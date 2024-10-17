@@ -4,11 +4,11 @@ using WSRS_SWAFO.Models;
 
 namespace WSRS_SWAFO.Controllers
 {
-    public class HomeController : Controller
+    public class DashboardController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ILogger<DashboardController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        public DashboardController(ILogger<DashboardController> logger)
         {
             _logger = logger;
         }
@@ -17,7 +17,6 @@ namespace WSRS_SWAFO.Controllers
         {
             return View();
         }
-
         public IActionResult Privacy()
         {
             return View();
