@@ -8,7 +8,7 @@ var connectionString = builder.Configuration.GetConnectionString("AuthDbContextC
 
 // Add services to the container.
 builder.Services.AddDbContext<AuthDbContext>(options => options.UseSqlServer(connectionString));
-builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<AuthDbContext>();
+builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false).AddEntityFrameworkStores<AuthDbContext>();
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
