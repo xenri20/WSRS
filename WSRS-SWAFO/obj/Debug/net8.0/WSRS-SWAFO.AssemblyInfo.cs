@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("WSRS-SWAFO")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a55cefa4892d6b474cfd4db7d51d0df0a410123f")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+43d191519ffdbad4fdf38a6ae0a9accdb0e0b2d0")]
 [assembly: System.Reflection.AssemblyProductAttribute("WSRS-SWAFO")]
 [assembly: System.Reflection.AssemblyTitleAttribute("WSRS-SWAFO")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
