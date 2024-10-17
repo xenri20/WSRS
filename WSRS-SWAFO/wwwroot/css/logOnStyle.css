@@ -24,7 +24,7 @@ body {
     box-sizing: border-box;
     border-radius: 16px;
     background-color: white;
-    padding: 50px;
+    padding: 50px 75px;
     box-shadow: 0px 0px 5px black;
     animation: riseUp 0.6s ease-out; 
 }
