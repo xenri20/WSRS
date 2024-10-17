@@ -2,8 +2,7 @@
 
 namespace WSRS_SWAFO.Models
 {
-    public class LogOnModel
-    {
+    public class LogOn {
         public string? email {  get; set; }
         public string? password { get; set; }
     }
