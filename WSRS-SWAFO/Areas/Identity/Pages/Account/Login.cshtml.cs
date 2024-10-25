@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
-using WSRS_SWAFO.Areas.Identity.Data;
+using WSRS_SWAFO.Models;
 
 namespace WSRS_SWAFO.Areas.Identity.Pages.Account
 {

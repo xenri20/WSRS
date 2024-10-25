@@ -4,14 +4,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using WSRS_SWAFO.Data;
+using WSRS_SWAFO.Models;
 
 #nullable disable
 
-namespace WSRS_SWAFO.Migrations
+namespace WSRS_SWAFO.Migrations.ApplicationDb
 {
-    [DbContext(typeof(AuthDbContext))]
-    partial class AuthDbContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(ApplicationDbContext))]
+    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
@@ -159,7 +159,7 @@ namespace WSRS_SWAFO.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("WSRS_SWAFO.Areas.Identity.Data.ApplicationUser", b =>
+            modelBuilder.Entity("WSRS_SWAFO.Models.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -243,7 +243,7 @@ namespace WSRS_SWAFO.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("WSRS_SWAFO.Areas.Identity.Data.ApplicationUser", null)
+                    b.HasOne("WSRS_SWAFO.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -252,7 +252,7 @@ namespace WSRS_SWAFO.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("WSRS_SWAFO.Areas.Identity.Data.ApplicationUser", null)
+                    b.HasOne("WSRS_SWAFO.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -267,7 +267,7 @@ namespace WSRS_SWAFO.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("WSRS_SWAFO.Areas.Identity.Data.ApplicationUser", null)
+                    b.HasOne("WSRS_SWAFO.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -276,7 +276,7 @@ namespace WSRS_SWAFO.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("WSRS_SWAFO.Areas.Identity.Data.ApplicationUser", null)
+                    b.HasOne("WSRS_SWAFO.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)

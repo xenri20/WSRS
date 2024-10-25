@@ -1,17 +1,16 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using WSRS_SWAFO.Areas.Identity.Data;
-using WSRS_SWAFO.Data;
+using WSRS_SWAFO.Models;
 
 public class Program
 {
     public static async Task Main(String[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
-        var connectionString = builder.Configuration.GetConnectionString("AuthDbContextConnection") ?? throw new InvalidOperationException("Connection string 'AuthDbContextConnection' not found.");
+        var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
         
         // Add services to the container.
-        builder.Services.AddDbContext<AuthDbContext>(options => options.UseSqlServer(connectionString));
+        builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
         builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
             {
                 // Temporary definition of password requirements for testing
@@ -24,7 +23,7 @@ public class Program
                 options.Password.RequiredUniqueChars = 1;
             })
             .AddRoles<IdentityRole>()
-            .AddEntityFrameworkStores<AuthDbContext>();
+            .AddEntityFrameworkStores<ApplicationDbContext>();
         builder.Services.AddControllersWithViews();
         builder.Services.AddRazorPages();
         
