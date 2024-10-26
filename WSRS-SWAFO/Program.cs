@@ -26,6 +26,9 @@ public class Program
             .AddEntityFrameworkStores<ApplicationDbContext>();
         builder.Services.AddControllersWithViews();
         builder.Services.AddRazorPages();
+
+        // Add in-memory caching to improve performance
+        builder.Services.AddMemoryCache();
         
         var app = builder.Build();
         
