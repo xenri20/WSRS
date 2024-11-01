@@ -9,7 +9,7 @@ namespace WSRS_SWAFO.Models
         [Key]
         public int Id { get; set; }
         [ForeignKey("ApplicationUser")]
-        public int FormatorId { get; set; }
+        public string FormatorId { get; set; }
         public string Description { get; set; }
         public DateTime CommissionDatetime { get; set; }
         [ForeignKey("Student")]
