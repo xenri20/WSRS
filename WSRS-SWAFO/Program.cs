@@ -1,6 +1,11 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using WSRS_SWAFO.Models;
+using Microsoft.Identity.Web.UI;
+using WSRS_SWAFO.Data;
+using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.Identity.Web;
+using Microsoft.AspNetCore.Authorization;
 
 public class Program
 {
@@ -25,6 +30,12 @@ public class Program
             .AddRoles<IdentityRole>()
             .AddEntityFrameworkStores<ApplicationDbContext>();
         builder.Services.AddControllersWithViews();
+        builder.Services.AddMicrosoftIdentityWebAppAuthentication(builder.Configuration, "AzureWSRSLogin");
+        builder.Services.AddMvc(option =>
+        {
+            var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+            option.Filters.Add(new AuthorizeFilter(policy));
+        }).AddMicrosoftIdentityUI();
         builder.Services.AddRazorPages();
 
         // Add in-memory caching to improve performance
@@ -45,8 +56,9 @@ public class Program
         
         app.UseRouting();
         
+        app.UseAuthentication();
         app.UseAuthorization();
-        
+
         app.MapControllerRoute(
             name: "default",
             pattern: "{controller=Dashboard}/{action=Index}/{id?}");
