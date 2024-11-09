@@ -6,6 +6,8 @@ using WSRS_SWAFO.Data;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Identity.Web;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 
 public class Program
 {
@@ -13,106 +15,113 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
         var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-        
-        // Add services to the container.
+
         builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
-        builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
-            {
-                // Temporary definition of password requirements for testing
-                options.SignIn.RequireConfirmedAccount = false;
-                options.Password.RequireDigit = true;
-                options.Password.RequireLowercase = true;
-                options.Password.RequireUppercase = false;
-                options.Password.RequireNonAlphanumeric = false;
-                options.Password.RequiredLength = 6;
-                options.Password.RequiredUniqueChars = 1;
-            })
-            .AddRoles<IdentityRole>()
-            .AddEntityFrameworkStores<ApplicationDbContext>();
-        builder.Services.AddControllersWithViews();
-        builder.Services.AddMicrosoftIdentityWebAppAuthentication(builder.Configuration, "AzureWSRSLogin");
-        builder.Services.AddMvc(option =>
+        builder.Services.AddAuthentication(options =>
         {
-            var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
-            option.Filters.Add(new AuthorizeFilter(policy));
-        }).AddMicrosoftIdentityUI();
+            options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = "AzureWSRSLogin";
+        })
+        .AddCookie()
+        .AddOpenIdConnect("AzureWSRSLogin", options =>
+        {
+            builder.Configuration.Bind("AzureWSRSLogin", options);
+            options.Authority = options.Authority;
+            options.ClientSecret = options.ClientSecret;
+            options.ClientId = options.ClientId;
+            options.CallbackPath = options.CallbackPath;
+            options.ResponseType = "code";
+            options.SaveTokens = true;
+            options.UseTokenLifetime = true;
+        });
+        // builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
+        //     {
+        //         // Temporary definition of password requirements for testing
+        //         options.SignIn.RequireConfirmedAccount = false;
+        //         options.Password.RequireDigit = true;
+        //         options.Password.RequireLowercase = true;
+        //         options.Password.RequireUppercase = false;
+        //         options.Password.RequireNonAlphanumeric = false;
+        //         options.Password.RequiredLength = 6;
+        //         options.Password.RequiredUniqueChars = 1;
+        //     })
+        //     .AddRoles<IdentityRole>()
+        //     .AddEntityFrameworkStores<ApplicationDbContext>();
+        // builder.Services.AddControllersWithViews();
         builder.Services.AddRazorPages();
 
-        // Add in-memory caching to improve performance
         builder.Services.AddMemoryCache();
-        
+
         var app = builder.Build();
-        
-        // Configure the HTTP request pipeline.
+
         if (!app.Environment.IsDevelopment())
         {
             app.UseExceptionHandler("/Dashboard/Error");
-            // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
             app.UseHsts();
         }
-        
+
         app.UseHttpsRedirection();
         app.UseStaticFiles();
-        
+
         app.UseRouting();
-        
+
         app.UseAuthentication();
         app.UseAuthorization();
 
         app.MapControllerRoute(
             name: "default",
-            pattern: "{controller=Dashboard}/{action=Index}/{id?}");
+            pattern: "{controller=LogOn}/{action=Index}/{id?}");
         app.MapRazorPages();
 
-        await CreateRoles(app.Services);
-        await CreateAdmin(app.Services);
+        // await CreateRoles(app.Services);
+        // await CreateAdmin(app.Services);
 
         app.Run();
     }
 
-    private static async Task CreateRoles(IServiceProvider serviceProvider)
-    {
-        using (var scope = serviceProvider.CreateScope())
-        {
-            var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-            var roleNames = new[] { "Admin", "Manager", "Member" };
+    // private static async Task CreateRoles(IServiceProvider serviceProvider)
+    // {
+    //     using (var scope = serviceProvider.CreateScope())
+    //     {
+    //         var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+    //         var roleNames = new[] { "Admin", "Manager", "Member" };
 
-            foreach (var roleName in roleNames)
-            {
-                var roleExist = await roleManager.RoleExistsAsync(roleName);
+    //         foreach (var roleName in roleNames)
+    //         {
+    //             var roleExist = await roleManager.RoleExistsAsync(roleName);
 
-                if (!roleExist)
-                {
-                    //create the roles and seed them to the database
-                    await roleManager.CreateAsync(new IdentityRole(roleName));
-                }
-            }
-        }
-    }
+    //             if (!roleExist)
+    //             {
+    //                 //create the roles and seed them to the database
+    //                 await roleManager.CreateAsync(new IdentityRole(roleName));
+    //             }
+    //         }
+    //     }
+    // }
 
-    private static async Task CreateAdmin(IServiceProvider serviceProvider)
-    {
-        using (var scope = serviceProvider.CreateScope())
-        {
-            var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+    // private static async Task CreateAdmin(IServiceProvider serviceProvider)
+    // {
+    //     using (var scope = serviceProvider.CreateScope())
+    //     {
+    //         var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
 
-            string adminEmail = "admin@test.com";
-            string adminPassword = "admin123";
+    //         string adminEmail = "admin@test.com";
+    //         string adminPassword = "admin123";
 
-            if (await userManager.FindByEmailAsync(adminEmail) == null)
-            {
-                var user = new ApplicationUser();
+    //         if (await userManager.FindByEmailAsync(adminEmail) == null)
+    //         {
+    //             var user = new ApplicationUser();
 
-                user.FirstName = "N/A";
-                user.LastName = "N/A";
-                user.UserName = adminEmail;
-                user.Email = adminEmail;
+    //             user.FirstName = "N/A";
+    //             user.LastName = "N/A";
+    //             user.UserName = adminEmail;
+    //             user.Email = adminEmail;
 
-                await userManager.CreateAsync(user, adminPassword);
+    //             await userManager.CreateAsync(user, adminPassword);
 
-                await userManager.AddToRoleAsync(user,"Admin");
-            }
-        }
-    }
+    //             await userManager.AddToRoleAsync(user,"Admin");
+    //         }
+    //     }
+    // }
 }
 
