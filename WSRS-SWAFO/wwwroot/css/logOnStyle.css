@@ -2,14 +2,13 @@
     Font Source: Google Sans
 */
 
-@import url(../lib/google-sans-webfont/style.css);
+@import url('../lib/fonts/typefaces.css');
+
 :root {
-    --regular: 'Product Sans Medium Regular';
+    --regular: 'Product Sans Regular';
     --lightItalic: 'Product Sans Italic';
     --bold: 'Product Sans Bold';
-}
-
-* {
+    --microsoft: 'Segoe UI Regular';
 }
 
 body {
@@ -111,7 +110,7 @@ span {
 }
 
 
-button {
+#btnLogin {
     font-family: var(--regular);
     box-sizing: border-box;
     border-radius: 32px;
@@ -124,9 +123,42 @@ button {
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-    button:hover {
+    #btnLogin:hover {
         background: #292929;
         color: white;
+    }
+
+svg {
+    width: 15px;
+}
+
+#btnSSO {
+    font-family: var(--microsoft);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
+    width: 350px;
+    font-weight: 600;
+    font-size: 15px;
+    margin: 15px 0px;
+    color: white;
+    background-color: #2F2F2F;
+    cursor: pointer;
+    border: none;
+    border-radius: 0;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    -moz-transition: all 0.4s ease-in-out;
+    -o-transition: all 0.4s ease-in-out;
+    -webkit-transition: all 0.4s ease-in-out;
+}
+
+    #btnSSO:hover {
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .btnSSO:focus {
+        outline: none;
     }
 
 .forgotPass {
