@@ -43,8 +43,10 @@ builder.Services.AddAuthentication(options =>
 //     })
 //     .AddRoles<IdentityRole>()
 //     .AddEntityFrameworkStores<ApplicationDbContext>();
-// builder.Services.AddControllersWithViews();
-builder.Services.AddRazorPages();
+
+// https://dotnettutorials.net/lesson/difference-between-addmvc-and-addmvccore-method/
+// Adds features support for MVC and Pages
+builder.Services.AddMvc();
 
 builder.Services.AddMemoryCache();
 
