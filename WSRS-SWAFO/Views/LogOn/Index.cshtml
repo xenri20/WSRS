@@ -22,6 +22,12 @@
 else
 { 
     <form id="offline-login-form" asp-controller="LogOn" asp-action="SignInLocally" method="post">
+        @if(TempData["Error"] != null)
+        {
+            <div class="alert alert-danger" role="alert">
+                <span>@TempData["Error"]</span>
+            </div>
+        }
         <div class="input-wrapper pt-3">
             <input asp-for="EmailAddress" type="email"  class="input" autocomplete="username" placeholder="Email Address" aria-required="true" />
             <label asp-for="EmailAddress" class="label">Email Address<span>*</span></label>

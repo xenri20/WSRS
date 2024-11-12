@@ -50,7 +50,7 @@ namespace WSRS_SWAFO.Controllers
                 return RedirectToAction("Index", "Dashboard");
             }
 
-            ModelState.AddModelError(string.Empty, "Invalid login credentials");
+            TempData["Error"] = "Invalid offline login credentials. Please try again";
             return View("Index", loginViewModel);
         }
     }
