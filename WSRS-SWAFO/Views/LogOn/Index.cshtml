@@ -1,53 +1,40 @@
-﻿@{
+﻿@using WSRS_SWAFO.ViewModels
+@model LoginViewModel
+
+@{
     Layout = "_LogOnLayout";
     bool isOnline = ViewData["isOnline"] as bool? ?? false;
 }
 
-<img alt="logo" src="assets/img/logo.png" />
+<img alt="logo" src="/assets/img/logo.png" />
 <h1>Login</h1>
 @if (isOnline)
 {
-<a type="button" id="btnSSO" asp-controller="LogOn" asp-action="SignInWithMicrosoft">
-    <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 21 21">
-    <rect x="1" y="1" width="9" height="9" fill="#f25022"/>
-    <rect x="1" y="11" width="9" height="9" fill="#00a4ef"/>
-    <rect x="11" y="1" width="9" height="9" fill="#7fba00"/>
-    <rect x="11" y="11" width="9" height="9" fill="#ffb900"/>
-    </svg>&nbsp;Login using SSO
-</a>
+    <a type="button" id="btnSSO" asp-controller="LogOn" asp-action="SignInWithMicrosoft">
+        <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 21 21">
+        <rect x="1" y="1" width="9" height="9" fill="#f25022"/>
+        <rect x="1" y="11" width="9" height="9" fill="#00a4ef"/>
+        <rect x="11" y="1" width="9" height="9" fill="#7fba00"/>
+        <rect x="11" y="11" width="9" height="9" fill="#ffb900"/>
+        </svg>&nbsp;Login using SSO
+    </a>
 }
 else
-{
-<section>
-    <table>
-        <tr>
-            <td>
-                <div class="input-wrapper pt-3">
-                    <input class="input" type="email" id="email" placeholder=" " required>
-                    <label class="label" for="email">Email Address<span>*</span></label>
-                </div>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <div class="input-wrapper pt-3">
-                    <input class="input" type="password" id="password" placeholder=" " required>
-                    <label class="label" for="password">Password<span>*</span></label>
-                </div>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <p class="forgotPass pt-1"><a href="google.com">Forgot Password?</a></p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <button type="submit" id="btnLogin">Log In</button>
-            </td>
-        </tr>
-    </table>
-</section>
+{ 
+    <form id="offline-login-form" asp-controller="LogOn" asp-action="SignInLocally" method="post">
+        <div class="input-wrapper pt-3">
+            <input asp-for="EmailAddress" type="email"  class="input" autocomplete="username" placeholder="Email Address" aria-required="true" />
+            <label asp-for="EmailAddress" class="label">Email Address<span>*</span></label>
+            <span asp-validation-for="EmailAddress" class="text-danger"></span>
+        </div>
+        <div class="input-wrapper pt-3">
+            <input asp-for="Password" type="password" class="input" autocomplete="current-password" placeholder="Password" aria-required="true">
+            <label asp-for="Password" class="label">Password<span>*</span></label>
+            <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
+        <p class="forgotPass pt-1"><a href="#">Forgot Password?</a></p>
+        <button type="submit" class="btn" id="btnLogin">Login Locally</button>
+    </form>
 }
 
 <footer class="pt-4">
@@ -58,3 +45,7 @@ else
     window.addEventListener('offline', function() { location.reload(); });
     window.addEventListener('online', function() { location.reload(); });
 </script>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
