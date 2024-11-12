@@ -30,19 +30,20 @@ builder.Services.AddAuthentication(options =>
     options.SaveTokens = true;
     options.UseTokenLifetime = true;
 });
-// builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
-//     {
-//         // Temporary definition of password requirements for testing
-//         options.SignIn.RequireConfirmedAccount = false;
-//         options.Password.RequireDigit = true;
-//         options.Password.RequireLowercase = true;
-//         options.Password.RequireUppercase = false;
-//         options.Password.RequireNonAlphanumeric = false;
-//         options.Password.RequiredLength = 6;
-//         options.Password.RequiredUniqueChars = 1;
-//     })
-//     .AddRoles<IdentityRole>()
-//     .AddEntityFrameworkStores<ApplicationDbContext>();
+
+builder.Services.AddDefaultIdentity<ApplicationUser>(options => 
+    {
+        // Temporary definition of password requirements for testing
+        options.SignIn.RequireConfirmedAccount = false;
+        options.Password.RequireDigit = true;
+        options.Password.RequireLowercase = true;
+        options.Password.RequireUppercase = false;
+        options.Password.RequireNonAlphanumeric = false;
+        options.Password.RequiredLength = 6;
+        options.Password.RequiredUniqueChars = 1;
+    })
+    .AddRoles<IdentityRole>()
+    .AddEntityFrameworkStores<ApplicationDbContext>();
 
 // https://dotnettutorials.net/lesson/difference-between-addmvc-and-addmvccore-method/
 // Adds features support for MVC and Pages
