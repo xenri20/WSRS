@@ -8,6 +8,8 @@ using Microsoft.Identity.Web;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using System.Security.Claims;
+using Microsoft.CodeAnalysis.Elfie.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
@@ -18,7 +20,23 @@ builder.Services.AddAuthentication(options =>
     options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = "AzureWSRSLogin";
 })
-.AddCookie()
+.AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
+{
+    options.Cookie.Name = "WSRSCookie";
+    
+    // Have session only be active when application is open, then expires after closing
+    options.Cookie.Expiration = null;
+    options.SlidingExpiration = false;
+
+    options.Events = new CookieAuthenticationEvents
+    {
+        OnSigningIn = context =>
+        {
+            context.Properties.IsPersistent = false;
+            return Task.CompletedTask;
+        }
+    };
+})
 .AddOpenIdConnect("AzureWSRSLogin", options =>
 {
     builder.Configuration.Bind("AzureWSRSLogin", options);
@@ -29,21 +47,56 @@ builder.Services.AddAuthentication(options =>
     options.ResponseType = "code";
     options.SaveTokens = true;
     options.UseTokenLifetime = true;
+
+    // Map OIDC claims to ASP.NET Identity
+    options.Events = new OpenIdConnectEvents
+    {
+        OnTokenValidated = async context =>
+        {
+            var claimsIdentity = context.Principal.Identity as ClaimsIdentity;
+
+            // Add custom claims or map existing claims to match ApplicationUser properties below
+            var userManager = context.HttpContext.RequestServices.GetRequiredService<UserManager<ApplicationUser>>();
+            var signInManager = context.HttpContext.RequestServices.GetRequiredService<SignInManager<ApplicationUser>>();
+
+            // Find the user based on their Azure AD unique identifier
+            var user = await userManager.FindByEmailAsync(claimsIdentity.FindFirst("preferred_username")?.Value);
+            // Or create this user
+            if (user == null)
+            {
+                user = new ApplicationUser
+                {
+                    // Mapping online user claims to ApplicationUser properties
+                    Email = claimsIdentity.FindFirst("preferred_username")?.Value,
+                    UserName = claimsIdentity.FindFirst("preferred_username")?.Value,
+                    Name = claimsIdentity.FindFirst("name")?.Value,
+                };
+                await userManager.CreateAsync(user);
+
+                // TODO Add role as well
+            }
+
+            // Sign in the user with ASP.NET Identity, syncing the session with Azure AD login
+            await signInManager.SignInAsync(user, isPersistent: false);
+        }
+    };
 });
 
 builder.Services.AddDefaultIdentity<ApplicationUser>(options => 
-    {
-        // Temporary definition of password requirements for testing
-        options.SignIn.RequireConfirmedAccount = false;
-        options.Password.RequireDigit = true;
-        options.Password.RequireLowercase = true;
-        options.Password.RequireUppercase = false;
-        options.Password.RequireNonAlphanumeric = false;
-        options.Password.RequiredLength = 6;
-        options.Password.RequiredUniqueChars = 1;
-    })
-    .AddRoles<IdentityRole>()
-    .AddEntityFrameworkStores<ApplicationDbContext>();
+{
+    // Temporary definition of password requirements for testing
+    options.SignIn.RequireConfirmedAccount = false;
+    options.Password.RequireDigit = true;
+    options.Password.RequireLowercase = true;
+    options.Password.RequireUppercase = false;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequiredLength = 6;
+    options.Password.RequiredUniqueChars = 1;
+})
+.AddRoles<IdentityRole>()
+.AddEntityFrameworkStores<ApplicationDbContext>();
+
+// TODO Make logout process signs the user out from both ASP.NET Identity and Azure AD
 
 // https://dotnettutorials.net/lesson/difference-between-addmvc-and-addmvccore-method/
 // Adds features support for MVC and Pages
