@@ -12,7 +12,7 @@ using WSRS_SWAFO.Models;
 namespace WSRS_SWAFO.Migrations.ApplicationDb
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241104162943_WSRSMigration")]
+    [Migration("20241113075743_WSRSMigration")]
     partial class WSRSMigration
     {
         /// <inheritdoc />
@@ -105,12 +105,10 @@ namespace WSRS_SWAFO.Migrations.ApplicationDb
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProviderKey")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("nvarchar(max)");
@@ -147,12 +145,10 @@ namespace WSRS_SWAFO.Migrations.ApplicationDb
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Value")
                         .HasColumnType("nvarchar(max)");
@@ -345,6 +341,50 @@ namespace WSRS_SWAFO.Migrations.ApplicationDb
                     b.ToTable("Students");
                 });
 
+            modelBuilder.Entity("WSRS_SWAFO.Models.TrafficReportsEncoded", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CommissionDatetime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateOnly>("DatePaid")
+                        .HasColumnType("date");
+
+                    b.Property<int>("ORNumber")
+                        .HasColumnType("int");
+
+                    b.Property<int>("OffenseId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Place")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PlateNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Remarks")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("StudentNumber")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OffenseId");
+
+                    b.HasIndex("StudentNumber");
+
+                    b.ToTable("TrafficReportsEncodeds");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -430,6 +470,25 @@ namespace WSRS_SWAFO.Migrations.ApplicationDb
                         .IsRequired();
 
                     b.Navigation("Formator");
+
+                    b.Navigation("Student");
+                });
+
+            modelBuilder.Entity("WSRS_SWAFO.Models.TrafficReportsEncoded", b =>
+                {
+                    b.HasOne("WSRS_SWAFO.Models.Offense", "Offense")
+                        .WithMany()
+                        .HasForeignKey("OffenseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WSRS_SWAFO.Models.Student", "Student")
+                        .WithMany()
+                        .HasForeignKey("StudentNumber")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Offense");
 
                     b.Navigation("Student");
                 });
