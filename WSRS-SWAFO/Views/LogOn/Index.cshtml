@@ -21,7 +21,7 @@
 }
 else
 { 
-    <form id="offline-login-form" asp-controller="LogOn" asp-action="SignInLocally" method="post">
+    <form id="offlineLoginForm" asp-controller="LogOn" asp-action="SignInLocally" method="post">
         @if(TempData["Error"] != null)
         {
             <div class="alert alert-danger" role="alert">
