@@ -57,6 +57,8 @@ main {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    font-size: 12px;
+    box-sizing: border-box;
 }
 
 #sel, #logout {
@@ -64,11 +66,7 @@ main {
     flex-direction: column;
 }
 
-.logout > a {
-    padding: 50px;
-}
-
-hr {
+#side-panel hr {
     width: 100%;
     margin: 0;
     color: white;
@@ -76,29 +74,35 @@ hr {
     box-sizing: border-box;
 }
 
-#sidebar a {
+#side-panel a {
     text-decoration: none;
     width: 100%;
-    font-size: 12px;
     color: white;
-    box-sizing: border-box;
     text-align: center;
     transition: color 0.1s ease-in, background-color 0.1s ease-in;
 }
 
-#sel a {
+#side-panel button {
+    width: 100%;
+    color: white;
+    text-align: center;
+    transition: color 0.1s ease-in, background-color 0.1s ease-in;
+    background: none;
+    border: none;
+}
+
+#side-panel a,
+#side-panel button {
     padding: 15px;
 }
 
-#logout a {
-    padding: 30px 0;
-}
-
-a:hover {
+#side-panel a:hover,
+#side-panel button:hover {
     color: black;
     background-color: white;
 }
 
-    a:hover .icons, a:hover div {
+    #side-panel a:hover .icons, #side-panel a:hover div,
+    #side-panel button:hover .icons, #side-panel button:hover div {
         color: black;
     }
