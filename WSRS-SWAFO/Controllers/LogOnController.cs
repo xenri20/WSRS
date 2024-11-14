@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -32,8 +33,15 @@ namespace WSRS_SWAFO.Controllers
             return View();
         }
 
-        public IActionResult SignInWithMicrosoft()
-        {
+        public async Task<IActionResult> SignInWithMicrosoft()
+        {    
+            bool isOnline = await NetworkHelper.IsOnline();
+            if (!isOnline)
+            { 
+                // Automatically refreshes page if there is no internet connection
+                return RedirectToAction("Index");
+            }
+
             var redirectUrl = Url.Action("Index", "Dashboard");
             return Challenge(new AuthenticationProperties { RedirectUri = redirectUrl }, "AzureWSRSLogin");
         }
@@ -41,6 +49,13 @@ namespace WSRS_SWAFO.Controllers
         [HttpPost]
         public async Task<IActionResult> SignInLocally(LoginViewModel loginViewModel)
         {
+            bool isOnline = await NetworkHelper.IsOnline();
+            if (isOnline)
+            {
+                // Automatically refreshes page if there is internet connection
+                RedirectToAction("Index");
+            }
+
             if (!ModelState.IsValid) return View("Index", loginViewModel);
 
             var result = await _signInManager.PasswordSignInAsync(loginViewModel.EmailAddress, loginViewModel.Password, false, lockoutOnFailure: false);
@@ -61,7 +76,12 @@ namespace WSRS_SWAFO.Controllers
             await _signInManager.SignOutAsync();
 
             // Azure AD Sign out
-            await HttpContext.SignOutAsync("AzureWSRSLogin");
+            bool isOnline = await NetworkHelper.IsOnline();
+            if (isOnline)
+            {
+                // Avoids error when trying to sign out from Azure AD when offline
+                await HttpContext.SignOutAsync("AzureWSRSLogin");
+            }
 
             // Cookie Authentication Scheme Sign out
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
