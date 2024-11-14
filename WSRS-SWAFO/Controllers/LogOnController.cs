@@ -53,5 +53,20 @@ namespace WSRS_SWAFO.Controllers
             TempData["Error"] = "Invalid offline login credentials. Please try again";
             return View("Index", loginViewModel);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> SignOut()
+        {
+            // ASP.NET Core Identity Sign out
+            await _signInManager.SignOutAsync();
+
+            // Azure AD Sign out
+            await HttpContext.SignOutAsync("AzureWSRSLogin");
+
+            // Cookie Authentication Scheme Sign out
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+            return RedirectToAction("Index");
+        }
     }
 }
