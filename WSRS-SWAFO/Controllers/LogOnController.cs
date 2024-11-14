@@ -84,7 +84,7 @@ namespace WSRS_SWAFO.Controllers
             }
 
             // Cookie Authentication Scheme Sign out
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            //await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
             return RedirectToAction("Index");
         }

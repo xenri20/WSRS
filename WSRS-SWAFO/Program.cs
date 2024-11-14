@@ -20,23 +20,13 @@ builder.Services.AddAuthentication(options =>
     options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = "AzureWSRSLogin";
 })
-.AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
-{
-    options.Cookie.Name = "WSRSCookie";
-    
-    // Have session only be active when application is open, then expires after closing
-    options.Cookie.Expiration = null;
-    options.SlidingExpiration = false;
-
-    options.Events = new CookieAuthenticationEvents
-    {
-        OnSigningIn = context =>
-        {
-            context.Properties.IsPersistent = false;
-            return Task.CompletedTask;
-        }
-    };
-})
+//.AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
+//{
+//    options.Cookie.Name = "WSRS-SWAFO";
+//    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+//    options.Cookie.SameSite = SameSiteMode.Strict;
+//    options.Cookie.IsEssential = true;
+//})
 .AddOpenIdConnect("AzureWSRSLogin", options =>
 {
     builder.Configuration.Bind("AzureWSRSLogin", options);
