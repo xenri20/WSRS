@@ -83,8 +83,11 @@ namespace WSRS_SWAFO.Controllers
                 await HttpContext.SignOutAsync("AzureWSRSLogin");
             }
 
-            // Cookie Authentication Scheme Sign out
-            //await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            // Temporary solution to delete all cookies when logging out
+            foreach (var cookie in Request.Cookies.Keys)
+            {
+                Response.Cookies.Delete(cookie);
+            }
 
             return RedirectToAction("Index");
         }

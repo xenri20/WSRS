@@ -26,13 +26,6 @@ builder.Services.AddAuthentication(options =>
     options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = "AzureWSRSLogin";
 })
-//.AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
-//{
-//    options.Cookie.Name = "WSRS-SWAFO";
-//    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-//    options.Cookie.SameSite = SameSiteMode.Strict;
-//    options.Cookie.IsEssential = true;
-//})
 .AddOpenIdConnect("AzureWSRSLogin", options =>
 {
     builder.Configuration.Bind("AzureWSRSLogin", options);
@@ -69,7 +62,12 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
 .AddRoles<IdentityRole>()
 .AddEntityFrameworkStores<ApplicationDbContext>();
 
-// TODO Make logout process signs the user out from both ASP.NET Identity and Azure AD
+builder.Services.ConfigureApplicationCookie(options => {
+    options.Cookie.Name = ".WSRSAuth";
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+    options.Cookie.SameSite = SameSiteMode.None;
+    options.Cookie.IsEssential = true;
+});
 
 // https://dotnettutorials.net/lesson/difference-between-addmvc-and-addmvccore-method/
 // Adds features support for MVC and Pages
