@@ -9,12 +9,15 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using System.Security.Claims;
-using Microsoft.CodeAnalysis.Elfie.Extensions;
+using WSRS_SWAFO.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
+
+builder.Services.AddScoped<AccountService>();
+
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
@@ -43,31 +46,8 @@ builder.Services.AddAuthentication(options =>
     {
         OnTokenValidated = async context =>
         {
-            var claimsIdentity = context.Principal.Identity as ClaimsIdentity;
-
-            // Add custom claims or map existing claims to match ApplicationUser properties below
-            var userManager = context.HttpContext.RequestServices.GetRequiredService<UserManager<ApplicationUser>>();
-            var signInManager = context.HttpContext.RequestServices.GetRequiredService<SignInManager<ApplicationUser>>();
-
-            // Find the user based on their Azure AD unique identifier
-            var user = await userManager.FindByEmailAsync(claimsIdentity.FindFirst("preferred_username")?.Value);
-            // Or create this user
-            if (user == null)
-            {
-                user = new ApplicationUser
-                {
-                    // Mapping online user claims to ApplicationUser properties
-                    Email = claimsIdentity.FindFirst("preferred_username")?.Value,
-                    UserName = claimsIdentity.FindFirst("preferred_username")?.Value,
-                    Name = claimsIdentity.FindFirst("name")?.Value,
-                };
-                await userManager.CreateAsync(user);
-
-                // TODO Add role as well
-            }
-
-            // Sign in the user with ASP.NET Identity, syncing the session with Azure AD login
-            await signInManager.SignInAsync(user, isPersistent: false);
+            var accountService = context.HttpContext.RequestServices.GetRequiredService<AccountService>();
+            await accountService.HandleUserSignInAsync(context.Principal);
         }
     };
 });
