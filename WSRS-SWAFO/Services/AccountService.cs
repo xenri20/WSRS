@@ -8,11 +8,13 @@ namespace WSRS_SWAFO.Services
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly ILogger<AccountService> _logger;
 
-        public AccountService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+        public AccountService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, ILogger<AccountService> logger)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _logger = logger;
         }
 
         public async Task HandleUserSignInAsync(ClaimsPrincipal principal)
@@ -31,7 +33,12 @@ namespace WSRS_SWAFO.Services
                     UserName = claimsIdentity.FindFirst("preferred_username")?.Value,
                     Name = claimsIdentity.FindFirst("name")?.Value,
                 };
-                await _userManager.CreateAsync(user);
+                var result = await _userManager.CreateAsync(user);
+
+                if (result.Succeeded)
+                {
+                    _logger.LogInformation("A user has just been registered to the database");
+                }
 
                 // TODO Add role as well
             }
