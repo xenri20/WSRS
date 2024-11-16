@@ -11,7 +11,7 @@ namespace WSRS_SWAFO.Models
         public DbSet<Offense> Offenses { get; set; }
         public DbSet<ReportEncoded> ReportsEncoded { get; set; }
         public DbSet<ReportPending> ReportsPending { get; set; }
-        public DbSet<TrafficReportsEncoded> TrafficReportsEncodeds { get; set; }
+        public DbSet<TrafficReportsEncoded> TrafficReportsEncoded { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

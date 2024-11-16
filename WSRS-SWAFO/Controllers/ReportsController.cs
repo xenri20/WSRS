@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using System.Diagnostics;
 using WSRS_SWAFO.Models;
@@ -8,20 +8,18 @@ using Microsoft.AspNetCore.Authorization.Infrastructure;
 namespace WSRS_SWAFO.Controllers
 {
     [Authorize]
-    public class DashboardController : Controller
+    public class ReportsController : Controller
     {
-        private readonly ILogger<DashboardController> _logger;
-
-        public DashboardController(ILogger<DashboardController> logger)
+      private readonly ILogger<ReportsController> _logger;
+        public ReportsController(ILogger<ReportsController> logger)
         {
             _logger = logger;
         }
-
         public IActionResult Index()
         {
             return View();
         }
-       
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
