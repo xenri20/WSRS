@@ -8,17 +8,24 @@ using Microsoft.Identity.Web;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using System.Security.Claims;
+using WSRS_SWAFO.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
+builder.Logging.AddConsole();
+builder.Logging.AddDebug();
+
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
+
+builder.Services.AddScoped<AccountService>();
+
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = "AzureWSRSLogin";
 })
-.AddCookie()
 .AddOpenIdConnect("AzureWSRSLogin", options =>
 {
     builder.Configuration.Bind("AzureWSRSLogin", options);
@@ -29,20 +36,38 @@ builder.Services.AddAuthentication(options =>
     options.ResponseType = "code";
     options.SaveTokens = true;
     options.UseTokenLifetime = true;
+
+    // Map OIDC claims to ASP.NET Identity
+    options.Events = new OpenIdConnectEvents
+    {
+        OnTokenValidated = async context =>
+        {
+            var accountService = context.HttpContext.RequestServices.GetRequiredService<AccountService>();
+            await accountService.HandleUserSignInAsync(context.Principal);
+        }
+    };
 });
-// builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
-//     {
-//         // Temporary definition of password requirements for testing
-//         options.SignIn.RequireConfirmedAccount = false;
-//         options.Password.RequireDigit = true;
-//         options.Password.RequireLowercase = true;
-//         options.Password.RequireUppercase = false;
-//         options.Password.RequireNonAlphanumeric = false;
-//         options.Password.RequiredLength = 6;
-//         options.Password.RequiredUniqueChars = 1;
-//     })
-//     .AddRoles<IdentityRole>()
-//     .AddEntityFrameworkStores<ApplicationDbContext>();
+
+builder.Services.AddDefaultIdentity<ApplicationUser>(options => 
+{
+    // Temporary definition of password requirements for testing
+    options.SignIn.RequireConfirmedAccount = false;
+    options.Password.RequireDigit = true;
+    options.Password.RequireLowercase = true;
+    options.Password.RequireUppercase = false;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequiredLength = 6;
+    options.Password.RequiredUniqueChars = 1;
+})
+.AddRoles<IdentityRole>()
+.AddEntityFrameworkStores<ApplicationDbContext>();
+
+builder.Services.ConfigureApplicationCookie(options => {
+    options.Cookie.Name = ".WSRSAuth";
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+    options.Cookie.SameSite = SameSiteMode.None;
+    options.Cookie.IsEssential = true;
+});
 
 // https://dotnettutorials.net/lesson/difference-between-addmvc-and-addmvccore-method/
 // Adds features support for MVC and Pages
