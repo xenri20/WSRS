@@ -6,6 +6,7 @@
 
 :root {
     --regular: 'Product Sans Regular';
+    --medium: 'Product Sans Medium Regular';
     --lightItalic: 'Product Sans Italic';
     --bold: 'Product Sans Bold';
     --microsoft: 'Segoe UI Regular';
@@ -40,11 +41,6 @@ body {
     }
 }
 
-table {
-    width: 100%;
-    text-align: right
-}
-
 img{
     width: 250px;
 }
@@ -58,10 +54,6 @@ h1 {
     -webkit-text-fill-color: transparent;
     -moz-background-clip: text;
     -moz-text-fill-color: transparent;
-}
-
-section{
-    width: 100%;
 }
 
 .input-wrapper {
@@ -90,6 +82,10 @@ section{
         pointer-events: none;
     }
 
+    .input-wrapper span {
+        font-family: var(--regular);
+    }
+
     .input-wrapper .input:focus + .label,
     .input-wrapper .input:not(:placeholder-shown) + .label {
         top: 8px;
@@ -111,21 +107,19 @@ span {
 
 
 #btnLogin {
-    font-family: var(--regular);
+    font-family: var(--medium);
     box-sizing: border-box;
     border-radius: 32px;
-    background: transparent;
+    background-color: #292929;
     border: 2px solid #292929;
-    width: 60%;
+    width: 100%;
     padding: 5px;
-    color: black;
+    color: white;
     cursor: pointer;
-    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-    #btnLogin:hover {
-        background: #292929;
-        color: white;
+    #btnLogin:active {
+        background-color: #363636;
     }
 
 svg {
@@ -161,10 +155,11 @@ svg {
         outline: none;
     }
 
-.forgotPass {
+#forgotPassword {
     font-family: var(--lightItalic);
     font-size: 16px;
     font-style: italic;
+    text-align: right;
 }
 
 a, a:hover {
