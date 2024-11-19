@@ -12,8 +12,8 @@ using WSRS_SWAFO.Models;
 namespace WSRS_SWAFO.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241115093256_Initial")]
-    partial class Initial
+    [Migration("20241119140052_new")]
+    partial class @new
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -382,7 +382,7 @@ namespace WSRS_SWAFO.Migrations
 
                     b.HasIndex("StudentNumber");
 
-                    b.ToTable("TrafficReportsEncodeds");
+                    b.ToTable("TrafficReportsEncoded");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
