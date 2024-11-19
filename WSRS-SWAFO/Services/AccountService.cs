@@ -21,6 +21,8 @@ namespace WSRS_SWAFO.Services
         {
             var claimsIdentity = principal.Identity as ClaimsIdentity;
 
+            var email = claimsIdentity.FindFirst("preferred_username")?.Value;
+
             // Find the user based on their Azure AD unique identifier
             var user = await _userManager.FindByEmailAsync(claimsIdentity.FindFirst("preferred_username")?.Value);
             // Or create this user
@@ -29,8 +31,8 @@ namespace WSRS_SWAFO.Services
                 user = new ApplicationUser
                 {
                     // Mapping online user claims to ApplicationUser properties
-                    Email = claimsIdentity.FindFirst("preferred_username")?.Value,
-                    UserName = claimsIdentity.FindFirst("preferred_username")?.Value,
+                    Email = email,
+                    UserName = email,
                     Name = claimsIdentity.FindFirst("name")?.Value,
                 };
                 var result = await _userManager.CreateAsync(user);
