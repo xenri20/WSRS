@@ -1,4 +1,31 @@
-﻿<nav id="sidebar">
+﻿<!-- Sign Out Modal  -->
+<div class="modal fade" id="signOutModal" tabindex="-1" aria-labelledby="signOutModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+          <h1 class="modal-title fs-3" id="signOutModalLabel">
+              Sign Out
+          </h1>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to sign out?
+      </div>
+      <div class="modal-footer">
+          <button class="light-btn" type="button" data-bs-dismiss="modal">
+              No
+          </button>
+        <form id="signOutForm" asp-controller="LogOn" asp-action="SignOut" method="post">
+            <button class="dark-btn" type="submit">
+                Yes
+            </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Sidebar -->
+<nav id="sidebar">
   <img src="/assets/img/logo-mini.png" class="logo-mini" />
   <div id="sidePanel">
     <div id="sel">
@@ -86,13 +113,7 @@
     </div>
     <div id="logout">
       <hr />
-      <form
-        id="signOutForm"
-        asp-controller="LogOn"
-        asp-action="SignOut"
-        method="post"
-      >
-        <button type="submit">
+        <button type="button" data-bs-toggle="modal" data-bs-target="#signOutModal">
           <svg
             class="icons"
             width="18"
@@ -108,7 +129,6 @@
           </svg>
           <div>Sign Out</div>
         </button>
-      </form>
     </div>
   </div>
 </nav>
