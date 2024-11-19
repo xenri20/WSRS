@@ -33,6 +33,7 @@ builder.Services.AddAuthentication(options =>
     options.ClientSecret = options.ClientSecret;
     options.ClientId = options.ClientId;
     options.CallbackPath = options.CallbackPath;
+    options.SignedOutRedirectUri = options.SignedOutRedirectUri;
     options.ResponseType = "code";
     options.SaveTokens = true;
     options.UseTokenLifetime = true;

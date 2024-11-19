@@ -44,9 +44,22 @@ namespace WSRS_SWAFO.Services
 
                 // TODO Add role as well
             }
+            
+            // For promptless sign out purposes (e.g. no more choosing which user to sign out as)
+            var loginHint = claimsIdentity.FindFirst("login_hint")?.Value;
 
-            // Sign in the user with ASP.NET Identity, syncing the session with Azure AD login
-            await _signInManager.SignInAsync(user, isPersistent: false);
+            if (!string.IsNullOrEmpty(loginHint))
+            {
+                // Sync Azure AD claims with ASP.NET Identity claims
+                var additionalClaims = new List<Claim>();
+                additionalClaims.Add(new Claim("login_hint", loginHint));
+
+                await _signInManager.SignInWithClaimsAsync(user, isPersistent: false, additionalClaims: additionalClaims);
+            }
+            else
+            {
+                await _signInManager.SignInAsync(user, isPersistent: false);
+            }
         }
     }
 }

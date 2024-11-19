@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
+using NuGet.Versioning;
 using WSRS_SWAFO.Models;
 using WSRS_SWAFO.ViewModels;
 
@@ -75,21 +76,24 @@ namespace WSRS_SWAFO.Controllers
             // ASP.NET Core Identity Sign out
             await _signInManager.SignOutAsync();
 
-            // Azure AD Sign out
+            // Azure AD Signs out. Sign out completely from the application
             bool isOnline = await NetworkHelper.IsOnline();
             if (isOnline)
             {
-                // Avoids error when trying to sign out from Azure AD when offline
-                await HttpContext.SignOutAsync("AzureWSRSLogin");
+                var idToken = User.FindFirst("login_hint")?.Value;
+                var postLogoutRedirectUri = Url.Action("Index", "LogOn", null, Request.Scheme);
+
+                string logoutUrl = $"https://login.microsoftonline.com/common/oauth2/v2.0/logout?post_logout_redirect_uri={postLogoutRedirectUri}";
+
+                if (!string.IsNullOrEmpty(idToken))
+                {
+                    logoutUrl += $"&logout_hint={idToken}";
+                }
+
+                return Redirect(logoutUrl);
             }
 
-            // Temporary solution to delete all cookies when logging out
-            foreach (var cookie in Request.Cookies.Keys)
-            {
-                Response.Cookies.Delete(cookie);
-            }
-
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", "LogOn");
         }
     }
 }
