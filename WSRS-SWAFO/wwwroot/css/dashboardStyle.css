@@ -67,7 +67,7 @@ span {
     margin: 0.4rem 0;
 }
 
-#search-bar {
+#searchBar {
     display: flex;
     flex-direction: row;
     margin: 1rem 0;
