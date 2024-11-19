@@ -1,3 +1,17 @@
+.icons {
+    width: 1.25rem;
+    height: 1.25rem;
+    color: white;
+    transition: fill 0.25s ease-in-out;
+}
+
+.logo-mini {
+    display: flex;
+    width: inherit;
+    padding: 10px;
+    user-select: none;
+}
+
 #sidebar {
     width: 95px;
     height: 100vh;
