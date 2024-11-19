@@ -1,0 +1,67 @@
+#sidebar {
+    width: 95px;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    background-image: linear-gradient(#01562A, #012010);
+    padding-top: 20px;
+    box-sizing: border-box;
+    transition: max-width 0.25s ease-in;
+}
+
+#sidePanel {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    font-size: 12px;
+    box-sizing: border-box;
+}
+
+#sel, #logout {
+    display: flex;
+    flex-direction: column;
+}
+
+#sidePanel hr {
+    width: 100%;
+    margin: 0;
+    color: white;
+    box-shadow: none;
+    box-sizing: border-box;
+}
+
+#sidePanel a {
+    text-decoration: none;
+    width: 100%;
+    color: white;
+    text-align: center;
+    transition: color 0.1s ease-in, background-color 0.1s ease-in;
+}
+
+#sidePanel button {
+    width: 100%;
+    color: white;
+    text-align: center;
+    transition: color 0.1s ease-in, background-color 0.1s ease-in;
+    background: none;
+    border: none;
+}
+
+#sidePanel a,
+#sidePanel button {
+    padding: 15px;
+}
+
+#sidePanel a:hover,
+#sidePanel button:hover {
+    color: black;
+    background-color: white;
+}
+
+    #sidePanel a:hover .icons, #sidePanel a:hover div,
+    #sidePanel button:hover .icons, #sidePanel button:hover div {
+        color: black;
+    }
