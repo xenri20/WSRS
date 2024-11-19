@@ -1,8 +1,9 @@
-@import url(../lib/fonts/typefaces.css);
+﻿@import url(../lib/fonts/typefaces.css);
 @import url(./navbar.css);
 
 :root {
     --nav-link: 'Product Sans Medium Regular';
+    --user: 'Product Sans Light Regular';
 }
 
 body {
@@ -15,7 +16,7 @@ body {
 }
 
 main {
-    width: 100%;
+    flex: 1;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -34,6 +35,254 @@ main {
     padding: 10px;
     user-select: none;
 }
+    
+main {
+    display: flex;
+    flex-direction: column;
+    align-content: flex-start;
+
+#side-panel {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    font-size: 12px;
+    box-sizing: border-box;
+}
+
+#sel, #logout {
+    display: flex;
+    flex-direction: column;
+}
+
+#side-panel hr {
+    width: 100%;
+    margin: 0;
+    color: white;
+    box-shadow: none;
+    box-sizing: border-box;
+}
+
+#side-panel a {
+    text-decoration: none;
+    width: 100%;
+    color: white;
+    text-align: center;
+    transition: color 0.1s ease-in, background-color 0.1s ease-in;
+}
+
+#side-panel button {
+    width: 100%;
+    color: white;
+    text-align: center;
+    transition: color 0.1s ease-in, background-color 0.1s ease-in;
+    background: none;
+    border: none;
+}
+
+#side-panel a,
+#side-panel button {
+    padding: 15px;
+}
+
+#side-panel a:hover,
+#side-panel button:hover {
+    color: black;
+    background-color: white;
+}
+
+    #side-panel a:hover .icons, #side-panel a:hover div,
+    #side-panel button:hover .icons, #side-panel button:hover div {
+        color: black;
+    }
+
+    
+main {
+    display: flex;
+    flex-direction: column;
+    align-content: flex-start;
+
+#side-panel {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    font-size: 12px;
+    box-sizing: border-box;
+}
+
+#sel, #logout {
+    display: flex;
+    flex-direction: column;
+}
+
+#side-panel hr {
+    width: 100%;
+    margin: 0;
+    color: white;
+    box-shadow: none;
+    box-sizing: border-box;
+}
+
+#side-panel a {
+    text-decoration: none;
+    width: 100%;
+    color: white;
+    text-align: center;
+    transition: color 0.1s ease-in, background-color 0.1s ease-in;
+}
+
+#side-panel button {
+    width: 100%;
+    color: white;
+    text-align: center;
+    transition: color 0.1s ease-in, background-color 0.1s ease-in;
+    background: none;
+    border: none;
+}
+
+#side-panel a,
+#side-panel button {
+    padding: 15px;
+}
+
+#side-panel a:hover,
+#side-panel button:hover {
+    color: black;
+    background-color: white;
+}
+
+    #side-panel a:hover .icons, #side-panel a:hover div,
+    #side-panel button:hover .icons, #side-panel button:hover div {
+        color: black;
+    }
+
+    
+main {
+    display: flex;
+    flex-direction: column;
+    align-content: flex-start;
+
+#side-panel {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    font-size: 12px;
+    box-sizing: border-box;
+}
+
+#sel, #logout {
+    display: flex;
+    flex-direction: column;
+}
+
+#side-panel hr {
+    width: 100%;
+    margin: 0;
+    color: white;
+    box-shadow: none;
+    box-sizing: border-box;
+}
+
+#side-panel a {
+    text-decoration: none;
+    width: 100%;
+    color: white;
+    text-align: center;
+    transition: color 0.1s ease-in, background-color 0.1s ease-in;
+}
+
+#side-panel button {
+    width: 100%;
+    color: white;
+    text-align: center;
+    transition: color 0.1s ease-in, background-color 0.1s ease-in;
+    background: none;
+    border: none;
+}
+
+#side-panel a,
+#side-panel button {
+    padding: 15px;
+}
+
+#side-panel a:hover,
+#side-panel button:hover {
+    color: black;
+    background-color: white;
+}
+
+    #side-panel a:hover .icons, #side-panel a:hover div,
+    #side-panel button:hover .icons, #side-panel button:hover div {
+        color: black;
+    }
+
+    
+main {
+    display: flex;
+    flex-direction: column;
+    align-content: flex-start;
+
+#side-panel {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    font-size: 12px;
+    box-sizing: border-box;
+}
+
+#sel, #logout {
+    display: flex;
+    flex-direction: column;
+}
+
+#side-panel hr {
+    width: 100%;
+    margin: 0;
+    color: white;
+    box-shadow: none;
+    box-sizing: border-box;
+}
+
+#side-panel a {
+    text-decoration: none;
+    width: 100%;
+    color: white;
+    text-align: center;
+    transition: color 0.1s ease-in, background-color 0.1s ease-in;
+}
+
+#side-panel button {
+    width: 100%;
+    color: white;
+    text-align: center;
+    transition: color 0.1s ease-in, background-color 0.1s ease-in;
+    background: none;
+    border: none;
+}
+
+#side-panel a,
+#side-panel button {
+    padding: 15px;
+}
+
+#side-panel a:hover,
+#side-panel button:hover {
+    color: black;
+    background-color: white;
+}
+
+    #side-panel a:hover .icons, #side-panel a:hover div,
+    #side-panel button:hover .icons, #side-panel button:hover div {
+        color: black;
+    }
+
     
 main {
     display: flex;
@@ -115,10 +364,10 @@ input[type="number"] {
     text-decoration: none;
 }
 
-#categFunc > a {
-    text-decoration: none;
-    color: black;
-}
+    #categFunc > a {
+        text-decoration: none;
+        color: black;
+    }
 
 .box {
     display: flex;
@@ -136,7 +385,7 @@ input[type="number"] {
 
 #categFunc .box:hover {
     box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 8px, rgba(0, 0, 0, 0.2) 0px 2px 4px;
-    transform: scale(1.025); 
+    transform: scale(1.025);
 }
 
 .encRec {
@@ -164,7 +413,7 @@ input[type="number"] {
 
 .iconPad {
     box-sizing: border-box;
-    border: 2px solid black; 
+    border: 2px solid black;
     max-width: 2.5rem;
     aspect-ratio: 1;
     padding: 0.25rem;
@@ -172,13 +421,4 @@ input[type="number"] {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-}
-
-footer {
-    height:50px;
-    padding: 0.5rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
 }
