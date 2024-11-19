@@ -17,7 +17,7 @@ namespace WSRS_SWAFO.Models
         public int StudentNumber { get; set; }
         public Student Student { get; set; } // Navigation Property
 
-        public DateTime CommissionDatetime { get; set; }
+        public DateOnly CommissionDate { get; set; }
         public string Sanction { get; set; }
         public string Description { get; set; }
     }
