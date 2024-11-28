@@ -1,0 +1,20 @@
+﻿@model WSRS_SWAFO.ViewModels.AccountViewModel
+
+@{
+    ViewData["Title"] = "Information";
+}
+
+<div id="account">
+    <h1>Account</h1>
+    <h2>@ViewData["Title"]</h2>
+    <div>
+        Email: <span>@Model.Email.ToLower()</span>
+    </div>
+    <div>
+        Name: <span>@Model.Name</span>
+    </div>
+
+    <hr />
+    @* TODO Add an alert if they do not have a password yet *@
+    <a class="btn btn-dark" asp-action="UpdatePassword">Change Password</a>
+</div>
