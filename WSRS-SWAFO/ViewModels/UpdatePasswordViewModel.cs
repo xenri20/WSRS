@@ -21,12 +21,4 @@ namespace WSRS_SWAFO.ViewModels
         [Compare("NewPassword", ErrorMessage = "The new password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
     }
-
-    public class RequiredIfAttribute : ValidationAttribute
-    {
-        public RequiredIfAttribute()
-        {
-            
-        }
-    }
 }
