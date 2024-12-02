@@ -55,6 +55,7 @@ h1 {
     #category-function > a {
         justify-content: center;
         align-items: center;
+        text-decoration: none;
         text-align: center;
         padding: 0.25em 1em;
         font-size: 14px;
@@ -174,6 +175,102 @@ h2 {
         background-color: black;
         color: white;
     }
+
+/* Page One - Student Violation */
+
+#first-page {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    flex: 1;
+}
+
+#search-student {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 0.5em;
+}
+
+.search-id {
+    display: flex;
+    flex: 1;
+    min-width: 0;
+    font-family: var(--nav-link);
+    padding: 8px 16px;
+    border: 2px solid black;
+    border-radius: 32px;
+    box-sizing: border-box;
+}
+
+#preview-records {
+    width: 100%;
+    height: 100%;
+    border: 2px solid black;
+    border-radius: 12px;
+    border-spacing: 0;
+    overflow: hidden;
+    font-family: var(--user);
+}
+
+    #preview-records th, #preview-records td {
+        padding: 10px;
+        text-align: center;
+    }
+
+    #preview-records td {
+        user-select: text;
+    }
+
+.selected {
+    color: white;
+    font-family: var(--nav-link);
+    background-color: #808080;
+}
+
+    #preview-records thead {
+        background-color: black;
+        color: white;
+        display: table-header-group;
+    }
+
+    #preview-records tbody {
+        display: block;
+        font-size: 0.95em;
+        overflow-y: auto;
+        height: 100%;
+        width: 100%;
+    }
+
+.iconPad {
+    border: 2px solid black;
+    height: 100%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Page Two - Student Violation */
+
+#create-new {
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1em;
+    width: 50%;
+}
+
+/* Page Three - Student Violation */
+
+#record-violation {
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1em;
+    width: 50%;
+}
 
 @media (max-width: 475px) {
     #category-function {
