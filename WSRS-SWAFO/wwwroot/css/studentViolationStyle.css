@@ -1,0 +1,198 @@
+﻿@import url(../lib/fonts/typefaces.css);
+@import url(./navbarStyle.css);
+@import url(./footerStyle.css);
+@import url(./studentViolationPageOneStyle.css);
+@import url(./studentViolationPageTwoStyle.css);
+
+
+:root {
+    --nav-link: 'Product Sans Medium Regular';
+    --user: 'Product Sans Light Regular';
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    height: 100vh;
+    width: 100vw;
+    font-family: var(--nav-link);
+    display: flex;
+    flex-direction: row;
+}
+
+main {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 1rem;
+}
+
+section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+
+h1 {
+    width: fit-content;
+    font-size: 3.5em;
+    background-image: linear-gradient(to right,#007D3C, #000000);
+    background-clip: text;
+    color: transparent;
+    margin: 0;
+}
+
+#category-function {
+    display: inline-flex;
+    flex-direction: row;
+}
+
+    #category-function > a {
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding: 0.25em 1em;
+        font-size: 14px;
+        cursor: pointer;
+        color: black;
+        background-color: transparent;
+        border: 2px solid black;
+        border-radius: 32px;
+        transition: color 0.2s ease-in, background-color 0.2s ease-in;
+    }
+
+        #category-function > a:hover, a:active {
+            background-color: black;
+            color: white;
+        }
+
+.student-encode, .traffic-encode {
+    margin-right: 0.5em;
+}
+
+hr {
+    margin: 1.25rem 0;
+}
+
+.content-panel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 85vw;
+    height: 65vh;
+    border: 2px solid black;
+    border-radius: 16px;
+}
+
+h2 {
+    margin: 0;
+}
+
+#input-panel {
+    display: flex;
+    align-self: center;
+    justify-content: center;
+    width: 75%;
+    height: 75%;
+}
+
+.title {
+    display: flex;
+    gap: 0.75em;
+    align-items: center;
+    line-height: 0;
+}
+
+    .title > a {
+        cursor: pointer;
+    }
+
+.input-wrapper {
+    position: relative;
+    font-family: var(--nav-link);
+}
+
+    .input-wrapper .input {
+        font-family: var(--nav-link);
+        padding: 8px 16px;
+        border: 2px solid black;
+        border-radius: 6px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .input-wrapper .label {
+        position: absolute;
+        left: 16px;
+        top: 10px;
+        background-color: #fff;
+        font-size: 14px;
+        padding: 0 4px;
+        transition: all 0.15s ease-out;
+        pointer-events: none;
+    }
+
+    .input-wrapper span {
+        font-family: var(--nav-link);
+    }
+
+    .input-wrapper .input:focus + .label, .input:active {
+        top: -8px;
+        left: 15px;
+        font-size: 12px;
+        background-color: #fff;
+    }
+
+    .input-wrapper .input:focus::placeholder {
+        color: transparent;
+    }
+
+    .input-wrapper span {
+        color: red;
+    }
+
+.btn {
+    justify-content: center;
+    align-self: flex-end;
+    text-align: center;
+    padding: 0.25em 2em;
+    font-size: 16px;
+    cursor: pointer;
+    color: black;
+    background-color: transparent;
+    border: 2px solid black;
+    border-radius: 32px;
+    transition: color 0.2s ease-in, background-color 0.2s ease-in;
+}
+
+    .btn:hover {
+        background-color: black;
+        color: white;
+    }
+
+@media (max-width: 475px) {
+    #category-function {
+        flex-direction: column;
+        gap: 0.4em;
+    }
+
+    #submit-section {
+        flex-direction: column;
+        width: 50%;
+    }
+}
+
+@media (max-width: 800px) {
+    .content-panel {
+        width: 75vw;
+    }
+
+    .create-new, .record-violation {
+        width: 100%
+    }
+}

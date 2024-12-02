@@ -1,0 +1,7 @@
+﻿.create-new {
+     display: inline-flex;    
+    flex-direction: column;
+    justify-content: center;
+    gap: 1em;
+    width: 50%;
+}
