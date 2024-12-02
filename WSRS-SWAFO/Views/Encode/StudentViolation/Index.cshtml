@@ -1,0 +1,16 @@
+﻿@{
+    Layout = "_StudentViolationLayout";
+    ViewData["Title"] = "Student Violation";
+}
+
+$(function(){
+
+  $(document).on("click","#",function() {
+     var val=$("#YourDropDownID").val();
+     if(val==2)
+     {
+        $("#DivContainerForCustForm").load("@Url.Action("CustomerForm", "Home")");
+     }
+  });
+
+});
