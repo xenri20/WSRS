@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace WSRS_SWAFO.Controllers
+namespace WSRS_SWAFO.Controllers.Encode
 {
-    public class StudentViolationController : Controller
+    public class TrafficViolationController : Controller
     {
         public IActionResult Index()
         {
