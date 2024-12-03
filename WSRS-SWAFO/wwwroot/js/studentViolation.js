@@ -1,7 +1,7 @@
 ﻿function formInitializer() {
-    document.querySelector("#first-page").style.display = "flex";
+    document.querySelector("#first-page").style.display = "none";
     document.querySelector("#create-new").style.display = "none";
-    document.querySelector("#record-violation").style.display = "none";
+    document.querySelector("#record-violation").style.display = "inline-flex";
 }
 
 document.querySelectorAll("#preview-records tbody tr").forEach(row => {
@@ -15,8 +15,12 @@ document.querySelectorAll("#preview-records tbody tr").forEach(row => {
 });
 
 document.querySelector("#first-page .btn-next").addEventListener("click", function () {
-    document.querySelector("#first-page").style.display = "none";
-    document.querySelector("#create-new").style.display = "inline-flex";
+    if (document.querySelector("#preview-records").classList.contains(".selected")){
+        document.querySelector("#first-page").style.display = "none";
+        document.querySelector("#create-new").style.display = "inline-flex";
+        return;
+    }
+    alert('Select a student first!')
 });
 
 document.querySelector("#create-new .btn-back").addEventListener("click", function () {
