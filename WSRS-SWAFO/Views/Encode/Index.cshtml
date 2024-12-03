@@ -1,4 +1,5 @@
-﻿@model IQueryable<WSRS_SWAFO.ViewModels.StudentsRecordModel>
+﻿@using WSRS_SWAFO.Data.Enum
+@model IQueryable<WSRS_SWAFO.ViewModels.StudentsRecordModel>
 @{
     Layout = "_StudentViolationLayout";
     ViewData["Title"] = "Student Violation";
@@ -116,7 +117,7 @@
     </div>
     <div class="input-wrapper">
         <label  class="label">Classification Of Offense<span>*</span></label>
-        <select  class="input" aria-required="true">
+        <select asp-items="Html.GetEnumSelectList<OffenseClassification>()" class="input" aria-required="true">
             <option value="">-- Select an option --</option>
         </select>
         <span  class="text-danger"></span>
