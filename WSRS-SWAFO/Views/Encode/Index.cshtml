@@ -6,8 +6,8 @@
 
 <div id="first-page">
     <h2>Check for an existing violation record</h2>
-    <form id="search-student" asp-controller="Encode" asp-action="Search">
-        <input class="search-id" autocomplete="firstname" placeholder="Check Student Violation Record" aria-required="true" />
+    <form id="search-student" asp-controller="Encode" asp-action="Search" method="get">
+        <input class="search-id" name="searchStudent" autocomplete="firstname" placeholder="Check Student Violation Record" aria-required="true" />
         <button class="iconPad" type="submit">
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <g clip-path="url(#clip0_173_68)">
@@ -22,7 +22,7 @@
             </svg>
         </button>
     </form>
-    <table>
+    <table id="preview-records">
         <thead>
             <tr>
                 <th>Student Number</th>
