@@ -22,10 +22,9 @@ namespace WSRS_SWAFO.Controllers
 
         public IActionResult Search(string searchStudent)
         {
-            var studentsQuery = _student.Students.AsQueryable();
-
             if (!string.IsNullOrEmpty(searchStudent))
             {
+                var studentsQuery = _student.Students.AsQueryable();
                 if (int.TryParse(searchStudent, out int studentNumber))
                 {
                     studentsQuery = studentsQuery.Where(s => s.StudentNumber == studentNumber);
@@ -34,17 +33,15 @@ namespace WSRS_SWAFO.Controllers
                 {
                     studentsQuery = studentsQuery.Where(s => s.LastName.Contains(searchStudent) || s.FirstName.Contains(searchStudent));
                 }
+                var result = studentsQuery.Select(s => new StudentsRecordModel
+                {
+                    StudentNumber = s.StudentNumber,
+                    LastName = s.LastName,
+                    FirstName = s.FirstName
+                });
+                return View("Index", result);
             }
-
-            // Map the query to StudentsRecordModel
-            var result = studentsQuery.Select(s => new StudentsRecordModel
-            {
-                StudentNumber = s.StudentNumber, // Assuming the view model requires it as a string
-                LastName = s.LastName,
-                FirstName = s.FirstName
-            });
-
-            return View("Index", result); // Pass the mapped IQueryable to the view
+            return View("Index");
         }
 
         public IActionResult Pending()
