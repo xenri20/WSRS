@@ -7,6 +7,10 @@
     --user: 'Product Sans Light Regular';
 }
 
+* {
+    box-sizing: border-box;
+}
+
 body {
     margin: 0;
     height: 100vh;
@@ -65,7 +69,6 @@ span {
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    box-sizing: border-box;
     border-radius: 32px;
     width: 50%;
     padding: 15px 30px;
@@ -87,7 +90,6 @@ input[type="number"] {
 
 .btnSearch {
     font-family: var(--regular);
-    box-sizing: border-box;
     border-radius: 100%;
     aspect-ratio: 1;
     padding: 1rem;
@@ -112,7 +114,6 @@ input[type="number"] {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    box-sizing: border-box;
     border-radius: 12px;
     padding: 24px;
     flex: 1;
@@ -151,7 +152,6 @@ input[type="number"] {
 }
 
 .iconPad {
-    box-sizing: border-box;
     border: 2px solid black;
     max-width: 2.5rem;
     aspect-ratio: 1;
