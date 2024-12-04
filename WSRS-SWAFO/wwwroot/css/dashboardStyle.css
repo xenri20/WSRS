@@ -7,26 +7,6 @@
     margin: 0.4rem 0;
 }
 
-#searchForm {
-    display: flex;
-    flex-direction: row;
-    margin: 1rem 0;
-}
-
-.search-field {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    border-radius: 32px;
-    width: 50%;
-    padding: 15px 30px;
-    background: transparent;
-    border: 2px solid #292929;
-    font-size: 1rem;
-    font-family: var(--user);
-    color: black;
-}
-
 .box-row {
     display: flex;
     flex-direction: row;
