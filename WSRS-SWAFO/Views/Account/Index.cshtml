@@ -1,7 +1,7 @@
 ﻿@model WSRS_SWAFO.ViewModels.AccountViewModel
 
 @{
-    ViewData["Title"] = "Information";
+    ViewData["Title"] = "Account";
 }
 
 @section customHead {
@@ -9,16 +9,22 @@
 }
 
 <div id="account">
-    <h1>Account</h1>
-    <h2>@ViewData["Title"]</h2>
-    <div>
-        Email: <span>@Model.Email.ToLower()</span>
-    </div>
-    <div>
-        Name: <span>@Model.Name</span>
-    </div>
+    <h1>@ViewData["Title"]</h1>
+    <section>
+        <h2>Information</h2>
+        <div>
+            Email: <span>@Model.Email.ToLower()</span>
+        </div>
+        <div>
+            Name: <span>@Model.Name</span>
+        </div>
+    </section>
 
     <hr />
-    @* TODO Add an alert if they do not have a password yet *@
-    <a class="btn btn-dark" asp-action="UpdatePassword">Change Password</a>
+
+    <section>
+        <h2>Offline Management</h2>
+        @* TODO Add an alert if they do not have a password yet *@
+        <a class="btn btn-dark" asp-action="UpdatePassword">Update Offline Password</a>
+    </section>
 </div>
