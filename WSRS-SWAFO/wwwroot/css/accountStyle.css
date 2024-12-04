@@ -1,0 +1,28 @@
+﻿h1 {
+    margin-bottom: 1rem;
+}
+
+#account {
+    width: 70vw;
+}
+
+#updatePasswordForm {
+    display: inline-flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 40ch;
+}
+
+    #updatePasswordForm .btn {
+        align-self: flex-start;
+    }
+
+@media (max-width: 800px) {
+    #updatePasswordForm {
+        width: 100%;
+    }
+
+        #updatePasswordForm .btn {
+            align-self: normal;
+        }
+}

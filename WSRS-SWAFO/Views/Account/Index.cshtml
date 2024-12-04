@@ -4,6 +4,10 @@
     ViewData["Title"] = "Information";
 }
 
+@section customHead {
+    <link rel="stylesheet" href="~/css/accountStyle.css" asp-append-version="true" />
+}
+
 <div id="account">
     <h1>Account</h1>
     <h2>@ViewData["Title"]</h2>
