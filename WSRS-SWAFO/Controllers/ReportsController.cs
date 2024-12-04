@@ -11,9 +11,12 @@ namespace WSRS_SWAFO.Controllers
     public class ReportsController : Controller
     {
       private readonly ILogger<ReportsController> _logger;
-        public ReportsController(ILogger<ReportsController> logger)
+        private readonly ApplicationDbContext _context;
+
+        public ReportsController(ILogger<ReportsController> logger, ApplicationDbContext context)
         {
             _logger = logger;
+            _context = context;
         }
         public IActionResult Index()
         {
