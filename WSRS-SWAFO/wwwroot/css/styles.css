@@ -61,3 +61,65 @@ input[type="number"] {
     font-family: var(--nav-link);
 }
 
+.input-wrapper {
+    position: relative;
+    font-family: var(--nav-link);
+}
+
+    .input-wrapper .input {
+        font-family: var(--nav-link);
+        padding: 8px 16px;
+        border: 2px solid black;
+        border-radius: 6px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .input-wrapper .label {
+        position: absolute;
+        left: 16px;
+        top: 10px;
+        background-color: #fff;
+        font-size: 12px;
+        padding: 0 4px;
+        transition: all 0.15s ease-out;
+        pointer-events: none;
+    }
+
+    .input-wrapper span {
+        font-family: var(--nav-link);
+    }
+
+    .input-wrapper .input:focus + .label,
+    .input-wrapper .input:not(:placeholder-shown) + .label {
+        top: -8px;
+        left: 15px;
+        font-size: 12px;
+        background-color: #fff;
+    }
+
+    .input-wrapper .input:focus::placeholder {
+        color: transparent;
+    }
+
+    .input-wrapper span {
+        color: red;
+    }
+
+.btn {
+    justify-content: center;
+    text-align: center;
+    padding: 0.25em 2em;
+    font-size: 16px;
+    cursor: pointer;
+    color: black;
+    background-color: transparent;
+    border: 2px solid black;
+    border-radius: 32px;
+    transition: color 0.2s ease-in, background-color 0.2s ease-in;
+}
+
+    .btn:hover {
+        background-color: black;
+        color: white;
+    }
