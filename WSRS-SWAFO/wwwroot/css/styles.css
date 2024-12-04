@@ -1,0 +1,63 @@
+﻿@import url(../lib/fonts/typefaces.css);
+@import url(./navbarStyle.css);
+@import url(./footerStyle.css);
+
+:root {
+    --nav-link: 'Product Sans Medium Regular';
+    --user: 'Product Sans Light Regular';
+    --gradient-header: linear-gradient(to right,#007D3C, #000000);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+}
+
+body {
+    width: 100vw;
+    font-family: var(--nav-link);
+    display: flex;
+    flex-direction: row;
+}
+
+#sidebar + .container {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+main {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 1rem;
+}
+
+h1 {
+    width: fit-content;
+    font-size: 3.5em;
+    background-image: var(--gradient-header);
+    background-clip: text;
+    color: transparent;
+    margin: 0;
+}
+
+    h1 > span {
+        font-family: var(--user);
+    }
+
+input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+.f-medium {
+    font-family: var(--nav-link);
+}
+

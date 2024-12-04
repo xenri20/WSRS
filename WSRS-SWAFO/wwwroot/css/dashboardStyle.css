@@ -1,56 +1,6 @@
-﻿@import url(../lib/fonts/typefaces.css);
-@import url(./navbarStyle.css);
-@import url(./footerStyle.css);
-
-:root {
-    --nav-link: 'Product Sans Medium Regular';
-    --user: 'Product Sans Light Regular';
-    --gradient-header: linear-gradient(to right,#007D3C, #000000);
-}
-
-* {
-    box-sizing: border-box;
-    margin: 0;
-}
-
-body {
-    width: 100vw;
-    font-family: var(--nav-link);
-    display: flex;
-    flex-direction: row;
-}
-
-#sidebar + .container {
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
-
-#dashboard {
+﻿#dashboard {
     width: 75vw;
 }
-
-main {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 1rem;
-}
-
-h1 {
-    width: fit-content;
-    font-size: 3.5em;
-    background-image: var(--gradient-header);
-    background-clip: text;
-    color: transparent;
-    margin: 0;
-}
-
-    h1 > span {
-        font-family: var(--user);
-    }
 
 .subtitle {
     color: #9B9B9B;
@@ -75,25 +25,6 @@ h1 {
     font-size: 1rem;
     font-family: var(--user);
     color: black;
-}
-
-input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-}
-
-input[type="number"] {
-    -moz-appearance: textfield;
-}
-
-.btnSearch {
-    font-family: var(--regular);
-    border-radius: 100%;
-    aspect-ratio: 1;
-    padding: 1rem;
-    background-color: transparent;
-    border: 2px solid #292929;
-    margin-left: 10px;
 }
 
 .box-row {
@@ -134,8 +65,25 @@ input[type="number"] {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.f-medium {
-    font-family: var(--nav-link);
+    .box .iconPad {
+        border: 2px solid black;
+        max-width: 2.5rem;
+        aspect-ratio: 1;
+        padding: 0.25rem;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+.btnSearch {
+    font-family: var(--regular);
+    border-radius: 100%;
+    aspect-ratio: 1;
+    padding: 1rem;
+    background-color: transparent;
+    border: 2px solid #292929;
+    margin-left: 10px;
 }
 
 @media (max-width: 800px) {
@@ -147,15 +95,4 @@ input[type="number"] {
     .box {
         margin: 0.5rem 0;
     }
-}
-
-.iconPad {
-    border: 2px solid black;
-    max-width: 2.5rem;
-    aspect-ratio: 1;
-    padding: 0.25rem;
-    border-radius: 50%;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
 }
