@@ -57,7 +57,7 @@ h1 {
     margin: 0.4rem 0;
 }
 
-#searchBar {
+#searchForm {
     display: flex;
     flex-direction: row;
     margin: 1rem 0;
