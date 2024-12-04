@@ -12,8 +12,8 @@ using WSRS_SWAFO.Models;
 namespace WSRS_SWAFO.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241119182339_Commission Datetime to Date")]
-    partial class CommissionDatetimetoDate
+    [Migration("20241204083642_Thinkpad-CL")]
+    partial class ThinkpadCL
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -231,6 +231,23 @@ namespace WSRS_SWAFO.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("WSRS_SWAFO.Models.Colleges", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Colleges");
+                });
+
             modelBuilder.Entity("WSRS_SWAFO.Models.Offense", b =>
                 {
                     b.Property<int>("Id")
@@ -239,12 +256,12 @@ namespace WSRS_SWAFO.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("Classification")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Nature")
+                    b.Property<string>("Classification")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Nature")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -259,12 +276,25 @@ namespace WSRS_SWAFO.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("CollegeId")
+                        .HasColumnType("int");
+
                     b.Property<DateOnly>("CommissionDate")
                         .HasColumnType("date");
+
+                    b.Property<string>("Course")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FormatorId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateOnly>("HearingDate")
+                        .HasColumnType("date");
 
                     b.Property<int>("OffenseId")
                         .HasColumnType("int");
@@ -273,10 +303,18 @@ namespace WSRS_SWAFO.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("StatusOfSanction")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("StudentNumber")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CollegeId");
+
+                    b.HasIndex("FormatorId");
 
                     b.HasIndex("OffenseId");
 
@@ -323,10 +361,6 @@ namespace WSRS_SWAFO.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StudentNumber"));
-
-                    b.Property<string>("Course")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -438,6 +472,16 @@ namespace WSRS_SWAFO.Migrations
 
             modelBuilder.Entity("WSRS_SWAFO.Models.ReportEncoded", b =>
                 {
+                    b.HasOne("WSRS_SWAFO.Models.Colleges", "Colleges")
+                        .WithMany()
+                        .HasForeignKey("CollegeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WSRS_SWAFO.Models.ApplicationUser", "Formator")
+                        .WithMany()
+                        .HasForeignKey("FormatorId");
+
                     b.HasOne("WSRS_SWAFO.Models.Offense", "Offense")
                         .WithMany()
                         .HasForeignKey("OffenseId")
@@ -449,6 +493,10 @@ namespace WSRS_SWAFO.Migrations
                         .HasForeignKey("StudentNumber")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Colleges");
+
+                    b.Navigation("Formator");
 
                     b.Navigation("Offense");
 

@@ -8,7 +8,7 @@ namespace WSRS_SWAFO.Models
     {
         [Key]
         public int Id { get; set; }
-        public string Nature { get; set; }
-        public OffenseClassification Classification { get; set; }
+        public OffenseClassification Nature { get; set; }
+        public string Classification { get; set; }
     }
 }

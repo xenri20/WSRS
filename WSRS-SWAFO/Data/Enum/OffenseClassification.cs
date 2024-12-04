@@ -5,9 +5,9 @@ namespace WSRS_SWAFO.Data.Enum
     public enum OffenseClassification
     {
         Minor,
-        [Display(Name = "Minor Traffic")]
-        MinorTraffic,
         Major,
+        [Display(Name ="Minor Traffic")]
+        MinorTraffic,
         [Display(Name = "Major Traffic")]
         MajorTraffic
     }
