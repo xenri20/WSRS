@@ -9,12 +9,12 @@
 </head>
 <body>
     <partial name="_SidebarPartial" />
-    <section>
-    <main class="container">
-        @RenderBody()
-    </main>
-    <partial name="_FooterPartial"/>
-    </section>
+    <div class="container">
+        <main>
+            @RenderBody()
+        </main>
+        <partial name="_FooterPartial"/>
+    </div>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
