@@ -1,11 +1,12 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WSRS_SWAFO.Models
 {
     public class Student
     {
-        [Key]
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int StudentNumber { get; set; }
         public string LastName { get; set; }
         public string FirstName { get; set; }
