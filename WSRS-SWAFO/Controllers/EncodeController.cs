@@ -16,12 +16,26 @@ namespace WSRS_SWAFO.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var students = await _student.Students.ToListAsync();
-            return View();
+            var students = await _student.Students
+                .Select(s => new StudentsRecordModel
+                {
+                    StudentNumber = s.StudentNumber,
+                    LastName = s.LastName,
+                    FirstName = s.FirstName
+                })
+                .ToListAsync();
+            var viewModel = new CreateStudentViewModel
+            {
+                ExistingStudents = students.AsQueryable()
+            };
+
+            return View(viewModel);
         }
+
 
         public IActionResult Search(string searchStudent)
         {
+                var existingDataViewModel = new CreateStudentViewModel();
             if (!string.IsNullOrEmpty(searchStudent))
             {
                 var studentsQuery = _student.Students.AsQueryable();
@@ -33,13 +47,15 @@ namespace WSRS_SWAFO.Controllers
                 {
                     studentsQuery = studentsQuery.Where(s => s.LastName.Contains(searchStudent) || s.FirstName.Contains(searchStudent));
                 }
-                var result = studentsQuery.Select(s => new StudentsRecordModel
+                existingDataViewModel.ExistingStudents = studentsQuery.Select(s => new StudentsRecordModel
                 {
                     StudentNumber = s.StudentNumber,
                     LastName = s.LastName,
                     FirstName = s.FirstName
                 });
-                return View("Index", result);
+            }
+            return View("Index", existingDataViewModel.ExistingStudents);
+        }
             }
             return View("Index");
         }
