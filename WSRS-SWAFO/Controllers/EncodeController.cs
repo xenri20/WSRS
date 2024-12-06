@@ -56,8 +56,26 @@ namespace WSRS_SWAFO.Controllers
             }
             return View("Index", existingDataViewModel.ExistingStudents);
         }
+
+        [HttpPost]
+        public IActionResult CreateNewStudent(CreateStudentViewModel model)
+        {
+            if (model.NewStudent == null)
+            {
+                return View("Error");
             }
-            return View("Index");
+
+            var student = new Student
+            {
+                StudentNumber = model.NewStudent.StudentNumber,
+                FirstName = model.NewStudent.FirstName,
+                LastName = model.NewStudent.LastName
+            };
+
+            _student.Students.Add(student);
+            _student.SaveChanges();
+
+            return RedirectToAction("Index");
         }
 
         public IActionResult Pending()
