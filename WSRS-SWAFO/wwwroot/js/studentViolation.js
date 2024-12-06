@@ -1,7 +1,7 @@
 ﻿function formInitializer() {
     document.querySelector("#first-page").style.display = "none";
-    document.querySelector("#create-new").style.display = "none";
-    document.querySelector("#record-violation").style.display = "inline-flex";
+    document.querySelector("#create-new").style.display = "inline-flex";
+    document.querySelector("#record-violation").style.display = "none";
 }
 
 document.querySelectorAll("#preview-records tbody tr").forEach(row => {

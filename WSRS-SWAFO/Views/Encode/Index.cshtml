@@ -1,5 +1,5 @@
 ﻿@using WSRS_SWAFO.Data.Enum
-@model IQueryable<WSRS_SWAFO.ViewModels.StudentsRecordModel>
+@model WSRS_SWAFO.ViewModels.CreateStudentViewModel
 @{
     Layout = "_StudentViolationLayout";
     ViewData["Title"] = "Student Violation";
@@ -32,7 +32,7 @@
             </tr>
         </thead>
         <tbody>
-            @if (Model == null || !Model.Any())
+            @if (Model.ExistingStudents == null || !Model.ExistingStudents.Any())
             {
                 <tr>
                     <td colspan="3">No records found.</td>
@@ -40,7 +40,7 @@
             }
             else
             {
-                foreach (var student in Model)
+                foreach (var student in Model.ExistingStudents.ToList())
                 {
                     <tr>
                         <td>@student.StudentNumber</td>
@@ -56,7 +56,7 @@
     </a>
 </div>
 
-<div id="create-new">
+<form id="create-new" asp-controller="Encode" asp-action="CreateNewStudent">
     <div class="title">
         <a class="btn-back">
             <svg width="32" height="32" viewBox="0 0 43 43" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -69,29 +69,24 @@
         <h2>Create a New Record</h2>
     </div>
     <div class="input-wrapper">
-        <input  type="text" class="input" autocomplete="StudentNumber" aria-required="true" />
+        <input asp-for="NewStudent.StudentNumber" type="text" class="input" autocomplete="StudentNumber" aria-required="true" />
         <label  class="label">Student Number<span>*</span></label>
         <span  class="text-danger"></span>
     </div>
     <div class="input-wrapper">
-        <input  type="text" class="input" autocomplete="firstname" aria-required="true" />
+        <input asp-for="NewStudent.FirstName" type="text" class="input" autocomplete="firstname" aria-required="true" />
         <label  class="label">First Name<span>*</span></label>
         <span  class="text-danger"></span>
     </div>
     <div class="input-wrapper">
-        <input  type="text" class="input" autocomplete="MiddleInitial" aria-required="true" />
-        <label  class="label">Middle Initial<span>*</span></label>
-        <span  class="text-danger"></span>
-    </div>
-    <div class="input-wrapper">
-        <input  type="text" class="input" autocomplete="LastName" aria-required="true" />
+        <input asp-for="NewStudent.LastName" type="text" class="input" autocomplete="LastName" aria-required="true" />
         <label  class="label">Last Name<span>*</span></label>
         <span  class="text-danger"></span>
     </div>
-    <a class="btn btn-next">
+    <button class="btn btn-next" type="submit">
         Next
-    </a>
-</div>
+    </button>
+</form>
 
 <div id="record-violation">
     <div class="title">
