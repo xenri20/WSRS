@@ -1,8 +1,20 @@
-﻿function formInitializer() {
+﻿var btnLinks = document.querySelectorAll("#category-function a")
+for (btnLink of btnLinks) {
+    btnLink.addEventListener("click", function (e) {
+        for (eachCategory of btnLinks) {
+            eachCategory.classList.remove("active");
+        }
+        e.currentTarget.classList.add("active");
+    });
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    document.querySelector(".encode-nav").classList.add("active");
+    document.querySelector(".student-encode").classList.add("active");
     document.querySelector("#first-page").style.display = "none";
     document.querySelector("#create-new").style.display = "inline-flex";
     document.querySelector("#record-violation").style.display = "none";
-}
+});
 
 document.querySelectorAll("#preview-records tbody tr").forEach(row => {
     row.addEventListener("click", function () {
