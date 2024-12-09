@@ -1,4 +1,5 @@
-﻿using Microsoft.Identity.Client;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Identity.Client;
 using System.ComponentModel.DataAnnotations;
 
 namespace WSRS_SWAFO.ViewModels
@@ -6,6 +7,7 @@ namespace WSRS_SWAFO.ViewModels
     public class StudentsRecordModel
     {
         [Required(ErrorMessage = "Student ID is required")]
+        [Remote(action: "CheckStudentID", controller: "Encode", ErrorMessage = "Student ID is already taken.")]
         [Display(Name = "Student Number")]
         public int StudentNumber { get; set; }
 
