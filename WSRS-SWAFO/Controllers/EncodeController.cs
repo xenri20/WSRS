@@ -32,7 +32,7 @@ namespace WSRS_SWAFO.Controllers
             return View(viewModel);
         }
 
-
+        [HttpGet]
         public IActionResult Search(string searchStudent)
         {
                 var existingDataViewModel = new CreateStudentViewModel();
@@ -57,6 +57,14 @@ namespace WSRS_SWAFO.Controllers
             return View("Index", existingDataViewModel.ExistingStudents);
         }
 
+        [AcceptVerbs("GET", "POST")]
+        public async Task<IActionResult> CheckStudentID(CreateStudentViewModel model)
+        {
+            var exists = await _student.Students.AnyAsync(student => student.StudentNumber == model.NewStudent.StudentNumber);
+            return Json(!exists); 
+        }
+
+
         [HttpPost]
         public IActionResult CreateNewStudent(CreateStudentViewModel model)
         {
@@ -64,11 +72,6 @@ namespace WSRS_SWAFO.Controllers
             {
                 return View("Index", model);
             }
-
-            //if (model.NewStudent == null)
-            //{
-            //    return View("Error");
-            //}
 
             var student = new Student
             {
