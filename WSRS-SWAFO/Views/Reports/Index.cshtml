@@ -1,17 +1,16 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@* TODO Add Model later *@
 
-
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.min.js" integrity="sha512-L0Shl7nXXzIlBSUUPpxrokqq4ojqgZFQczTYlGjzONGTDAcLremjwaWv5A+EDLnxhQzY5xUZPWLOLqYRkY0Cbw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<h2><b>Reports Chart</b></h2>
-<div>
+<div id="reports">
+    <h2>Reports Chart</h2>
     <canvas id="reportsChart" height="200" width="500"></canvas>
 </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.min.js" integrity="sha512-L0Shl7nXXzIlBSUUPpxrokqq4ojqgZFQczTYlGjzONGTDAcLremjwaWv5A+EDLnxhQzY5xUZPWLOLqYRkY0Cbw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+@* TODO Add data to charts *@
+@* TODO Add legend to the chart of which college is what color *@
+
 <script>
     // Get the canvas element by its ID
     const ctx = document.getElementById('reportsChart').getContext('2d');
@@ -41,4 +40,3 @@
         data: chartData
     });
 </script>
-
