@@ -5,13 +5,15 @@ namespace WSRS_SWAFO.ViewModels
 {
     public class StudentsRecordModel
     {
+        [Required(ErrorMessage = "Student ID is required")]
         [Display(Name = "Student Number")]
-        //[Required(ErrorMessage = "Email Address is required")]
         public int StudentNumber { get; set; }
 
+        [Required(ErrorMessage = "Student's First Name is required")]
         [Display(Name = "First Name")]
-        //[Required(ErrorMessage = "Password is required")]
         public string FirstName { get; set; }
+
+        [Required(ErrorMessage = "Student's Last Name is required")]
         [Display(Name = "Last Name")]
         public string LastName { get; set; }
     }

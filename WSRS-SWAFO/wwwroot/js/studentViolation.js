@@ -28,10 +28,16 @@ document.querySelector("#create-new .btn-back").addEventListener("click", functi
     document.querySelector("#create-new").style.display = "none";
 })
 
-document.querySelector("#create-new .btn-next").addEventListener("click", function () {
-    document.querySelector("#create-new").style.display = "none";
-    document.querySelector("#record-violation").style.display = "inline-flex";
-})
+//document.querySelector("#create-new").addEventListener("submit", function (e) {
+//    if (this.checkValidity()) {
+//        e.preventDefault();
+//        return alert("Please fill out all required fields before proceeding.");
+//    } 
+//    alert("Student Data Created Successfully!");
+//    this.style.display = "none";
+//    document.querySelector("#record-violation").style.display = "inline-flex";
+//});
+
 
 document.querySelector("#record-violation .btn-back").addEventListener("click", function () {
     document.querySelector("#create-new").style.display = "inline-flex";
