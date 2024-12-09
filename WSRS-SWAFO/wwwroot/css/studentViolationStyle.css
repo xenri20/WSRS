@@ -1,51 +1,4 @@
-﻿@import url(../lib/fonts/typefaces.css);
-@import url(./navbarStyle.css);
-@import url(./footerStyle.css);
-@import url(./studentViolationPageOneStyle.css);
-@import url(./studentViolationPageTwoStyle.css);
-
-
-:root {
-    --nav-link: 'Product Sans Medium Regular';
-    --user: 'Product Sans Light Regular';
-}
-
-* {
-    box-sizing: border-box;
-}
-
-body {
-    margin: 0;
-    height: 100vh;
-    width: 100vw;
-    font-family: var(--nav-link);
-    display: flex;
-    flex-direction: row;
-}
-
-main {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 1rem;
-}
-
-section {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-}
-
-
-h1 {
-    width: fit-content;
-    font-size: 3.5em;
-    background-image: linear-gradient(to right,#007D3C, #000000);
-    background-clip: text;
-    color: transparent;
-    margin: 0;
-}
+﻿@import url(./styles.css);
 
 #category-function {
     display: inline-flex;
@@ -115,69 +68,9 @@ h2 {
         cursor: pointer;
     }
 
-.input-wrapper {
-    position: relative;
-    font-family: var(--nav-link);
-}
-
-    .input-wrapper .input {
-        font-family: var(--nav-link);
-        padding: 8px 16px;
-        border: 2px solid black;
-        border-radius: 6px;
-        width: 100%;
-        box-sizing: border-box;
-    }
-
-    .input-wrapper .label {
-        position: absolute;
-        left: 16px;
-        top: 10px;
-        background-color: #fff;
-        font-size: 14px;
-        padding: 0 4px;
-        transition: all 0.15s ease-out;
-        pointer-events: none;
-    }
-
-    .input-wrapper span {
-        font-family: var(--nav-link);
-    }
-
-    .input-wrapper .input:focus + .label,
-    .input-wrapper .input:not(:placeholder-shown) + .label {
-        top: -8px;
-        left: 15px;
-        font-size: 12px;
-        background-color: #fff;
-    }
-
-    .input-wrapper .input:focus::placeholder {
-        color: transparent;
-    }
-
-    .input-wrapper span {
-        color: red;
-    }
-
 .btn {
-    justify-content: center;
     align-self: flex-end;
-    text-align: center;
-    padding: 0.25em 2em;
-    font-size: 16px;
-    cursor: pointer;
-    color: black;
-    background-color: transparent;
-    border: 2px solid black;
-    border-radius: 32px;
-    transition: color 0.2s ease-in, background-color 0.2s ease-in;
 }
-
-    .btn:hover {
-        background-color: black;
-        color: white;
-    }
 
 /* Page One - Student Violation */
 

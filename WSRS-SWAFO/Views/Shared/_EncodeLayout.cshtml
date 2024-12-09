@@ -9,8 +9,8 @@
 </head>
 <body>
     <partial name="_SidebarPartial" />
-    <section>
-        <main class="container">
+    <div class="container">
+        <main>
             <div id="encode">
                 <h1>Encode</h1>
                 <div id="category-function">
@@ -33,8 +33,10 @@
             </div>
         </main>
         <partial name="_FooterPartial" />
-    </section>
+    </div>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
