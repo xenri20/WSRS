@@ -69,16 +69,18 @@
     padding: 15px;
 }
 
-#sidePanel a:hover,
-#sidePanel button:hover {
-    color: black;
-    background-color: white;
-}
-
-    #sidePanel a:hover .icons, #sidePanel a:hover div,
-    #sidePanel button:hover .icons, #sidePanel button:hover div {
+    #sidePanel a:hover,
+    #sidePanel button:hover,
+    #sidePanel .active {
         color: black;
+        background-color: white;
     }
+
+        #sidePanel a:hover .icons,
+        #sidePanel button:hover .icons,
+        #sidePanel .active .icons {
+            color: black;
+        }
 
 .dark-btn {
     font-family: var(--medium);

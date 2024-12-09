@@ -67,7 +67,9 @@ h1 {
         transition: color 0.2s ease-in, background-color 0.2s ease-in;
     }
 
-        #category-function > a:hover, a:active {
+        #category-function > a:hover,
+        #category-function > a:active,
+        #category-function > a.active {
             background-color: black;
             color: white;
         }
