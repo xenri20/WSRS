@@ -22,8 +22,7 @@ namespace WSRS_SWAFO.Controllers
                     StudentNumber = s.StudentNumber,
                     LastName = s.LastName,
                     FirstName = s.FirstName
-                })
-                .ToListAsync();
+                }).Take(5).ToListAsync();
             var viewModel = new CreateStudentViewModel
             {
                 ExistingStudents = students.AsQueryable()
@@ -54,7 +53,7 @@ namespace WSRS_SWAFO.Controllers
                     FirstName = s.FirstName
                 });
             }
-            return View("Index", existingDataViewModel.ExistingStudents);
+            return View("Index", existingDataViewModel);
         }
 
         [AcceptVerbs("GET", "POST")]
