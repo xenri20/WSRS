@@ -60,10 +60,15 @@ namespace WSRS_SWAFO.Controllers
         [HttpPost]
         public IActionResult CreateNewStudent(CreateStudentViewModel model)
         {
-            if (model.NewStudent == null)
+            if (!ModelState.IsValid)
             {
-                return View("Error");
+                return View("Index", model);
             }
+
+            //if (model.NewStudent == null)
+            //{
+            //    return View("Error");
+            //}
 
             var student = new Student
             {
