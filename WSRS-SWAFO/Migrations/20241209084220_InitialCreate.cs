@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace WSRS_SWAFO.Migrations
 {
     /// <inheritdoc />
-    public partial class @new : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -52,13 +52,26 @@ namespace WSRS_SWAFO.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Colleges",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Colleges", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Offenses",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Nature = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Classification = table.Column<int>(type: "int", nullable: false)
+                    Nature = table.Column<int>(type: "int", nullable: false),
+                    Classification = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -69,11 +82,9 @@ namespace WSRS_SWAFO.Migrations
                 name: "Students",
                 columns: table => new
                 {
-                    StudentNumber = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    StudentNumber = table.Column<int>(type: "int", nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Course = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -193,14 +204,30 @@ namespace WSRS_SWAFO.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     OffenseId = table.Column<int>(type: "int", nullable: false),
+                    CollegeId = table.Column<int>(type: "int", nullable: false),
                     StudentNumber = table.Column<int>(type: "int", nullable: false),
-                    CommissionDatetime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    FormatorId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CommissionDate = table.Column<DateOnly>(type: "date", nullable: false),
+                    Course = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    HearingDate = table.Column<DateOnly>(type: "date", nullable: false),
                     Sanction = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    StatusOfSanction = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ReportsEncoded", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ReportsEncoded_AspNetUsers_FormatorId",
+                        column: x => x.FormatorId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_ReportsEncoded_Colleges_CollegeId",
+                        column: x => x.CollegeId,
+                        principalTable: "Colleges",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_ReportsEncoded_Offenses_OffenseId",
                         column: x => x.OffenseId,
@@ -315,6 +342,16 @@ namespace WSRS_SWAFO.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ReportsEncoded_CollegeId",
+                table: "ReportsEncoded",
+                column: "CollegeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ReportsEncoded_FormatorId",
+                table: "ReportsEncoded",
+                column: "FormatorId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ReportsEncoded_OffenseId",
                 table: "ReportsEncoded",
                 column: "OffenseId");
@@ -374,6 +411,9 @@ namespace WSRS_SWAFO.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "Colleges");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

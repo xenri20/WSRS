@@ -8,6 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\ApplicationDb\**" />
+    <Content Remove="Migrations\ApplicationDb\**" />
+    <EmbeddedResource Remove="Migrations\ApplicationDb\**" />
+    <None Remove="Migrations\ApplicationDb\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.10" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.10" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.10" />
@@ -21,7 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Migrations\ApplicationDb\" />
+    <Folder Include="Migrations\" />
     <Folder Include="wwwroot\lib\fonts\" />
   </ItemGroup>
 
