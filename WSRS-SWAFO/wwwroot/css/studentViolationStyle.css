@@ -168,6 +168,11 @@ h2 {
     width: 50%;
 }
 
+.student-information .info {
+    font-family: var(--user);
+}
+
+
 @media (max-width: 475px) {
     #category-function {
         flex-direction: column;

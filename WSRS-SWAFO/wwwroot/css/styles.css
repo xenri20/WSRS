@@ -123,3 +123,11 @@ input[type="number"] {
         background-color: black;
         color: white;
     }
+
+.label-header{
+    font-family: var(--nav-link);
+}
+
+.info {
+    font-family: var(--user);
+}
