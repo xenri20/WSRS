@@ -15,7 +15,7 @@ namespace WSRS_SWAFO.Controllers
             TempData["StudentNumber"] = StudentNumber;
             TempData["FirstName"] = FirstName;
             TempData["LastName"] = LastName;
-            return Ok();
+            return NoContent();
         }
 
         public StudentsRecordModel GetStudentData() {  return _studentData; }
