@@ -112,8 +112,8 @@ input[type="number"] {
     padding: 0.25em 2em;
     font-size: 16px;
     cursor: pointer;
-    color: black;
     background-color: transparent;
+    color: black;
     border: 2px solid black;
     border-radius: 32px;
     transition: color 0.2s ease-in, background-color 0.2s ease-in;
@@ -123,6 +123,15 @@ input[type="number"] {
         background-color: black;
         color: white;
     }
+
+    .btn:focus {
+        box-shadow: none;
+    }
+
+.dark {
+    background-color: black;
+    color: white;
+}
 
 .label-header{
     font-family: var(--nav-link);
