@@ -105,5 +105,59 @@ namespace WSRS_SWAFO.Controllers
         {
             return View();
         }
+
+        [HttpGet]
+        public IActionResult CreateCollege()
+        {
+            var colleges = _student.Colleges.ToList(); // Fetch all colleges
+            ViewBag.Colleges = colleges; // Pass the list of colleges to the view
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult CreateCollege(string collegeName)
+        {
+            if (ModelState.IsValid)
+            {
+                // Check if the collegeName already exists to prevent duplicate entries
+                var existingCollege = _student.Colleges.FirstOrDefault(c => c.CollegeID == collegeName);
+                if (existingCollege == null)
+                {
+                    // Create new college with the given name and set the CollegeID to the same value
+                    var newCollege = new Colleges
+                    {
+                        CollegeID = collegeName // Use collegeName as CollegeID
+                    };
+
+                    _student.Colleges.Add(newCollege);
+                    _student.SaveChanges(); // Save changes to the database
+
+                    TempData["SuccessMessage"] = "College added into the database successfully."; // Success message
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = "College ID already exists."; // Error message for duplicate CollegeID
+                }
+
+                return RedirectToAction("CreateCollege"); // Redirect to refresh the page and display success/error
+            }
+
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult DeleteCollege(string collegeID)
+        {
+            var college = _student.Colleges.FirstOrDefault(c => c.CollegeID == collegeID);
+            if (college != null)
+            {
+                _student.Colleges.Remove(college); // Remove the college
+                _student.SaveChanges();           // Save changes
+                TempData["SuccessMessage"] = "College deleted successfully.";
+            }
+            return RedirectToAction("CreateCollege"); // Redirect to refresh the page
+        }
     }
 }

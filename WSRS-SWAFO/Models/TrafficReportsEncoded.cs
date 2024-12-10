@@ -16,6 +16,11 @@ namespace WSRS_SWAFO.Models
         [ForeignKey("Student")]
         public int StudentNumber { get; set; }
         public Student Student { get; set; } // Navigation Property
+
+        [ForeignKey("Colleges")]
+        public string CollegeID { get; set; }
+        public Colleges Colleges { get; set; }
+
         public string PlateNumber { get; set; }
         public DateTime CommissionDatetime { get; set; }
         public string Place { get; set; }
