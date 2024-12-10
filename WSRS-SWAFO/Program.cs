@@ -75,6 +75,7 @@ builder.Services.ConfigureApplicationCookie(options => {
 builder.Services.AddMvc();
 
 builder.Services.AddMemoryCache();
+builder.Services.AddSession();
 
 var app = builder.Build();
 
@@ -86,6 +87,7 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+app.UseSession();
 
 app.UseRouting();
 
