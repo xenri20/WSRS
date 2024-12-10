@@ -15,7 +15,7 @@ namespace WSRS_SWAFO.Models
 
         [ForeignKey("Colleges")]
         public string CollegeID { get; set; }
-        public Colleges Colleges { get; set; }
+        public College College { get; set; }
 
         [ForeignKey("Student")]
         public int StudentNumber { get; set; }

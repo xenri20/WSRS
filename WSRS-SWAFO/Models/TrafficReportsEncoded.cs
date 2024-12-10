@@ -19,7 +19,7 @@ namespace WSRS_SWAFO.Models
 
         [ForeignKey("Colleges")]
         public string CollegeID { get; set; }
-        public Colleges Colleges { get; set; }
+        public College College { get; set; }
 
         public string PlateNumber { get; set; }
         public DateTime CommissionDatetime { get; set; }

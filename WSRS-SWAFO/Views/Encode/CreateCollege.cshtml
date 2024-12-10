@@ -1,4 +1,4 @@
-﻿@model WSRS_SWAFO.Models.Colleges
+﻿@model WSRS_SWAFO.Models.College
 
 @{
     ViewData["Title"] = "Create College";
@@ -42,7 +42,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var college in ViewBag.Colleges)
+        @foreach (var college in ViewBag.College)
         {
             <tr>
                 <td>@college.CollegeID</td>
