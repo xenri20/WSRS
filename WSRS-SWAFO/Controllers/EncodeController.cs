@@ -8,6 +8,17 @@ namespace WSRS_SWAFO.Controllers
     public class EncodeController : Controller
     {
         private readonly ApplicationDbContext _student;
+        private StudentsRecordModel _studentData = new StudentsRecordModel();
+
+        public IActionResult SetStudentData(int StudentNumber, string FirstName, string LastName)
+        {
+            TempData["StudentNumber"] = StudentNumber;
+            TempData["FirstName"] = FirstName;
+            TempData["LastName"] = LastName;
+            return Ok();
+        }
+
+        public StudentsRecordModel GetStudentData() {  return _studentData; }
 
         public EncodeController(ApplicationDbContext student)
         {
