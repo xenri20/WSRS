@@ -53,8 +53,13 @@
                         <td>@student.LastName</td>
                         <td>@student.FirstName</td>
                         <td>
-                            <a class="btn btn-select">
-                            Select
+                            <a asp-controller="Encode"
+                               asp-action="SetStudentData"
+                               asp-route-studentNumber="@student.StudentNumber"
+                               asp-route-lastName="@student.LastName"
+                               asp-route-firstName="@student.FirstName"
+                               class="btn btn-select" onclick="saveStudentData()">
+                                Select
                             </a>
                         </td>
                     </tr>
@@ -95,7 +100,7 @@
     </button>
 </form>
 
-<div id="record-violation">
+<form id="record-violation">
     <div class="title">
         <a class="btn-back">
             <svg width="32" height="32" viewBox="0 0 43 43" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -144,5 +149,5 @@
     <a class="btn btn-submit">
         Submit
     </a>
-</div>
+</form>
 <script src="~/js/studentViolation.js" />
