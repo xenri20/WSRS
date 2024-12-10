@@ -17,6 +17,12 @@
         align-self: flex-start;
     }
 
+    #updatePasswordForm .btn-row {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 1rem;
+    }
+
 @media (max-width: 800px) {
     #updatePasswordForm {
         width: 100%;
