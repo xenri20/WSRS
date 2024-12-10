@@ -51,14 +51,16 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddDefaultIdentity<ApplicationUser>(options => 
 {
-    // Temporary definition of password requirements for testing
+    /* PASSWORD REQUIREMENTS (based on https://learn.microsoft.com/en-us/microsoft-365/admin/misc/password-policy-recommendations?view=o365-worldwide)
+        - Minimum 12 characters 
+        - No strict requirements for digits, lowercase, uppercase, or non-alphanumeric characters
+     */
     options.SignIn.RequireConfirmedAccount = false;
-    options.Password.RequireDigit = true;
-    options.Password.RequireLowercase = true;
+    options.Password.RequireDigit = false;
+    options.Password.RequireLowercase = false;
     options.Password.RequireUppercase = false;
     options.Password.RequireNonAlphanumeric = false;
-    options.Password.RequiredLength = 6;
-    options.Password.RequiredUniqueChars = 1;
+    options.Password.RequiredLength = 12;
 })
 .AddRoles<IdentityRole>()
 .AddEntityFrameworkStores<ApplicationDbContext>();
