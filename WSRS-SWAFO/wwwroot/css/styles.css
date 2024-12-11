@@ -128,10 +128,33 @@ input[type="number"] {
         box-shadow: none;
     }
 
-.dark {
-    background-color: black;
+.dark-btn {
+    font-family: var(--medium);
+    border-radius: 32px;
+    background-color: #292929;
+    border: 2px solid #292929;
+    padding: 5px 2rem;
     color: white;
+    cursor: pointer;
 }
+    
+    .dark-btn:active {
+        background-color: #363636;
+    }
+
+.light-btn {
+    font-family: var(--medium);
+    border-radius: 32px;
+    background: transparent;
+    border: 2px solid #292929;
+    padding: 5px 2rem;
+    color: #292929;
+    cursor: pointer;
+}
+
+    .light-btn:active {
+        background-color: #d7d7d7;
+    }
 
 .label-header{
     font-family: var(--nav-link);
