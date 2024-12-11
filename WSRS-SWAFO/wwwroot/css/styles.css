@@ -3,152 +3,152 @@
 @import url(./footerStyle.css);
 
 :root {
-  --nav-link: "Product Sans Medium Regular";
-  --gradient-header: linear-gradient(to right, #007d3c, #000000);
-  --bold: "Product Sans Bold";
-  --light: "Product Sans Light Regular";
+    --gradient-header: linear-gradient(to right, #007d3c, #000000);
+    --bold: "Product Sans Bold";
+    --medium: "Product Sans Medium Regular";
+    --light: "Product Sans Light Regular";
 }
 
 * {
-  box-sizing: border-box;
-  margin: 0;
+    box-sizing: border-box;
+    margin: 0;
 }
 
 body {
-  width: 100vw;
-  font-family: var(--nav-link);
-  display: flex;
-  flex-direction: row;
+    width: 100vw;
+    font-family: var(--medium);
+    display: flex;
+    flex-direction: row;
 }
 
 #sidebar + .container {
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 main {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 1rem;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 1rem;
 }
 
 h1 {
-  width: fit-content;
-  font-size: 3.5em;
-  font-family: var(--bold);
-  background-image: var(--gradient-header);
-  background-clip: text;
-  color: transparent;
-  margin: 0;
+    width: fit-content;
+    font-size: 3.5em;
+    font-family: var(--bold);
+    background-image: var(--gradient-header);
+    background-clip: text;
+    color: transparent;
+    margin: 0;
 }
 
-h1 > span {
-  font-family: var(--light);
-}
+    h1 > span {
+        font-family: var(--light);
+    }
 
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
+    -webkit-appearance: none;
+    margin: 0;
 }
 
 input[type="number"] {
-  -moz-appearance: textfield;
+    -moz-appearance: textfield;
 }
 
 .f-medium {
-  font-family: var(--nav-link);
+    font-family: var(--medium);
 }
 
 .input-wrapper {
-  position: relative;
-  font-family: var(--nav-link);
+    position: relative;
+    font-family: var(--medium);
 }
 
-.input-wrapper .input {
-  font-family: var(--nav-link);
-  padding: 8px 16px;
-  border: 2px solid black;
-  border-radius: 6px;
-  width: 100%;
-  box-sizing: border-box;
-}
+    .input-wrapper .input {
+        font-family: var(--medium);
+        padding: 8px 16px;
+        border: 2px solid black;
+        border-radius: 6px;
+        width: 100%;
+        box-sizing: border-box;
+    }
 
-.input-wrapper .label {
-  position: absolute;
-  left: 16px;
-  top: 10px;
-  background-color: #fff;
-  font-size: 12px;
-  padding: 0 4px;
-  transition: all 0.15s ease-out;
-  pointer-events: none;
-}
+    .input-wrapper .label {
+        position: absolute;
+        left: 16px;
+        top: 10px;
+        background-color: #fff;
+        font-size: 12px;
+        padding: 0 4px;
+        transition: all 0.15s ease-out;
+        pointer-events: none;
+    }
 
-.input-wrapper span {
-  font-family: var(--nav-link);
-}
+    .input-wrapper span {
+        font-family: var(--medium);
+    }
 
-.input-wrapper .input:focus + .label,
-.input-wrapper .input:not(:placeholder-shown) + .label {
-  top: -8px;
-  left: 15px;
-  font-size: 12px;
-  background-color: #fff;
-}
+    .input-wrapper .input:focus + .label,
+    .input-wrapper .input:not(:placeholder-shown) + .label {
+        top: -8px;
+        left: 15px;
+        font-size: 12px;
+        background-color: #fff;
+    }
 
-.input-wrapper .input:focus::placeholder {
-  color: transparent;
-}
+    .input-wrapper .input:focus::placeholder {
+        color: transparent;
+    }
 
-.input-wrapper span {
-  color: red;
-}
+    .input-wrapper span {
+        color: red;
+    }
 
 .btn {
-  justify-content: center;
-  text-align: center;
-  padding: 0.25em 2em;
-  font-size: 16px;
-  font-family: var(--medium);
-  cursor: pointer;
-  border-radius: 32px;
-  transition: color 0.2s ease-in, background-color 0.2s ease-in;
-  border: 2px solid black; 
-  background-color: transparent; 
-  color: black; 
+    justify-content: center;
+    text-align: center;
+    padding: 0.25em 2em;
+    font-size: 16px;
+    font-family: var(--medium);
+    cursor: pointer;
+    border-radius: 32px;
+    transition: color 0.2s ease-in, background-color 0.2s ease-in;
+    border: 2px solid black;
+    background-color: transparent;
+    color: black;
 }
 
     .btn:hover {
-      background-color: black;
-      color: white;
+        background-color: black;
+        color: white;
     }
 
     .btn:focus {
-      box-shadow: none;
+        box-shadow: none;
     }
 
 .dark-btn {
-  background-color: #292929;
-  border: 2px solid #292929;
-  padding: 5px 2rem;
-  color: white;
+    background-color: #292929;
+    border: 2px solid #292929;
+    padding: 5px 2rem;
+    color: white;
 }
 
     .dark-btn:active {
-      background-color: #363636;
+        background-color: #363636;
     }
 
 .label-header {
-  font-family: var(--nav-link);
+    font-family: var(--medium);
 }
 
 .info {
-  font-family: var(--light);
+    font-family: var(--light);
 }
 
 .modal .modal-content {
