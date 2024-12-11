@@ -5,7 +5,7 @@
     ViewData["Title"] = "Account";
 
     @* For changing name to title case *@
-    TextInfo textInfo = new CultureInfo("en-US",false).TextInfo;
+    TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
     string nameTitleCase = textInfo.ToTitleCase(Model.Name.ToLower());
 }
 
@@ -17,12 +17,12 @@
     <h1>@ViewData["Title"]</h1>
     <section>
         <h2>Information</h2>
-        <div>
-            Email: <span>@Model.Email.ToLower()</span>
-        </div>
-        <div>
-            Name: <span>@nameTitleCase</span>
-        </div>
+        <dl>
+            <dt>Email</dt>
+            <dd>@Model.Email</dd>
+            <dt>Name</dt>
+            <dd>@nameTitleCase</dd>
+        </dl>
     </section>
 
     <hr />

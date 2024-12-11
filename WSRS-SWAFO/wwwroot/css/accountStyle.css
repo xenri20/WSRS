@@ -23,6 +23,21 @@
         margin-top: 1rem;
     }
 
+dl {
+    display: grid;
+    grid-gap: 4px 16px;
+    grid-template-columns: max-content;
+}
+
+dt {
+    font-weight: normal;
+}
+
+dd {
+    margin: 0;
+    grid-column-start: 2;
+}
+
 @media (max-width: 800px) {
     #updatePasswordForm {
         width: 100%;
