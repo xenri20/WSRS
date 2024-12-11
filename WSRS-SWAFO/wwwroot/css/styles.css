@@ -6,6 +6,7 @@
     --gradient-header: linear-gradient(to right, #007d3c, #000000);
     --bold: "Product Sans Bold";
     --medium: "Product Sans Medium Regular";
+    --regular: "Product Sans Regular";
     --light: "Product Sans Light Regular";
 }
 
@@ -16,7 +17,7 @@
 
 body {
     width: 100vw;
-    font-family: var(--medium);
+    font-family: var(--regular);
     display: flex;
     flex-direction: row;
 }
