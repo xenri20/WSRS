@@ -4,9 +4,9 @@
 
 :root {
   --nav-link: "Product Sans Medium Regular";
-  --user: "Product Sans Light Regular";
   --gradient-header: linear-gradient(to right, #007d3c, #000000);
   --bold: "Product Sans Bold";
+  --light: "Product Sans Light Regular";
 }
 
 * {
@@ -47,7 +47,7 @@ h1 {
 }
 
 h1 > span {
-  font-family: var(--user);
+  font-family: var(--light);
 }
 
 input::-webkit-outer-spin-button,
@@ -143,13 +143,12 @@ input[type="number"] {
       background-color: #363636;
     }
 
-
 .label-header {
   font-family: var(--nav-link);
 }
 
 .info {
-  font-family: var(--user);
+  font-family: var(--light);
 }
 
 .modal .modal-content {
