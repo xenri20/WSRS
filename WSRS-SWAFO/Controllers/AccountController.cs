@@ -48,8 +48,6 @@ namespace WSRS_SWAFO.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdatePasswordAsync(UpdatePasswordViewModel updatePasswordVM)
         {
-            const string requiredMessage = "This password field is required.";
-
             if (!ModelState.IsValid)
             {
                 var errorList = ModelState.Values
