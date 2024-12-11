@@ -6,6 +6,7 @@
   --nav-link: "Product Sans Medium Regular";
   --user: "Product Sans Light Regular";
   --gradient-header: linear-gradient(to right, #007d3c, #000000);
+  --bold: "Product Sans Bold";
 }
 
 * {
@@ -38,6 +39,7 @@ main {
 h1 {
   width: fit-content;
   font-size: 3.5em;
+  font-family: var(--bold);
   background-image: var(--gradient-header);
   background-clip: text;
   color: transparent;
