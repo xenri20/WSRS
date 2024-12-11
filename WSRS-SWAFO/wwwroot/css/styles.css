@@ -39,7 +39,7 @@ main {
 
 h1 {
     width: fit-content;
-    font-size: 3.5em;
+    font-size: 3rem;
     font-family: var(--bold);
     background-image: var(--gradient-header);
     background-clip: text;
