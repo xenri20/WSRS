@@ -149,3 +149,7 @@ input[type="number"] {
 .info {
   font-family: var(--user);
 }
+
+.modal .modal-content {
+    border-radius: 12px;
+}
