@@ -1,8 +1,10 @@
 ﻿@using WSRS_SWAFO.Data.Enum
-
-@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+@using WSRS_SWAFO.ViewModels
+@model StudentRecordViewModel
+@{
+    Layout = "_EncodeLayout";
+    ViewData["Title"] = "Student Violation";
+}
 @section customHead {
     <link rel="stylesheet" href="~/css/studentViolationStyle.css" asp-append-version="true" />
 }
@@ -18,8 +20,8 @@
         <h2>Record Violation</h2>
     </div>
     <div id="student-information">
-        <div class="label-header">Student Number: <span class="info"></span></div>
-        <div class="label-header">Student Name: <span class="info"></span></div>
+        <div class="label-header">Student Number: <span class="info">@Model.StudentNumber</span></div>
+        <div class="label-header">Student Name: <span class="info">@Model.FirstName @Model.LastName</span></div>
     </div>
     <div class="input-wrapper">
         <input type="text" class="input" autocomplete="CYS" aria-required="true" />
@@ -59,3 +61,4 @@
         Submit
     </a>
 </form>
+<script src="~/js/studentViolation.js" />
