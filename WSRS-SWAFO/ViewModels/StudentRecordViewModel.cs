@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace WSRS_SWAFO.ViewModels
 {
-    public class StudentRecordModel
+    public class StudentRecordViewModel
     {
         [Required(ErrorMessage = "Student ID is required")]
         [Remote(action: "CheckStudentID", controller: "Encode", ErrorMessage = "Student ID is already taken.")]
