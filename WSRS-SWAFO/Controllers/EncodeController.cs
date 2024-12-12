@@ -104,6 +104,22 @@ namespace WSRS_SWAFO.Controllers
             return Json(!exists); 
         }
 
+        // Page 3 - Encode Student Violation (If student data exist)
+        public IActionResult EncodeStudentViolation(int studentNumber, string firstName, string lastName)
+        {
+            var referer = Request.Headers["Referer"].ToString();
+            if (string.IsNullOrEmpty(referer))
+            {
+                return RedirectToAction("StudentRecordViolation");
+            }
+            var studentInfo = new StudentRecordViewModel
+            {
+                StudentNumber = studentNumber,
+                FirstName = firstName,
+                LastName = lastName
+            };
+            return View(studentInfo);
+        }
         public IActionResult Pending()
         {
             return View();
