@@ -104,58 +104,6 @@ namespace WSRS_SWAFO.Controllers
             return Json(!exists); 
         }
 
-        // Page
-
-        /*
-        public IActionResult SetStudentSession(int StudentNumber, string FirstName, string LastName)
-        {
-            //var students = await _student.Students
-            //    .Select(s => new StudentsRecordModel
-            //    {
-            //        StudentNumber = s.StudentNumber,
-            //        LastName = s.LastName,
-            //        FirstName = s.FirstName
-            //    })
-            //    .Take(5)
-            //    .ToListAsync();
-            //var viewModel = new CreateStudentViewModel
-            //{
-            //    ExistingStudents = students.AsQueryable()
-            //};
-            //HttpContext.Session.SetInt32("_studentID", StudentNumber);
-            //HttpContext.Session.SetString("_firstName", FirstName);
-            //HttpContext.Session.SetString("_lastName", LastName);
-            //return View("index", viewModel);
-            return View("index"); 
-            //Json(new { StudentNumber, FirstName, LastName });
-        }
-        public IActionResult GetStudent()
-        {
-            var studentNumber = HttpContext.Session.GetInt32("_studentID");
-            var firstName = HttpContext.Session.GetString("_firstName");
-            var lastName = HttpContext.Session.GetString("_lastName");
-
-            if (studentNumber == null || string.IsNullOrEmpty(firstName) || string.IsNullOrEmpty(lastName))
-            {
-                return BadRequest(new { message = "Student data not found in session." });
-            }
-
-            return Json(new { studentNumber, firstName, lastName });
-        }
-
-        public IActionResult ClearSession()
-        {
-            HttpContext.Session.Clear();
-            return RedirectToAction("Index");
-        }
-
-
-        
-
-
-
-        */
-
         public IActionResult Pending()
         {
             return View();
@@ -165,59 +113,5 @@ namespace WSRS_SWAFO.Controllers
         {
             return View();
         }
-
-        //[HttpGet]
-        //public IActionResult CreateCollege()
-        //{
-        //    var colleges = _student.College.ToList(); // Fetch all colleges
-        //    ViewBag.College = colleges; 
-        //    return View();
-        //}
-
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public IActionResult CreateCollege(string collegeName)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        // Check if the collegeName already exists to prevent duplicate entries
-        //        var existingCollege = _student.College.FirstOrDefault(c => c.CollegeID == collegeName);
-        //        if (existingCollege == null)
-        //        {
-        //            // Create new college with the given name and set the CollegeID to the same value
-        //            var newCollege = new College
-        //            {
-        //                CollegeID = collegeName // Use collegeName as CollegeID
-        //            };
-
-        //            _student.College.Add(newCollege);
-        //            _student.SaveChanges(); // Save changes to the database
-
-        //            TempData["SuccessMessage"] = "College added into the database successfully."; // Success message
-        //        }
-        //        else
-        //        {
-        //            TempData["ErrorMessage"] = "College ID already exists."; // Error message for duplicate CollegeID
-        //        }
-
-        //        return RedirectToAction("CreateCollege"); // Redirect to refresh the page and display success/error
-        //    }
-
-        //    return View();
-        //}
-
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public IActionResult DeleteCollege(string collegeID)
-        //{
-        //    var college = _student.College.FirstOrDefault(c => c.CollegeID == collegeID);
-        //    if (college != null)
-        //    {
-        //        _student.College.Remove(college); // Remove the college
-        //        _student.SaveChanges();           // Save changes
-        //        TempData["SuccessMessage"] = "College deleted successfully.";
-        //    }
-        //    return RedirectToAction("CreateCollege"); // Redirect to refresh the page
-        //}
     }
 }
