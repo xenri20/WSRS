@@ -4,7 +4,9 @@
     Layout = "_EncodeLayout";
     ViewData["Title"] = "Student Violation";
 }
-
+@section customHead {
+    <link rel="stylesheet" href="~/css/studentViolationStyle.css" asp-append-version="true" />
+}
 <div id="first-page">
     <h2>Check for an existing violation record</h2>
     <form id="search-student" asp-controller="Encode" asp-action="Search" method="get">

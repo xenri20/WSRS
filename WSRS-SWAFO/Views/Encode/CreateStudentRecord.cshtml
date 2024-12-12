@@ -5,6 +5,10 @@
     ViewData["Title"] = "Student Violation";
 }
 
+@section customHead {
+    <link rel="stylesheet" href="~/css/studentViolationStyle.css" asp-append-version="true" />
+}
+
 <form id="create-new" asp-controller="Encode" asp-action="CreateNewStudent">
     <div class="title">
         <a class="btn-back">
