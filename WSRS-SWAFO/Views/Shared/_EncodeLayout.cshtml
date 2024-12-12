@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"]</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    @RenderSection("customHead", required: false)
 </head>
 <body>
     <partial name="_SidebarPartial" />
@@ -13,7 +14,7 @@
             <div id="encode">
                 <h1>Encode</h1>
                 <div id="category-function">
-                    <a asp-controller="Encode" asp-action="Index" class="student-encode">
+                    <a asp-controller="Encode" asp-action="StudentRecordViolation" class="student-encode">
                         Student Violation
                     </a>
                     <a class="traffic-encode">
@@ -37,6 +38,7 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/js/encode.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
