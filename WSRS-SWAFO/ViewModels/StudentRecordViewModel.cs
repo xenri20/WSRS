@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Identity.Client;
 using System.ComponentModel.DataAnnotations;
 
 namespace WSRS_SWAFO.ViewModels
