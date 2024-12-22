@@ -20,8 +20,20 @@
         <h2>Record Violation</h2>
     </div>
     <div id="student-information">
-        <div class="label-header">Student Number: <span class="info">@Model.StudentNumber</span></div>
-        <div class="label-header">Student Name: <span class="info">@Model.FirstName @Model.LastName</span></div>
+        <div class="label-header" asp-for="StudentNumber">Student Number: <span class="info">@Model.StudentNumber</span></div>
+        <input hidden asp-for="StudentNumber" value="@Model.StudentNumber" readonly/>
+        <div class="label-header">Student Name: <span class="info">@Model.Student.FirstName @Model.Student.LastName</span></div>
+    </div>
+    <div class="input-wrapper">
+        <select asp-for="CollegeID" class="input" autocomplete="College" aria-required="true">
+            <option disabled hidden selected>-- Select an option --</option>
+            @foreach (var item in ViewBag.Colleges)
+            {
+                <option value="@item.CollegeID">@item.CollegeID</option>
+            }
+        </select>
+        <label class="label">College<span>*</span></label>
+        <span class="text-danger"></span>
     </div>
     <div class="input-wrapper">
         <input type="text" class="input" autocomplete="CYS" aria-required="true" />
