@@ -79,7 +79,7 @@ namespace WSRS_SWAFO.Controllers
         [HttpPost]
         public IActionResult CreateNewStudent(StudentRecordViewModel model)
         {
-            if (ModelState.IsValid) {
+            if (!ModelState.IsValid) {
                 return View("CreateStudentRecord", model);
             }
 
