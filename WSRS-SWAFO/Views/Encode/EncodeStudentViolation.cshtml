@@ -8,7 +8,7 @@
 @section customHead {
     <link rel="stylesheet" href="~/css/studentViolationStyle.css" asp-append-version="true" />
 }
-<form id="record-violation">
+<form id="record-violation" asp-controller="Encode" asp-action="CreateReport" method="post"> 
     <div class="title">
         <a asp-controller="Encode" asp-action="StudentRecordViolation" class="btn-back">
             <svg width="32" height="32" viewBox="0 0 43 43" fill="none" xmlns="http://www.w3.org/2000/svg">
