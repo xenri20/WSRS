@@ -57,10 +57,15 @@
         <span class="text-danger"></span>
     </div>
     <div class="input-wrapper">
-        <label class="label">Nature of Offense<span>*</span></label>
-        <select class="input" aria-required="true">
-            <option value="">-- Select an option --</option>
+        <select asp-for="OffenseId" class="input" id="offenseClassification" aria-required="true">
+            <option disabled hidden selected>-- Select an option --</option>
         </select>
+        <label class="label">Classification of Offense<span>*</span></label>
+        <span class="text-danger"></span>
+    </div>
+    <div class="input-wrapper" id="hearingDate">
+        <input asp-for="HearingDate" type="date" class="input" value="@DateTime.Now" autocomplete="dateOfCommission" aria-required="true" />
+        <label class="label"><span>*</span></label>
         <span class="text-danger"></span>
     </div>
     <div class="input-wrapper">
