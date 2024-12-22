@@ -36,7 +36,7 @@
         <span class="text-danger"></span>
     </div>
     <div class="input-wrapper">
-        <input type="text" class="input" autocomplete="CYS" aria-required="true" />
+        <input asp-for="Course" type="text" class="input" autocomplete="CYS" aria-required="true" />
         <label class="label">CYS<span>*</span></label>
         <span class="text-danger"></span>
     </div>
@@ -60,18 +60,23 @@
         <span class="text-danger"></span>
     </div>
     <div class="input-wrapper">
-        <input type="text" class="input" autocomplete="sanction" aria-required="true" />
+        <input asp-for="Sanction" type="text" class="input" autocomplete="sanction" aria-required="true" />
         <label class="label">Sanction<span>*</span></label>
         <span class="text-danger"></span>
     </div>
     <div class="input-wrapper">
-        <input type="text" class="input description" autocomplete="description" aria-required="true" />
+        <input asp-for="Description" type="text" class="input description" autocomplete="description" aria-required="true" />
         <label class="label">Description</label>
         <span class="text-danger"></span>
     </div>
-    <a class="btn btn-submit">
+    <div class="input-wrapper">
+        <input asp-for="StatusOfSanction" type="text" class="input description" autocomplete="description" aria-required="true" />
+        <label class="label">Status of Sanction</label>
+        <span class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-submit">
         Submit
-    </a>
+    </button>
 </form>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/js/encode.js"></script>
