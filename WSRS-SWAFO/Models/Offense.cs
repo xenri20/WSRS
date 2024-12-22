@@ -1,12 +1,13 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using WSRS_SWAFO.Data.Enum;
 
 namespace WSRS_SWAFO.Models
 {
     public class Offense
     {
-        [Key]
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int Id { get; set; }
         public OffenseClassification Nature { get; set; }
         public string Classification { get; set; }
