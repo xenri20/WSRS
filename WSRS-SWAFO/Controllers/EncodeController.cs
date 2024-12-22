@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WSRS_SWAFO.Models;
 using WSRS_SWAFO.ViewModels;
@@ -7,11 +7,11 @@ namespace WSRS_SWAFO.Controllers
 {
     public class EncodeController : Controller
     {
-        private readonly ApplicationDbContext _student;
+        private readonly ApplicationDbContext _context;
 
-        public EncodeController(ApplicationDbContext student)
+        public EncodeController(ApplicationDbContext context)
         {
-            _student = student;
+            _context = context;
         }
 
         // Page One - Student Violation Controller
@@ -19,7 +19,7 @@ namespace WSRS_SWAFO.Controllers
         public async Task<IActionResult> StudentRecordViolation()
         {
             // Checks student data in the Database
-            var students = await _student.Students
+            var students = await _context.Students
                 .Select(student => new StudentRecordViewModel
                 {
                     // For every student in the Database, compiler creates the query
@@ -41,7 +41,7 @@ namespace WSRS_SWAFO.Controllers
             // Checks searchStudent
             if (!string.IsNullOrEmpty(searchStudent))
             {
-                var studentsQuery = _student.Students.AsQueryable();
+                var studentsQuery = _context.Students.AsQueryable();
                 // Compiler creates query for searchStudent
                 if (int.TryParse(searchStudent, out int studentNumber))
                 {
@@ -90,8 +90,8 @@ namespace WSRS_SWAFO.Controllers
                 LastName = model.LastName
             };
 
-            _student.Students.Add(student);
-            _student.SaveChanges();
+            _context.Students.Add(student);
+            _context.SaveChanges();
 
             return RedirectToAction("EncodeStudentViolation");
         }
@@ -100,7 +100,7 @@ namespace WSRS_SWAFO.Controllers
         [AcceptVerbs("GET", "POST")]
         public async Task<IActionResult> CheckStudentID(StudentRecordViewModel model)
         {
-            var exists = await _student.Students.AnyAsync(student => student.StudentNumber == model.StudentNumber);
+            var exists = await _context.Students.AnyAsync(student => student.StudentNumber == model.StudentNumber);
             return Json(!exists); 
         }
 
