@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WSRS_SWAFO.Models;
 using WSRS_SWAFO.ViewModels;
@@ -116,16 +116,50 @@ namespace WSRS_SWAFO.Controllers
             {
                 StudentNumber = studentNumber,
                 Student = new Student
-            {
-                StudentNumber = studentNumber,
-                FirstName = firstName,
-                LastName = lastName
+                {
+                    StudentNumber = studentNumber, 
+                    FirstName = firstName,
+                    LastName = lastName
                 }
             };
 
             ViewBag.Colleges = _context.College.ToList();
             return View(studentInfo);
         }
+
+        // Creates a violation record - POST Function
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateReport(ReportEncoded reportEncoded)
+        {
+            if (!ModelState.IsValid)
+            {
+                try
+                {
+                    _context.ReportsEncoded.Add(reportEncoded);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction("StudentRecordViolation");  
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", "Unable to save data: " + ex.Message);
+                }
+            }
+            return View(reportEncoded); 
+        }
+
+        // Returns offense Nature to JSON - GET Function
+        [HttpGet]
+        public IActionResult GetOffenseNature(int classification)
+        {
+            var offenseNature = _context.Offenses
+                .Where(offense => (int)offense.Nature == classification)
+                .Select(nature => new { nature.Id, nature.Classification })
+                .ToList();
+
+            return Json(offenseNature);
+        }
+
         public IActionResult Pending()
         {
             return View();
