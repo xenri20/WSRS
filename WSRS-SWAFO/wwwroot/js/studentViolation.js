@@ -2,7 +2,6 @@
     document.querySelector(".student-encode").classList.add("active");
 });
 
-// Stay
 document.querySelector("#create-new").addEventListener("submit", function (e) {
     if (!this.checkValidity()) {
         e.preventDefault();
@@ -13,24 +12,15 @@ document.querySelector("#create-new").addEventListener("submit", function (e) {
     document.querySelector("#record-violation").style.display = "inline-flex";
 });
 
-// STAY
-document.querySelector(".btn-select").addEventListener("click", function (e) {
-    e.preventDefault(); // Prevent default link behavior
+document.getElementById('create-new').addEventListener('submit', function (event) {
+    event.preventDefault();
 
-    // Hide the first page and show the record violation section
-    $('#first-page').hide();
-    $('#record-violation').show();
+    var studentNumber = document.querySelector('[name="StudentNumber"]').value;
+    var firstName = document.querySelector('[name="FirstName"]').value;
+    var lastName = document.querySelector('[name="LastName"]').value;
 
-    // Optionally, call fetchStudentData() here if needed
-     //fetchStudentData();
+    var formAction = '/Encode/EncodeStudentViolation';
+    formAction += `?studentNumber=${studentNumber}&firstName=${firstName}&lastName=${lastName}`;
+
+    window.location.href = formAction;
 });
-
-if($('.btn-create').is(':visible')){
-    document.querySelector("#first-page .btn-create").addEventListener("click", function () {
-        //document.querySelector("#first-page").style.display = "none";
-        //document.querySelector("#create-new").style.display = "inline-flex";
-        $('#first-page').hide();
-        $('#create-new').show();
-    });
-};
-
