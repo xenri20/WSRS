@@ -41,8 +41,8 @@
         <span class="text-danger"></span>
     </div>
     <div class="input-wrapper">
-        <input type="date" class="input" autocomplete="dateOfCommission" aria-required="true" />
-        <label class="label">Date Of Commission<span>*</span></label>
+        <input asp-for="CommissionDate" type="date" class="input" value="@DateTime.Now" autocomplete="dateOfCommission" aria-required="true" />
+        <label class="label"><span>*</span></label>
         <span class="text-danger"></span>
     </div>
     <div class="input-wrapper">
