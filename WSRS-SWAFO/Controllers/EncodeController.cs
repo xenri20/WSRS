@@ -112,12 +112,18 @@ namespace WSRS_SWAFO.Controllers
             {
                 return RedirectToAction("StudentRecordViolation");
             }
-            var studentInfo = new StudentRecordViewModel
+            var studentInfo = new ReportEncodedViewModel
+            {
+                StudentNumber = studentNumber,
+                Student = new Student
             {
                 StudentNumber = studentNumber,
                 FirstName = firstName,
                 LastName = lastName
+                }
             };
+
+            ViewBag.Colleges = _context.College.ToList();
             return View(studentInfo);
         }
         public IActionResult Pending()
