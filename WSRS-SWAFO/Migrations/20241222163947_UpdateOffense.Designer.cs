@@ -12,8 +12,8 @@ using WSRS_SWAFO.Models;
 namespace WSRS_SWAFO.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241210131510_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20241222163947_UpdateOffense")]
+    partial class UpdateOffense
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -244,10 +244,7 @@ namespace WSRS_SWAFO.Migrations
             modelBuilder.Entity("WSRS_SWAFO.Models.Offense", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Classification")
                         .IsRequired()
