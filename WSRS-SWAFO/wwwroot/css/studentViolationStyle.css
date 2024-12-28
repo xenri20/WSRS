@@ -139,16 +139,6 @@ h2 {
         width: 100%;
     }
 
-.iconPad {
-    border: 2px solid black;
-    height: 100%;
-    aspect-ratio: 1;
-    border-radius: 50%;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-}
-
 /* Page Two - Student Violation */
 
 #create-new {
