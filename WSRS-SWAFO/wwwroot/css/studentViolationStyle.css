@@ -171,12 +171,14 @@ h2 {
 
 .student-information .info {
     font-family: var(--light);
+}
+
 #student-information .info {
     font-family: var(--user);
 }
 
 
-@media screen and (max-width: 475px) {
+@media only screen and (max-width:475px) {
     #category-function {
         flex-direction: column;
         gap: 0.4em;
@@ -188,12 +190,12 @@ h2 {
     }
 }
 
-@media screen and (max-width: 800px) {
+@media only screen and (max-width:800px) {
     .content-panel {
         width: 75vw;
     }
 
-    .create-new, .record-violation {
+    #create-new, #record-violation {
         width: 100%;
     }
 }
