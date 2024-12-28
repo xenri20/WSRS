@@ -45,7 +45,7 @@
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-    .box .iconPad {
+    .box .dashboard-icon {
         border: 2px solid black;
         max-width: 2.5rem;
         aspect-ratio: 1;
