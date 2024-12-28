@@ -139,6 +139,25 @@ input[type="number"] {
         box-shadow: none;
     }
 
+.btn-function {
+    border: 2px solid black;
+    height: 100%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all ease-in-out 0.15s;
+}
+
+    .btn-function:hover {
+        background-color: black;
+    }
+
+        .btn-function:hover > svg path{
+            stroke: white;
+        }
+
 .dark-btn {
     background-color: #292929;
     border: 2px solid #292929;
