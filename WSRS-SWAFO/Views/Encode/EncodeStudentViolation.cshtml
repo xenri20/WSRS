@@ -46,21 +46,21 @@
         <span class="text-danger"></span>
     </div>
     <div class="input-wrapper">
-        <select class="input" id="offenseNature" aria-required="true">
+        <select asp-for="OffenseId" class="input" id="offenseClassification" aria-required="true">
             <option disabled hidden selected>-- Select an option --</option>
             @foreach (var item in Html.GetEnumSelectList<OffenseClassification>().Where(e => e.Value == "0" || e.Value == "1"))
             {
                 <option value="@item.Value">@item.Text</option>
             }
         </select>
-        <label class="label">Nature of Offense<span>*</span></label>
+        <label class="label">Classification of Offense<span>*</span></label>
         <span class="text-danger"></span>
     </div>
     <div class="input-wrapper">
-        <select asp-for="OffenseId" class="input" id="offenseClassification" aria-required="true">
+        <select class="input" id="offenseNature" aria-required="true">
             <option disabled hidden selected>-- Select an option --</option>
         </select>
-        <label class="label">Classification of Offense<span>*</span></label>
+        <label class="label">Nature of Offense<span>*</span></label>
         <span class="text-danger"></span>
     </div>
     <div class="input-wrapper" id="hearingDate">
