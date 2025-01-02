@@ -153,8 +153,8 @@ namespace WSRS_SWAFO.Controllers
         public IActionResult GetOffenseNature(int classification)
         {
             var offenseNature = _context.Offenses
-                .Where(offense => (int)offense.Nature == classification)
-                .Select(nature => new { nature.Id, nature.Classification })
+                .Where(offense => (int)offense.Classification == classification)
+                .Select(nature => new { nature.Id, nature.Nature })
                 .ToList();
 
             return Json(offenseNature);
