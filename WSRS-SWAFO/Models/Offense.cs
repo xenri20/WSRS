@@ -9,7 +9,7 @@ namespace WSRS_SWAFO.Models
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int Id { get; set; }
-        public OffenseClassification Nature { get; set; }
-        public string Classification { get; set; }
+        public OffenseClassification Classification { get; set; }
+        public string Nature { get; set; }
     }
 }
