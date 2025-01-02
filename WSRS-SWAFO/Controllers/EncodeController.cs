@@ -79,7 +79,8 @@ namespace WSRS_SWAFO.Controllers
         [HttpPost]
         public IActionResult CreateNewStudent(StudentRecordViewModel model)
         {
-            if (!ModelState.IsValid) {
+            if (!ModelState.IsValid)
+            {
                 return View("CreateStudentRecord", model);
             }
 
@@ -93,7 +94,12 @@ namespace WSRS_SWAFO.Controllers
             _context.Students.Add(student);
             _context.SaveChanges();
 
-            return RedirectToAction("EncodeStudentViolation");
+            return RedirectToAction("EncodeStudentViolation", new
+            {
+                studentNumber = student.StudentNumber,
+                firstName = student.FirstName,
+                lastName = student.LastName
+            });
         }
 
         // Checks whether studentID is existing or not - POST, GET Function
