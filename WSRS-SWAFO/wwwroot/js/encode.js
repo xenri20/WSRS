@@ -14,10 +14,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
 $(document).ready(function () {
     const hearingDate = $('#hearingDate');
-    const offense = $('#offenseClassification'); // Dropdown to populate 
+    const offense = $('#offenseNature'); // Dropdown to populate 
     hearingDate.hide();
     offense.attr("disabled", false);
-    $('#offenseNature').change(function () {
+    $('#offenseClassification').change(function () {
         const classification = $(this).val(); // Get selected classification
         offense.removeAttr("disabled", true);
         // Perform AJAX request
@@ -33,7 +33,7 @@ $(document).ready(function () {
 
                 // Populate the dropdown with new data
                 data.forEach(function (item) {
-                    offense.append(`<option value="${item.id}">${item.classification}</option>`);
+                    offense.append(`<option value="${item.id}">${item.nature}</option>`);
                 });
                 if (classification === "0") {
                     hearingDate.children().first().val('');
