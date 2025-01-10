@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using System.Diagnostics;
 using WSRS_SWAFO.Models;
+using System.Linq;
 
 namespace WSRS_SWAFO.Controllers
 {
@@ -29,26 +30,51 @@ namespace WSRS_SWAFO.Controllers
         }
 
         [HttpPost]
-        public JsonResult GetCollegeReports()
+        public JsonResult GetCollegeReports([FromBody] ViolationRequest request)
         {
             try
             {
-                // Group by CollegeID and count violations for each college
+                // Define the violation Nature IDs based on the selected violation type
+                List<int> violationClassificationIds = new List<int>();
+
+                switch (request.ViolationType)
+                {
+                    case "MajorViolations":
+                        violationClassificationIds = new List<int> { 9, 10, 11 }; // Major Violations
+                        break;
+                    case "MinorViolations":
+                        violationClassificationIds = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8 }; // Minor Violations
+                        break;
+                    case "MinorTrafficViolations":
+                        violationClassificationIds = new List<int> { 12, 13, 14, 15, 16, 17, 18 }; // Minor Traffic Violations
+                        break;
+                    case "MajorTrafficViolations":
+                        violationClassificationIds = new List<int> { 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 }; // Major Traffic Violations
+                        break;
+                    default:
+                        throw new Exception("Invalid violation type.");
+                }
+
+                // Filter records by selected violation Nature IDs and group by College
                 var collegeReports = _context.ReportsEncoded
+                    .Where(r => violationClassificationIds.Contains(r.OffenseId)) // Filter by selected violation types
                     .GroupBy(r => r.CollegeID)
                     .Select(g => new
                     {
                         College = g.Key,
                         ViolationCount = g.Count()
                     })
-                    .OrderBy(report => report.College) // Optional: Sort alphabetically by CollegeID
+                    .OrderBy(report => report.College) // Sort alphabetically by CollegeID
                     .ToList();
+
+                // Calculate the total violations
+                var totalViolations = collegeReports.Sum(cr => cr.ViolationCount);
 
                 // Prepare the labels and violation counts for the response
                 var labels = collegeReports.Select(cr => cr.College).ToList();
                 var violationNumbers = collegeReports.Select(cr => cr.ViolationCount).ToList();
 
-                return Json(new { labels, violationNumbers });
+                return Json(new { labels, violationNumbers, totalViolations });
             }
             catch (Exception ex)
             {
@@ -56,5 +82,11 @@ namespace WSRS_SWAFO.Controllers
                 return Json(new { error = "Failed to fetch data. Please try again later." });
             }
         }
+    }
+
+    // Model for the request to include violation type
+    public class ViolationRequest
+    {
+        public string ViolationType { get; set; }
     }
 }
