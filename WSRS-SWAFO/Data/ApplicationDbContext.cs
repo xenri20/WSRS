@@ -1,7 +1,8 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using WSRS_SWAFO.Models;
 
-namespace WSRS_SWAFO.Models 
+namespace WSRS_SWAFO.Data 
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
