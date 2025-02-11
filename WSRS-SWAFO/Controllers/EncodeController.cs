@@ -192,7 +192,7 @@ namespace WSRS_SWAFO.Controllers
             {
                 try
                 {
-                    _context.ReportsEncoded.Add(reportEncoded);
+                    _context.ReportsEncoded.Add(studentReport);
                     await _context.SaveChangesAsync();
                     return RedirectToAction("StudentRecordViolation");  
                 }
