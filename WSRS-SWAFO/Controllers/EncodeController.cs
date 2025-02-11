@@ -221,9 +221,26 @@ namespace WSRS_SWAFO.Controllers
             return View();
         }
 
-        public IActionResult TrafficViolation()
+        public IActionResult EncodeTrafficViolation(int studentNumber, string firstName, string lastName)
         {
-            return View();
+            var referer = Request.Headers["Referer"].ToString();
+            if (string.IsNullOrEmpty(referer))
+            {
+                return RedirectToAction("StudentRecordViolation");
+            }
+            var studentInfo = new ReportTrafficEncodedViewModel
+            {
+                StudentNumber = studentNumber,
+                Student = new Student
+                {
+                    StudentNumber = studentNumber,
+                    FirstName = firstName,
+                    LastName = lastName
+                }
+            };
+
+            ViewBag.Colleges = _context.College.ToList();
+            return View(studentInfo);
         }
         public IActionResult CreateOffense()
         {
