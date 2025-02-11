@@ -9,7 +9,7 @@ namespace WSRS_SWAFO.Models
         [Key]
         public int Id { get; set; }
 
-        [ForeignKey("Offense")]
+        [ForeignKey("Offense"), DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int OffenseId { get; set; }
         public Offense Offense { get; set; } // Navigation Property
 
@@ -25,7 +25,7 @@ namespace WSRS_SWAFO.Models
         public DateTime CommissionDatetime { get; set; }
         public string Place { get; set; }
         public string Remarks { get; set; }
-        public int ORNumber { get; set; }
-        public DateOnly DatePaid { get; set; }
+        public int? ORNumber { get; set; } // NULLABLE
+        public DateOnly? DatePaid { get; set; } // NULLABLE
     }
 }
