@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WSRS_SWAFO.Data;
 using WSRS_SWAFO.Data.Enum;
@@ -182,7 +182,6 @@ namespace WSRS_SWAFO.Controllers
             ViewBag.Colleges = _context.College.ToList();
             return View(studentInfo);
         }
-
         // Creates a violation record - POST Function
         [HttpPost]
         [ValidateAntiForgeryToken]

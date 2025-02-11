@@ -12,8 +12,8 @@ using WSRS_SWAFO.Models;
 namespace WSRS_SWAFO.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241222174733_updateOffenseIdandHearingDate")]
-    partial class updateOffenseIdandHearingDate
+    [Migration("20250211162507_TrafficReportUpdate")]
+    partial class TrafficReportUpdate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -246,12 +246,12 @@ namespace WSRS_SWAFO.Migrations
                     b.Property<int>("Id")
                         .HasColumnType("int");
 
-                    b.Property<string>("Classification")
+                    b.Property<int>("Classification")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Nature")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Nature")
-                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -378,10 +378,10 @@ namespace WSRS_SWAFO.Migrations
                     b.Property<DateTime>("CommissionDatetime")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateOnly>("DatePaid")
+                    b.Property<DateOnly?>("DatePaid")
                         .HasColumnType("date");
 
-                    b.Property<int>("ORNumber")
+                    b.Property<int?>("ORNumber")
                         .HasColumnType("int");
 
                     b.Property<int>("OffenseId")

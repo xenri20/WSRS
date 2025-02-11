@@ -376,10 +376,10 @@ namespace WSRS_SWAFO.Migrations
                     b.Property<DateTime>("CommissionDatetime")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateOnly>("DatePaid")
+                    b.Property<DateOnly?>("DatePaid")
                         .HasColumnType("date");
 
-                    b.Property<int>("ORNumber")
+                    b.Property<int?>("ORNumber")
                         .HasColumnType("int");
 
                     b.Property<int>("OffenseId")
