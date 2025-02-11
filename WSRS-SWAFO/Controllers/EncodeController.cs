@@ -186,7 +186,7 @@ namespace WSRS_SWAFO.Controllers
         // Creates a violation record - POST Function
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateReport(ReportEncoded reportEncoded)
+        public async Task<IActionResult> CreateStudentReport(ReportEncoded studentReport)
         {
             if (!ModelState.IsValid)
             {
@@ -201,8 +201,29 @@ namespace WSRS_SWAFO.Controllers
                     ModelState.AddModelError("", "Unable to save data: " + ex.Message);
                 }
             }
-            return View(reportEncoded); 
+            return View(studentReport); 
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateTrafficReport(TrafficReportsEncoded trafficReport)
+        {
+            if (!ModelState.IsValid)
+            {
+                try
+                {
+                    _context.TrafficReportsEncoded.Add(trafficReport);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction("StudentRecordViolation");
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", "Unable to save data: " + ex.Message);
+                }
+            }
+            return View(trafficReport);
+        }
+
 
         // Returns offense Nature to JSON - GET Function
         [HttpGet]
