@@ -1,0 +1,70 @@
+﻿@model WSRS_SWAFO.Models.Offense
+
+@{
+    ViewData["Title"] = "Create Offense";
+}
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @TempData["ErrorMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<h2>Add Offense</h2>
+
+<form asp-action="CreateOffense" method="post">
+    <div class="form-group">
+        <label for="classification">Offense Classification<span>*</span></label>
+        <select id="classification" name="classification" class="form-select" required>
+            @foreach (var classification in Enum.GetValues(typeof(WSRS_SWAFO.Data.Enum.OffenseClassification)))
+            {
+                <option value="@classification">@classification</option>
+            }
+        </select>
+    </div>
+
+    <div class="form-group mt-3">
+        <label for="nature">Offense Nature<span>*</span></label>
+        <input type="text" id="nature" name="nature" class="form-control" maxlength="50" required />
+    </div>
+
+    <div class="form-group mt-3">
+        <button type="submit" class="btn btn-primary">Add Offense</button>
+    </div>
+</form>
+
+<h3>List of Offenses</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Classification</th>
+            <th>Nature</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var offense in ViewBag.Offenses)
+        {
+            <tr>
+                <td>@offense.Classification</td>
+                <td>@offense.Nature</td>
+                <td>
+                    <form method="post" asp-action="DeleteOffense" onsubmit="return confirm('Are you sure you want to delete this offense?');">
+                        <input type="hidden" name="id" value="@offense.Id" />
+                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

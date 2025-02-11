@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using WSRS_SWAFO.Data.Enum;
 using WSRS_SWAFO.Models;
 using WSRS_SWAFO.ViewModels;
 
@@ -174,6 +175,154 @@ namespace WSRS_SWAFO.Controllers
         public IActionResult TrafficViolation()
         {
             return View();
+        }
+        public IActionResult CreateOffense()
+        {
+            // Retrieve all offenses and sort them by Classification
+            ViewBag.Offenses = _context.Offenses
+                .OrderBy(o => o.Classification)  
+                .ToList();  
+
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult CreateOffense(OffenseClassification classification, string nature)
+        {
+            if (string.IsNullOrWhiteSpace(nature))
+            {
+                TempData["ErrorMessage"] = "Offense nature cannot be empty.";
+            }
+            else if (nature.Length > 50)
+            {
+                TempData["ErrorMessage"] = "Offense nature cannot exceed 50 characters.";
+            }
+            else
+            {
+                try
+                {
+                    // Find the last ID in the database and increment it
+                    int nextId = _context.Offenses.Any()
+                        ? _context.Offenses.Max(o => o.Id) + 1
+                        : 1;
+
+                    var offense = new Offense
+                    {
+                        Id = nextId, // Assign the next available ID
+                        Classification = classification,
+                        Nature = nature
+                    };
+
+                    _context.Offenses.Add(offense);
+                    _context.SaveChanges();
+
+                    TempData["SuccessMessage"] = $"Offense added successfully with ID {nextId}.";
+                }
+                catch (Exception ex)
+                {
+                    TempData["ErrorMessage"] = $"Error adding offense: {ex.Message}";
+                }
+            }
+
+            ViewBag.Offenses = _context.Offenses.ToList();
+            return View();
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult DeleteOffense(int id)
+        {
+            var offense = _context.Offenses.FirstOrDefault(o => o.Id == id);
+            if (offense != null)
+            {
+                try
+                {
+                    _context.Offenses.Remove(offense); 
+                    _context.SaveChanges();
+                    TempData["SuccessMessage"] = "Offense deleted successfully.";
+                }
+                catch (Exception ex)
+                {
+                    TempData["ErrorMessage"] = $"Error deleting offense: {ex.Message}";
+                }
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Offense not found.";
+            }
+
+            return RedirectToAction(nameof(CreateOffense));
+        }
+
+        public IActionResult CreateCollege()
+        {
+            ViewBag.College = _context.College.ToList();
+            return View();
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult CreateCollege(string collegeID)
+        {
+            if (string.IsNullOrWhiteSpace(collegeID))
+            {
+                TempData["ErrorMessage"] = "College name cannot be empty.";
+            }
+            else if (_context.College.Any(c => c.CollegeID == collegeID))
+            {
+                TempData["ErrorMessage"] = $"The college '{collegeID}' already exists.";
+            }
+            else
+            {
+                try
+                {
+                    var college = new College
+                    {
+                        CollegeID = collegeID
+                    };
+
+                    _context.College.Add(college);
+                    _context.SaveChanges();
+
+                    TempData["SuccessMessage"] = $"The college '{collegeID}' has been added successfully.";
+                }
+                catch (Exception ex)
+                {
+                    TempData["ErrorMessage"] = $"Error adding college: {ex.Message}";
+                }
+            }
+
+            ViewBag.College = _context.College.ToList();
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult DeleteCollege(string collegeID)
+        {
+            var college = _context.College.FirstOrDefault(c => c.CollegeID == collegeID);
+            if (college != null)
+            {
+                try
+                {
+                    _context.College.Remove(college);
+                    _context.SaveChanges();
+                    TempData["SuccessMessage"] = $"The college '{collegeID}' has been deleted successfully.";
+                }
+                catch (Exception ex)
+                {
+                    TempData["ErrorMessage"] = $"Error deleting college: {ex.Message}";
+                }
+            }
+            else
+            {
+                TempData["ErrorMessage"] = $"The college '{collegeID}' was not found.";
+            }
+
+            
+            return RedirectToAction(nameof(CreateCollege));
         }
     }
 }
