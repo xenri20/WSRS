@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WSRS_SWAFO.Data;
 using WSRS_SWAFO.Data.Enum;
@@ -148,7 +148,12 @@ namespace WSRS_SWAFO.Controllers
 
             if (violationType == "Traffic Violation")
             {
-                return RedirectToAction();
+                return RedirectToAction("EncodeTrafficViolation", new
+                {
+                    studentNumber = studentNumber,
+                    firstName = firstName,
+                    lastName = lastName
+                });
             }
 
             // Redirect to first page if no mode is selected
