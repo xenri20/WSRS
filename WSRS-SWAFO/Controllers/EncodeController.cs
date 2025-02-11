@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WSRS_SWAFO.Data;
+using WSRS_SWAFO.Data.Enum;
 using WSRS_SWAFO.Models;
 using WSRS_SWAFO.ViewModels;
 
@@ -190,7 +191,7 @@ namespace WSRS_SWAFO.Controllers
                     await _context.SaveChangesAsync();
                     return RedirectToAction("StudentRecordViolation");  
                 }
-                catch (Exception ex)
+                catch (Exception ex)    
                 {
                     ModelState.AddModelError("", "Unable to save data: " + ex.Message);
                 }

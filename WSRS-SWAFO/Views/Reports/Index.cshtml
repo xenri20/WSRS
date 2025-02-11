@@ -13,8 +13,10 @@
     </select>
 
     <h3 id="totalViolations">Total Violations: 0</h3> <!-- Display total violations -->
-    <!-- Chart to display violations -->
-    <canvas id="reportsChart" height="200" width="500"></canvas>
+    <!-- Container for larger chart -->
+    <div style="width: 50vw; height: 500px; margin: auto;">
+        <canvas id="reportsChart"></canvas>
+    </div>
 </div>
 
 <script src="/lib/jquery/dist/jquery.min.js"></script>
@@ -69,27 +71,44 @@
                         chart.destroy();
                     }
 
-                    // Initialize the chart
+                    // Initialize the bar chart with a larger size
                     chart = new Chart("reportsChart", {
-                        type: "doughnut", // Doughnut chart
+                        type: "bar",
                         data: {
                             labels: chartLabels,
                             datasets: [{
                                 label: violationType + " by College",
-                                backgroundColor: chartColors,  // Use the mapped colors
+                                backgroundColor: chartColors,
+                                borderColor: "black",
+                                borderWidth: 1,
                                 data: chartData
                             }]
                         },
                         options: {
                             responsive: true,
+                            maintainAspectRatio: false, // Allow chart to resize properly
                             plugins: {
                                 legend: {
-                                    display: true,
-                                    position: "top"
+                                    display: false // Hide legend since bars are labeled
                                 },
                                 title: {
                                     display: true,
                                     text: violationType + " by College"
+                                }
+                            },
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    title: {
+                                        display: true,
+                                        text: "Number of Violations"
+                                    }
+                                },
+                                x: {
+                                    title: {
+                                        display: true,
+                                        text: "College"
+                                    }
                                 }
                             }
                         }
@@ -112,6 +131,5 @@
         });
     });
 </script>
-
 
 <script src="~/js/reports.js"></script>
