@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using WSRS_SWAFO.Data.Enum;
+using WSRS_SWAFO.Data;
 using WSRS_SWAFO.Models;
 using WSRS_SWAFO.ViewModels;
 
@@ -15,10 +15,25 @@ namespace WSRS_SWAFO.Controllers
             _context = context;
         }
 
+        // Mode Switch
+        // Ticks whether Student Violation or Traffic Violation
+        public IActionResult EncodingMode()
+        {
+            return View();
+        }
+
         // Page One - Student Violation Controller
         // Checks Student Record Database upon page load - Index
-        public async Task<IActionResult> StudentRecordViolation()
+        [HttpPost]
+        [HttpGet] // Adding for optional 
+        public async Task<IActionResult> StudentRecordViolation(string violationType = null)
         {
+            if (HttpContext.Request.Method == HttpMethods.Post)
+            {
+                // Store the violation type in session or view data if needed
+                HttpContext.Session.SetString("ViolationType", violationType);
+            }
+
             // Checks student data in the Database
             var students = await _context.Students
                 .Select(student => new StudentRecordViewModel
@@ -30,7 +45,7 @@ namespace WSRS_SWAFO.Controllers
                 })
                 .Take(5)
                 .ToListAsync();
-            
+
             // Returns queried list
             return View(students.AsQueryable());
         }
@@ -109,6 +124,34 @@ namespace WSRS_SWAFO.Controllers
         {
             var exists = await _context.Students.AnyAsync(student => student.StudentNumber == model.StudentNumber);
             return Json(!exists); 
+        }
+
+        public IActionResult RedirectToView(int studentNumber, string firstName, string lastName)
+        {
+            var violationType = HttpContext.Session.GetString("ViolationType");
+
+            if(string.IsNullOrEmpty(violationType))
+            {
+                return RedirectToAction("EncodeMode"); 
+            }
+
+            if (violationType == "Student Violation")
+            {
+                return RedirectToAction("EncodeStudentViolation", new
+                {
+                    studentNumber = studentNumber,
+                    firstName = firstName,
+                    lastName = lastName
+                });
+            }
+
+            if (violationType == "Traffic Violation")
+            {
+                return RedirectToAction();
+            }
+
+            // Redirect to first page if no mode is selected
+            return RedirectToAction("EncodeMode"); 
         }
 
         // Page 3 - Encode Student Violation (If student data exist)

@@ -31,10 +31,6 @@
     margin-right: 0.5em;
 }
 
-hr {
-    margin: 1.25rem 0;
-}
-
 .content-panel {
     display: flex;
     align-items: center;
@@ -70,6 +66,27 @@ h2 {
 
 .btn {
     align-self: flex-end;
+}
+
+/* Mode Picker */
+
+#page-picker {
+    display: flex;
+    flex-direction: column;
+    
+}
+
+.modes {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    gap: 0.5em; 
+}
+
+.modes > button {
+    width: 100%;
 }
 
 /* Page One - Student Violation */
