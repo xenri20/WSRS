@@ -37,6 +37,7 @@ namespace WSRS_SWAFO.Controllers
             {
                 // Define the violation Nature IDs based on the selected violation type
                 List<int> violationClassificationIds = new List<int>();
+                bool isTrafficViolation = false; // Flag to check if we should use TrafficReportsEncoded
 
                 switch (request.ViolationType)
                 {
@@ -48,25 +49,38 @@ namespace WSRS_SWAFO.Controllers
                         break;
                     case "MinorTrafficViolations":
                         violationClassificationIds = new List<int> { 12, 13, 14, 15, 16, 17, 18 }; // Minor Traffic Violations
+                        isTrafficViolation = true;
                         break;
                     case "MajorTrafficViolations":
                         violationClassificationIds = new List<int> { 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 }; // Major Traffic Violations
+                        isTrafficViolation = true;
                         break;
                     default:
                         throw new Exception("Invalid violation type.");
                 }
 
-                // Filter records by selected violation Nature IDs and group by College
-                var collegeReports = _context.ReportsEncoded
-                    .Where(r => violationClassificationIds.Contains(r.OffenseId)) // Filter by selected violation types
-                    .GroupBy(r => r.CollegeID)
-                    .Select(g => new
-                    {
-                        College = g.Key,
-                        ViolationCount = g.Count()
-                    })
-                    .OrderBy(report => report.College) // Sort alphabetically by CollegeID
-                    .ToList();
+                // Fetch data from the correct table
+                var collegeReports = isTrafficViolation
+                    ? _context.TrafficReportsEncoded
+                        .Where(r => violationClassificationIds.Contains(r.OffenseId)) // Fetch from TrafficReportsEncoded
+                        .GroupBy(r => r.CollegeID)
+                        .Select(g => new
+                        {
+                            College = g.Key,
+                            ViolationCount = g.Count()
+                        })
+                        .OrderBy(report => report.College)
+                        .ToList()
+                    : _context.ReportsEncoded
+                        .Where(r => violationClassificationIds.Contains(r.OffenseId)) // Fetch from ReportsEncoded
+                        .GroupBy(r => r.CollegeID)
+                        .Select(g => new
+                        {
+                            College = g.Key,
+                            ViolationCount = g.Count()
+                        })
+                        .OrderBy(report => report.College)
+                        .ToList();
 
                 // Calculate the total violations
                 var totalViolations = collegeReports.Sum(cr => cr.ViolationCount);
@@ -84,10 +98,12 @@ namespace WSRS_SWAFO.Controllers
             }
         }
     }
+}
+    
 
     // Model for the request to include violation type
     public class ViolationRequest
     {
         public string ViolationType { get; set; }
     }
-}
+
