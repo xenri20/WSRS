@@ -24,7 +24,7 @@ namespace WSRS_SWAFO.ViewModels
 
         [Required(ErrorMessage = "College is required")]
         [Display(Name = "College")]
-        [ForeignKey("Colleges")]
+        [ForeignKey("College")]
         public string CollegeID { get; set; }
         public College College { get; set; }
         [Required(ErrorMessage = "Plate Number is required!")]
