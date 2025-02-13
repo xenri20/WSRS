@@ -1,16 +1,16 @@
-﻿var btnLinks = document.querySelectorAll("#category-function a")
+﻿document.addEventListener("DOMContentLoaded", () => {
+    document.querySelector(".encode-nav").classList.add("active");
+});
+
+var btnLinks = document.querySelectorAll("#category-function a")
 for (btnLink of btnLinks) {
-    btnLink.addEventListener("click", function (e) {
+    btnLink.addEventListener("click", (e) => {
         for (eachCategory of btnLinks) {
             eachCategory.classList.remove("active");
         }
         e.currentTarget.classList.add("active");
     });
 }
-
-document.addEventListener("DOMContentLoaded", function () {
-    document.querySelector(".encode-nav").classList.add("active");
-});
 
 $(document).ready(function () {
     const hearingDate = $('#hearingDate');

@@ -1,8 +1,8 @@
-﻿document.addEventListener("DOMContentLoaded", function () {
+﻿document.addEventListener("DOMContentLoaded", () => {
     document.querySelector(".student-encode").classList.add("active");
 });
 
-document.querySelector("#create-new").addEventListener("submit", function (e) {
+document.querySelector("#create-new").addEventListener("submit", (e) => {
     if (!this.checkValidity()) {
         e.preventDefault();
         return alert("Please fill out all required fields before proceeding.");
