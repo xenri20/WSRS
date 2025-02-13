@@ -13,7 +13,7 @@ namespace WSRS_SWAFO.Models
         public int OffenseId { get; set; }
         public Offense Offense { get; set; } // Navigation Property
 
-        [ForeignKey("Colleges")]
+        [ForeignKey("College")]
         public string CollegeID { get; set; }
         public College College { get; set; }
 
