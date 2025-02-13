@@ -1,0 +1,37 @@
+﻿@using System.Globalization
+@model WSRS_SWAFO.ViewModels.AccountViewModel
+
+@{
+    ViewData["Title"] = "Account";
+
+    @* For changing name to title case *@
+    TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
+    string nameTitleCase = textInfo.ToTitleCase(Model.Name.ToLower());
+}
+
+@section customHead {
+    <link rel="stylesheet" href="~/css/accountStyle.css" asp-append-version="true" />
+}
+
+<div id="account">
+    <h1>@ViewData["Title"]</h1>
+    <section>
+        <h2>Information</h2>
+        <dl>
+            <dt>Email</dt>
+            <dd>@Model.Email</dd>
+            <dt>Name</dt>
+            <dd>@nameTitleCase</dd>
+        </dl>
+    </section>
+
+    <hr />
+
+    <section>
+        <h2>Offline Management</h2>
+        @* TODO Add an alert if they do not have a password yet *@
+        <a class="btn dark-btn" asp-action="UpdatePassword">Update Offline Password</a>
+    </section>
+</div>
+
+<script src="~/js/account.js" />

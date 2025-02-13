@@ -1,0 +1,27 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/styles.css" asp-append-version="true" />
+    @RenderSection("customHead", required: false)
+</head>
+<body>
+    <partial name="_SidebarPartial" />
+    <div class="container">
+        <main>
+            @RenderBody()
+        </main>
+        <partial name="_FooterPartial" />
+    </div>
+    <script defer src="~/js/jqueryEnabler.js"></script>
+    <script defer src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script defer src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script defer src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script defer src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

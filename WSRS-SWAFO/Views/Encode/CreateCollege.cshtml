@@ -1,0 +1,60 @@
+﻿@model WSRS_SWAFO.Models.College
+
+@{
+    ViewData["Title"] = "Create College";
+}
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @TempData["ErrorMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<h2>Add College</h2>
+
+<form asp-action="CreateCollege" method="post">
+    <div class="input-wrapper">
+        <input type="text" name="collegeID" class="input form-control" autocomplete="off" required aria-required="true" maxlength="50" />
+        <label class="label">College Name<span>*</span></label>
+        <span class="text-danger"></span>
+    </div>
+    <div class="form-group mt-3">
+        <button type="submit" class="btn btn-primary">Add College</button>
+    </div>
+</form>
+
+<h3>List of Colleges</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>College ID</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var college in ViewBag.College)
+        {
+            <tr>
+                <td>@college.CollegeID</td>
+                <td>
+                    <form method="post" asp-action="DeleteCollege" onsubmit="return confirm('Are you sure you want to delete this college?');">
+                        <input type="hidden" name="collegeID" value="@college.CollegeID" />
+                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+

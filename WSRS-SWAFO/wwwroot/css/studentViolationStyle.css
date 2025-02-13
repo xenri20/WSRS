@@ -1,0 +1,208 @@
+﻿@import url(./styles.css);
+
+#category-function {
+    display: inline-flex;
+    flex-direction: row;
+}
+
+    #category-function > a {
+        justify-content: center;
+        align-items: center;
+        text-decoration: none;
+        text-align: center;
+        padding: 0.25em 1em;
+        font-size: 14px;
+        cursor: pointer;
+        color: black;
+        background-color: transparent;
+        border: 2px solid black;
+        border-radius: 32px;
+        transition: color 0.2s ease-in, background-color 0.2s ease-in;
+    }
+
+        #category-function > a:hover,
+        #category-function > a:active,
+        #category-function > a.active {
+            background-color: black;
+            color: white;
+        }
+
+.student-encode, .traffic-encode {
+    margin-right: 0.5em;
+}
+
+.content-panel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 85vw;
+    height: 65vh;
+    border: 2px solid black;
+    border-radius: 16px;
+}
+
+h2 {
+    margin: 0;
+}
+
+#input-panel {
+    display: flex;
+    align-self: center;
+    justify-content: center;
+    width: 75%;
+    height: 75%;
+}
+
+.title {
+    display: flex;
+    gap: 0.75em;
+    align-items: center;
+    line-height: 0;
+}
+
+    .title > a {
+        cursor: pointer;
+    }
+
+.btn {
+    align-self: flex-end;
+}
+
+/* Mode Picker */
+
+#page-picker {
+    display: flex;
+    flex-direction: column;
+    
+}
+
+.modes {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    gap: 0.5em; 
+}
+
+.modes > button {
+    width: 100%;
+}
+
+/* Page One - Student Violation */
+
+#first-page {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    flex: 1;
+}
+
+#search-student {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 0.5em;
+}
+
+.search-id {
+    display: flex;
+    flex: 1;
+    min-width: 0;
+    font-family: var(--nav-link);
+    padding: 8px 16px;
+    border: 2px solid black;
+    border-radius: 32px;
+    box-sizing: border-box;
+}
+
+
+#preview-records {
+    width: 100%;
+    height: 100%;
+    border: 2px solid black;
+    border-radius: 12px; 
+    border-collapse: separate; 
+    border-spacing: 0; 
+    font-family: var(--light);
+    overflow: hidden;
+}
+
+    #preview-records th, #preview-records td {
+
+        padding: 10px;
+        text-align: center;
+    }
+
+    #preview-records td {
+        user-select: text;
+    }
+
+.selected {
+    color: white;
+    background-color: #808080;
+}
+
+    #preview-records thead {
+        background-color: black;
+        color: white;
+        display: table-header-group;
+    }
+
+    #preview-records tbody {
+        font-size: 0.95em;
+        overflow-y: auto;
+        height: 100%;
+        width: 100%;
+    }
+
+/* Page Two - Student Violation */
+
+#create-new {
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1em;
+    width: 50%;
+}
+
+/* Page Three - Student Violation */
+
+#record-violation {
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1em;
+    width: 50%;
+}
+
+.student-information .info {
+    font-family: var(--light);
+}
+
+#student-information .info {
+    font-family: var(--user);
+}
+
+
+@media only screen and (max-width:475px) {
+    #category-function {
+        flex-direction: column;
+        gap: 0.4em;
+    }
+
+    #submit-section {
+        flex-direction: column;
+        width: 50%;
+    }
+}
+
+@media only screen and (max-width:800px) {
+    .content-panel {
+        width: 75vw;
+    }
+
+    #create-new, #record-violation {
+        width: 100%;
+    }
+}

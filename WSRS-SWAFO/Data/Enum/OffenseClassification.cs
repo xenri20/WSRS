@@ -1,0 +1,14 @@
+using System.ComponentModel.DataAnnotations;
+
+namespace WSRS_SWAFO.Data.Enum
+{
+    public enum OffenseClassification
+    {
+        Minor,
+        Major,
+        [Display(Name ="Minor Traffic")]
+        MinorTraffic,
+        [Display(Name = "Major Traffic")]
+        MajorTraffic
+    }
+}

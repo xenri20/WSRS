@@ -1,0 +1,135 @@
+﻿@* TODO Add Model later *@
+
+<div id="reports">
+    <h2>Reports Chart</h2>
+
+    <!-- Dropdown for selecting violation type -->
+    <label for="violationType">Select Violation Type:</label>
+    <select id="violationType">
+        <option value="MajorViolations">Major Violations</option>
+        <option value="MinorViolations">Minor Violations</option>
+        <option value="MinorTrafficViolations">Minor Traffic Violations</option>
+        <option value="MajorTrafficViolations">Major Traffic Violations</option>
+    </select>
+
+    <h3 id="totalViolations">Total Violations: 0</h3> <!-- Display total violations -->
+    <!-- Container for larger chart -->
+    <div style="width: 50vw; height: 500px; margin: auto;">
+        <canvas id="reportsChart"></canvas>
+    </div>
+</div>
+
+<script src="/lib/jquery/dist/jquery.min.js"></script>
+<script src="/lib/chartjs/dist/chart.umd.js"></script>
+
+<script>
+    $(document).ready(function () {
+        var chart;  // To store the Chart instance
+
+        // Define a color mapping for colleges
+        var collegeColors = {
+            "CBAA": "yellow",
+            "CCJE": "pink",
+            "CEAT": "green",
+            "CICS": "gray",
+            "CLAC": "white",
+            "COED": "blue",
+            "COS": "red",
+            "CTHM": "purple"
+        };
+
+        // Function to fetch data and update the chart
+        function fetchData(violationType) {
+            $.ajax({
+                type: "POST",
+                url: "/Reports/GetCollegeReports",
+                data: JSON.stringify({ violationType: violationType }),  // Send the selected violation type to the server
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    if (response.error) {
+                        console.error(response.error);
+                        alert("Error loading chart data.");
+                        return;
+                    }
+
+                    // Extract chart labels, data, and total count
+                    var chartLabels = response.labels;
+                    var chartData = response.violationNumbers;
+                    var totalViolations = response.totalViolations;
+
+                    // Update the total violation count on the page
+                    $("#totalViolations").text("Total Violations: " + totalViolations);
+
+                    // Map college names to their corresponding colors
+                    var chartColors = chartLabels.map(function (college) {
+                        return collegeColors[college] || "gray"; // Default to gray if no color is found
+                    });
+
+                    // If chart exists, destroy it before creating a new one to avoid duplicates
+                    if (chart) {
+                        chart.destroy();
+                    }
+
+                    // Initialize the bar chart with a larger size
+                    chart = new Chart("reportsChart", {
+                        type: "bar",
+                        data: {
+                            labels: chartLabels,
+                            datasets: [{
+                                label: violationType + " by College",
+                                backgroundColor: chartColors,
+                                borderColor: "black",
+                                borderWidth: 1,
+                                data: chartData
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false, // Allow chart to resize properly
+                            plugins: {
+                                legend: {
+                                    display: false // Hide legend since bars are labeled
+                                },
+                                title: {
+                                    display: true,
+                                    text: violationType + " by College"
+                                }
+                            },
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    title: {
+                                        display: true,
+                                        text: "Number of Violations"
+                                    }
+                                },
+                                x: {
+                                    title: {
+                                        display: true,
+                                        text: "College"
+                                    }
+                                }
+                            }
+                        }
+                    });
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error fetching data:", error);
+                    alert("Failed to load chart data.");
+                }
+            });
+        }
+
+        // Fetch data for default violation type on page load
+        fetchData('MajorViolations');
+
+        // Event listener for dropdown change
+        $('#violationType').change(function () {
+            var selectedViolationType = $(this).val();
+            fetchData(selectedViolationType);  // Update chart based on selected violation type
+        });
+    });
+</script>
+
+<script src="~/js/reports.js"></script>

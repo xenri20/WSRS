@@ -1,0 +1,27 @@
+﻿@using WSRS_SWAFO.Data.Enum
+@using WSRS_SWAFO.ViewModels
+@{
+    Layout = "_EncodeLayout";
+    ViewData["Title"] = "Student Violation";
+}
+@section customHead {
+    <link rel="stylesheet" href="~/css/studentViolationStyle.css" asp-append-version="true" />
+}
+<form id="page-picker" asp-controller="Encode" asp-action="StudentRecordViolation" method="post">
+    <div class="page-header">
+    <h1>
+        Step 1
+    </h1>
+    <hr />
+    <p>Pick which violation would you be recording?</p>
+    </div>
+    <div class="modes">
+        <button type="submit" class="btn btn-create" name="violationType" value="Student Violation">
+            Student Violation
+        </button>
+        <button type="submit" class="btn btn-create" name="violationType" value="Traffic Violation">
+            Traffic Violation
+        </button>
+    </div>
+</form>
+<script src="~/js/studentViolation.js" />

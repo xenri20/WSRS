@@ -1,0 +1,57 @@
+﻿@using WSRS_SWAFO.ViewModels
+@model LoginViewModel
+
+@{
+    Layout = "_LogOnLayout";
+    bool isOnline = ViewData["isOnline"] as bool? ?? false;
+}
+
+<img alt="logo" src="/assets/img/logo.png" />
+<h1>Login</h1>
+@if (isOnline)
+{
+    <a id="btnSSO" asp-controller="LogOn" asp-action="SignInWithMicrosoft">
+        <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 21 21">
+        <rect x="1" y="1" width="9" height="9" fill="#f25022"/>
+        <rect x="1" y="11" width="9" height="9" fill="#00a4ef"/>
+        <rect x="11" y="1" width="9" height="9" fill="#7fba00"/>
+        <rect x="11" y="11" width="9" height="9" fill="#ffb900"/>
+        </svg>&nbsp;Login using SSO
+    </a>
+}
+else
+{ 
+    <form id="offlineLoginForm" asp-controller="LogOn" asp-action="SignInLocally" method="post">
+        @if(TempData["Error"] != null)
+        {
+            <div class="alert alert-danger" role="alert">
+                <span>@TempData["Error"]</span>
+            </div>
+        }
+        <div class="input-wrapper pt-3">
+            <input asp-for="EmailAddress" type="email"  class="input" autocomplete="username" placeholder="Email Address" aria-required="true" />
+            <label asp-for="EmailAddress" class="label">Email Address<span>*</span></label>
+            <span asp-validation-for="EmailAddress" class="text-danger"></span>
+        </div>
+        <div class="input-wrapper pt-3">
+            <input asp-for="Password" type="password" class="input" autocomplete="current-password" placeholder="Password" aria-required="true">
+            <label asp-for="Password" class="label">Password<span>*</span></label>
+            <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
+        <p id="forgotPassword" class="pt-1"><a href="#">Forgot Password?</a></p>
+        <button type="submit" id="btnLogin">Login Locally</button>
+    </form>
+}
+
+<footer class="pt-4">
+    <p><b>Student Welfare and Formation Office Record System</b></p>
+    <p>Copyright 2015 De La Salle University - Dasmariñas</p>
+</footer>
+<script>
+    window.addEventListener('offline', function() { location.reload(); });
+    window.addEventListener('online', function() { location.reload(); });
+</script>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
