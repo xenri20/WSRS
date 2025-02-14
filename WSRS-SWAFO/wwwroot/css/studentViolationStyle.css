@@ -21,8 +21,7 @@
     }
 
         #category-function > a:hover,
-        #category-function > a:active,
-        #category-function > a.active {
+        #category-function > a:active {
             background-color: black;
             color: white;
         }
