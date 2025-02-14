@@ -197,28 +197,3 @@ input[type="number"] {
     border: 2px solid black;
     border-radius: 2rem;
 }
-
-/* ROW OF PILLS */
-.pills-group {
-    display: flex;
-    flex-direction: row;
-    justify-content: start;
-    gap: 0.5rem;
-}
-
-    .pills-group > button {
-        text-align: center;
-        padding: 0.25em 1em;
-        font-size: 14px;
-        cursor: pointer;
-        background-color: transparent;
-        border: 2px solid black;
-        border-radius: 32px;
-        transition: color 0.2s ease-in, background-color 0.2s ease-in;
-    }
-
-        .pills-group > button:hover,
-        .pills-group > button:active {
-            background-color: black;
-            color: white;
-        }

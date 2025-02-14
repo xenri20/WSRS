@@ -1,3 +1,50 @@
-﻿@* TODO managing (editing, deleting, viewing) of records *@
+﻿@{
+    ViewData["Title"] = "Manage Records";
+}
+
+@section customHead {
+    <link rel="stylesheet" href="~/css/recordStyle.css" asp-append-version="true" />
+}
+
+@* TODO managing (editing, deleting, viewing) of records *@
+
+<div id="records">
+    <h1>@ViewData["Title"]</h1>
+
+    <div class="control-group">
+        <form method="get" action="" id="searchForm">
+            <input type="search" name="student" placeholder="Search Student" aria-required="true">
+            <button type="submit" class="btn-function">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <g clip-path="url(#clip0_173_68)">
+                        <path
+                            d="M6.41667 11.0833C8.994 11.0833 11.0833 8.994 11.0833 6.41667C11.0833 3.83934 8.994 1.75 6.41667 1.75C3.83934 1.75 1.75 3.83934 1.75 6.41667C1.75 8.994 3.83934 11.0833 6.41667 11.0833Z"
+                            stroke="#1E1F20" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M12.25 12.25L9.71252 9.71249" stroke="#1E1F20" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                    </g>
+                    <defs>
+                        <clipPath id="clip0_173_68">
+                            <rect width="14" height="14" fill="white" />
+                        </clipPath>
+                    </defs>
+                </svg>
+            </button>
+        </form>
+
+        <div class="pills-group" id="sortControls">
+            <button type="button" class="btn">
+                Date
+            </button>
+            <button type="button" class="btn">
+                A-Z
+            </button>
+            <button type="button">
+                @* TODO Replace with an icon *@
+                (asc - desc icon)
+            </button>
+        </div>
+    </div>
+</div>
 
 <script src="~/js/records.js"></script>
