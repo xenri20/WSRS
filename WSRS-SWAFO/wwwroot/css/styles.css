@@ -154,7 +154,7 @@ input[type="number"] {
         background-color: black;
     }
 
-        .btn-function:hover > svg path{
+        .btn-function:hover > svg path {
             stroke: white;
         }
 
@@ -180,3 +180,45 @@ input[type="number"] {
 .modal .modal-content {
     border-radius: 12px;
 }
+
+/* SEARCH INPUT WITH BUTTOn */
+#searchForm {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 0.5rem;
+    height: 2.5rem;
+}
+
+#searchForm > input {
+    display: flex;
+    flex-grow: 1;
+    padding: 0.5rem 1rem;
+    border: 2px solid black;
+    border-radius: 2rem;
+}
+
+/* ROW OF PILLS */
+.pills-group {
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    gap: 0.5rem;
+}
+
+    .pills-group > button {
+        text-align: center;
+        padding: 0.25em 1em;
+        font-size: 14px;
+        cursor: pointer;
+        background-color: transparent;
+        border: 2px solid black;
+        border-radius: 32px;
+        transition: color 0.2s ease-in, background-color 0.2s ease-in;
+    }
+
+        .pills-group > button:hover,
+        .pills-group > button:active {
+            background-color: black;
+            color: white;
+        }
