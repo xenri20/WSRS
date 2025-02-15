@@ -80,3 +80,9 @@ _[Ss]cripts
 # Just ignores text files #
 ###########################
 *.txt
+
+##############
+# Node stuff #
+##############
+node_modules/
+
