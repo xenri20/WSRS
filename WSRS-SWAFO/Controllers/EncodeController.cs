@@ -124,21 +124,24 @@ namespace WSRS_SWAFO.Controllers
         public async Task<IActionResult> CheckStudentID(StudentRecordViewModel model)
         {
             var exists = await _context.Students.AnyAsync(student => student.StudentNumber == model.StudentNumber);
-            return Json(!exists); 
+            return Json(!exists);
         }
 
-        public IActionResult RedirectToView(int studentNumber, string firstName, string lastName)
+        public IActionResult RedirectToView(
+            [FromQuery] int studentNumber,
+            [FromQuery] string firstName,
+            [FromQuery] string lastName)
         {
             var violationType = HttpContext.Session.GetString("ViolationType");
 
-            if(string.IsNullOrEmpty(violationType))
+            if (string.IsNullOrEmpty(violationType))
             {
-                return RedirectToAction("EncodeMode"); 
+                return RedirectToAction(nameof(EncodingMode));
             }
 
             if (violationType == "Student Violation")
             {
-                return RedirectToAction("EncodeStudentViolation", new
+                return RedirectToAction(nameof(EncodeStudentViolation), new
                 {
                     studentNumber = studentNumber,
                     firstName = firstName,
@@ -157,50 +160,78 @@ namespace WSRS_SWAFO.Controllers
             }
 
             // Redirect to first page if no mode is selected
-            return RedirectToAction("EncodeMode"); 
+            return RedirectToAction(nameof(EncodingMode));
         }
 
         // Page 3 - Encode Student Violation (If student data exist)
-        public IActionResult EncodeStudentViolation(int studentNumber, string firstName, string lastName)
+        public IActionResult EncodeStudentViolation(
+            [FromQuery] int studentNumber,
+            [FromQuery] string firstName,
+            [FromQuery] string lastName)
         {
             var referer = Request.Headers["Referer"].ToString();
             if (string.IsNullOrEmpty(referer))
             {
-                return RedirectToAction("StudentRecordViolation");
+                return RedirectToAction(nameof(StudentRecordViolation));
             }
+
             var studentInfo = new ReportEncodedViewModel
             {
                 StudentNumber = studentNumber,
-                Student = new Student
-                {
-                    StudentNumber = studentNumber, 
-                    FirstName = firstName,
-                    LastName = lastName
-                }
+                FirstName = firstName,
+                LastName = lastName
             };
 
             ViewBag.Colleges = _context.College.ToList();
+
             return View(studentInfo);
         }
+
         // Creates a violation record - POST Function
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateStudentReport(ReportEncoded studentReport)
+        public async Task<IActionResult> EncodeStudentViolation(ReportEncodedViewModel reportEncodedVM)
         {
             if (!ModelState.IsValid)
             {
-                try
+                return RedirectToAction(nameof(EncodeStudentViolation), new
                 {
-                    _context.ReportsEncoded.Add(studentReport);
-                    await _context.SaveChangesAsync();
-                    return RedirectToAction("StudentRecordViolation");  
-                }
-                catch (Exception ex)    
-                {
-                    ModelState.AddModelError("", "Unable to save data: " + ex.Message);
-                }
+                    studentNumber = reportEncodedVM.StudentNumber,
+                    firstName = reportEncodedVM.FirstName,
+                    lastName = reportEncodedVM.LastName
+                });
             }
-            return View(studentReport); 
+
+            try
+            {
+                var studentReport = new ReportEncoded
+                {
+                    OffenseId = reportEncodedVM.OffenseId,
+                    StudentNumber = reportEncodedVM.StudentNumber,
+                    CollegeID = reportEncodedVM.CollegeID,
+                    CommissionDate = reportEncodedVM.CommissionDate,
+                    // FormatorId = reportEncodedVM.FormatorId,
+                    Course = reportEncodedVM.Course,
+                    Description = reportEncodedVM.Description,
+                    Sanction = reportEncodedVM.Sanction,
+                    StatusOfSanction = reportEncodedVM.StatusOfSanction
+                };
+
+                _context.ReportsEncoded.Add(studentReport);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", "Unable to save data: " + ex.Message);
+                return RedirectToAction(nameof(EncodeStudentViolation), new
+                {
+                    studentNumber = reportEncodedVM.StudentNumber,
+                    firstName = reportEncodedVM.FirstName,
+                    lastName = reportEncodedVM.LastName
+                });
+            }
+
+            return RedirectToAction(nameof(StudentRecordViolation));
         }
 
         [HttpPost]
@@ -266,8 +297,8 @@ namespace WSRS_SWAFO.Controllers
         {
             // Retrieve all offenses and sort them by Classification
             ViewBag.Offenses = _context.Offenses
-                .OrderBy(o => o.Classification)  
-                .ToList();  
+                .OrderBy(o => o.Classification)
+                .ToList();
 
             return View();
         }
@@ -325,7 +356,7 @@ namespace WSRS_SWAFO.Controllers
             {
                 try
                 {
-                    _context.Offenses.Remove(offense); 
+                    _context.Offenses.Remove(offense);
                     _context.SaveChanges();
                     TempData["SuccessMessage"] = "Offense deleted successfully.";
                 }
@@ -407,7 +438,7 @@ namespace WSRS_SWAFO.Controllers
                 TempData["ErrorMessage"] = $"The college '{collegeID}' was not found.";
             }
 
-            
+
             return RedirectToAction(nameof(CreateCollege));
         }
     }

@@ -5,10 +5,12 @@
     Layout = "_EncodeLayout";
     ViewData["Title"] = "Student Violation";
 }
+
 @section customHead {
     <link rel="stylesheet" href="~/css/studentViolationStyle.css" asp-append-version="true" />
 }
-<form id="record-violation" asp-controller="Encode" asp-action="CreateStudentReport" method="post"> 
+
+<form id="record-violation" asp-controller="Encode" asp-action="EncodeStudentViolation" method="post"> 
     <div class="title">
         <a asp-controller="Encode" asp-action="StudentRecordViolation" class="btn-back">
             <svg width="32" height="32" viewBox="0 0 43 43" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -22,7 +24,9 @@
     <div id="student-information">
         <div class="label-header" asp-for="StudentNumber">Student Number: <span class="info">@Model.StudentNumber</span></div>
         <input hidden asp-for="StudentNumber" value="@Model.StudentNumber" readonly/>
-        <div class="label-header">Student Name: <span class="info">@Model.Student.FirstName @Model.Student.LastName</span></div>
+        <div class="label-header">Student Name: <span class="info">@Model.FirstName @Model.LastName</span></div>
+        <input hidden asp-for="FirstName" value="@Model.FirstName" readonly/>
+        <input hidden asp-for="LastName" value="@Model.LastName" readonly/>
     </div>
     <div class="input-wrapper">
         <select asp-for="CollegeID" class="input" autocomplete="College" aria-required="true">
@@ -64,7 +68,7 @@
         <span class="text-danger"></span>
     </div>
     <div class="input-wrapper" id="hearingDate">
-        <input asp-for="HearingDate" type="date" class="input" value="@DateTime.Now" autocomplete="dateOfCommission" aria-required="true" />
+        <input asp-for="HearingDate" type="date" class="input" value="@DateTime.Now.ToString("MM-dd-yyyy")" autocomplete="dateOfCommission" aria-required="true" />
         <label class="label"><span>*</span></label>
         <span class="text-danger"></span>
     </div>
@@ -79,7 +83,7 @@
         <span class="text-danger"></span>
     </div>
     <div class="input-wrapper">
-        <input asp-for="StatusOfSanction" type="text" class="input description" autocomplete="description" aria-required="true" />
+        <input asp-for="StatusOfSanction" type="text" class="input description" autocomplete="statusOfSanction" aria-required="true" />
         <label class="label">Status of Sanction</label>
         <span class="text-danger"></span>
     </div>
