@@ -1,6 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace WSRS_SWAFO.Models
 {
@@ -12,6 +13,7 @@ namespace WSRS_SWAFO.Models
         public string FirstName { get; set; }
 
         // Navigation Properties
+        [JsonIgnore]
         public ICollection<ReportEncoded> ReportsEncoded { get; set; }
         public ICollection<ReportPending> ReportsPending { get; set; }
     }

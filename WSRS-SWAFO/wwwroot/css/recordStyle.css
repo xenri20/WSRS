@@ -23,3 +23,32 @@
 .control-group > form {
     flex-grow: 0.95;
 }
+
+/* GENERIC TABLE */
+table {
+    width: 100%;
+    height: 100%;
+    border: 2px solid black;
+    border-radius: 12px; 
+    border-collapse: separate; 
+    border-spacing: 0; 
+    font-family: var(--light);
+}
+
+    table th, 
+    table td {
+        padding: 0.5rem;
+        text-align: center;
+    }
+
+    table thead {
+        background-color: black;
+        color: white;
+        display: table-header-group;
+    }
+
+    table tbody {
+        font-size: 0.95rem;
+        overflow-y: auto;
+        height: 100%;
+    }

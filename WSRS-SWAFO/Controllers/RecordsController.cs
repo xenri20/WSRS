@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using WSRS_SWAFO.Data;
+using WSRS_SWAFO.ViewModels;
 
 namespace WSRS_SWAFO.Controllers
 {
@@ -14,9 +16,25 @@ namespace WSRS_SWAFO.Controllers
             _context = context;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var records = await _context.ReportsEncoded
+                .Include(r => r.Student)
+                .Select(r => new RecordsViewModel
+                {
+                    LastName = r.Student.LastName,
+                    FirstName = r.Student.FirstName,
+                    StudentNumber = r.StudentNumber,
+                    College = r.CollegeID,
+                    CommissionDate = r.CommissionDate
+                })
+                .OrderByDescending(r => r.CommissionDate)
+                .Skip(0)
+                .Take(10)
+                .ToListAsync();
+
+            //return Ok(records); // Return data as JSON response
+            return View(records.AsQueryable());
         }
     }
 }
