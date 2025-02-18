@@ -1,6 +1,7 @@
 ﻿@using Microsoft.AspNetCore.HttpOverrides
+@using WSRS_SWAFO.Helpers;
 @using WSRS_SWAFO.ViewModels
-@model IQueryable<RecordsViewModel>
+@model RecordsIndexViewModel
 
 @{
     ViewData["Title"] = "Manage Records";
@@ -16,8 +17,8 @@
     <h1>@ViewData["Title"]</h1>
 
     <div class="control-group">
-        <form method="get" action="" id="searchForm">
-            <input type="search" name="student" placeholder="Search Student" aria-required="true">
+        <form method="get" id="searchForm">
+            <input type="search" name="searchString" placeholder="Search" aria-required="true" value="@Model.SearchString">
             <button type="submit" class="btn-function">
                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <g clip-path="url(#clip0_173_68)">
@@ -36,33 +37,39 @@
             </button>
         </form>
 
-        <div class="pills-group" id="sortControls">
-            <button type="button" class="btn">
-                Date
-            </button>
-            <button type="button" class="btn">
-                A-Z
-            </button>
-            <button type="button">
-                @* TODO Replace with an icon *@
-                (asc - desc icon)
-            </button>
-        </div>
+        @if (!string.IsNullOrEmpty(Model.SearchString)) 
+        {
+            <div class="pills-group" id="searchControls">
+                <a asp-action="Index" class="btn">
+                    Clear
+                </a>
+            </div>
+        }
     </div>
 
     <table id="recordsTable">
         <thead>
             <tr>
-                <th>Last Name</th>
-                <th>First Name</th>
+                <th>
+                    <a 
+                        asp-action="Index" 
+                        asp-controller="Records" 
+                        asp-route-sortOrder="@Model.CommissionDateSort"
+                        asp-route-searchString="@Model.SearchString"
+                    >
+                        @* TODO Place this action to an reversible icon *@
+                        Commission Date
+                    </a>
+                </th>
+                <th>Nature</th>
                 <th>Student Number</th>
+                <th>Name</th>
                 <th>College</th>
-                <th>Commission Date</th>
                 <th>Manage</th>
             </tr>
         </thead>
         <tbody>
-            @if (!Model.Any())
+            @if (!Model.Records.Any())
             {
                 <tr>
                     <td colspan="6">
@@ -72,18 +79,22 @@
             }
             else
             {
-                @foreach (var record in Model.ToList())
+                @foreach (var record in Model.Records.ToList())
                 {
                     <tr>
-                         <td>@record.LastName</td>
-                         <td>@record.FirstName</td>
-                         <td>@record.StudentNumber</td>
-                         <td>@record.College</td>
                          <td>@record.CommissionDate</td>
+                         <td>@StringHelper.TruncateWithEllipsis(record.OffenseNature, 40)</td>
+                         <td>@record.StudentNumber</td>
+                         <td>@record.Name</td>
+                         <td>@record.College</td>
                          <td>
-                             <a asp-controller="Records" asp-action="" asp-route-studentNumber="@record.StudentNumber"
-                                class="btn btn-select">
-                                 Select
+                             <a asp-action="Edit" asp-route-studentNumber="@record.StudentNumber"
+                                class="btn">
+                                 E
+                             </a>
+                             <a asp-action="Delete" asp-route-studentNumber="@record.StudentNumber"
+                                class="btn">
+                                 D
                              </a>
                          </td>
                     </tr>
