@@ -1,7 +1,15 @@
 ﻿@* TODO Add Model later *@
 
+@{
+    ViewData["Title"] = "Reports";
+}
+
+@section customHead {
+    <link rel="stylesheet" href="~/css/reportStyle.css" asp-append-version="true" />
+}
+
 <div id="reports">
-    <h2>Reports Chart</h2>
+    <h1>@ViewData["Title"]</h1>
 
     <!-- Dropdown for selecting violation type -->
     <label for="violationType">Select Violation Type:</label>

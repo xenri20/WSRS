@@ -1,4 +1,6 @@
-﻿@import url(./styles.css);
+﻿#encode {
+    align-self: center;
+}
 
 #category-function {
     display: inline-flex;
