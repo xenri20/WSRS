@@ -6,6 +6,8 @@
 
 @section customHead {
     <link rel="stylesheet" href="~/css/reportStyle.css" asp-append-version="true" />
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/chartjs/dist/chart.umd.js"></script>
 }
 
 <div id="reports">
@@ -26,9 +28,6 @@
         <canvas id="reportsChart"></canvas>
     </div>
 </div>
-
-<script src="/lib/jquery/dist/jquery.min.js"></script>
-<script src="/lib/chartjs/dist/chart.umd.js"></script>
 
 <script>
     $(document).ready(function () {
@@ -140,4 +139,4 @@
     });
 </script>
 
-<script src="~/js/reports.js"></script>
+<script defer src="~/js/reports.js"></script>
