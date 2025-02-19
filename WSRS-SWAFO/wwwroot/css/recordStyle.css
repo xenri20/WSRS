@@ -6,22 +6,12 @@
 }
 
 /* ROW OF PILL-SHAPED BUTTONS */
-.pills-group {
+.button-group {
     display: flex;
     flex-direction: row;
     justify-content: start;
+    align-items: center;
     gap: 0.5rem;
-}
-
-.control-group {
-    display: flex;
-    justify-content: space-between;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-}
-
-.control-group > form {
-    flex-grow: 0.95;
 }
 
 /* GENERIC TABLE */
