@@ -1,0 +1,41 @@
+﻿@using WSRS_SWAFO.ViewModels
+@model RecordDetailsViewModel
+
+@section customHead {
+    <link rel="stylesheet" href="~/css/recordDetailsStyle.css" asp-append-version="true" />
+}
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<div id="details">
+    <section>
+        @* TODO Back button *@
+        <h2>Details</h2>
+        <hr />
+        <dl>
+            <dt>Student Name</dt>
+            <dd>@Model.Name</dd>
+            <dt>Course</dt>
+            <dd>@Model.Course</dd>
+            <dt>College</dt>
+            <dd>@Model.College</dd>
+            <dt>Classification</dt>
+            <dd>@Model.Classification</dd>
+            <dt>Sanction</dt>
+            <dd>@Model.Sanction</dd>
+            <dt>Status</dt>
+            <dd>@Model.Status</dd>
+            <dt>Description</dt>
+            <dd>@Model.Description</dd>
+        </dl>
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn">
+            Edit
+        </a>
+        <a asp-action="Delete" asp-route-id="@Model.Id" class="btn">
+            Delete
+        </a>
+    </section>
+    @* TODO Add Buttons to edit and delete *@
+</div>

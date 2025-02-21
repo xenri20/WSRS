@@ -60,5 +60,40 @@ namespace WSRS_SWAFO.Controllers
             //return Ok(records); // Return data as JSON response
             return View(recordsIndexVM);
         }
+
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var record = await _context.ReportsEncoded
+                .Include(r => r.Student)
+                .Include(r => r.Offense)
+                .Include(r => r.College)
+                .FirstOrDefaultAsync(r => r.Id == id);
+
+            if (record == null)
+            {
+                return BadRequest();
+            }
+
+            var recordDetailsVM = new RecordDetailsViewModel
+            {
+                Id = record.Id,
+                Name = string.Concat(record.Student.FirstName, " ", record.Student.LastName),
+                Course = record.Course,
+                College = record.College.CollegeID,
+                CommissionDate = record.CommissionDate,
+                Classification = record.Offense.Classification,
+                Sanction = record.Sanction,
+                Status = record.StatusOfSanction,
+                HearingDate = record.HearingDate,
+                Description = record.Description
+            };
+
+            return View(recordDetailsVM);
+        }
     }
 }

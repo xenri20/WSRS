@@ -65,7 +65,7 @@
                 <th>Student Number</th>
                 <th>Name</th>
                 <th>College</th>
-                <th>Manage</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -88,13 +88,10 @@
                          <td>@record.Name</td>
                          <td>@record.College</td>
                          <td>
-                             <a asp-action="Edit" asp-route-studentNumber="@record.StudentNumber"
+                             @* TODO Change to a view icon *@
+                             <a asp-action="Details" asp-route-id="@record.Id"
                                 class="btn">
-                                 E
-                             </a>
-                             <a asp-action="Delete" asp-route-studentNumber="@record.StudentNumber"
-                                class="btn">
-                                 D
+                                 Show
                              </a>
                          </td>
                     </tr>
