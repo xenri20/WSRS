@@ -9,6 +9,28 @@
     ViewData["Title"] = "Details";
 }
 
+<!-- Confirm Delete Modal  -->
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-body">
+          <h2 class="modal-title fs-2" id="confirmDeleteModalLabel">Confirm Delete</h2>
+          Are you sure you want to delete this record?
+      </div>
+      <div class="modal-footer">
+          <button class="btn" type="button" data-bs-dismiss="modal">
+              No
+          </button>
+        <form id="confirmDeleteForm" asp-action="Delete" asp-route-id="@Model.Id" method="post">
+            <button class="btn dark-btn" type="submit">
+                Yes
+            </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div id="details">
     <section>
         @* TODO Back button *@
@@ -33,9 +55,9 @@
         <a asp-action="Edit" asp-route-id="@Model.Id" class="btn">
             Edit
         </a>
-        <a asp-action="Delete" asp-route-id="@Model.Id" class="btn">
-            Delete
-        </a>
+        <button class="btn" type="button" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal">
+          Delete
+        </button>
     </section>
     @* TODO Add Buttons to edit and delete *@
 </div>
