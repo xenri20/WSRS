@@ -95,5 +95,21 @@ namespace WSRS_SWAFO.Controllers
 
             return View(recordDetailsVM);
         }
+
+        [HttpDelete, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var record = await _context.ReportsEncoded.FindAsync(id);
+
+            if (record != null)
+            {
+                _context.ReportsEncoded.Remove(record);
+            }
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
+        }
     }
 }
