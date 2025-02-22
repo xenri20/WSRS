@@ -1,5 +1,3 @@
-using System;
-
 namespace WSRS_SWAFO.ViewModels;
 
 /// <summary>
