@@ -8,7 +8,11 @@
 
 @{
     string fullName = string.Concat(Model.Student.FirstName, " ", Model.Student.LastName);
+
     string formattedCommissionDate = Model.CommissionDate.ToString("yyyy-MM-dd");
+    string formattedHearingDate = Model.HearingDate?.ToString("yyyy-MM-dd") ?? string.Empty;
+    string today = DateOnly.FromDateTime(DateTime.Now).ToString("yyyy-MM-dd");
+
     ViewData["Title"] = "Edit Record";
 }
 
@@ -46,6 +50,16 @@
                 <label asp-for="CommissionDate" class="label">Commission Date<span>*</span></label>
                 <span asp-validation-for="CommissionDate" class="text-danger"></span>
             </div>
+            
+            @* Hearing Date*@
+            @if (Model.Offense.Classification == OffenseClassification.Major)
+            {
+                <div class="input-wrapper">
+                    <input asp-for="HearingDate" type="date" class="input" value="@(string.IsNullOrEmpty(formattedHearingDate) ? today : formattedHearingDate)" aria-required="true">
+                    <label asp-for="HearingDate" class="label">Hearing Date<span>*</span></label>
+                    <span asp-validation-for="HearingDate" class="text-danger"></span>
+                </div>
+            }
 
             @* TODO Hearing Date if Major *@
 
