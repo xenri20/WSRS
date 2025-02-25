@@ -159,7 +159,7 @@ namespace WSRS_SWAFO.Controllers
             return RedirectToAction(nameof(Details), new { id = editRecordVM.Id });
         }
 
-        [HttpDelete, ActionName("Delete")]
+        [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
         {
