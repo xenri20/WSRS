@@ -43,3 +43,26 @@ table {
         overflow-y: auto;
         height: 100%;
     }
+
+#details {
+    width: 100%;
+}
+
+#edit {
+    width: 100%;
+}
+
+dl {
+    display: grid;
+    grid-gap: 0.5rem 2rem;
+    grid-template-columns: max-content;
+}
+
+dt {
+    font-weight: normal;
+}
+
+dd {
+    margin: 0;
+    grid-column-start: 2;
+}
