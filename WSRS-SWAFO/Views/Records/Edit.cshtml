@@ -70,10 +70,12 @@
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
 
-            <a asp-action="Details" asp-route-id="@Model.Id" class="btn">
-                Cancel
-            </a>
-            <button type="submit" class="btn">Save</button>
+            <div class="button-group">
+                <a asp-action="Details" asp-route-id="@Model.Id" class="btn">
+                    Cancel
+                </a>
+                <button type="submit" class="btn">Save</button>
+            </div>
         </form>
     </section>
 </div>

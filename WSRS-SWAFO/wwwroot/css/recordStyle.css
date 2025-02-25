@@ -44,11 +44,17 @@ table {
         height: 100%;
     }
 
-#details {
+#edit {
     width: 100%;
 }
 
-#edit {
+#edit form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+#details {
     width: 100%;
 }
 
