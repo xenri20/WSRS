@@ -37,14 +37,19 @@
         <h2>Details</h2>
         <hr />
         <dl>
+            <dt>Student Number</dt>
+            <dd>@Model.StudentNumber</dd>
             <dt>Student Name</dt>
             <dd>@Model.Name</dd>
             <dt>Course</dt>
             <dd>@Model.Course</dd>
             <dt>College</dt>
             <dd>@Model.College</dd>
+            <input asp-for="OffenseId" type="hidden" value="@Model.OffenseId"/>
             <dt>Classification</dt>
             <dd>@Model.Classification</dd>
+            <dt>Nature</dt>
+            <dd>@Model.Nature</dd>
             <dt>Sanction</dt>
             <dd>@Model.Sanction</dd>
             <dt>Status</dt>
@@ -52,6 +57,7 @@
             <dt>Description</dt>
             <dd>@Model.Description</dd>
         </dl>
+
         <a asp-action="Edit" asp-route-id="@Model.Id" class="btn">
             Edit
         </a>

@@ -82,10 +82,13 @@ namespace WSRS_SWAFO.Controllers
             var recordDetailsVM = new RecordDetailsViewModel
             {
                 Id = record.Id,
+                StudentNumber = record.StudentNumber,
                 Name = string.Concat(record.Student.FirstName, " ", record.Student.LastName),
                 Course = record.Course,
                 College = record.College.CollegeID,
                 CommissionDate = record.CommissionDate,
+                OffenseId = record.OffenseId,
+                Nature = record.Offense.Nature,
                 Classification = record.Offense.Classification,
                 Sanction = record.Sanction,
                 Status = record.StatusOfSanction,
