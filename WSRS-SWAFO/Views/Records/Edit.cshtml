@@ -1,0 +1,82 @@
+﻿@using WSRS_SWAFO.Data.Enum
+@using WSRS_SWAFO.ViewModels
+@model EditRecordViewModel
+
+@section customHead {
+   @* TODO Add stye ref *@
+}
+
+@{
+    string fullName = string.Concat(Model.Student.FirstName, " ", Model.Student.LastName);
+    string formattedCommissionDate = Model.CommissionDate.ToString("yyyy-MM-dd");
+    ViewData["Title"] = "Edit Record";
+}
+
+<div id="edit">
+    <section>
+        @* TODO Back button *@
+        <h2>@ViewData["Title"]</h2>
+        <hr />
+        <form asp-action="Edit" asp-route-id="@Model.Id">
+            <dl>
+                <input asp-for="Id" type="hidden" value="@Model.Id">
+                <dt>Student Name</dt>
+                <dd>@fullName</dd>
+                <dt>Student Number</dt>
+                <dd>@Model.Student.StudentNumber</dd>
+                <input asp-for="StudentNumber" type="hidden" value="@Model.StudentNumber">
+                <dt>College</dt>
+                <dd>@Model.College</dd>
+                <input asp-for="College" type="hidden" value="@Model.College">
+                <dt>Nature of Offense</dt>
+                <dd>@Model.Offense.Nature</dd>
+                <input asp-for="OffenseId" type="hidden" value="@Model.OffenseId">
+            </dl>
+
+            @* Course *@
+            <div class="input-wrapper">
+                <input asp-for="Course" type="text" class="input" aria-required="true">
+                <label asp-for="Course" class="label">CYS<span>*</span></label>
+                <span asp-validation-for="Course" class="text-danger"></span>
+            </div>
+
+            @* Commission Date *@
+            <div class="input-wrapper">
+                <input asp-for="CommissionDate" type="date" class="input" value="@formattedCommissionDate" aria-required="true">
+                <label asp-for="CommissionDate" class="label">Commission Date<span>*</span></label>
+                <span asp-validation-for="CommissionDate" class="text-danger"></span>
+            </div>
+
+            @* TODO Hearing Date if Major *@
+
+            @* Sanction *@
+            <div class="input-wrapper">
+                <input asp-for="Sanction" type="text" class="input" aria-required="true">
+                <label asp-for="Sanction" class="label">Sanction</label>
+                <span asp-validation-for="Sanction" class="text-danger"></span>
+            </div>
+
+            @* Status of Sanction *@
+            <div class="input-wrapper">
+                <input asp-for="StatusOfSanction" type="text" class="input" aria-required="true">
+                <label asp-for="StatusOfSanction" class="label">Status of Sanction<span>*</span></label>
+                <span asp-validation-for="StatusOfSanction" class="text-danger"></span>
+            </div>
+
+            @* Description *@
+            <div class="input-wrapper">
+                <input asp-for="Description" type="text" class="input" aria-required="true">
+                <label asp-for="Description" class="label">Description</label>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+
+            <a asp-action="Details" asp-route-id="@Model.Id" class="btn">
+                Cancel
+            </a>
+            <button type="submit" class="btn">Save</button>
+        </form>
+    </section>
+</div>
+
+<script src="~/js/records.js"></script>
+

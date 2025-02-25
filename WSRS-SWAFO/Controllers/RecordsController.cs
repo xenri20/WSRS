@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WSRS_SWAFO.Data;
+using WSRS_SWAFO.Models;
 using WSRS_SWAFO.ViewModels;
 
 namespace WSRS_SWAFO.Controllers
@@ -97,6 +98,65 @@ namespace WSRS_SWAFO.Controllers
             };
 
             return View(recordDetailsVM);
+        }
+
+        public async Task<IActionResult> Edit(int id)
+        {
+            var record = await _context.ReportsEncoded
+                .Include(r => r.Student)
+                .Include(r => r.Offense)
+                .FirstOrDefaultAsync(r => r.Id == id);
+
+            if (record == null)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
+            var editRecordVM = new EditRecordViewModel
+            {
+                Id = id,
+                StudentNumber = record.StudentNumber,
+                Student = record.Student,
+                College = record.CollegeID,
+                Course = record.Course,
+                OffenseId = record.OffenseId,
+                Offense = record.Offense,
+                CommissionDate = record.CommissionDate,
+                HearingDate = record.HearingDate,
+                Sanction = record.Sanction,
+                StatusOfSanction = record.StatusOfSanction,
+                Description = record.Description,
+            };
+
+            return View(editRecordVM);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(EditRecordViewModel editRecordVM)
+        {
+            if (!ModelState.IsValid)
+            {
+                ModelState.AddModelError("", "Failed to edit record.");
+                return View(editRecordVM);
+            }
+
+            var updatedRecord = new ReportEncoded
+            {
+                Id = editRecordVM.Id,
+                StudentNumber = editRecordVM.StudentNumber,
+                CollegeID = editRecordVM.College,
+                OffenseId = editRecordVM.OffenseId,
+                Course = editRecordVM.Course,
+                CommissionDate = editRecordVM.CommissionDate,
+                HearingDate = editRecordVM.HearingDate,
+                Sanction = editRecordVM.Sanction,
+                Description = editRecordVM.Description,
+                StatusOfSanction = editRecordVM.StatusOfSanction,
+            };
+
+            _context.Update(updatedRecord);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Details), new { id = editRecordVM.Id });
         }
 
         [HttpDelete, ActionName("Delete")]

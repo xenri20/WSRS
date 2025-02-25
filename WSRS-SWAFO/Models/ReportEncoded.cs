@@ -22,7 +22,7 @@ namespace WSRS_SWAFO.Models
 
         [ForeignKey("ApplicationUser")]
         public string? FormatorId { get; set; } // Nullable if needed
-        public ApplicationUser Formator { get; set; }
+        public ApplicationUser? Formator { get; set; }
 
         public DateOnly CommissionDate { get; set; }
         public string Course { get; set; }
