@@ -24,14 +24,18 @@
         <form asp-action="Edit" asp-route-id="@Model.Id">
             <dl>
                 <input asp-for="Id" type="hidden" value="@Model.Id">
-                <dt>Student Name</dt>
-                <dd>@fullName</dd>
+
                 <dt>Student Number</dt>
                 <dd>@Model.Student.StudentNumber</dd>
                 <input asp-for="StudentNumber" type="hidden" value="@Model.StudentNumber">
+
+                <dt>Student Name</dt>
+                <dd>@fullName</dd>
+
                 <dt>College</dt>
                 <dd>@Model.College</dd>
                 <input asp-for="College" type="hidden" value="@Model.College">
+
                 <dt>Nature of Offense</dt>
                 <dd>@Model.Offense.Nature</dd>
                 <input asp-for="OffenseId" type="hidden" value="@Model.OffenseId">
@@ -50,7 +54,7 @@
                 <label asp-for="CommissionDate" class="label">Commission Date<span>*</span></label>
                 <span asp-validation-for="CommissionDate" class="text-danger"></span>
             </div>
-            
+
             @* Hearing Date*@
             @if (Model.Offense.Classification == OffenseClassification.Major)
             {
