@@ -36,9 +36,13 @@
                 <dd>@Model.College</dd>
                 <input asp-for="College" type="hidden" value="@Model.College">
 
-                <dt>Nature of Offense</dt>
-                <dd>@Model.Offense.Nature</dd>
                 <input asp-for="OffenseId" type="hidden" value="@Model.OffenseId">
+
+                <dt>Classification</dt>
+                <dd>@Model.Offense.Classification</dd>
+
+                <dt>Nature</dt>
+                <dd>@Model.Offense.Nature</dd>
             </dl>
 
             @* Course *@
