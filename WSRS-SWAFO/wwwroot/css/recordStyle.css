@@ -5,6 +5,12 @@
     width: 100%;
 }
 
+.title {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+}
+
 /* ROW OF PILL-SHAPED BUTTONS */
 .button-group {
     display: flex;
