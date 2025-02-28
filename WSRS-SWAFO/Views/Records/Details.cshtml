@@ -32,6 +32,8 @@
 </div>
 
 <div id="details">
+    <h1>Manage Records</h1>
+    <hr />
     <section>
         <div class="title">
             <a asp-action="Index">
@@ -43,35 +45,37 @@
             </a>
             <h2>Details</h2>
         </div>
-        <hr />
-        <dl>
-            <dt>Student Number</dt>
-            <dd>@Model.StudentNumber</dd>
-            <dt>Student Name</dt>
-            <dd>@Model.Name</dd>
-            <dt>Course</dt>
-            <dd>@Model.Course</dd>
-            <dt>College</dt>
-            <dd>@Model.College</dd>
-            <input asp-for="OffenseId" type="hidden" value="@Model.OffenseId" />
-            <dt>Classification</dt>
-            <dd>@Model.Classification</dd>
-            <dt>Nature</dt>
-            <dd>@Model.Nature</dd>
-            <dt>Sanction</dt>
-            <dd>@Model.Sanction</dd>
-            <dt>Status</dt>
-            <dd>@Model.Status</dd>
-            <dt>Description</dt>
-            <dd>@Model.Description</dd>
-        </dl>
+        <div class="panel">
+            <dl>
+                <dt>Student Number</dt>
+                <dd>@Model.StudentNumber</dd>
+                <dt>Student Name</dt>
+                <dd>@Model.Name</dd>
+                <dt>Course</dt>
+                <dd>@Model.Course</dd>
+                <dt>College</dt>
+                <dd>@Model.College</dd>
+                <input asp-for="OffenseId" type="hidden" value="@Model.OffenseId" />
+                <dt>Classification</dt>
+                <dd>@Model.Classification</dd>
+                <dt>Nature</dt>
+                <dd>@Model.Nature</dd>
+                <dt>Sanction</dt>
+                <dd>@Model.Sanction</dd>
+                <dt>Status</dt>
+                <dd>@Model.Status</dd>
+                <dt>Description</dt>
+                <dd>@Model.Description</dd>
+            </dl>
 
-        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn">
-            Edit
-        </a>
-        <button class="btn" type="button" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal">
-            Delete
-        </button>
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn">
+                Edit
+            </a>
+            <button class="btn" type="button" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal">
+                Delete
+            </button>
+
+        </div>
     </section>
     @* TODO Add Buttons to edit and delete *@
 </div>

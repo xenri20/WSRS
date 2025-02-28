@@ -17,11 +17,13 @@
 }
 
 <div id="edit">
+    <h1>Manage Records</h1>
+    <hr />
     <section>
-        @* TODO Back button *@
-        <h2>@ViewData["Title"]</h2>
-        <hr />
-        <form asp-action="Edit" asp-route-id="@Model.Id">
+        <div class="title">
+            <h2>Edit Record</h2>
+        </div>
+        <form asp-action="Edit" asp-route-id="@Model.Id" class="panel">
             <dl>
                 <input asp-for="Id" type="hidden" value="@Model.Id">
 

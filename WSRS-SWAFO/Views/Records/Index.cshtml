@@ -10,11 +10,9 @@
     <link rel="stylesheet" href="~/css/recordStyle.css" asp-append-version="true" />
 }
 
-@* TODO managing (editing, deleting, viewing) of records *@
-
 <div id="records">
-    <h1>@ViewData["Title"]</h1>
-
+    <h1>Manage Records</h1>
+    <hr />
     <div class="control-group">
         <form method="get" id="searchForm">
             <input type="search" name="searchString" placeholder="Search" aria-required="true" value="@Model.SearchString">
@@ -44,7 +42,6 @@
             </div>
         </form>
     </div>
-    <hr />
     <table id="recordsTable">
         <thead>
             <tr>
