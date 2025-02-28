@@ -24,13 +24,13 @@
                     <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <g clip-path="url(#clip0_173_68)">
                             <path d="M6.41667 11.0833C8.994 11.0833 11.0833 8.994 11.0833 6.41667C11.0833 3.83934 8.994 1.75 6.41667 1.75C3.83934 1.75 1.75 3.83934 1.75 6.41667C1.75 8.994 3.83934 11.0833 6.41667 11.0833Z"
-                                  stroke="#1E1F20" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                  stroke="#1E1F20" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                             <path d="M12.25 12.25L9.71252 9.71249" stroke="#1E1F20" stroke-width="2" stroke-linecap="round"
-                                  stroke-linejoin="round" />
+                                  stroke-linejoin="round"/>
                         </g>
                         <defs>
                             <clipPath id="clip0_173_68">
-                                <rect width="14" height="14" fill="white" />
+                                <rect width="14" height="14" fill="white"/>
                             </clipPath>
                         </defs>
                     </svg>
@@ -44,7 +44,7 @@
             </div>
         </form>
     </div>
-
+    <hr/>
     <table id="recordsTable">
         <thead>
             <tr>
@@ -53,7 +53,7 @@
                        asp-controller="Records"
                        asp-route-sortOrder="@Model.CommissionDateSort"
                        asp-route-searchString="@Model.SearchString">
-                        @* TODO Place this action to an reversible icon *@
+                        @* TODO Place this action to a reversible icon *@
                         Commission Date
                     </a>
                 </th>
@@ -68,8 +68,8 @@
         <tbody>
             @if (!Model.Records.Any())
             {
-                <tr>
-                    <td colspan="6">
+                <tr class="empty">
+                    <td colspan="7">
                         <div>No records found.</div>
                         <a asp-controller="Encode" asp-action="StudentRecordViolation" class="btn">
                             Encode new record
@@ -89,10 +89,13 @@
                         <td>@record.College</td>
                         <td>@record.Status</td>
                         <td>
-                            @* TODO Change to a view icon *@
-                            <a asp-action="Details" asp-route-id="@record.Id"
-                               class="btn">
-                                Show
+                            <a asp-action="Details" asp-route-id="@record.Id" class="btn-function">
+                                <svg width="32" height="32" viewBox="0 0 43 43" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <g transform="rotate(180, 21.5, 21.5)">
+                                        <path d="M16 22L24 14" stroke="black" stroke-width="2" stroke-linecap="round" />
+                                        <path d="M16 22L24 30" stroke="black" stroke-width="2" stroke-linecap="round" />
+                                    </g>
+                                </svg>
                             </a>
                         </td>
                     </tr>

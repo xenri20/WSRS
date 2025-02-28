@@ -1,7 +1,4 @@
 #records {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
     width: 100%;
 }
 
@@ -11,7 +8,11 @@
     align-items: center;
 }
 
-/* ROW OF PILL-SHAPED BUTTONS */
+.control-group {
+    margin-top: 0.5rem;
+}
+
+/* ROW OF BUTTONS */
 .button-group {
     display: flex;
     flex-direction: row;
@@ -23,7 +24,6 @@
 /* GENERIC TABLE */
 table {
     width: 100%;
-    height: 100%;
     border: 2px solid black;
     border-radius: 12px; 
     border-collapse: separate; 
@@ -32,23 +32,40 @@ table {
     overflow: hidden;
 }
 
-    table th, 
-    table td {
-        padding: 0.5rem;
-        text-align: center;
-    }
+table th, 
+table td {
+    padding: 0.5rem;
+    text-align: center;
+}
 
-    table thead {
-        background-color: black;
-        color: white;
-        display: table-header-group;
-    }
+table thead {
+    background-color: black;
+    color: white;
+    display: table-header-group;
+}
 
-    table tbody {
-        font-size: 0.95rem;
-        overflow-y: auto;
-        height: 100%;
-    }
+table thead a {
+    text-decoration: none; 
+    color: white;
+}
+
+table thead a:hover {
+    color: white;
+    filter: brightness(95%);
+}
+
+table tbody {
+    overflow-y: auto;
+    height: 100%;
+}
+
+table tbody tr:hover {
+    background-color: #eee;
+}
+
+table tbody tr.empty {
+    background-color: inherit;
+}
 
 #edit {
     width: 100%;
