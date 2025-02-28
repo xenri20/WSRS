@@ -1,3 +1,5 @@
+using WSRS_SWAFO.Models;
+
 namespace WSRS_SWAFO.ViewModels;
 
 /// <summary>
@@ -5,7 +7,7 @@ namespace WSRS_SWAFO.ViewModels;
 /// </summary>
 public class RecordsIndexViewModel
 {
-    public List<RecordsViewModel> Records { get; set; }
+    public PaginatedList<RecordsViewModel> Pagination { get; set; }
     public string CurrentSort { get; set; }
     public string CommissionDateSort { get; set; }
     public string SearchString { get; set; }

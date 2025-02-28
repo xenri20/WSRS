@@ -19,8 +19,14 @@ namespace WSRS_SWAFO.Controllers
 
         public async Task<IActionResult> Index(
             [FromQuery] string sortOrder,
-            [FromQuery] string searchString)
+            [FromQuery] string searchString,
+            [FromQuery] int? pageIndex)
         {
+            if (searchString != null)
+            {
+                pageIndex = 1;
+            }
+
             var records = from r in _context.ReportsEncoded
                 .Include(r => r.Student)
                           select new RecordsViewModel
@@ -51,9 +57,18 @@ namespace WSRS_SWAFO.Controllers
                     break;
             }
 
+            // Ensures page number is at least 1
+            if (pageIndex < 1)
+            {
+                pageIndex = 1;
+            }
+
+            // Set default page size
+            int pageSize = 10;
+
             var recordsIndexVM = new RecordsIndexViewModel
             {
-                Records = await records.ToListAsync(),
+                Pagination = await PaginatedList<RecordsViewModel>.CreateAsync(records, pageIndex ?? 1, pageSize),
                 CurrentSort = sortOrder,
                 CommissionDateSort = (sortOrder == "date_desc") ? "date_asc" : "date_desc",
                 SearchString = searchString,

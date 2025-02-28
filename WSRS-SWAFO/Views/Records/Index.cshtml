@@ -24,13 +24,13 @@
                     <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <g clip-path="url(#clip0_173_68)">
                             <path d="M6.41667 11.0833C8.994 11.0833 11.0833 8.994 11.0833 6.41667C11.0833 3.83934 8.994 1.75 6.41667 1.75C3.83934 1.75 1.75 3.83934 1.75 6.41667C1.75 8.994 3.83934 11.0833 6.41667 11.0833Z"
-                                  stroke="#1E1F20" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                  stroke="#1E1F20" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                             <path d="M12.25 12.25L9.71252 9.71249" stroke="#1E1F20" stroke-width="2" stroke-linecap="round"
-                                  stroke-linejoin="round"/>
+                                  stroke-linejoin="round" />
                         </g>
                         <defs>
                             <clipPath id="clip0_173_68">
-                                <rect width="14" height="14" fill="white"/>
+                                <rect width="14" height="14" fill="white" />
                             </clipPath>
                         </defs>
                     </svg>
@@ -44,7 +44,7 @@
             </div>
         </form>
     </div>
-    <hr/>
+    <hr />
     <table id="recordsTable">
         <thead>
             <tr>
@@ -66,7 +66,7 @@
             </tr>
         </thead>
         <tbody>
-            @if (!Model.Records.Any())
+            @if (!Model.Pagination.Items.Any())
             {
                 <tr class="empty">
                     <td colspan="7">
@@ -79,13 +79,13 @@
             }
             else
             {
-                @foreach (var record in Model.Records.ToList())
+                @foreach (var record in Model.Pagination.Items)
                 {
                     <tr>
                         <td>@record.CommissionDate</td>
-                        <td>@StringHelper.TruncateWithEllipsis(record.OffenseNature, 40)</td>
+                        <td class="long">@StringHelper.TruncateWithEllipsis(record.OffenseNature, 40)</td>
                         <td>@record.StudentNumber</td>
-                        <td>@record.Name</td>
+                        <td class="long">@record.Name</td>
                         <td>@record.College</td>
                         <td>@record.Status</td>
                         <td>
@@ -103,6 +103,59 @@
             }
         </tbody>
     </table>
+
+    @* Pagination Controls *@
+    <div class="row mt-2 p-1">
+        <div class="col-md-6">
+            Results: @Model.Pagination.TotalItems
+        </div>
+        <div class="col-md-6">
+            @if (Model.Pagination.TotalPages > 1)
+            {
+                <nav>
+                    <ul class="pagination align-items-center justify-content-end">
+                        <li class="page-item @(Model.Pagination.PageIndex == 1 ? "disabled" : "")">
+                            <a class="page-link text-black"
+                               asp-route-pageIndex="1"
+                               asp-route-sortOrder="@Model.CurrentSort"
+                               asp-route-searchString="@Model.SearchString">
+                                <span>First</span>
+                            </a>
+                        </li>
+                        <li class="page-item @(Model.Pagination.HasPreviousPage ? "" : "disabled")">
+                            <a class="page-link text-black"
+                               asp-route-pageIndex="@(Model.Pagination.PageIndex - 1)"
+                               asp-route-sortOrder="@Model.CurrentSort"
+                               asp-route-searchString="@Model.SearchString">
+                                <span>&laquo;</span>
+                            </a>
+                        </li>
+
+                        <li class="page-item p-2 @(Model.Pagination.TotalPages == 0 ? "hidden" : "")">
+                            @string.Concat(Model.Pagination.PageIndex, " of ", Model.Pagination.TotalPages)
+                        </li>
+
+                        <li class="page-item @(Model.Pagination.HasNextPage ? "" : "disabled")">
+                            <a class="page-link text-black"
+                               asp-route-pageIndex="@(Model.Pagination.PageIndex + 1)"
+                               asp-route-sortOrder="@Model.CurrentSort"
+                               asp-route-searchString="@Model.SearchString">
+                                <span>&raquo;</span>
+                            </a>
+                        </li>
+                        <li class="page-item @(Model.Pagination.PageIndex == Model.Pagination.TotalPages || Model.Pagination.TotalPages == 0 ? "disabled" : "")">
+                            <a class="page-link text-black"
+                               asp-route-pageIndex="@Model.Pagination.TotalPages"
+                               asp-route-sortOrder="@Model.CurrentSort"
+                               asp-route-searchString="@Model.SearchString">
+                                <span>Last</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            }
+        </div>
+    </div>
 </div>
 
 <script src="~/js/records.js"></script>
