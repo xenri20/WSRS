@@ -174,21 +174,5 @@ namespace WSRS_SWAFO.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Details), new { id = editRecordVM.Id });
         }
-
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(int id)
-        {
-            var record = await _context.ReportsEncoded.FindAsync(id);
-
-            if (record != null)
-            {
-                _context.ReportsEncoded.Remove(record);
-            }
-
-            await _context.SaveChangesAsync();
-
-            return RedirectToAction(nameof(Index));
-        }
     }
 }
