@@ -61,6 +61,7 @@
                 <th>Student Number</th>
                 <th>Name</th>
                 <th>College</th>
+                <th>Status of Sanction</th>
                 <th></th>
             </tr>
         </thead>
@@ -83,6 +84,7 @@
                         <td>@record.StudentNumber</td>
                         <td>@record.Name</td>
                         <td>@record.College</td>
+                        <td>@record.Status</td>
                         <td>
                             @* TODO Change to a view icon *@
                             <a asp-action="Details" asp-route-id="@record.Id"

@@ -30,7 +30,8 @@ namespace WSRS_SWAFO.Controllers
                               StudentNumber = r.StudentNumber,
                               College = r.CollegeID,
                               CommissionDate = r.CommissionDate,
-                              OffenseNature = r.Offense.Nature
+                              OffenseNature = r.Offense.Nature,
+                              Status = r.StatusOfSanction
                           };
 
             if (!string.IsNullOrEmpty(searchString))
