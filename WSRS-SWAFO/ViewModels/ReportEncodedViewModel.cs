@@ -46,7 +46,7 @@ namespace WSRS_SWAFO.ViewModels
         public string Description { get; set; }
 
         [Required(ErrorMessage = "Status is required")]
-        [Display(Name = "Status of Sanction")]
+        [Display(Name = "Status")]
         public string StatusOfSanction { get; set; }
     }
 }
