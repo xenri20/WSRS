@@ -20,11 +20,16 @@ namespace WSRS_SWAFO.Controllers
         public async Task<IActionResult> Index(
             [FromQuery] string sortOrder,
             [FromQuery] string searchString,
+            [FromQuery] string currentFilter,
             [FromQuery] int? pageIndex)
         {
             if (searchString != null)
             {
                 pageIndex = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
             }
 
             var records = from r in _context.ReportsEncoded
@@ -71,7 +76,7 @@ namespace WSRS_SWAFO.Controllers
                 Pagination = await PaginatedList<RecordsViewModel>.CreateAsync(records, pageIndex ?? 1, pageSize),
                 CurrentSort = sortOrder,
                 CommissionDateSort = (sortOrder == "date_desc") ? "date_asc" : "date_desc",
-                SearchString = searchString,
+                CurrentFilter = searchString,
             };
 
             //return Ok(records); // Return data as JSON response

@@ -10,5 +10,5 @@ public class RecordsIndexViewModel
     public PaginatedList<RecordsViewModel> Pagination { get; set; }
     public string CurrentSort { get; set; }
     public string CommissionDateSort { get; set; }
-    public string SearchString { get; set; }
+    public string CurrentFilter { get; set; }
 }
