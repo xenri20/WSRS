@@ -35,61 +35,61 @@ namespace WSRS_SWAFO.Controllers
         {
             try
             {
-                // Define the violation Nature IDs based on the selected violation type
                 List<int> violationClassificationIds = new List<int>();
-                bool isTrafficViolation = false; // Flag to check if we should use TrafficReportsEncoded
+                bool isTrafficViolation = false;
 
                 switch (request.ViolationType)
                 {
                     case "MajorViolations":
-                        violationClassificationIds = new List<int> { 9, 10, 11 }; // Major Violations
+                        violationClassificationIds = new List<int> { 9, 10, 11 };
                         break;
                     case "MinorViolations":
-                        violationClassificationIds = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8 }; // Minor Violations
+                        violationClassificationIds = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8 };
                         break;
                     case "MinorTrafficViolations":
-                        violationClassificationIds = new List<int> { 12, 13, 14, 15, 16, 17, 18 }; // Minor Traffic Violations
+                        violationClassificationIds = new List<int> { 12, 13, 14, 15, 16, 17, 18 };
                         isTrafficViolation = true;
                         break;
                     case "MajorTrafficViolations":
-                        violationClassificationIds = new List<int> { 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 }; // Major Traffic Violations
+                        violationClassificationIds = new List<int> { 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 };
                         isTrafficViolation = true;
                         break;
                     default:
                         throw new Exception("Invalid violation type.");
                 }
 
-                // Fetch data from the correct table
-                var collegeReports = isTrafficViolation
+                DateOnly? start = request.StartDate.HasValue ? DateOnly.FromDateTime(request.StartDate.Value) : null;
+                DateOnly? end = request.EndDate.HasValue ? DateOnly.FromDateTime(request.EndDate.Value) : null;
+
+                var reports = isTrafficViolation
                     ? _context.TrafficReportsEncoded
-                        .Where(r => violationClassificationIds.Contains(r.OffenseId)) // Fetch from TrafficReportsEncoded
+                        .Where(r => violationClassificationIds.Contains(r.OffenseId) &&
+                                    (!request.StartDate.HasValue || r.CommissionDatetime >= request.StartDate.Value) &&
+                                    (!request.EndDate.HasValue || r.CommissionDatetime <= request.EndDate.Value))
                         .GroupBy(r => r.CollegeID)
-                        .Select(g => new
-                        {
-                            College = g.Key,
-                            ViolationCount = g.Count()
-                        })
-                        .OrderBy(report => report.College)
+                        .Select(g => new { College = g.Key, ViolationCount = g.Count() })
                         .ToList()
                     : _context.ReportsEncoded
-                        .Where(r => violationClassificationIds.Contains(r.OffenseId)) // Fetch from ReportsEncoded
+                        .Where(r => violationClassificationIds.Contains(r.OffenseId) &&
+                                    (!start.HasValue || r.CommissionDate >= start) &&
+                                    (!end.HasValue || r.CommissionDate <= end))
                         .GroupBy(r => r.CollegeID)
-                        .Select(g => new
-                        {
-                            College = g.Key,
-                            ViolationCount = g.Count()
-                        })
-                        .OrderBy(report => report.College)
+                        .Select(g => new { College = g.Key, ViolationCount = g.Count() })
                         .ToList();
 
-                // Calculate the total violations
-                var totalViolations = collegeReports.Sum(cr => cr.ViolationCount);
+                _logger.LogInformation("Fetched {count} reports", reports.Count); // Debugging
 
-                // Prepare the labels and violation counts for the response
-                var labels = collegeReports.Select(cr => cr.College).ToList();
-                var violationNumbers = collegeReports.Select(cr => cr.ViolationCount).ToList();
+                if (!reports.Any())
+                {
+                    _logger.LogWarning("No reports found for given filters!");
+                }
 
-                return Json(new { labels, violationNumbers, totalViolations });
+                return Json(new
+                {
+                    labels = reports.Select(r => r.College).ToList(),
+                    violationNumbers = reports.Select(r => r.ViolationCount).ToList(),
+                    totalViolations = reports.Sum(r => r.ViolationCount)
+                });
             }
             catch (Exception ex)
             {
@@ -99,11 +99,13 @@ namespace WSRS_SWAFO.Controllers
         }
     }
 }
-    
 
-    // Model for the request to include violation type
-    public class ViolationRequest
-    {
-        public string ViolationType { get; set; }
-    }
+
+// Model for the request to include violation type
+public class ViolationRequest
+{
+    public string ViolationType { get; set; }
+    public DateTime? StartDate { get; set; }
+    public DateTime? EndDate { get; set; }
+}
 

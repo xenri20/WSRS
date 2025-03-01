@@ -1,4 +1,4 @@
-﻿@* TODO Add Model later *@
+﻿@* Reports Page *@
 
 <div id="reports">
     <h2>Reports Chart</h2>
@@ -12,8 +12,16 @@
         <option value="MajorTrafficViolations">Major Traffic Violations</option>
     </select>
 
-    <h3 id="totalViolations">Total Violations: 0</h3> <!-- Display total violations -->
-    <!-- Container for larger chart -->
+    <!-- Date range selection -->
+    <label for="startDate">Start Date:</label>
+    <input type="date" id="startDate">
+
+    <label for="endDate">End Date:</label>
+    <input type="date" id="endDate">
+
+    <button id="filterButton">Apply Filter</button>
+
+    <h3 id="totalViolations">Total Violations: 0</h3>
     <div style="width: 50vw; height: 500px; margin: auto;">
         <canvas id="reportsChart"></canvas>
     </div>
@@ -24,9 +32,7 @@
 
 <script>
     $(document).ready(function () {
-        var chart;  // To store the Chart instance
-
-        // Define a color mapping for colleges
+        var chart;
         var collegeColors = {
             "CBAA": "yellow",
             "CCJE": "pink",
@@ -38,12 +44,33 @@
             "CTHM": "purple"
         };
 
-        // Function to fetch data and update the chart
-        function fetchData(violationType) {
+        // Load all data on page load (no date filtering)
+        fetchData('MajorViolations', null, null);
+
+        // Apply filter when selecting a violation type
+        $('#violationType').change(function () {
+            var selectedViolationType = $(this).val();
+            fetchData(selectedViolationType, null, null);
+        });
+
+        // Apply filter when clicking the button
+        $('#filterButton').click(function () {
+            var selectedViolationType = $('#violationType').val();
+            var startDate = $('#startDate').val();
+            var endDate = $('#endDate').val();
+
+            fetchData(selectedViolationType, startDate, endDate);
+        });
+
+        function fetchData(violationType, startDate, endDate) {
             $.ajax({
                 type: "POST",
                 url: "/Reports/GetCollegeReports",
-                data: JSON.stringify({ violationType: violationType }),  // Send the selected violation type to the server
+                data: JSON.stringify({ 
+                    violationType: violationType,
+                    startDate: startDate || null,
+                    endDate: endDate || null
+                }),
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (response) {
@@ -53,25 +80,20 @@
                         return;
                     }
 
-                    // Extract chart labels, data, and total count
                     var chartLabels = response.labels;
                     var chartData = response.violationNumbers;
                     var totalViolations = response.totalViolations;
 
-                    // Update the total violation count on the page
                     $("#totalViolations").text("Total Violations: " + totalViolations);
 
-                    // Map college names to their corresponding colors
                     var chartColors = chartLabels.map(function (college) {
-                        return collegeColors[college] || "gray"; // Default to gray if no color is found
+                        return collegeColors[college] || "gray"; 
                     });
 
-                    // If chart exists, destroy it before creating a new one to avoid duplicates
                     if (chart) {
                         chart.destroy();
                     }
 
-                    // Initialize the bar chart with a larger size
                     chart = new Chart("reportsChart", {
                         type: "bar",
                         data: {
@@ -86,30 +108,14 @@
                         },
                         options: {
                             responsive: true,
-                            maintainAspectRatio: false, // Allow chart to resize properly
+                            maintainAspectRatio: false,
                             plugins: {
-                                legend: {
-                                    display: false // Hide legend since bars are labeled
-                                },
-                                title: {
-                                    display: true,
-                                    text: violationType + " by College"
-                                }
+                                legend: { display: false },
+                                title: { display: true, text: violationType + " by College" }
                             },
                             scales: {
-                                y: {
-                                    beginAtZero: true,
-                                    title: {
-                                        display: true,
-                                        text: "Number of Violations"
-                                    }
-                                },
-                                x: {
-                                    title: {
-                                        display: true,
-                                        text: "College"
-                                    }
-                                }
+                                y: { beginAtZero: true, title: { display: true, text: "Number of Violations" }},
+                                x: { title: { display: true, text: "College" }}
                             }
                         }
                     });
@@ -120,16 +126,5 @@
                 }
             });
         }
-
-        // Fetch data for default violation type on page load
-        fetchData('MajorViolations');
-
-        // Event listener for dropdown change
-        $('#violationType').change(function () {
-            var selectedViolationType = $(this).val();
-            fetchData(selectedViolationType);  // Update chart based on selected violation type
-        });
     });
 </script>
-
-<script src="~/js/reports.js"></script>
