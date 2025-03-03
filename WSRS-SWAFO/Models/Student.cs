@@ -1,9 +1,11 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
+using Microsoft.EntityFrameworkCore;
 
 namespace WSRS_SWAFO.Models
 {
+    [Index(nameof(StudentNumber))]
     public class Student
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.None)]
