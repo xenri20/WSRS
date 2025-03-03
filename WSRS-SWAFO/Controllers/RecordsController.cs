@@ -32,7 +32,7 @@ namespace WSRS_SWAFO.Controllers
                 searchString = currentFilter;
             }
 
-            var records = from r in _context.ReportsEncoded
+            var records = from r in _context.ReportsEncoded.AsNoTracking()
                 .Include(r => r.Student)
                           select new RecordsViewModel
                           {
@@ -90,7 +90,7 @@ namespace WSRS_SWAFO.Controllers
                 return NotFound();
             }
 
-            var record = await _context.ReportsEncoded
+            var record = await _context.ReportsEncoded.AsNoTracking()
                 .Include(r => r.Student)
                 .Include(r => r.Offense)
                 .Include(r => r.College)
