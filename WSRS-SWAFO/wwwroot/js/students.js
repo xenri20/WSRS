@@ -1,19 +1,4 @@
-﻿const evaluateClassification = (c) => {
-    switch (c) {
-        case 0:
-            return 'Minor';
-            break;
-        case 1:
-            return 'Major';
-            break;
-        case 2:
-            return 'Minor Traffic';
-            break;
-        case 3:
-            return 'Major Traffic';
-            break;
-    }
-};
+﻿import { evaluateClassification } from  './utils/evaluateClassification.js';
 
 // Global elements
 const studentModalBody = document.querySelector('#studentModal .modal-body')
