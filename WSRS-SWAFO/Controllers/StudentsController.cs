@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using WSRS_SWAFO.Data;
 using WSRS_SWAFO.Models;
 
@@ -21,11 +22,14 @@ namespace WSRS_SWAFO.Controllers
         [Produces("application/json")]
         public async Task<ActionResult<Student>> GetStudentAsync(int studentNumber)
         {
-            var student = await _context.Students.FindAsync(studentNumber);
-
+            var student = await _context.Students
+                .Include(s => s.ReportsEncoded)
+                    .ThenInclude(r => r.Offense)
+                .FirstOrDefaultAsync(s => s.StudentNumber == studentNumber);
+            
             if (student == null)
             {
-                return NotFound();
+                return NotFound(new { message = "Student not found" });
             }
 
             return student;
