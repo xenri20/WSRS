@@ -85,9 +85,9 @@
                         <td>@record.CommissionDate</td>
                         <td class="long">@StringHelper.TruncateWithEllipsis(record.OffenseNature, 40)</td>
                         <td>
-                            <a type="button" data-student="@record.StudentNumber" data-bs-toggle="modal" data-bs-target="#studentModal">
+                            <button type="button" class="text-button" data-student="@record.StudentNumber" data-bs-toggle="modal" data-bs-target="#studentModal">
                                 @record.StudentNumber
-                            </a>
+                            </button>
                         </td>
                         <td class="long">@record.Name</td>
                         <td>@record.College</td>
