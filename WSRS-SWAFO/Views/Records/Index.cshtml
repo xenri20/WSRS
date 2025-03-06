@@ -6,9 +6,12 @@
     ViewData["Title"] = "Manage Records";
 }
 
+
 @section customHead {
     <link rel="stylesheet" href="~/css/recordStyle.css" asp-append-version="true" />
 }
+
+<partial name="_StudentModalPartial" />
 
 <div id="records">
     <h1>Manage Records</h1>
@@ -81,7 +84,11 @@
                     <tr>
                         <td>@record.CommissionDate</td>
                         <td class="long">@StringHelper.TruncateWithEllipsis(record.OffenseNature, 40)</td>
-                        <td>@record.StudentNumber</td>
+                        <td>
+                            <a type="button" data-student="@record.StudentNumber" data-bs-toggle="modal" data-bs-target="#studentModal">
+                                @record.StudentNumber
+                            </a>
+                        </td>
                         <td class="long">@record.Name</td>
                         <td>@record.College</td>
                         <td>@record.Status</td>
@@ -156,3 +163,4 @@
 </div>
 
 <script src="~/js/records.js"></script>
+<script src="~/js/students.js" type="module" asp-append-version="true"></script>
