@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace WSRS_SWAFO.Models
 {
@@ -18,6 +19,7 @@ namespace WSRS_SWAFO.Models
 
         [ForeignKey("Student")]
         public int StudentNumber { get; set; }
+        [JsonIgnore]
         public Student Student { get; set; } // Navigation Property
 
         [ForeignKey("ApplicationUser")]
