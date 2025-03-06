@@ -1,4 +1,4 @@
-﻿import { evaluateClassification } from  './utils/evaluateClassification.js';
+﻿import { evaluateClassification } from  '../utils/evaluateClassification.js';
 
 // Global elements
 const studentModalBody = document.querySelector('#studentModal .modal-body')
@@ -86,7 +86,9 @@ const constructHeading = (data) => {
     return heading;
 }
 
-document.getElementById("recordsTable").addEventListener('click', async e => {
+// Attaches itself to the document so that it can be used anywhere where it's needed
+// e.g. when clicking on an element with a student number
+document.addEventListener('click', async e => {
     if (e.target.type === 'button' && e.target.hasAttribute('data-student')) {
         const studentData = await fetchStudentData(e.target.getAttribute('data-student'));
 
