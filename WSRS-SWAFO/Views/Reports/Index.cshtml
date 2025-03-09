@@ -11,21 +11,25 @@
 }
 
 <div id="reports">
-    <h1>@ViewData["Title"]</h1>
-
-    <!-- Dropdown for selecting violation type -->
-    <label for="violationType">Select Violation Type:</label>
-    <select id="violationType">
-        <option value="MajorViolations">Major Violations</option>
-        <option value="MinorViolations">Minor Violations</option>
-        <option value="MinorTrafficViolations">Minor Traffic Violations</option>
-        <option value="MajorTrafficViolations">Major Traffic Violations</option>
-    </select>
-
-    <h3 id="totalViolations">Total Violations: 0</h3> <!-- Display total violations -->
+    <h1>Reports</h1>
+    <div id="category-function" class="mt-1" role="group" aria-label="Button group example">
+        <button type="submit" name="action" class="btn major-violations" value="MajorViolations">Major Violations</button>
+        <button type="submit" name="action" class="btn minor-violations" value="MinorViolations">Minor Violations</button>
+        <button type="submit" name="action" class="btn minor-traffic-violations" value="MinorTrafficViolations">Minor Traffic</button>
+        <button type="submit" name="action" class="btn major-traffic-violtions" value="MajorTrafficViolations">Major Traffic</button>
+    </div>
+    <hr />
+    <div class="content-panel reports">
     <!-- Container for larger chart -->
-    <div style="width: 50vw; height: 500px; margin: auto;">
+        <div id="grid-screen">
+            <div id="statistics">
         <canvas id="reportsChart"></canvas>
+    </div>
+            <div id="panel-footer">
+                <div id="total-violations">Total Violations: 0</div>
+                <button class="btn"><img src="~/assets/img/AI.svg" />Generate a Report</button>
+</div>
+        </div>
     </div>
 </div>
 
