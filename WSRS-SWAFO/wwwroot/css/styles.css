@@ -118,11 +118,16 @@ input[type="number"] {
 
 .btn {
     justify-content: center;
+        align-items: center;
+        text-decoration: none;
     text-align: center;
-    padding: 0.25em 2em;
+        padding: 0.25em 1em;
     font-size: 16px;
     font-family: var(--medium);
     cursor: pointer;
+        color: black;
+        background-color: transparent;
+        border: 2px solid black;
     border-radius: 32px;
     transition: color 0.2s ease-in, background-color 0.2s ease-in;
     border: 2px solid black;
@@ -130,10 +135,13 @@ input[type="number"] {
     color: black;
 }
 
-    .btn:hover {
+    .btn:hover,
+    .btn:active,
+    .btn.active {
         background-color: black;
         color: white;
     }
+
 
     .btn:focus {
         box-shadow: none;
