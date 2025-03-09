@@ -1,5 +1,6 @@
 ﻿document.addEventListener("DOMContentLoaded", () => {
     document.querySelector(".reports-nav").classList.add("active");
+    document.querySelector(".major-violations").classList.add("active");
 });
 
 $(document).ready(function () {
