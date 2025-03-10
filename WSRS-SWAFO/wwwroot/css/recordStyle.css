@@ -19,14 +19,14 @@
 table {
     width: 100%;
     border: 2px solid black;
-    border-radius: 12px; 
-    border-collapse: separate; 
-    border-spacing: 0; 
+    border-radius: 12px;
+    border-collapse: separate;
+    border-spacing: 0;
     font-family: var(--light);
     overflow: hidden;
 }
 
-table th, 
+table th,
 table td {
     padding: 0.5rem;
 }
@@ -42,7 +42,7 @@ table thead {
 }
 
 table thead a {
-    text-decoration: none; 
+    text-decoration: none;
     color: white;
 }
 
@@ -109,5 +109,3 @@ dd {
 #details {
     width: 100%;
 }
-
-
