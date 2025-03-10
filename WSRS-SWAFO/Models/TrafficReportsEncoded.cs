@@ -21,7 +21,7 @@ namespace WSRS_SWAFO.Models
         public College College { get; set; }
 
         public string PlateNumber { get; set; }
-        public DateTime CommissionDatetime { get; set; }
+        public DateOnly CommissionDate { get; set; }
         public string Place { get; set; }
         public string Remarks { get; set; }
         public int? ORNumber { get; set; } // NULLABLE
