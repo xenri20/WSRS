@@ -179,5 +179,71 @@ namespace WSRS_SWAFO.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Details), new { id = editRecordVM.Id });
         }
+
+        public async Task<IActionResult> Traffic(
+            [FromQuery] string sortOrder,
+            [FromQuery] string searchString,
+            [FromQuery] string currentFilter,
+            [FromQuery] int? pageIndex)
+        {
+            if (searchString != null)
+            {
+                pageIndex = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            var records = from tr in _context.TrafficReportsEncoded.AsNoTracking()
+                .Include(tr => tr.Student)
+                          select new TrafficRecordsViewModel
+                          {
+                              Id = tr.Id,
+                              Name = string.Concat(tr.Student.FirstName, " ", tr.Student.LastName),
+                              StudentNumber = tr.StudentNumber,
+                              College = tr.CollegeID,
+                              CommissionDate = tr.CommissionDate,
+                              OffenseNature = tr.Offense.Nature,
+                              DatePaid = tr.DatePaid,
+                          };
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                searchString = searchString.Trim();
+                records = records.Where(r => r.Name.Contains(searchString)
+                                            || r.StudentNumber.ToString().Contains(searchString));
+            }
+
+            switch (sortOrder)
+            {
+                case "date_desc":
+                    records = records.OrderByDescending(r => r.CommissionDate).ThenBy(r => r.Id);
+                    break;
+                default:
+                    records = records.OrderBy(r => r.CommissionDate).ThenBy(r => r.Id);
+                    break;
+            }
+
+            // Ensures page number is at least 1
+            if (pageIndex < 1)
+            {
+                pageIndex = 1;
+            }
+
+            // Set default page size
+            int pageSize = 10;
+
+            var recordsIndexVM = new TrafficRecordsIndexViewModel
+            {
+                Pagination = await PaginatedList<TrafficRecordsViewModel>.CreateAsync(records, pageIndex ?? 1, pageSize),
+                CurrentSort = sortOrder,
+                CommissionDateSort = (sortOrder == "date_desc") ? "date_asc" : "date_desc",
+                CurrentFilter = searchString,
+            };
+
+            //return Ok(records); // Return data as JSON response
+            return View(recordsIndexVM);
+        }
     }
 }
