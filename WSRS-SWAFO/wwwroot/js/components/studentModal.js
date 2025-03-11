@@ -25,9 +25,57 @@ const fetchStudentData = async (number) => {
 
 const clearModalBody = () => studentModalBody.textContent = '';
 
-const constructTable = (data) => {
+// Regular table component
+const constructRegularTable = (data) => {
 
-    if (!data) {
+    if (data.length === 0) {
+        const empty = document.createElement('div');
+
+        empty.textContent = 'No records to show';
+        return empty;
+    }
+
+    const offenseTable = document.createElement('table');
+    const offenseTableHeader = document.createElement('thead');
+    const offenseTableBody = document.createElement('tbody');
+
+    const headers = ['Commission Date', 'Classification', 'Nature', 'Sanction'];
+    const headerRow = document.createElement('tr');
+    headers.forEach(headerText => {
+        const header = document.createElement('th');
+        header.textContent = headerText;
+        headerRow.appendChild(header);
+    });
+    offenseTableHeader.appendChild(headerRow);
+
+    data.forEach(report => {
+        const row = document.createElement('tr');
+
+        const dateCell = document.createElement('td');
+        const classificationCell = document.createElement('td');        
+        const natureCell = document.createElement('td');
+        const sanctionCell = document.createElement('td');
+
+        classificationCell.textContent = evaluateClassification(report.offense.classification);
+        natureCell.textContent = report.offense.nature;
+        dateCell.textContent = new Date(report.commissionDate).toLocaleDateString();
+        sanctionCell.textContent = report.sanction;
+
+        row.appendChild(dateCell);
+        row.appendChild(classificationCell);
+        row.appendChild(natureCell);
+        row.appendChild(sanctionCell);
+        offenseTableBody.appendChild(row);
+    });
+
+    offenseTable.appendChild(offenseTableHeader);
+    offenseTable.appendChild(offenseTableBody);
+    return offenseTable;
+};
+
+const constructTrafficTable = (data) => {
+
+    if (data.length === 0) {
         const empty = document.createElement('div');
 
         empty.textContent = 'No records to show';
@@ -95,7 +143,17 @@ document.addEventListener('click', async e => {
         clearModalBody();
 
         studentModalBody.appendChild(constructHeading(studentData));
-        studentModalBody.appendChild(constructTable(studentData.reportsEncoded));
+
+        let tableTitle = document.createElement('h3');
+        tableTitle.textContent = 'Regular Violations';
+        studentModalBody.appendChild(tableTitle);
+        studentModalBody.appendChild(constructRegularTable(studentData.reportsEncoded));
+
+        tableTitle = document.createElement('h3');
+        tableTitle.classList.add('mt-3');
+        tableTitle.textContent = 'Traffic Violations';
+        studentModalBody.appendChild(tableTitle);
+        studentModalBody.appendChild(constructTrafficTable(studentData.trafficReportsEncoded));
     }
 });
 
