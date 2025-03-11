@@ -20,11 +20,13 @@ namespace WSRS_SWAFO.Controllers
         [Route("api/[controller]")]
         [HttpGet("studentNumber")]
         [Produces("application/json")]
-        public async Task<ActionResult<Student>> GetStudentAsync(int studentNumber)
+        public async Task<ActionResult<Student>> GetStudentViolationsAsync(int studentNumber)
         {
             var student = await _context.Students
                 .Include(s => s.ReportsEncoded)
                     .ThenInclude(r => r.Offense)
+                .Include(s => s.TrafficReportsEncoded)
+                    .ThenInclude(tr => tr.Offense)
                 .FirstOrDefaultAsync(s => s.StudentNumber == studentNumber);
             
             if (student == null)
