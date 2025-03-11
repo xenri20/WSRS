@@ -4,6 +4,7 @@ namespace WSRS_SWAFO.ViewModels
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public string OffenseClassification { get; set; }
         public string OffenseNature { get; set; }
         public int StudentNumber { get; set; }
         public string College { get; set; }

@@ -61,6 +61,7 @@
                         Commission Date
                     </a>
                 </th>
+                <th>Classification</th>
                 <th>Nature</th>
                 <th>Student Number</th>
                 <th>Name</th>
@@ -87,6 +88,7 @@
                 {
                     <tr>
                         <td>@record.CommissionDate</td>
+                        <td>@record.OffenseClassification</td>
                         <td class="long">@StringHelper.TruncateWithEllipsis(record.OffenseNature, 40)</td>
                         <td>
                             <button type="button" class="text-button" data-student="@record.StudentNumber" data-bs-toggle="modal" data-bs-target="#studentModal">

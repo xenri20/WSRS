@@ -41,6 +41,7 @@ namespace WSRS_SWAFO.Controllers
                               StudentNumber = r.StudentNumber,
                               College = r.CollegeID,
                               CommissionDate = r.CommissionDate,
+                              OffenseClassification = r.Offense.Classification.ToString(),
                               OffenseNature = r.Offense.Nature,
                               Status = r.StatusOfSanction
                           };
@@ -204,6 +205,7 @@ namespace WSRS_SWAFO.Controllers
                               StudentNumber = tr.StudentNumber,
                               College = tr.CollegeID,
                               CommissionDate = tr.CommissionDate,
+                              OffenseClassification = tr.Offense.Classification.ToString().Substring(0, 5) + " Traffic",
                               OffenseNature = tr.Offense.Nature,
                               DatePaid = tr.DatePaid,
                           };
