@@ -20,100 +20,116 @@ $(document).ready(function () {
 
     // Function to fetch data and update the chart
     function fetchData(violationType) {
+        console.log("Fetching data for:", violationType);
+
         $.ajax({
             type: "POST",
             url: "/Reports/GetCollegeReports",
-            data: JSON.stringify({ violationType: violationType }),  // Send the selected violation type to the server
+            data: JSON.stringify({ violationType: violationType }),
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (response) {
-                if (response.error) {
-                    console.error(response.error);
+                console.log("Server Response:", response);
+
+                if (!response || response.error) {
+                    console.error("Invalid response:", response);
                     alert("Error loading chart data.");
                     return;
                 }
 
-                // Extract chart labels, data, and total count
-                var chartLabels = response.labels;
-                var chartData = response.violationNumbers;
-                var totalViolations = response.totalViolations;
-
-                // Update the total violation count on the page
-                $("#total-violations").text("Total Violations: " + totalViolations);
-
-                // Map college names to their corresponding colors
-                var chartColors = chartLabels.map(function (college) {
-                    return collegeColors[college] || "gray"; // Default to gray if no color is found
-                });
-
-                // If chart exists, destroy it before creating a new one to avoid duplicates
-                if (chart) {
-                    chart.destroy();
+                if (!Array.isArray(response.labels) || !Array.isArray(response.violationNumbers)) {
+                    console.error("Unexpected data format:", response);
+                    return;
                 }
 
-                // Initialize the bar chart
-                var ctx = document.getElementById("reportsChart").getContext("2d");
-                chart = new Chart(ctx, {
-                    type: "bar",
-                    data: {
-                        labels: chartLabels,
-                        datasets: [{
-                            label: violationType + " by College",
-                            backgroundColor: chartColors,
-                            borderColor: "black",
-                            borderWidth: 1,
-                            data: chartData
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false, // Allow chart to resize properly
-                        plugins: {
-                            legend: {
-                                display: false // Hide legend since bars are labeled
-                            },
-                            title: {
-                                display: true,
-                                text: violationType + " by College"
-                            }
-                        },
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                title: {
-                                    display: true,
-                                    text: "Number of Violations"
-                                }
-                            },
-                            x: {
-                                title: {
-                                    display: true,
-                                    text: "College"
-                                }
-                            }
-                        }
-                    }
-                });
+                updateChart(response.labels, response.violationNumbers, violationType, response.totalViolations);
             },
             error: function (xhr, status, error) {
-                console.error("Error fetching data:", error);
+                console.error("Error fetching data:", status, error);
                 alert("Failed to load chart data.");
             }
         });
     }
 
-    // Fetch data for default violation type on page load
-    fetchData('MajorViolations');
+    function updateChart(labels, data, violationType, totalViolations) {
+        $("#total-violations").text("Total Violations: " + totalViolations);
 
-    // Handle button click events
+        var ctx = document.getElementById("reportsChart").getContext("2d");
+        // Destroy existing chart instance if it exists
+        if (window.reportsChart instanceof Chart) {
+            window.reportsChart.destroy();
+        }
+
+        // Create a new chart instance
+        window.reportsChart = new Chart(ctx, {
+            type: "bar",
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: violationType + " by College",
+                    backgroundColor: labels.map(college => collegeColors[college] || "gray"),
+                    borderColor: "black",
+                    borderWidth: 1,
+                    data: data
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: violationType + " by College"
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: "Number of Violations"
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: "College"
+                        }
+                    }
+                }
+            }
+        });
+    }
     $("#category-function button").click(function () {
         let violationType = $(this).val();
 
-        // Remove 'active' class from all buttons and add it to the clicked one
+        if (!violationType) {
+            console.error("No violation type found for button!");
+            return;
+        }
+
+        console.log("Button clicked:", violationType);
+
         $("#category-function button").removeClass("active");
         $(this).addClass("active");
 
-        // Fetch new data based on the selected violation type
         fetchData(violationType);
     });
+
+    $(".button-group button").click(function () {
+        let violationType = $(this).val();
+
+        if (!violationType) {
+            console.error("No violation type found for button!");
+            return;
+        }
+
+        console.log("Button clicked:", violationType);
+
+        $(".button-group button").removeClass("active");
+        $(this).addClass("active");
+
+        fetchData(violationType);
+    });
+
 });
