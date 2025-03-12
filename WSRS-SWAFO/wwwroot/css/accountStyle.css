@@ -10,18 +10,8 @@
     display: inline-flex;
     flex-direction: column;
     gap: 1rem;
-    width: 40ch;
+    width: 60ch;
 }
-
-    #updatePasswordForm .btn {
-        align-self: flex-start;
-    }
-
-    #updatePasswordForm .btn-row {
-        display: flex;
-        justify-content: space-between;
-        margin-top: 1rem;
-    }
 
 dl {
     display: grid;
@@ -36,6 +26,12 @@ dt {
 dd {
     margin: 0;
     grid-column-start: 2;
+}
+
+.panel {
+    border: 2px solid black;
+    border-radius: 1rem;
+    padding: 1.5rem;
 }
 
 @media (max-width: 800px) {

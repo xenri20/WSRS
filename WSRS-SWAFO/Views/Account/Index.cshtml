@@ -15,8 +15,9 @@
 
 <div id="account">
     <h1>@ViewData["Title"]</h1>
+    <hr />
+
     <section>
-        <h2>Information</h2>
         <dl>
             <dt>Email</dt>
             <dd>@Model.Email</dd>
@@ -25,8 +26,6 @@
         </dl>
     </section>
 
-    <hr />
-
     <section>
         <h2>Offline Management</h2>
         @* TODO Add an alert if they do not have a password yet *@
@@ -34,4 +33,5 @@
     </section>
 </div>
 
-<script src="~/js/account.js" /></script>
+<script src="~/js/account.js" />
+</script>
