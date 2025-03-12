@@ -93,6 +93,7 @@ if (!app.Environment.IsDevelopment())
 }
 
 // Data Seeding
+// Note: make sure you have a valid file running studentsWithReports command
 if (args.Length > 0 && args[0] == "seed")
 {
     using var scope = app.Services.CreateScope();

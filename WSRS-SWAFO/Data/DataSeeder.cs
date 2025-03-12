@@ -4,9 +4,17 @@ using WSRS_SWAFO.Helpers;
 
 namespace WSRS_SWAFO.Data;
 
+/// <summary>
+/// Seeds data to database
+/// </summary>
 public class DataSeeder
 {
 
+    /// <summary>
+    /// Seeds students and then assigns them a report
+    /// </summary>
+    /// <param name="filePath">Path to a valid excel file</param>
+    /// <param name="context">Application's context</param>
     public static void SeedStudentReports(string filePath, ApplicationDbContext context)
     {
         try
@@ -81,6 +89,10 @@ public class DataSeeder
         }
     }
 
+    /// <summary>
+    /// Seeds college data to database
+    /// </summary>
+    /// <param name="context">Application's context</param>
     public static void SeedCollege(ApplicationDbContext context)
     {
         List<string> collegeList = ["CBAA", "CCJE", "CEAT", "CLAC", "COED", "CICS", "COS", "CTHM"];
@@ -91,7 +103,7 @@ public class DataSeeder
         {
             if (!context.College.Any(c => c.CollegeID == college))
             {
-                context.College.Add(new College{CollegeID = college});
+                context.College.Add(new College { CollegeID = college });
             }
         }
 
