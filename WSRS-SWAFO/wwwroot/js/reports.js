@@ -176,7 +176,16 @@ $(document).ready(function () {
             return;
         }
 
-        // Ensure same filters persist when reapplying
+        // Convert to Date objects for comparison
+        let start = new Date(startDate);
+        let end = new Date(endDate);
+
+        if (start > end) {
+            alert("Start date cannot be later than end date.");
+            return;
+        }
+
+        // Fetch data with validated date range
         fetchData(selectedViolationType, startDate, endDate);
     });
 
