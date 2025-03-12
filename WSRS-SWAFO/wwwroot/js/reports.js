@@ -1,24 +1,26 @@
 ﻿document.addEventListener("DOMContentLoaded", () => {
     document.querySelector(".reports-nav").classList.add("active");
-    document.querySelector(".major-violations").classList.add("active");
+
+    // Ensure Major Violations is active when the page loads
+    $(".major-violations").addClass("active");
+
+    // Fetch and render Major Violations report immediately
+    fetchData("MajorViolations");
 });
 
 $(document).ready(function () {
-    var chart; // To store the Chart instance
-
-    // Define a color mapping for colleges
+    var hiddenColleges = new Set(); // Store hidden colleges
     var collegeColors = {
-        "CBAA": "yellow",
-        "CCJE": "pink",
-        "CEAT": "green",
-        "CICS": "gray",
-        "CLAC": "white",
-        "COED": "blue",
-        "COS": "red",
-        "CTHM": "purple"
+        "CBAA": "#FFD700", // Yellow
+        "CCJE": "#FF69B4", // Pink
+        "CEAT": "#228B22", // Green
+        "CICS": "#808080", // Gray
+        "CLAC": "#FFFFFF", // White
+        "COED": "#0000FF", // Blue
+        "COS": "#FF0000", // Red
+        "CTHM": "#800080"  // Purple
     };
 
-    // Function to fetch data and update the chart
     function fetchData(violationType) {
         console.log("Fetching data for:", violationType);
 
@@ -43,6 +45,7 @@ $(document).ready(function () {
                 }
 
                 updateChart(response.labels, response.violationNumbers, violationType, response.totalViolations);
+                generateLegend(response.labels);
             },
             error: function (xhr, status, error) {
                 console.error("Error fetching data:", status, error);
@@ -55,12 +58,11 @@ $(document).ready(function () {
         $("#total-violations").text("Total Violations: " + totalViolations);
 
         var ctx = document.getElementById("reportsChart").getContext("2d");
-        // Destroy existing chart instance if it exists
+
         if (window.reportsChart instanceof Chart) {
             window.reportsChart.destroy();
         }
 
-        // Create a new chart instance
         window.reportsChart = new Chart(ctx, {
             type: "bar",
             data: {
@@ -77,6 +79,7 @@ $(document).ready(function () {
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {
+                    legend: { display: false },
                     title: {
                         display: true,
                         text: violationType + " by College"
@@ -100,31 +103,58 @@ $(document).ready(function () {
             }
         });
     }
-    $("#category-function button").click(function () {
-        let violationType = $(this).val();
 
-        if (!violationType) {
-            console.error("No violation type found for button!");
-            return;
-        }
+    function generateLegend(labels) {
+        let legendContainer = $("#chartLegend");
+        legendContainer.empty();
 
-        console.log("Button clicked:", violationType);
+        labels.forEach(college => {
+            let color = collegeColors[college] || "gray";
 
-        $("#category-function button").removeClass("active");
-        $(this).addClass("active");
+            let legendItem = $(`<button class="legend-item" data-college="${college}" style="background-color: ${color}; border: 1px solid black; padding: 5px 10px; margin: 2px; color: black;">${college}</button>`);
 
-        fetchData(violationType);
+            legendItem.click(function () {
+                let selectedCollege = $(this).data("college");
+
+                if (hiddenColleges.has(selectedCollege)) {
+                    hiddenColleges.delete(selectedCollege);
+                    $(this).css("opacity", "1");
+                } else {
+                    hiddenColleges.add(selectedCollege);
+                    $(this).css("opacity", "0.5");
+                }
+
+                filterChartData();
+            });
+
+            legendContainer.append(legendItem);
+        });
+    }
+
+    function filterChartData() {
+        let chart = window.reportsChart;
+        if (!chart) return;
+
+        chart.data.datasets.forEach(dataset => {
+            dataset.data = dataset.data.map((value, index) =>
+                hiddenColleges.has(chart.data.labels[index]) ? 0 : value
+            );
+        });
+
+        chart.update();
+    }
+
+    // When clicking the Reports tab, ensure Major Violations is loaded
+    $(".reports-nav").click(function () {
+        $(".button-group button").removeClass("active");
+        $(".major-violations").addClass("active");
+        fetchData("MajorViolations");
     });
 
+    // When clicking any violation button, update the active class and fetch data
     $(".button-group button").click(function () {
         let violationType = $(this).val();
-
-        if (!violationType) {
-            console.error("No violation type found for button!");
-            return;
-        }
-
-        console.log("Button clicked:", violationType);
+        if (!violationType) return;
 
         $(".button-group button").removeClass("active");
         $(this).addClass("active");
@@ -132,4 +162,6 @@ $(document).ready(function () {
         fetchData(violationType);
     });
 
+    // Fetch Major Violations by default on page load
+    fetchData("MajorViolations");
 });
