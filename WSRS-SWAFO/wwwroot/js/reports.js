@@ -9,8 +9,9 @@
 });
 
 $(document).ready(function () {
-    var hiddenColleges = new Set(); // Store hidden colleges
-    var collegeColors = {
+    let selectedViolationType = "MajorViolations"; // Store selected violation type
+    let hiddenColleges = new Set(); // Track hidden colleges
+    let collegeColors = {
         "CBAA": "#FFD700", // Yellow
         "CCJE": "#FF69B4", // Pink
         "CEAT": "#228B22", // Green
@@ -21,13 +22,17 @@ $(document).ready(function () {
         "CTHM": "#800080"  // Purple
     };
 
-    function fetchData(violationType) {
-        console.log("Fetching data for:", violationType);
+    function fetchData(violationType, startDate = null, endDate = null) {
+        console.log("Fetching Data:", { violationType, startDate, endDate });
 
         $.ajax({
             type: "POST",
             url: "/Reports/GetCollegeReports",
-            data: JSON.stringify({ violationType: violationType }),
+            data: JSON.stringify({
+                violationType: violationType,
+                startDate: startDate || null,
+                endDate: endDate || null
+            }),
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (response) {
@@ -39,16 +44,11 @@ $(document).ready(function () {
                     return;
                 }
 
-                if (!Array.isArray(response.labels) || !Array.isArray(response.violationNumbers)) {
-                    console.error("Unexpected data format:", response);
-                    return;
-                }
-
                 updateChart(response.labels, response.violationNumbers, violationType, response.totalViolations);
                 generateLegend(response.labels);
             },
             error: function (xhr, status, error) {
-                console.error("Error fetching data:", status, error);
+                console.error("Error fetching data:", xhr.responseText);
                 alert("Failed to load chart data.");
             }
         });
@@ -57,7 +57,7 @@ $(document).ready(function () {
     function updateChart(labels, data, violationType, totalViolations) {
         $("#total-violations").text("Total Violations: " + totalViolations);
 
-        var ctx = document.getElementById("reportsChart").getContext("2d");
+        let ctx = document.getElementById("reportsChart").getContext("2d");
 
         if (window.reportsChart instanceof Chart) {
             window.reportsChart.destroy();
@@ -148,20 +148,44 @@ $(document).ready(function () {
     $(".reports-nav").click(function () {
         $(".button-group button").removeClass("active");
         $(".major-violations").addClass("active");
-        fetchData("MajorViolations");
+        selectedViolationType = "MajorViolations";
+        fetchData(selectedViolationType);
     });
 
-    // When clicking any violation button, update the active class and fetch data
+    // Handle violation button clicks
     $(".button-group button").click(function () {
         let violationType = $(this).val();
         if (!violationType) return;
 
+        selectedViolationType = violationType;
         $(".button-group button").removeClass("active");
         $(this).addClass("active");
 
-        fetchData(violationType);
+        let startDate = $("#startDate").val();
+        let endDate = $("#endDate").val();
+
+        fetchData(selectedViolationType, startDate, endDate);
     });
 
-    // Fetch Major Violations by default on page load
-    fetchData("MajorViolations");
+    $("#applyFilterBtn").click(function () {
+        let startDate = $("#startDate").val();
+        let endDate = $("#endDate").val();
+
+        if (!startDate || !endDate) {
+            alert("Please select both start and end dates.");
+            return;
+        }
+
+        // Ensure same filters persist when reapplying
+        fetchData(selectedViolationType, startDate, endDate);
+    });
+
+    $("#clearFilterBtn").click(function () {
+        $("#startDate").val(""); // Clear start date
+        $("#endDate").val("");   // Clear end date
+        fetchData(selectedViolationType, null, null); // Reload default data
+    });
+
+    // Fetch default data
+    fetchData(selectedViolationType);
 });

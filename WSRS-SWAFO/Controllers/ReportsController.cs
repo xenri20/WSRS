@@ -38,8 +38,15 @@ namespace WSRS_SWAFO.Controllers
         {
             try
             {
+                if (request == null)
+                {
+                    _logger.LogError("ViolationRequest is null.");
+                    return Json(new { error = "Invalid request data." });
+                }
+
                 List<int> violationClassificationIds = new List<int>();
                 bool isTrafficViolation = false;
+
 
                 switch (request.ViolationType)
                 {
@@ -64,21 +71,26 @@ namespace WSRS_SWAFO.Controllers
                 DateOnly? start = request.StartDate.HasValue ? DateOnly.FromDateTime(request.StartDate.Value) : null;
                 DateOnly? end = request.EndDate.HasValue ? DateOnly.FromDateTime(request.EndDate.Value) : null;
 
+                if (start.HasValue && end.HasValue && start > end)
+                {
+                    return Json(new { error = "Start date cannot be after end date." });
+                }
+
                 var reports = isTrafficViolation
-                    ? _context.TrafficReportsEncoded
-                        .Where(r => violationClassificationIds.Contains(r.OffenseId) &&
-                                    (!start.HasValue || r.CommissionDate >= start) &&
-                                    (!end.HasValue || r.CommissionDate <= end))
-                        .GroupBy(r => r.CollegeID)
-                        .Select(g => new { College = g.Key, ViolationCount = g.Count() })
-                        .ToList()
-                    : _context.ReportsEncoded
-                        .Where(r => violationClassificationIds.Contains(r.OffenseId) &&
-                                    (!start.HasValue || r.CommissionDate >= start) &&
-                                    (!end.HasValue || r.CommissionDate <= end))
-                        .GroupBy(r => r.CollegeID)
-                        .Select(g => new { College = g.Key, ViolationCount = g.Count() })
-                        .ToList();
+            ? _context.TrafficReportsEncoded
+                .Where(r => violationClassificationIds.Contains(r.OffenseId) &&
+                            (!start.HasValue || r.CommissionDate >= start) &&
+                            (!end.HasValue || r.CommissionDate <= end))
+                .GroupBy(r => r.CollegeID)
+                .Select(g => new { College = g.Key, ViolationCount = g.Count() })
+                .ToList()
+            : _context.ReportsEncoded
+                .Where(r => violationClassificationIds.Contains(r.OffenseId) &&
+                            (!start.HasValue || r.CommissionDate >= start) &&
+                            (!end.HasValue || r.CommissionDate <= end))
+                .GroupBy(r => r.CollegeID)
+                .Select(g => new { College = g.Key, ViolationCount = g.Count() })
+                .ToList();
 
                 _logger.LogInformation("Fetched {count} reports", reports.Count); // Debugging
 
