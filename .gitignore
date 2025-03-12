@@ -77,9 +77,10 @@ _[Ss]cripts
 *.dot[Cc]over
 
 ###########################
-# Just ignores text files #
+# Just ignores these files #
 ###########################
 *.txt
+*.xlsx
 
 ##############
 # Node stuff #
