@@ -55,11 +55,11 @@ namespace WSRS_SWAFO.Controllers
 
             switch (sortOrder)
             {
-                case "date_desc":
-                    records = records.OrderByDescending(r => r.CommissionDate).ThenBy(r => r.Id);
+                case "date_asc":
+                    records = records.OrderBy(r => r.CommissionDate).ThenBy(r => r.Id);
                     break;
                 default:
-                    records = records.OrderBy(r => r.CommissionDate).ThenBy(r => r.Id);
+                    records = records.OrderByDescending(r => r.CommissionDate).ThenBy(r => r.Id);
                     break;
             }
 
@@ -76,7 +76,7 @@ namespace WSRS_SWAFO.Controllers
             {
                 Pagination = await PaginatedList<RecordsViewModel>.CreateAsync(records, pageIndex ?? 1, pageSize),
                 CurrentSort = sortOrder,
-                CommissionDateSort = (sortOrder == "date_desc") ? "date_asc" : "date_desc",
+                CommissionDateSort = (sortOrder == "date_asc") ? "date_desc" : "date_asc",
                 CurrentFilter = searchString,
             };
 
@@ -197,7 +197,7 @@ namespace WSRS_SWAFO.Controllers
             }
 
             var records = from tr in _context.TrafficReportsEncoded.AsNoTracking()
-                .Include(tr => tr.Student)
+                    .Include(tr => tr.Student)
                           select new TrafficRecordsViewModel
                           {
                               Id = tr.Id,
@@ -219,11 +219,11 @@ namespace WSRS_SWAFO.Controllers
 
             switch (sortOrder)
             {
-                case "date_desc":
-                    records = records.OrderByDescending(r => r.CommissionDate).ThenBy(r => r.Id);
+                case "date_asc":
+                    records = records.OrderBy(r => r.CommissionDate).ThenBy(r => r.Id);
                     break;
                 default:
-                    records = records.OrderBy(r => r.CommissionDate).ThenBy(r => r.Id);
+                    records = records.OrderByDescending(r => r.CommissionDate).ThenBy(r => r.Id);
                     break;
             }
 
@@ -240,7 +240,7 @@ namespace WSRS_SWAFO.Controllers
             {
                 Pagination = await PaginatedList<TrafficRecordsViewModel>.CreateAsync(records, pageIndex ?? 1, pageSize),
                 CurrentSort = sortOrder,
-                CommissionDateSort = (sortOrder == "date_desc") ? "date_asc" : "date_desc",
+                CommissionDateSort = (sortOrder == "date_asc") ? "date_desc" : "date_asc",
                 CurrentFilter = searchString,
             };
 
