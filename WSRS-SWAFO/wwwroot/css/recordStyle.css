@@ -109,3 +109,10 @@ dd {
 #details {
     width: 100%;
 }
+
+@media all and (max-width: 1100px) {
+    /* For fixing smaller screen overflow */
+    #sidebar + .container {
+        display: block;
+    }
+}

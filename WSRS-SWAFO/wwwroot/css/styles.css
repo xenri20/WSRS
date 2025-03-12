@@ -24,6 +24,7 @@ body {
 
 #sidebar + .container {
     height: 100vh;
+    max-width: 85vw;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -35,8 +36,8 @@ main {
     justify-content: center;
     align-items: center;
     flex: 1;
-    padding-top: 2rem;
-    margin: 1rem;
+    padding-top: 1rem;
+    margin: 0 1rem;
 }
 
 h1 {

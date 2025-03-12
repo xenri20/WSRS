@@ -1,6 +1,7 @@
 ﻿#dashboard {
     width: 75vw;
     align-self: center;
+    font-size: clamp(0.9375rem, 1.8vw + 0.875rem, 1.125rem);
 }
 
 .subtitle {
