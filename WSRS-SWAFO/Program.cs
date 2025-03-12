@@ -49,7 +49,7 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-builder.Services.AddDefaultIdentity<ApplicationUser>(options => 
+builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
 {
     /* PASSWORD REQUIREMENTS (based on https://learn.microsoft.com/en-us/microsoft-365/admin/misc/password-policy-recommendations?view=o365-worldwide)
         - Minimum 12 characters 
@@ -65,7 +65,8 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
 .AddRoles<IdentityRole>()
 .AddEntityFrameworkStores<ApplicationDbContext>();
 
-builder.Services.ConfigureApplicationCookie(options => {
+builder.Services.ConfigureApplicationCookie(options =>
+{
     options.Cookie.Name = ".WSRSAuth";
     options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
     options.Cookie.SameSite = SameSiteMode.None;
@@ -89,6 +90,30 @@ if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Dashboard/Error");
     app.UseHsts();
+}
+
+// Data Seeding
+if (args.Length > 0 && args[0] == "seed")
+{
+    using var scope = app.Services.CreateScope();
+    var services = scope.ServiceProvider;
+    var context = services.GetRequiredService<ApplicationDbContext>();
+
+    if (args.Length != 2)
+    {
+        Console.WriteLine("Usage: 'seed [ studentWithReports | college ]");
+        return;
+    }
+
+    switch (args[1])
+    {
+        case "studentsWithReports":
+            DataSeeder.SeedStudentReports("./Data/mock-data.xlsx", context);
+            return;
+        case "college":
+            DataSeeder.SeedCollege(context);
+            return;
+    }
 }
 
 app.UseHttpsRedirection();
