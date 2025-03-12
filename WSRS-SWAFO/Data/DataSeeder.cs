@@ -104,9 +104,11 @@ public class DataSeeder
             if (!context.College.Any(c => c.CollegeID == college))
             {
                 context.College.Add(new College { CollegeID = college });
+                Console.WriteLine($"Added {college} successfully");
             }
         }
 
+        context.SaveChanges();
         Console.WriteLine("Seeding colleges data completed successfully.");
     }
 }
