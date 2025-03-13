@@ -1,12 +1,17 @@
 ﻿using System;
-using System.IO;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
+using System.Collections.Generic;
 using System.Diagnostics;
-using WSRS_SWAFO.Models;
-using WSRS_SWAFO.Data;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using ClosedXML.Excel;
+using WSRS_SWAFO.Data;
 using WSRS_SWAFO.Data.Enum;
+using WSRS_SWAFO.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace WSRS_SWAFO.Controllers
 {
@@ -44,9 +49,8 @@ namespace WSRS_SWAFO.Controllers
                     return Json(new { error = "Invalid request data." });
                 }
 
-                List<int> violationClassificationIds = new List<int>();
+                List<int> violationClassificationIds = new();
                 bool isTrafficViolation = false;
-
 
                 switch (request.ViolationType)
                 {
@@ -77,22 +81,24 @@ namespace WSRS_SWAFO.Controllers
                 }
 
                 var reports = isTrafficViolation
-            ? _context.TrafficReportsEncoded
-                .Where(r => violationClassificationIds.Contains(r.OffenseId) &&
-                            (!start.HasValue || r.CommissionDate >= start) &&
-                            (!end.HasValue || r.CommissionDate <= end))
-                .GroupBy(r => r.CollegeID)
-                .Select(g => new { College = g.Key, ViolationCount = g.Count() })
-                .ToList()
-            : _context.ReportsEncoded
-                .Where(r => violationClassificationIds.Contains(r.OffenseId) &&
-                            (!start.HasValue || r.CommissionDate >= start) &&
-                            (!end.HasValue || r.CommissionDate <= end))
-                .GroupBy(r => r.CollegeID)
-                .Select(g => new { College = g.Key, ViolationCount = g.Count() })
-                .ToList();
+    ? _context.TrafficReportsEncoded
+        .Where(r => violationClassificationIds.Contains(r.OffenseId) &&
+                    (!start.HasValue || r.CommissionDate >= start) &&
+                    (!end.HasValue || r.CommissionDate <= end) &&
+                    r.College != null && r.College.CollegeID != null)
+        .GroupBy(r => r.College.CollegeID)
+        .Select(g => new { College = g.Key, ViolationCount = g.Count() })
+        .ToList()
+    : _context.ReportsEncoded
+        .Where(r => violationClassificationIds.Contains(r.OffenseId) &&
+                    (!start.HasValue || r.CommissionDate >= start) &&
+                    (!end.HasValue || r.CommissionDate <= end) &&
+                    r.College != null && r.College.CollegeID != null)
+        .GroupBy(r => r.College.CollegeID)
+        .Select(g => new { College = g.Key, ViolationCount = g.Count() })
+        .ToList();
 
-                _logger.LogInformation("Fetched {count} reports", reports.Count); // Debugging
+                _logger.LogInformation("Fetched {count} reports", reports.Count);
 
                 if (!reports.Any())
                 {
@@ -114,111 +120,248 @@ namespace WSRS_SWAFO.Controllers
         }
 
         [HttpGet]
-        public IActionResult ExportToExcel(string fileName, DateTime? startDate, DateTime? endDate)
+        public IActionResult GenerateReport(string fileName, DateTime startDate, DateTime endDate)
         {
-            using (var workbook = new XLWorkbook())
+            if (string.IsNullOrWhiteSpace(fileName))
             {
-                var worksheet = workbook.Worksheets.Add("Stats by College");
-                worksheet.Cell(1, 1).Value = "College";
-                worksheet.Cell(1, 2).Value = "Violation Type";
-                worksheet.Cell(1, 3).Value = "Total Violations";
-
-                // Adding months as headers
-                for (int i = 0; i < 12; i++)
-                {
-                    worksheet.Cell(1, 4 + i).Value = new DateTime(2000, i + 1, 1).ToString("MMMM");
-                }
-
-                worksheet.Range("A1:P1").Style.Font.Bold = true;
-
-                DateOnly? start = startDate.HasValue ? DateOnly.FromDateTime(startDate.Value) : null;
-                DateOnly? end = endDate.HasValue ? DateOnly.FromDateTime(endDate.Value) : null;
-
-                var violationTypes = new Dictionary<string, List<int>>
-                {
-                    { "Major Violations", new List<int> { 9, 10, 11 } },
-                    { "Minor Violations", new List<int> { 1, 2, 3, 4, 5, 6, 7, 8 } },
-                    { "Major Traffic Violations", new List<int> { 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 } },
-                    { "Minor Traffic Violations", new List<int> { 12, 13, 14, 15, 16, 17, 18 } }
-                };
-
-                var allData = new List<ViolationStatsDto>();
-
-                foreach (var (type, offenseIds) in violationTypes)
-                {
-                    var majorMinorData = _context.ReportsEncoded
-                        .Where(r => offenseIds.Contains(r.OffenseId) &&
-                                   (!start.HasValue || r.CommissionDate >= start) &&
-                                   (!end.HasValue || r.CommissionDate <= end))
-                        .AsEnumerable() // Forces client-side evaluation
-                        .GroupBy(r => new { r.CollegeID, Month = r.CommissionDate.Month })
-                        .Select(g => new ViolationStatsDto
-                        {
-                            College = g.Key.CollegeID,
-                            ViolationType = type,
-                            TotalViolations = g.Count(),
-                            MonthlyViolations = g.GroupBy(r => r.CommissionDate.Month)
-                                                 .ToDictionary(mg => mg.Key, mg => mg.Count())
-                        })
-                        .ToList();
-
-                    allData.AddRange(majorMinorData);
-                }
-
-                int row = 2;
-                foreach (var record in allData)
-                {
-                    worksheet.Cell(row, 1).Value = record.College;
-                    worksheet.Cell(row, 2).Value = record.ViolationType;
-                    worksheet.Cell(row, 3).Value = record.TotalViolations;
-
-                    for (int i = 1; i <= 12; i++)
-                    {
-                        worksheet.Cell(row, 3 + i).Value = record.MonthlyViolations.ContainsKey(i) ? record.MonthlyViolations[i] : 0;
-                    }
-
-                    row++;
-                }
-
-                worksheet.Columns().AdjustToContents();
-
-                using (var stream = new MemoryStream())
-                {
-                    workbook.SaveAs(stream);
-                    return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"{fileName}.xlsx");
-                }
+                fileName = "Student_Offenses_Report";
             }
+
+            DateOnly start = DateOnly.FromDateTime(startDate);
+            DateOnly end = DateOnly.FromDateTime(endDate);
+
+            var reportRecords = _context.ReportsEncoded 
+                .Include(r => r.College)
+                .Where(r => r.CommissionDate >= start && r.CommissionDate <= end)
+                .Select(r => new ReportEncoded 
+                {
+                    Id = r.Id,
+                    CommissionDate = r.CommissionDate,
+                    College = r.College
+                })
+                .ToList();
+
+            var trafficRecords = _context.TrafficReportsEncoded
+                .Include(t => t.College)
+                .Where(t => t.CommissionDate >= start && t.CommissionDate <= end)
+                .Select(t => new TrafficReportsEncoded
+                {
+                    Id = t.Id,
+                    CommissionDate = t.CommissionDate,
+                    College = t.College
+                })
+                .ToList();
+
+            using var workbook = new XLWorkbook();
+            PopulateWorksheet(workbook.Worksheets.Add("Total Colleges Reports"), reportRecords, trafficRecords);
+
+            using var stream = new MemoryStream();
+            workbook.SaveAs(stream);
+            return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"{fileName}.xlsx");
         }
 
+
+        [HttpGet]
+        public IActionResult ExportViolationsByCollege()
+        {
+            var violationCounts = _context.ReportsEncoded
+                .Where(r => r.College != null) 
+                .GroupBy(r => r.College.CollegeID)
+                .Select(g => new { College = g.Key, ViolationCount = g.Count() });
+
+            var trafficViolationCounts = _context.TrafficReportsEncoded
+                .Where(t => t.College != null) 
+                .GroupBy(t => t.College.CollegeID)
+                .Select(g => new { College = g.Key, ViolationCount = g.Count() });
+
+            var combinedViolations = violationCounts.Concat(trafficViolationCounts)
+                .GroupBy(v => v.College)
+                .Select(g => new { College = g.Key, TotalViolations = g.Sum(v => v.ViolationCount) })
+                .OrderByDescending(v => v.TotalViolations)
+                .ToList();
+
+            using var workbook = new XLWorkbook();
+            var worksheet = workbook.Worksheets.Add("Violations by College");
+
+            // Headers
+            worksheet.Cell(1, 1).Value = "College";
+            worksheet.Cell(1, 2).Value = "Total Violations";
+            worksheet.Range("A1:B1").Style.Font.Bold = true;
+
+            // Insert data
+            int row = 2;
+            foreach (var item in combinedViolations)
+            {
+                worksheet.Cell(row, 1).Value = item.College;
+                worksheet.Cell(row, 2).Value = item.TotalViolations;
+                row++;
+            }
+
+            // Auto-fit columns
+            worksheet.Columns().AdjustToContents();
+
+            using var stream = new MemoryStream();
+            workbook.SaveAs(stream);
+            return File(stream.ToArray(),
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                "ViolationsReport.xlsx");
+        }
+
+
+
+
+        private void PopulateWorksheet(IXLWorksheet worksheet, List<ReportEncoded> reports, List<TrafficReportsEncoded> trafficReports)
+        {
+            // ✅ College name mapping
+            var collegeNames = new Dictionary<string, string>
+    {
+        { "CBAA", "College of Business Administration and Accountancy" },
+        { "COED", "College of Education" },
+        { "CEAT", "College of Engineering, Architecture and Technology" },
+        { "CTHM", "College of Tourism and Hospitality Management" },
+        { "CCJE", "College of Criminal Justice Education" },
+        { "CLAC", "College of Liberal Arts and Communication" },
+        { "CICS", "College of Information and Computer Studies" },
+        { "COS", "College of Science" }
+    };
+
+            // Ensure we only fetch records within the selected date range
+            var startDate = reports.Any() ? reports.Min(r => r.CommissionDate) : new DateOnly(2024, 1, 1);
+            var endDate = reports.Any() ? reports.Max(r => r.CommissionDate) : new DateOnly(2025, 1, 1);
+
+            // Fetch violations grouped by CollegeID and Month
+            var violationRecords = reports
+                .Where(r => r.CommissionDate >= startDate && r.CommissionDate <= endDate)
+                .Select(r => new
+                {
+                    CollegeID = r.College?.CollegeID ?? "Unknown",
+                    Month = r.CommissionDate.Month
+                })
+                .ToList();
+
+            var trafficViolationRecords = trafficReports
+                .Where(r => r.CommissionDate >= startDate && r.CommissionDate <= endDate)
+                .Select(r => new
+                {
+                    CollegeID = r.College?.CollegeID ?? "Unknown",
+                    Month = r.CommissionDate.Month
+                })
+                .ToList();
+
+            // Merge both normal violations and traffic violations
+            var allViolations = violationRecords.Concat(trafficViolationRecords)
+                .GroupBy(v => v.CollegeID)
+                .Select(g => new
+                {
+                    College = collegeNames.ContainsKey(g.Key) ? collegeNames[g.Key] : "Unknown College",  // ✅ Convert CollegeID to Full Name
+                    MonthlyViolations = g.GroupBy(m => m.Month)
+                                         .ToDictionary(m => m.Key, m => m.Count())
+                })
+                .ToList();
+
+            // 📌 Column headers
+            worksheet.Cell(1, 1).Value = "College";
+            string[] months = { "August", "September", "October", "November", "December",
+                        "January", "February", "March", "April", "May", "June", "July" };
+
+            for (int i = 0; i < months.Length; i++)
+            {
+                worksheet.Cell(1, i + 2).Value = months[i];
+            }
+            worksheet.Cell(1, 14).Value = "Total";
+
+            worksheet.Row(1).Style.Font.Bold = true;
+
+            int row = 2;
+
+            // 🏫 Insert college-wise data
+            foreach (var record in allViolations)
+            {
+                worksheet.Cell(row, 1).Value = record.College; // ✅ Full College Name
+
+                int totalViolations = 0;
+
+                for (int month = 8, col = 2; month <= 12; month++, col++)
+                {
+                    int count = record.MonthlyViolations.TryGetValue(month, out int val) ? val : 0;
+                    worksheet.Cell(row, col).Value = count;
+                    totalViolations += count;
+                }
+
+                for (int month = 1, col = 7; month <= 7; month++, col++)
+                {
+                    int count = record.MonthlyViolations.TryGetValue(month, out int val) ? val : 0;
+                    worksheet.Cell(row, col).Value = count;
+                    totalViolations += count;
+                }
+
+                worksheet.Cell(row, 14).Value = totalViolations;
+                row++;
+            }
+
+            // 🟡 Add the total violations per month row
+            worksheet.Cell(row, 1).Value = "Total No. of Violations Per Month";
+            worksheet.Row(row).Style.Fill.BackgroundColor = XLColor.Yellow;
+            worksheet.Row(row).Style.Font.Bold = true;
+
+            for (int col = 2; col <= 14; col++)
+            {
+                int sum = 0;
+                for (int r = 2; r < row; r++)
+                {
+                    sum += worksheet.Cell(r, col).GetValue<int>();
+                }
+                worksheet.Cell(row, col).Value = sum;
+            }
+
+            // Autofit columns for better readability
+            worksheet.Columns().AdjustToContents();
+        }
+
+
+
+        private string GetCollege<T>(T record)
+        {
+            if (record is ReportEncoded report)
+            {
+                if (report.College == null || string.IsNullOrWhiteSpace(report.College.CollegeID))
+                {
+                    _logger.LogWarning("Missing College for ReportEncoded record.");
+                    return "Unknown";
+                }
+                return report.College.CollegeID;
+            }
+
+            if (record is TrafficReportsEncoded trafficReport)
+            {
+                if (trafficReport.College == null || string.IsNullOrWhiteSpace(trafficReport.College.CollegeID))
+                {
+                    _logger.LogWarning("Missing College for TrafficReportsEncoded record.");
+                    return "Unknown";
+                }
+                return trafficReport.College.CollegeID;
+            }
+
+            return "Unknown";
+        }
+
+
+        private int GetMonth<T>(T record)
+        {
+            if (record is ReportEncoded report)
+                return report.CommissionDate.Month;
+            if (record is TrafficReportsEncoded trafficReport)
+                return trafficReport.CommissionDate.Month;
+
+            return 0;
+        }
+
+
+        public class ViolationRequest
+        {
+            public string ViolationType { get; set; }
+            public DateTime? StartDate { get; set; }
+            public DateTime? EndDate { get; set; }
+        }
     }
-
-
 }
-
-
-// Model for the request to include violation type
-
-public class ExcelExportRequest
-{
-    public string FileName { get; set; }
-    public DateTime? StartDate { get; set; }
-    public DateTime? EndDate { get; set; }
-}
-public class ViolationStatsDto
-{
-    public string College { get; set; }
-    public string ViolationType { get; set; }
-    public int TotalViolations { get; set; }
-    public Dictionary<int, int> MonthlyViolations { get; set; } = new();
-    public int MajorViolations { get; set; } = 0;
-    public int MinorViolations { get; set; } = 0;
-    public int MajorTrafficViolations { get; set; } = 0;
-    public int MinorTrafficViolations { get; set; } = 0;
-}
-public class ViolationRequest
-{
-    public string ViolationType { get; set; }
-    public DateTime? StartDate { get; set; }
-    public DateTime? EndDate { get; set; }
-}
-

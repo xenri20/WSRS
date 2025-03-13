@@ -22,6 +22,69 @@ $(document).ready(function () {
         "CTHM": "#800080"  // Purple
     };
 
+    document.getElementById("generateReportForm").addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        let fileName = document.getElementById("fileName")?.value || "Report";
+        let startDate = document.getElementById("reportStartDate")?.value.trim();
+        let endDate = document.getElementById("reportEndDate")?.value.trim();
+
+        if (!startDate || !endDate) {
+            alert("Please select both start and end dates.");
+            return;
+        }
+
+        if (new Date(startDate) > new Date(endDate)) {
+            alert("Start date cannot be later than end date.");
+            return;
+        }
+
+        console.log(`Generating report: ${fileName}, Start: ${startDate}, End: ${endDate}`);
+
+        window.location.href = `/Reports/GenerateReport?fileName=${encodeURIComponent(fileName)}&startDate=${encodeURIComponent(startDate)}&endDate=${encodeURIComponent(endDate)}`;
+    });
+    document.addEventListener("DOMContentLoaded", function () {
+        const form = document.getElementById("generateReportForm");
+        const fileNameInput = document.getElementById("fileName");
+        const startDateInput = document.getElementById("reportStartDate");
+        const endDateInput = document.getElementById("reportEndDate"); 
+        const submitButton = form.querySelector("button");
+
+        function validateForm() {
+            let fileNameValid = fileNameInput.value.trim() !== "";
+            let startDateValid = startDateInput.value !== "";
+            let endDateValid = endDateInput.value !== "";
+
+            submitButton.disabled = !(fileNameValid && startDateValid && endDateValid);
+        }
+
+        let today = new Date().toISOString().split("T")[0];
+        startDateInput.setAttribute("max", today);
+        endDateInput.setAttribute("max", today);
+
+        [fileNameInput, startDateInput, endDateInput].forEach(input => {
+            input.addEventListener("input", validateForm);
+        });
+
+        form.addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            let fileName = fileNameInput.value.trim();
+            let startDate = startDateInput.value;
+            let endDate = endDateInput.value;
+
+            if (new Date(startDate) > new Date(endDate)) {
+                alert("Start date cannot be later than end date.");
+                return;
+            }
+
+            window.location.href = `/Reports/GenerateReport?fileName=${encodeURIComponent(fileName)}&startDate=${encodeURIComponent(startDate)}&endDate=${encodeURIComponent(endDate)}`;
+        });
+
+        validateForm();
+    });
+
+
     function fetchData(violationType, startDate = null, endDate = null) {
         console.log("Fetching Data:", { violationType, startDate, endDate });
 
@@ -176,7 +239,6 @@ $(document).ready(function () {
             return;
         }
 
-        // Convert to Date objects for comparison
         let start = new Date(startDate);
         let end = new Date(endDate);
 
@@ -185,16 +247,15 @@ $(document).ready(function () {
             return;
         }
 
-        // Fetch data with validated date range
         fetchData(selectedViolationType, startDate, endDate);
     });
 
     $("#clearFilterBtn").click(function () {
         $("#startDate").val(""); // Clear start date
         $("#endDate").val("");   // Clear end date
-        fetchData(selectedViolationType, null, null); // Reload default data
+        fetchData(selectedViolationType, null, null); 
     });
 
-    // Fetch default data
+  
     fetchData(selectedViolationType);
 });
