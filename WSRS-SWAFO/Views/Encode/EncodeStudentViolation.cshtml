@@ -78,9 +78,10 @@
         <span class="text-danger"></span>
     </div>
     <div class="input-wrapper">
-        <input asp-for="Description" type="text" class="input description" autocomplete="description" aria-required="true" />
+        <input asp-for="Description" type="text" class="input description" aria-required="true" list="descriptionSuggestions"/>
         <label class="label">Description</label>
         <span class="text-danger"></span>
+        <datalist id="descriptionSuggestions"></datalist>
     </div>
     <div class="input-wrapper">
         <input asp-for="StatusOfSanction" type="text" class="input description" autocomplete="statusOfSanction" aria-required="true" />
@@ -91,5 +92,7 @@
         Submit
     </button>
 </form>
+
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/js/encode.js"></script>
+<script src="~/js/offenses.js"></script>

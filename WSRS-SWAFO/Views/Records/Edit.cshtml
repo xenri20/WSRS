@@ -71,8 +71,6 @@
                 </div>
             }
 
-            @* TODO Hearing Date if Major *@
-
             @* Sanction *@
             <div class="input-wrapper">
                 <input asp-for="Sanction" type="text" class="input" aria-required="true">
@@ -89,9 +87,10 @@
 
             @* Description *@
             <div class="input-wrapper">
-                <input asp-for="Description" type="text" class="input" aria-required="true">
+                <input asp-for="Description" type="text" class="input" aria-required="true" list="descriptionSuggestions">
                 <label asp-for="Description" class="label">Description</label>
                 <span asp-validation-for="Description" class="text-danger"></span>
+                <datalist id="descriptionSuggestions"></datalist>
             </div>
 
             <div class="button-group">
@@ -105,4 +104,5 @@
 </div>
 
 <script src="~/js/records.js"></script>
+<script src="~/js/offenses.js"></script>
 
