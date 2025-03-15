@@ -5,7 +5,6 @@ using WSRS_SWAFO.Models;
 
 namespace WSRS_SWAFO.Controllers
 {
-
     public class StudentsController : Controller
     {
         private readonly ILogger<StudentsController> _logger;

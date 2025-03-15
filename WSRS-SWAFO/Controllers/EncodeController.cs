@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WSRS_SWAFO.Data;
 using WSRS_SWAFO.Data.Enum;
@@ -7,6 +8,7 @@ using WSRS_SWAFO.ViewModels;
 
 namespace WSRS_SWAFO.Controllers
 {
+    [Authorize]
     public class EncodeController : Controller
     {
         private readonly ApplicationDbContext _context;
