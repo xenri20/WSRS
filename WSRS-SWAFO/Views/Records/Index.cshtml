@@ -76,9 +76,11 @@
                 <tr class="empty">
                     <td colspan="7">
                         <div>No records found.</div>
-                        <a asp-controller="Encode" asp-action="StudentRecordViolation" class="btn">
-                            Encode new record
-                        </a>
+                        <form asp-controller="Encode" asp-action="StudentRecordViolation" method="post">
+                            <button type="submit" class="btn" name="violationType" value="Student Violation">
+                                Encode new record
+                            </button>
+                        </form>
                     </td>
                 </tr>
             }
