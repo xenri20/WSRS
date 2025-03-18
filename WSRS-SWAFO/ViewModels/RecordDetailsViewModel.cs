@@ -16,6 +16,7 @@ namespace WSRS_SWAFO.ViewModels
         public DateOnly CommissionDate { get; set; }
         public string FormattedCommissionDate => CommissionDate.ToString("MM/dd/yyyy");
         public DateOnly? HearingDate { get; set; }
+        public string FormattedHearingDate => HearingDate.HasValue ? HearingDate.Value.ToString("MM/dd/yyyy") : string.Empty;
         public string Sanction { get; set; }
         public string Status { get; set; }
         public string Description { get; set; }

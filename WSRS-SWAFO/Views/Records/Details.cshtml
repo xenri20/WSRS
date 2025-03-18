@@ -1,4 +1,5 @@
-﻿@using WSRS_SWAFO.ViewModels
+﻿@using WSRS_SWAFO.Data.Enum
+@using WSRS_SWAFO.ViewModels
 @model RecordDetailsViewModel
 
 @section customHead {
@@ -40,6 +41,11 @@
                 <dd>@Model.Nature</dd>
                 <dt>Commission Date</dt>
                 <dd>@Model.FormattedCommissionDate</dd>
+                @if (Model.Classification == OffenseClassification.Major)
+                {
+                    <dt>Hearing Date</dt>
+                    <dd>@(string.IsNullOrEmpty(Model.FormattedHearingDate) ? "-" : Model.FormattedHearingDate)</dd>
+                }
                 <dt>Sanction</dt>
                 <dd>@Model.Sanction</dd>
                 <dt>Status</dt>
