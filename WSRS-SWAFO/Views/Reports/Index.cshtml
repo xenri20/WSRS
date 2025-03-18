@@ -5,7 +5,6 @@
 @section customHead {
     <link rel="stylesheet" href="~/css/reportStyle.css" asp-append-version="true" />
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/js/reports.js" asp-append-version="true"></script>
     <script src="~/lib/chartjs/dist/chart.umd.js"></script>
 }
 
@@ -85,6 +84,8 @@
         </div>
     </div>
 </div>
-      <script src="/lib/jquery/dist/jquery.min.js"></script>
-      <script src="/lib/chartjs/dist/chart.umd.js"></script>
+
+@section scripts {
+    <script src="~/js/reports.js" asp-append-version="true"></script>
+}
 
