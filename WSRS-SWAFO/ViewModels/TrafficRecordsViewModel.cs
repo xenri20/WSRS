@@ -9,6 +9,7 @@ namespace WSRS_SWAFO.ViewModels
         public int StudentNumber { get; set; }
         public string College { get; set; }
         public DateOnly CommissionDate { get; set; }
+        public string FormattedCommissionDate => CommissionDate.ToString("MM/dd/yyyy");
 
         public string PlateNumber { get; set; }
         public string Remarks { get; set; }

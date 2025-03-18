@@ -37,7 +37,7 @@
                 <dt>Nature</dt>
                 <dd>@Model.Nature</dd>
                 <dt>Commission Date</dt>
-                <dd>@Model.CommissionDate</dd>
+                <dd>@Model.FormattedCommissionDate</dd>
                 <dt>Plate Number</dt>
                 <dd>@Model.PlateNumber</dd>
                 <dt>Place</dt>
@@ -45,9 +45,9 @@
                 <dt>Remarks</dt>
                 <dd>@Model.Remarks</dd>
                 <dt>Date Paid</dt>
-                <dd>@(Model.DatePaid is null ? "-" : Model.DatePaid)</dd>
+                <dd>@(!Model.DatePaid.HasValue ? "-" : Model.FormattedDatePaid)</dd>
                 <dt>OR Number</dt>
-                <dd>@(Model.ORNumber is null ? "-" : Model.ORNumber)</dd>
+                <dd>@(!Model.ORNumber.HasValue ? "-" : Model.ORNumber)</dd>
             </dl>
 
             <a asp-action="EditTraffic" asp-route-id="@Model.Id" class="btn dark-btn">

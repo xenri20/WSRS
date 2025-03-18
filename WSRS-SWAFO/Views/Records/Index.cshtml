@@ -89,7 +89,7 @@
                 @foreach (var record in Model.Pagination.Items)
                 {
                     <tr>
-                        <td>@record.CommissionDate</td>
+                        <td>@record.FormattedCommissionDate</td>
                         <td>@record.OffenseClassification</td>
                         <td class="long">@StringHelper.TruncateWithEllipsis(record.OffenseNature, 40)</td>
                         <td>

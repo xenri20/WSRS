@@ -14,6 +14,7 @@ namespace WSRS_SWAFO.ViewModels
         public string Nature { get; set; }
         public OffenseClassification Classification { get; set; }
         public DateOnly CommissionDate { get; set; }
+        public string FormattedCommissionDate => CommissionDate.ToString("MM/dd/yyyy");
         public DateOnly? HearingDate { get; set; }
         public string Sanction { get; set; }
         public string Status { get; set; }

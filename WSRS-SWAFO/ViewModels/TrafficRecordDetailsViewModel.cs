@@ -12,10 +12,12 @@ namespace WSRS_SWAFO.ViewModels
         public string Nature { get; set; }
         public OffenseClassification Classification { get; set; }
         public DateOnly CommissionDate { get; set; }
+        public string FormattedCommissionDate => CommissionDate.ToString("MM/dd/yyyy");
         public string PlateNumber { get; set; }
         public string Place { get; set; }
         public string Remarks { get; set; }
         public DateOnly? DatePaid { get; set; }
+        public string? FormattedDatePaid => DatePaid.HasValue ? DatePaid.Value.ToString("MM/dd/yyyy") : string.Empty;
         public int? ORNumber { get; set; }
     }
 }
