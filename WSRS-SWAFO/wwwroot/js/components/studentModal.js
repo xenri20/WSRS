@@ -144,10 +144,20 @@ document.addEventListener('click', async e => {
 
         studentModalBody.appendChild(constructHeading(studentData));
 
+        // sort regular records by descending
+        studentData.reportsEncoded.sort((a, b) => {
+            return new Date(b.commissionDate) - new Date(a.commissionDate);
+        });
+
         let tableTitle = document.createElement('h3');
         tableTitle.textContent = 'Regular Violations';
         studentModalBody.appendChild(tableTitle);
         studentModalBody.appendChild(constructRegularTable(studentData.reportsEncoded));
+
+        // sort traffic records by descending
+        studentData.trafficReportsEncoded.sort((a, b) => {
+            return new Date(b.commissionDate) - new Date(a.commissionDate);
+        });
 
         tableTitle = document.createElement('h3');
         tableTitle.classList.add('mt-3');
