@@ -35,24 +35,24 @@ namespace WSRS_SWAFO.Controllers
             }
 
             var records = from r in _context.ReportsEncoded.AsNoTracking()
-                .Include(r => r.Student)
-                          select new RecordsViewModel
-                          {
-                              Id = r.Id,
-                              Name = string.Concat(r.Student.FirstName, " ", r.Student.LastName),
-                              StudentNumber = r.StudentNumber,
-                              College = r.CollegeID,
-                              CommissionDate = r.CommissionDate,
-                              OffenseClassification = r.Offense.Classification.ToString(),
-                              OffenseNature = r.Offense.Nature,
-                              Status = r.StatusOfSanction
-                          };
+                    .Include(r => r.Student)
+                select new RecordsViewModel
+                {
+                    Id = r.Id,
+                    Name = string.Concat(r.Student.FirstName, " ", r.Student.LastName),
+                    StudentNumber = r.StudentNumber,
+                    College = r.CollegeID,
+                    CommissionDate = r.CommissionDate,
+                    OffenseClassification = r.Offense.Classification.ToString(),
+                    OffenseNature = r.Offense.Nature,
+                    Status = r.StatusOfSanction
+                };
 
             if (!string.IsNullOrEmpty(searchString))
             {
                 searchString = searchString.Trim();
                 records = records.Where(r => r.Name.Contains(searchString)
-                                            || r.StudentNumber.ToString().Contains(searchString));
+                                             || r.StudentNumber.ToString().Contains(searchString));
             }
 
             switch (sortOrder)
@@ -200,23 +200,23 @@ namespace WSRS_SWAFO.Controllers
 
             var records = from tr in _context.TrafficReportsEncoded.AsNoTracking()
                     .Include(tr => tr.Student)
-                          select new TrafficRecordsViewModel
-                          {
-                              Id = tr.Id,
-                              Name = string.Concat(tr.Student.FirstName, " ", tr.Student.LastName),
-                              StudentNumber = tr.StudentNumber,
-                              College = tr.CollegeID,
-                              CommissionDate = tr.CommissionDate,
-                              OffenseClassification = tr.Offense.Classification.ToString().Substring(0, 5) + " Traffic",
-                              OffenseNature = tr.Offense.Nature,
-                              DatePaid = tr.DatePaid,
-                          };
+                select new TrafficRecordsViewModel
+                {
+                    Id = tr.Id,
+                    Name = string.Concat(tr.Student.FirstName, " ", tr.Student.LastName),
+                    StudentNumber = tr.StudentNumber,
+                    College = tr.CollegeID,
+                    CommissionDate = tr.CommissionDate,
+                    OffenseClassification = tr.Offense.Classification.ToString().Substring(0, 5) + " Traffic",
+                    OffenseNature = tr.Offense.Nature,
+                    DatePaid = tr.DatePaid,
+                };
 
             if (!string.IsNullOrEmpty(searchString))
             {
                 searchString = searchString.Trim();
                 records = records.Where(r => r.Name.Contains(searchString)
-                                            || r.StudentNumber.ToString().Contains(searchString));
+                                             || r.StudentNumber.ToString().Contains(searchString));
             }
 
             switch (sortOrder)
@@ -238,16 +238,114 @@ namespace WSRS_SWAFO.Controllers
             // Set default page size
             int pageSize = 10;
 
-            var recordsIndexVM = new TrafficRecordsIndexViewModel
+            var trafficRecordsIndexVM = new TrafficRecordsIndexViewModel
             {
-                Pagination = await PaginatedList<TrafficRecordsViewModel>.CreateAsync(records, pageIndex ?? 1, pageSize),
+                Pagination =
+                    await PaginatedList<TrafficRecordsViewModel>.CreateAsync(records, pageIndex ?? 1, pageSize),
                 CurrentSort = sortOrder,
                 CommissionDateSort = (sortOrder == "date_asc") ? "date_desc" : "date_asc",
                 CurrentFilter = searchString,
             };
 
             //return Ok(records); // Return data as JSON response
-            return View(recordsIndexVM);
+            return View(trafficRecordsIndexVM);
+        }
+
+        public async Task<IActionResult> TrafficDetails(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var record = await _context.TrafficReportsEncoded.AsNoTracking()
+                .Include(r => r.Student)
+                .Include(r => r.Offense)
+                .Include(r => r.College)
+                .FirstOrDefaultAsync(r => r.Id == id);
+
+            if (record == null)
+            {
+                return BadRequest();
+            }
+
+            var trafficRecordDetailsVM = new TrafficRecordDetailsViewModel
+            {
+                Id = record.Id,
+                StudentNumber = record.StudentNumber,
+                Name = string.Concat(record.Student.FirstName, " ", record.Student.LastName),
+                College = record.College.CollegeID,
+                OffenseId = record.OffenseId,
+                Classification = record.Offense.Classification,
+                Nature = record.Offense.Nature,
+                CommissionDate = record.CommissionDate,
+                PlateNumber = record.PlateNumber,
+                Place = record.Place,
+                Remarks = record.Remarks,
+                DatePaid = record.DatePaid,
+                ORNumber = record.ORNumber
+            };
+
+            return View(trafficRecordDetailsVM);
+        }
+
+        public async Task<IActionResult> EditTraffic(int id)
+        {
+            var record = await _context.TrafficReportsEncoded
+                .Include(r => r.Student)
+                .Include(r => r.Offense)
+                .FirstOrDefaultAsync(r => r.Id == id);
+
+            if (record == null)
+            {
+                return RedirectToAction(nameof(Traffic));
+            }
+
+            var editTrafficRecordVM = new EditTrafficRecordViewModel
+            {
+                Id = id,
+                StudentNumber = record.StudentNumber,
+                Student = record.Student,
+                College = record.CollegeID,
+                OffenseId = record.OffenseId,
+                Offense = record.Offense,
+                CommissionDate = record.CommissionDate,
+                PlateNumber = record.PlateNumber,
+                Place = record.Place,
+                Remarks = record.Remarks,
+                DatePaid = record.DatePaid,
+                ORNumber = record.ORNumber,
+            };
+
+            return View(editTrafficRecordVM);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditTraffic(EditTrafficRecordViewModel editTrafficRecordVM)
+        {
+            if (!ModelState.IsValid)
+            {
+                ModelState.AddModelError("", "Failed to edit record.");
+                return View(editTrafficRecordVM);
+            }
+
+            var updatedRecord = new TrafficReportsEncoded
+            {
+                Id = editTrafficRecordVM.Id,
+                StudentNumber = editTrafficRecordVM.StudentNumber,
+                CollegeID = editTrafficRecordVM.College,
+                OffenseId = editTrafficRecordVM.OffenseId,
+                CommissionDate = editTrafficRecordVM.CommissionDate,
+                PlateNumber = editTrafficRecordVM.PlateNumber,
+                Place = editTrafficRecordVM.Place,
+                Remarks = editTrafficRecordVM.Remarks,
+                DatePaid = editTrafficRecordVM.DatePaid,
+                ORNumber = editTrafficRecordVM.ORNumber,
+            };
+
+            _context.Update(updatedRecord);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(TrafficDetails), new { id = editTrafficRecordVM.Id });
         }
     }
 }

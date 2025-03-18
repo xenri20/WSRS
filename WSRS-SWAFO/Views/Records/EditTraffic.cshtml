@@ -1,0 +1,103 @@
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using WSRS_SWAFO.ViewModels
+@model EditTrafficRecordViewModel
+
+@section customHead {
+    <link rel="stylesheet" href="~/css/recordStyle.css" asp-append-version="true" />
+}
+
+@{
+    string fullName = string.Concat(Model.Student.FirstName, " ", Model.Student.LastName);
+
+    string formattedCommissionDate = Model.CommissionDate.ToString("yyyy-MM-dd");
+    // string today = DateOnly.FromDateTime(DateTime.Now).ToString("yyyy-MM-dd");
+    string? formattedDatePaid = Model.DatePaid?.ToString("yyyy-MM-dd");
+
+    ViewData["Title"] = "Edit Record";
+}
+
+<div id="edit">
+    <h1>Manage Records</h1>
+    <hr />
+    <section>
+        <div class="title">
+            <h2>Edit Record</h2>
+        </div>
+        <form asp-action="EditTraffic" asp-route-id="@Model.Id" class="panel" method="post">
+            <dl>
+                <dt>Student Number</dt>
+                <dd>@Model.Student.StudentNumber</dd>
+                <input asp-for="StudentNumber" type="hidden" value="@Model.StudentNumber">
+
+                <dt>Student Name</dt>
+                <dd>@fullName</dd>
+
+                <dt>College</dt>
+                <dd>@Model.College</dd>
+                <input asp-for="College" type="hidden" value="@Model.College">
+
+                <input asp-for="OffenseId" type="hidden" value="@Model.OffenseId">
+
+                <dt>Classification</dt>
+                <dd>@Model.Offense.Classification</dd>
+
+                <dt>Nature</dt>
+                <dd>@Model.Offense.Nature</dd>
+            </dl>
+
+            @* Commission Date *@
+            <div class="input-wrapper">
+                <input asp-for="CommissionDate" type="date" class="input" value="@formattedCommissionDate" aria-required="true">
+                <label asp-for="CommissionDate" class="label">Commission Date<span>*</span></label>
+                <span asp-validation-for="CommissionDate" class="text-danger"></span>
+            </div>
+
+            @* Plate Number *@
+            <div class="input-wrapper">
+                <input asp-for="PlateNumber" type="text" class="input" aria-required="true">
+                <label asp-for="PlateNumber" class="label">Plate Number<span>*</span></label>
+                <span asp-validation-for="PlateNumber" class="text-danger"></span>
+            </div>
+
+            @* Place *@
+            <div class="input-wrapper">
+                <input asp-for="Place" type="text" class="input" aria-required="true">
+                <label asp-for="Place" class="label">Place</label>
+                <span asp-validation-for="Place" class="text-danger"></span>
+            </div>
+
+            @* Remarks *@
+            <div class="input-wrapper">
+                <input asp-for="Remarks" type="text" class="input" aria-required="true">
+                <label asp-for="Remarks" class="label">Remarks</label>
+                <span asp-validation-for="Remarks" class="text-danger"></span>
+            </div>
+
+            @* Date Paid *@
+            <div class="input-wrapper">
+                <input asp-for="DatePaid" type="date" class="input" value="@(formattedDatePaid is null ? "" : formattedDatePaid)">
+                <label asp-for="DatePaid" class="label">Date Paid</label>
+                <span asp-validation-for="DatePaid" class="text-danger"></span>
+            </div>
+
+            @* OR Number *@
+            <div class="input-wrapper">
+                <input asp-for="ORNumber" type="text" class="input" list="descriptionSuggestions">
+                <label asp-for="ORNumber" class="label">OR Number</label>
+                <span asp-validation-for="ORNumber" class="text-danger"></span>
+            </div>
+
+            <div class="button-group">
+                <a asp-action="TrafficDetails" asp-route-id="@Model.Id" class="btn">
+                    Cancel
+                </a>
+                <button type="submit" class="btn dark-btn">Save</button>
+            </div>
+        </form>
+    </section>
+</div>
+
+@section scripts {
+    <script src="~/js/records.js"></script>
+}
+
