@@ -87,7 +87,7 @@
 
             @* Description *@
             <div class="input-wrapper">
-                <input asp-for="Description" type="text" class="input" aria-required="true" list="descriptionSuggestions">
+                <input asp-for="Description" type="text" class="input" list="descriptionSuggestions">
                 <label asp-for="Description" class="label">Description</label>
                 <span asp-validation-for="Description" class="text-danger"></span>
                 <datalist id="descriptionSuggestions"></datalist>

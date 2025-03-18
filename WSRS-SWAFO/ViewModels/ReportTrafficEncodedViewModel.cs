@@ -26,21 +26,27 @@ namespace WSRS_SWAFO.ViewModels
         [ForeignKey("College")]
         public string CollegeID { get; set; }
         public College College { get; set; }
+
+        [Required(ErrorMessage = "Commission Date is required")]
+        [Display(Name = "Commission Date")]
+        public DateOnly CommissionDate { get; set; }
+
         [Required(ErrorMessage = "Plate Number is required!")]
         [Display(Name = "Plate Number")]
         public string PlateNumber { get; set; }
-        [Required(ErrorMessage = "Commision Date is required")]
-        [Display(Name = "Commision Date")]
-        public DateTime CommissionDatetime { get; set; }
+
         [Required(ErrorMessage = "Input Place first!")]
         [Display(Name = "Place")]
         public string Place { get; set; }
+
         [Required(ErrorMessage = "Input your Remarks!")]
         [Display(Name = "Remarks")]
         public string Remarks { get; set; }
-        [Required(ErrorMessage = "Input Place first!")]
-        [Display(Name = "Place")]
-        public int? ORNumber { get; set; }
+
+        [Display(Name = "Date Paid")]
         public DateOnly? DatePaid { get; set; }
+
+        [Display(Name = "OR Number")]
+        public int? ORNumber { get; set; }
     }
 }
