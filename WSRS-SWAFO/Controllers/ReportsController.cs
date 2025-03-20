@@ -348,6 +348,86 @@ namespace WSRS_SWAFO.Controllers
 
             statsPopulationRep.Columns().AdjustToContents();
 
+            var majorByNatureSheet = workbook.Worksheets.Add("Major Offense by Nature");
+
+            // Title: "Major Offenses by Nature"
+            int majorNatureRow = 1;
+            majorByNatureSheet.Cell(majorNatureRow, 1).Value = "Major Offenses by Nature";
+            majorByNatureSheet.Row(majorNatureRow).Style.Font.Bold = true;
+            majorByNatureSheet.Row(majorNatureRow).Style.Font.FontSize = 14;
+            majorByNatureSheet.Row(majorNatureRow).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+            majorByNatureSheet.Range(majorNatureRow, 1, majorNatureRow, 3).Merge();
+            majorNatureRow += 2;
+
+            // Headers
+            majorByNatureSheet.Cell(majorNatureRow, 1).Value = "Nature of Offense";
+            majorByNatureSheet.Cell(majorNatureRow, 2).Value = "Total Cases";
+            majorByNatureSheet.Cell(majorNatureRow, 3).Value = "Total Descriptions";
+            majorByNatureSheet.Row(majorNatureRow).Style.Font.Bold = true;
+            majorByNatureSheet.Row(majorNatureRow).Style.Fill.BackgroundColor = XLColor.Gray;
+            majorByNatureSheet.Row(majorNatureRow).Style.Font.FontColor = XLColor.White;
+            majorNatureRow++;
+
+            // **Get Major Offenses Grouped by Nature**
+            var majorViolationsByNature = _context.ReportsEncoded
+                .Where(r => r.CommissionDate >= DateOnly.FromDateTime(startDate) &&
+                            r.CommissionDate <= DateOnly.FromDateTime(endDateTime) &&
+                            r.Offense.Classification == OffenseClassification.Major)
+                .GroupBy(v => v.Offense.Nature)
+                .Select(g => new
+                {
+                    Nature = g.Key,
+                    Count = g.Count(),
+                    DescriptionCount = g.Count(v => !string.IsNullOrEmpty(v.Description)),
+                    Descriptions = g.Select(v => v.Description).Where(d => !string.IsNullOrEmpty(d)).ToList()
+                })
+                .OrderByDescending(v => v.Count)
+                .ToList();
+
+            // **Write Data (Nature of Offense & Total Cases)**
+            foreach (var record in majorViolationsByNature)
+            {
+                majorByNatureSheet.Cell(majorNatureRow, 1).Value = record.Nature;
+                majorByNatureSheet.Cell(majorNatureRow, 2).Value = record.Count;
+                majorByNatureSheet.Cell(majorNatureRow, 3).Value = record.DescriptionCount;
+                majorNatureRow++;
+            }
+
+            // **Add a Space Before Descriptions**
+            majorNatureRow += 1;
+
+            // **Section Header: "STATISTICS OF MAJOR OFFENSES COMMITTED BY STUDENTS"**
+            majorByNatureSheet.Cell(majorNatureRow, 1).Value = "STATISTICS OF MAJOR OFFENSES COMMITTED BY STUDENTS";
+            majorByNatureSheet.Row(majorNatureRow).Style.Font.Bold = true;
+            majorByNatureSheet.Row(majorNatureRow).Style.Font.FontSize = 12;
+            majorByNatureSheet.Row(majorNatureRow).Style.Font.FontColor = XLColor.Red;
+            majorByNatureSheet.Row(majorNatureRow).Style.Fill.BackgroundColor = XLColor.White;
+            majorByNatureSheet.Range(majorNatureRow, 1, majorNatureRow, 3).Merge();
+            majorNatureRow += 2;
+
+            // **Headers for Description Section**
+            majorByNatureSheet.Cell(majorNatureRow, 1).Value = "Description";
+            majorByNatureSheet.Cell(majorNatureRow, 2).Value = "Frequency";
+            majorByNatureSheet.Row(majorNatureRow).Style.Font.Bold = true;
+            majorByNatureSheet.Row(majorNatureRow).Style.Fill.BackgroundColor = XLColor.LightGray;
+            majorNatureRow++;
+
+            // **Write Descriptions with Frequency**
+            foreach (var record in majorViolationsByNature)
+            {
+                foreach (var description in record.Descriptions.GroupBy(d => d)
+                                                              .Select(g => new { Text = g.Key, Count = g.Count() }))
+                {
+                    majorByNatureSheet.Cell(majorNatureRow, 1).Value = description.Text;
+                    majorByNatureSheet.Cell(majorNatureRow, 2).Value = description.Count;
+                    majorNatureRow++;
+                }
+            }
+
+            // **Adjust Column Width for Readability**
+            majorByNatureSheet.Columns().AdjustToContents();
+
+
             using var stream = new MemoryStream();
             workbook.SaveAs(stream);
             return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"{fileName}.xlsx");
