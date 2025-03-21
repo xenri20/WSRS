@@ -202,6 +202,14 @@ namespace WSRS_SWAFO.Controllers
             violationSheet.Range(currentRow, 1, currentRow, 6).Merge();
             currentRow += 2;
 
+            // Date Range (Adjust format as needed)
+            violationSheet.Cell(currentRow, 1).Value = $"{startDate:MMMM yyyy} - {endDateTime:MMMM yyyy}";
+            violationSheet.Row(currentRow).Style.Font.Bold = true;
+            violationSheet.Row(currentRow).Style.Font.FontSize = 12;
+            violationSheet.Row(currentRow).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+            violationSheet.Range(currentRow, 1, currentRow, 2).Merge();
+            currentRow += 2;
+
             foreach (var category in categories)
             {
                 violationSheet.Cell(currentRow, 1).Value = category.Key;
@@ -280,6 +288,14 @@ namespace WSRS_SWAFO.Controllers
             statsPopulationRep.Range(row, 1, row, 2).Merge();
             row += 2;
 
+            // Date Range (Adjust format as needed)
+            statsPopulationRep.Cell(row, 1).Value = $"{startDate:MMMM yyyy} - {endDateTime:MMMM yyyy}";
+            statsPopulationRep.Row(row).Style.Font.Bold = true;
+            statsPopulationRep.Row(row).Style.Font.FontSize = 12;
+            statsPopulationRep.Row(row).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+            statsPopulationRep.Range(row, 1, row, 2).Merge();
+            row += 2;
+
             // Function to add sections dynamically
             void AddViolationCategory(string title, Dictionary<string, int> data)
             {
@@ -348,6 +364,71 @@ namespace WSRS_SWAFO.Controllers
 
             statsPopulationRep.Columns().AdjustToContents();
 
+            var sanctionNatureList = workbook.Worksheets.Add("Nature of sanctions");
+            
+
+            // Title: "SANCTIONS IMPOSED FOR MAJOR OFFENSES COMMITTED"
+            int sanctionRow = 1;
+            sanctionNatureList.Cell(sanctionRow, 1).Value = "SANCTIONS IMPOSED FOR MAJOR OFFENSES COMMITTED";
+            sanctionNatureList.Row(sanctionRow).Style.Font.Bold = true;
+            sanctionNatureList.Row(sanctionRow).Style.Font.FontSize = 14;
+            sanctionNatureList.Row(sanctionRow).Style.Font.FontColor = XLColor.Red;
+            sanctionNatureList.Row(sanctionRow).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+            sanctionNatureList.Range(sanctionRow, 1, sanctionRow, 2).Merge();
+            sanctionRow++;
+
+            // Date Range (Adjust format as needed)
+            sanctionNatureList.Cell(sanctionRow, 1).Value = $"{startDate:MMMM yyyy} - {endDateTime:MMMM yyyy}";
+            sanctionNatureList.Row(sanctionRow).Style.Font.Bold = true;
+            sanctionNatureList.Row(sanctionRow).Style.Font.FontSize = 12;
+            sanctionNatureList.Row(sanctionRow).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+            sanctionNatureList.Range(sanctionRow, 1, sanctionRow, 2).Merge();
+            sanctionRow += 2;
+
+            // Headers
+            sanctionNatureList.Cell(sanctionRow, 1).Value = "Nature of Sanctions";
+            sanctionNatureList.Cell(sanctionRow, 2).Value = "Frequency";
+            sanctionNatureList.Row(sanctionRow).Style.Font.Bold = true;
+            sanctionNatureList.Row(sanctionRow).Style.Fill.BackgroundColor = XLColor.Gray;
+            sanctionNatureList.Row(sanctionRow).Style.Font.FontColor = XLColor.White;
+            sanctionRow++;
+
+            // **Get All Sanctions Grouped and Counted**
+            var sanctionsByNature = _context.ReportsEncoded
+                .Where(r => r.CommissionDate >= DateOnly.FromDateTime(startDate) &&
+                            r.CommissionDate <= DateOnly.FromDateTime(endDateTime))
+                .Where(r => !string.IsNullOrEmpty(r.Sanction)) // Ensure no empty values
+                .GroupBy(r => r.Sanction)
+                .Select(g => new
+                {
+                    Nature = g.Key,
+                    Count = g.Count()
+                })
+                .OrderByDescending(v => v.Count)
+                .ToList();
+
+            // **Write Data (Sanction & Count)**
+            int totalSanctions = 0;
+            foreach (var record in sanctionsByNature)
+            {
+                sanctionNatureList.Cell(sanctionRow, 1).Value = record.Nature;
+                sanctionNatureList.Cell(sanctionRow, 2).Value = record.Count;
+                totalSanctions += record.Count;
+                sanctionRow++;
+            }
+
+            // **Total Row**
+            sanctionNatureList.Cell(sanctionRow, 1).Value = "TOTAL";
+            sanctionNatureList.Cell(sanctionRow, 2).Value = totalSanctions;
+            sanctionNatureList.Row(sanctionRow).Style.Font.Bold = true;
+            sanctionNatureList.Row(sanctionRow).Style.Font.FontColor = XLColor.Red;
+            sanctionNatureList.Row(sanctionRow).Style.Fill.BackgroundColor = XLColor.Yellow;
+
+            // **Adjust Column Width for Readability**
+            sanctionNatureList.Columns().AdjustToContents();
+
+
+
             var majorByNatureSheet = workbook.Worksheets.Add("Major Offense by Nature");
 
             // Title: "Major Offenses by Nature"
@@ -357,6 +438,14 @@ namespace WSRS_SWAFO.Controllers
             majorByNatureSheet.Row(majorNatureRow).Style.Font.FontSize = 14;
             majorByNatureSheet.Row(majorNatureRow).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
             majorByNatureSheet.Range(majorNatureRow, 1, majorNatureRow, 3).Merge();
+            majorNatureRow += 2;
+
+            // Date Range (Adjust format as needed)
+            majorByNatureSheet.Cell(majorNatureRow, 1).Value = $"{startDate:MMMM yyyy} - {endDateTime:MMMM yyyy}";
+            majorByNatureSheet.Row(majorNatureRow).Style.Font.Bold = true;
+            majorByNatureSheet.Row(majorNatureRow).Style.Font.FontSize = 12;
+            majorByNatureSheet.Row(majorNatureRow).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+            majorByNatureSheet.Range(majorNatureRow, 1, majorNatureRow, 2).Merge();
             majorNatureRow += 2;
 
             // Headers
@@ -426,6 +515,270 @@ namespace WSRS_SWAFO.Controllers
 
             // **Adjust Column Width for Readability**
             majorByNatureSheet.Columns().AdjustToContents();
+
+            var minorByNatureSheet = workbook.Worksheets.Add("Minor Offense by Nature");
+
+            // Title: "Minor Offenses by Nature"
+            int minorNatureRow = 1;
+            minorByNatureSheet.Cell(minorNatureRow, 1).Value = "Minor Offenses by Nature";
+            minorByNatureSheet.Row(minorNatureRow).Style.Font.Bold = true;
+            minorByNatureSheet.Row(minorNatureRow).Style.Font.FontSize = 14;
+            minorByNatureSheet.Row(minorNatureRow).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+            minorByNatureSheet.Range(minorNatureRow, 1, minorNatureRow, 3).Merge();
+            minorNatureRow += 2;
+
+            // Date Range (Adjust format as needed)
+            minorByNatureSheet.Cell(minorNatureRow, 1).Value = $"{startDate:MMMM yyyy} - {endDateTime:MMMM yyyy}";
+            minorByNatureSheet.Row(minorNatureRow).Style.Font.Bold = true;
+            minorByNatureSheet.Row(minorNatureRow).Style.Font.FontSize = 12;
+            minorByNatureSheet.Row(minorNatureRow).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+            minorByNatureSheet.Range(minorNatureRow, 1, minorNatureRow, 2).Merge();
+            minorNatureRow += 2;
+
+            // Headers
+            minorByNatureSheet.Cell(minorNatureRow, 1).Value = "Nature of Offense";
+            minorByNatureSheet.Cell(minorNatureRow, 2).Value = "Total Cases";
+            minorByNatureSheet.Cell(minorNatureRow, 3).Value = "Total Descriptions";
+            minorByNatureSheet.Row(minorNatureRow).Style.Font.Bold = true;
+            minorByNatureSheet.Row(minorNatureRow).Style.Fill.BackgroundColor = XLColor.Gray;
+            minorByNatureSheet.Row(minorNatureRow).Style.Font.FontColor = XLColor.White;
+            minorNatureRow++;
+
+            // **Get Minor Offenses Grouped by Nature**
+            var minorViolationsByNature = _context.ReportsEncoded
+                .Where(r => r.CommissionDate >= DateOnly.FromDateTime(startDate) &&
+                            r.CommissionDate <= DateOnly.FromDateTime(endDateTime) &&
+                            r.Offense.Classification == OffenseClassification.Minor)
+                .GroupBy(v => v.Offense.Nature)
+                .Select(g => new
+                {
+                    Nature = g.Key,
+                    Count = g.Count(),
+                    DescriptionCount = g.Count(v => !string.IsNullOrEmpty(v.Description)),
+                    Descriptions = g.Select(v => v.Description).Where(d => !string.IsNullOrEmpty(d)).ToList()
+                })
+                .OrderByDescending(v => v.Count)
+                .ToList();
+
+            // **Write Data (Nature of Offense & Total Cases)**
+            foreach (var record in minorViolationsByNature)
+            {
+                minorByNatureSheet.Cell(minorNatureRow, 1).Value = record.Nature;
+                minorByNatureSheet.Cell(minorNatureRow, 2).Value = record.Count;
+                minorByNatureSheet.Cell(minorNatureRow, 3).Value = record.DescriptionCount;
+                minorNatureRow++;
+            }
+
+            // **Add a Space Before Descriptions**
+            minorNatureRow += 1;
+
+            // **Section Header: "STATISTICS OF MINOR OFFENSES COMMITTED BY STUDENTS"**
+            minorByNatureSheet.Cell(minorNatureRow, 1).Value = "STATISTICS OF MINOR OFFENSES COMMITTED BY STUDENTS";
+            minorByNatureSheet.Row(minorNatureRow).Style.Font.Bold = true;
+            minorByNatureSheet.Row(minorNatureRow).Style.Font.FontSize = 12;
+            minorByNatureSheet.Row(minorNatureRow).Style.Font.FontColor = XLColor.Red;
+            minorByNatureSheet.Row(minorNatureRow).Style.Fill.BackgroundColor = XLColor.White;
+            minorByNatureSheet.Range(minorNatureRow, 1, minorNatureRow, 3).Merge();
+            minorNatureRow += 2;
+
+            // **Headers for Description Section**
+            minorByNatureSheet.Cell(minorNatureRow, 1).Value = "Description";
+            minorByNatureSheet.Cell(minorNatureRow, 2).Value = "Frequency";
+            minorByNatureSheet.Row(minorNatureRow).Style.Font.Bold = true;
+            minorByNatureSheet.Row(minorNatureRow).Style.Fill.BackgroundColor = XLColor.LightGray;
+            minorNatureRow++;
+
+            // **Write Descriptions with Frequency**
+            foreach (var record in minorViolationsByNature)
+            {
+                foreach (var description in record.Descriptions.GroupBy(d => d)
+                                                              .Select(g => new { Text = g.Key, Count = g.Count() }))
+                {
+                    minorByNatureSheet.Cell(minorNatureRow, 1).Value = description.Text;
+                    minorByNatureSheet.Cell(minorNatureRow, 2).Value = description.Count;
+                    minorNatureRow++;
+                }
+            }
+
+            // **Adjust Column Width for Readability**
+            var minorTrafficByNatureSheet = workbook.Worksheets.Add("Minor Traffic Offense by Nature");
+
+            // Title: "Minor Traffic Offenses by Nature"
+            int minorTrafficNatureRow = 1;
+            minorTrafficByNatureSheet.Cell(minorTrafficNatureRow, 1).Value = "Minor Traffic Offenses by Nature";
+            minorTrafficByNatureSheet.Row(minorTrafficNatureRow).Style.Font.Bold = true;
+            minorTrafficByNatureSheet.Row(minorTrafficNatureRow).Style.Font.FontSize = 14;
+            minorTrafficByNatureSheet.Row(minorTrafficNatureRow).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+            minorTrafficByNatureSheet.Range(minorTrafficNatureRow, 1, minorTrafficNatureRow, 2).Merge();
+            minorTrafficNatureRow += 2;
+
+            minorTrafficByNatureSheet.Cell(minorTrafficNatureRow, 1).Value = $"{startDate:MMMM yyyy} - {endDateTime:MMMM yyyy}";
+            minorTrafficByNatureSheet.Row(minorTrafficNatureRow).Style.Font.Bold = true;
+            minorTrafficByNatureSheet.Row(minorTrafficNatureRow).Style.Font.FontSize = 12;
+            minorTrafficByNatureSheet.Row(minorTrafficNatureRow).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+            minorTrafficByNatureSheet.Range(minorTrafficNatureRow, 1, minorTrafficNatureRow, 2).Merge();
+            minorTrafficNatureRow += 2;
+
+            // Headers
+            minorTrafficByNatureSheet.Cell(minorTrafficNatureRow, 1).Value = "Nature of Offense";
+            minorTrafficByNatureSheet.Cell(minorTrafficNatureRow, 2).Value = "Total Cases";
+            minorTrafficByNatureSheet.Row(minorTrafficNatureRow).Style.Font.Bold = true;
+            minorTrafficByNatureSheet.Row(minorTrafficNatureRow).Style.Fill.BackgroundColor = XLColor.Gray;
+            minorTrafficByNatureSheet.Row(minorTrafficNatureRow).Style.Font.FontColor = XLColor.White;
+            minorTrafficNatureRow++;
+
+            // **Get Minor Traffic Offenses Grouped by Nature**
+            var minorTrafficViolationsByNature = _context.TrafficReportsEncoded
+                .Where(r => r.CommissionDate >= DateOnly.FromDateTime(startDate) &&
+                            r.CommissionDate <= DateOnly.FromDateTime(endDateTime) &&
+                            r.Offense.Classification == OffenseClassification.MinorTraffic)
+                .GroupBy(v => v.Offense.Nature)
+                .Select(g => new
+                {
+                    Nature = g.Key,
+                    Count = g.Count()
+                })
+                .OrderByDescending(v => v.Count)
+                .ToList();
+
+            // **Write Data (Nature of Offense & Total Cases)**
+            foreach (var record in minorTrafficViolationsByNature)
+            {
+                minorTrafficByNatureSheet.Cell(minorTrafficNatureRow, 1).Value = record.Nature;
+                minorTrafficByNatureSheet.Cell(minorTrafficNatureRow, 2).Value = record.Count;
+                minorTrafficNatureRow++;
+            }
+
+            // **Add a Space Before Descriptions**
+            minorTrafficNatureRow += 1;
+
+            // **Section Header: "STATISTICS OF MINOR TRAFFIC OFFENSES COMMITTED BY STUDENTS"**
+            minorTrafficByNatureSheet.Cell(minorTrafficNatureRow, 1).Value = "STATISTICS OF MINOR TRAFFIC OFFENSES COMMITTED BY STUDENTS";
+            minorTrafficByNatureSheet.Row(minorTrafficNatureRow).Style.Font.Bold = true;
+            minorTrafficByNatureSheet.Row(minorTrafficNatureRow).Style.Font.FontSize = 12;
+            minorTrafficByNatureSheet.Row(minorTrafficNatureRow).Style.Font.FontColor = XLColor.Red;
+            minorTrafficByNatureSheet.Row(minorTrafficNatureRow).Style.Fill.BackgroundColor = XLColor.White;
+            minorTrafficByNatureSheet.Range(minorTrafficNatureRow, 1, minorTrafficNatureRow, 2).Merge();
+            minorTrafficNatureRow += 2;
+
+            // **Headers for Description Section**
+            minorTrafficByNatureSheet.Cell(minorTrafficNatureRow, 1).Value = "Description";
+            minorTrafficByNatureSheet.Cell(minorTrafficNatureRow, 2).Value = "Frequency";
+            minorTrafficByNatureSheet.Row(minorTrafficNatureRow).Style.Font.Bold = true;
+            minorTrafficByNatureSheet.Row(minorTrafficNatureRow).Style.Fill.BackgroundColor = XLColor.LightGray;
+            minorTrafficNatureRow++;
+
+            // **Get Unique Descriptions with Count**
+            var minorTrafficDescriptions = _context.TrafficReportsEncoded
+                .Where(r => r.CommissionDate >= DateOnly.FromDateTime(startDate) &&
+                            r.CommissionDate <= DateOnly.FromDateTime(endDateTime) &&
+                            r.Offense.Classification == OffenseClassification.MinorTraffic)
+                .Where(r => !string.IsNullOrEmpty(r.Remarks)) // Exclude empty descriptions
+                .GroupBy(r => r.Remarks)
+                .Select(g => new { Description = g.Key, Count = g.Count() })
+                .OrderByDescending(d => d.Count)
+                .ToList();
+
+            // **Write Unique Descriptions & Their Counts**
+            foreach (var record in minorTrafficDescriptions)
+            {
+                minorTrafficByNatureSheet.Cell(minorTrafficNatureRow, 1).Value = record.Description;
+                minorTrafficByNatureSheet.Cell(minorTrafficNatureRow, 2).Value = record.Count;
+                minorTrafficNatureRow++;
+            }
+
+            // **Adjust Column Width for Readability**
+            minorTrafficByNatureSheet.Columns().AdjustToContents();
+
+            var majorTrafficByNatureSheet = workbook.Worksheets.Add("Major Traffic Offense by Nature");
+
+            // Title: "Major Traffic Offenses by Nature"
+            int majorTrafficNatureRow = 1;
+            majorTrafficByNatureSheet.Cell(majorTrafficNatureRow, 1).Value = "Major Traffic Offenses by Nature";
+            majorTrafficByNatureSheet.Row(majorTrafficNatureRow).Style.Font.Bold = true;
+            majorTrafficByNatureSheet.Row(majorTrafficNatureRow).Style.Font.FontSize = 14;
+            majorTrafficByNatureSheet.Row(majorTrafficNatureRow).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+            majorTrafficByNatureSheet.Range(majorTrafficNatureRow, 1, majorTrafficNatureRow, 2).Merge();
+            majorTrafficNatureRow += 2;
+
+            majorTrafficByNatureSheet.Cell(majorTrafficNatureRow, 1).Value = $"{startDate:MMMM yyyy} - {endDateTime:MMMM yyyy}";
+            majorTrafficByNatureSheet.Row(majorTrafficNatureRow).Style.Font.Bold = true;
+            majorTrafficByNatureSheet.Row(majorTrafficNatureRow).Style.Font.FontSize = 12;
+            majorTrafficByNatureSheet.Row(majorTrafficNatureRow).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+            majorTrafficByNatureSheet.Range(majorTrafficNatureRow, 1, majorTrafficNatureRow, 2).Merge();
+            majorTrafficNatureRow += 2;
+
+            // Headers
+            majorTrafficByNatureSheet.Cell(majorTrafficNatureRow, 1).Value = "Nature of Offense";
+            majorTrafficByNatureSheet.Cell(majorTrafficNatureRow, 2).Value = "Total Cases";
+            majorTrafficByNatureSheet.Row(majorTrafficNatureRow).Style.Font.Bold = true;
+            majorTrafficByNatureSheet.Row(majorTrafficNatureRow).Style.Fill.BackgroundColor = XLColor.Gray;
+            majorTrafficByNatureSheet.Row(majorTrafficNatureRow).Style.Font.FontColor = XLColor.White;
+            majorTrafficNatureRow++;
+
+            // **Get Major Traffic Offenses Grouped by Nature**
+            var majorTrafficViolationsByNature = _context.TrafficReportsEncoded
+                .Where(r => r.CommissionDate >= DateOnly.FromDateTime(startDate) &&
+                            r.CommissionDate <= DateOnly.FromDateTime(endDateTime) &&
+                            r.Offense.Classification == OffenseClassification.MajorTraffic)
+                .GroupBy(v => v.Offense.Nature)
+                .Select(g => new
+                {
+                    Nature = g.Key,
+                    Count = g.Count()
+                })
+                .OrderByDescending(v => v.Count)
+                .ToList();
+
+            // **Write Data (Nature of Offense & Total Cases)**
+            foreach (var record in majorTrafficViolationsByNature)
+            {
+                majorTrafficByNatureSheet.Cell(majorTrafficNatureRow, 1).Value = record.Nature;
+                majorTrafficByNatureSheet.Cell(majorTrafficNatureRow, 2).Value = record.Count;
+                majorTrafficNatureRow++;
+            }
+
+            // **Add a Space Before Descriptions**
+            majorTrafficNatureRow += 1;
+
+            // **Section Header: "STATISTICS OF MAJOR TRAFFIC OFFENSES COMMITTED BY STUDENTS"**
+            majorTrafficByNatureSheet.Cell(majorTrafficNatureRow, 1).Value = "STATISTICS OF MAJOR TRAFFIC OFFENSES COMMITTED BY STUDENTS";
+            majorTrafficByNatureSheet.Row(majorTrafficNatureRow).Style.Font.Bold = true;
+            majorTrafficByNatureSheet.Row(majorTrafficNatureRow).Style.Font.FontSize = 12;
+            majorTrafficByNatureSheet.Row(majorTrafficNatureRow).Style.Font.FontColor = XLColor.Red;
+            majorTrafficByNatureSheet.Row(majorTrafficNatureRow).Style.Fill.BackgroundColor = XLColor.White;
+            majorTrafficByNatureSheet.Range(majorTrafficNatureRow, 1, majorTrafficNatureRow, 2).Merge();
+            majorTrafficNatureRow += 2;
+
+            // **Headers for Description Section**
+            majorTrafficByNatureSheet.Cell(majorTrafficNatureRow, 1).Value = "Description";
+            majorTrafficByNatureSheet.Cell(majorTrafficNatureRow, 2).Value = "Frequency";
+            majorTrafficByNatureSheet.Row(majorTrafficNatureRow).Style.Font.Bold = true;
+            majorTrafficByNatureSheet.Row(majorTrafficNatureRow).Style.Fill.BackgroundColor = XLColor.LightGray;
+            majorTrafficNatureRow++;
+
+            // **Get Unique Descriptions with Count**
+            var majorTrafficDescriptions = _context.TrafficReportsEncoded
+                .Where(r => r.CommissionDate >= DateOnly.FromDateTime(startDate) &&
+                            r.CommissionDate <= DateOnly.FromDateTime(endDateTime) &&
+                            r.Offense.Classification == OffenseClassification.MajorTraffic)
+                .Where(r => !string.IsNullOrEmpty(r.Remarks)) // Exclude empty descriptions
+                .GroupBy(r => r.Remarks)
+                .Select(g => new { Description = g.Key, Count = g.Count() })
+                .OrderByDescending(d => d.Count)
+                .ToList();
+
+            // **Write Unique Descriptions & Their Counts**
+            foreach (var record in majorTrafficDescriptions)
+            {
+                majorTrafficByNatureSheet.Cell(majorTrafficNatureRow, 1).Value = record.Description;
+                majorTrafficByNatureSheet.Cell(majorTrafficNatureRow, 2).Value = record.Count;
+                majorTrafficNatureRow++;
+            }
+
+            // **Adjust Column Width for Readability**
+            majorTrafficByNatureSheet.Columns().AdjustToContents();
+
 
 
             using var stream = new MemoryStream();
