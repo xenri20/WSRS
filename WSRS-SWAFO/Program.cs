@@ -94,26 +94,37 @@ if (!app.Environment.IsDevelopment())
 
 // Data Seeding
 // Note: make sure you have a valid file running studentsWithReports command
-if (args.Length > 0 && args[0] == "seed")
+if (args.Length > 0)
 {
-    using var scope = app.Services.CreateScope();
-    var services = scope.ServiceProvider;
-    var context = services.GetRequiredService<ApplicationDbContext>();
-
-    if (args.Length != 2)
+    if (args[0] == "seed")
     {
-        Console.WriteLine("Usage: 'seed [ studentWithReports | college ]");
-        return;
+        using var scope = app.Services.CreateScope();
+        var services = scope.ServiceProvider;
+        var context = services.GetRequiredService<ApplicationDbContext>();
+
+        if (args.Length != 2)
+        {
+            Console.WriteLine("Usage: 'seed [ studentsWithReports | college ]'");
+            return;
+        }
+
+        switch (args[1])
+        {
+            case "studentsWithReports":
+                DataSeeder.SeedStudentReports("./Data/mock-data.xlsx", context);
+                return;
+            case "college":
+                DataSeeder.SeedCollege(context);
+                return;
+            default:
+                Console.WriteLine("Accepts: '[ studentsWithReports | college ]'");
+                return;
+        }
     }
-
-    switch (args[1])
+    else
     {
-        case "studentsWithReports":
-            DataSeeder.SeedStudentReports("./Data/mock-data.xlsx", context);
-            return;
-        case "college":
-            DataSeeder.SeedCollege(context);
-            return;
+        Console.WriteLine("Error: Command not found");
+        return;
     }
 }
 
