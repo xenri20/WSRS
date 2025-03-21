@@ -18,6 +18,6 @@ namespace WSRS_SWAFO.ViewModels
         public string Remarks { get; set; }
         public DateOnly? DatePaid { get; set; }
         public string? FormattedDatePaid => DatePaid.HasValue ? DatePaid.Value.ToString("MM/dd/yyyy") : string.Empty;
-        public int? ORNumber { get; set; }
+        public string? ORNumber { get; set; }
     }
 }

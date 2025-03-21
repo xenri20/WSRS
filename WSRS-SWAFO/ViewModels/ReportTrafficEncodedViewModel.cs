@@ -47,6 +47,6 @@ namespace WSRS_SWAFO.ViewModels
         public DateOnly? DatePaid { get; set; }
 
         [Display(Name = "OR Number")]
-        public int? ORNumber { get; set; }
+        public string? ORNumber { get; set; }
     }
 }

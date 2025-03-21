@@ -13,7 +13,7 @@ namespace WSRS_SWAFO.ViewModels
 
         public string PlateNumber { get; set; }
         public string Remarks { get; set; }
-        public int? ORNumber { get; set; } // NULLABLE
+        public string? ORNumber { get; set; } // NULLABLE
         public DateOnly? DatePaid { get; set; } // NULLABLE
     }
 }

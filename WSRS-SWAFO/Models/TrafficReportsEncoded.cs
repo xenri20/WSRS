@@ -26,7 +26,7 @@ namespace WSRS_SWAFO.Models
         public DateOnly CommissionDate { get; set; }
         public string Place { get; set; }
         public string Remarks { get; set; }
-        public int? ORNumber { get; set; } // NULLABLE
+        public string? ORNumber { get; set; } // NULLABLE
         public DateOnly? DatePaid { get; set; } // NULLABLE
     }
 }
