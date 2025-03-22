@@ -86,7 +86,7 @@ const constructTrafficTable = (data) => {
     const offenseTableHeader = document.createElement('thead');
     const offenseTableBody = document.createElement('tbody');
 
-    const headers = ['Commission Date', 'Classification', 'Nature', 'Sanction'];
+    const headers = ['Commission Date', 'Classification', 'Nature', 'Plate Number', 'Remarks'];
     const headerRow = document.createElement('tr');
     headers.forEach(headerText => {
         const header = document.createElement('th');
@@ -101,17 +101,20 @@ const constructTrafficTable = (data) => {
         const dateCell = document.createElement('td');
         const classificationCell = document.createElement('td');        
         const natureCell = document.createElement('td');
-        const sanctionCell = document.createElement('td');
+        const plateNumberCell = document.createElement('td');        
+        const remarksCell = document.createElement('td');
 
         classificationCell.textContent = evaluateClassification(report.offense.classification);
         natureCell.textContent = report.offense.nature;
+        plateNumberCell.textContent = report.plateNumber;
         dateCell.textContent = new Date(report.commissionDate).toLocaleDateString();
-        sanctionCell.textContent = report.sanction;
+        remarksCell.textContent = report.remarks;
 
         row.appendChild(dateCell);
         row.appendChild(classificationCell);
         row.appendChild(natureCell);
-        row.appendChild(sanctionCell);
+        row.appendChild(plateNumberCell);
+        row.appendChild(remarksCell);
         offenseTableBody.appendChild(row);
     });
 
