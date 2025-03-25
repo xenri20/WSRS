@@ -1,14 +1,9 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using WSRS_SWAFO.Models;
-using Microsoft.Identity.Web.UI;
 using WSRS_SWAFO.Data;
-using Microsoft.AspNetCore.Mvc.Authorization;
-using Microsoft.Identity.Web;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
-using System.Security.Claims;
 using WSRS_SWAFO.Services;
 
 var builder = WebApplication.CreateBuilder(args);
