@@ -83,16 +83,3 @@
             color: black;
         }
 
-#sidePanel .dropdown-menu {
-    box-shadow: 4px 4px 1rem rgb(0, 0, 0, 0.2);
-}
-
-#sidePanel .dropdown-menu > a {
-    text-align: left;
-    color: black;
-    padding: 0.5rem 1rem;
-}
-
-#sidePanel .dropdown-menu > a:hover {
-    background-color: #eee;
-}
