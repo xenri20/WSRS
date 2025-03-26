@@ -8,67 +8,73 @@
 @section customHead {
     <link rel="stylesheet" href="~/css/studentViolationStyle.css" asp-append-version="true" />
 }
-<div id="first-page">
+<div class="grid-system">
     <h2>Check for an existing violation record</h2>
-    <form id="search-student" asp-controller="Encode" asp-action="Search" method="get">
-        <input class="search-id" name="searchStudent" autocomplete="firstname" placeholder="Check Student Violation Record" aria-required="true" />
-        <button class="btn-function" type="submit">
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <g clip-path="url(#clip0_173_68)">
-                    <path d="M6.41667 11.0833C8.994 11.0833 11.0833 8.994 11.0833 6.41667C11.0833 3.83934 8.994 1.75 6.41667 1.75C3.83934 1.75 1.75 3.83934 1.75 6.41667C1.75 8.994 3.83934 11.0833 6.41667 11.0833Z" stroke="#1E1F20" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                    <path d="M12.25 12.25L9.71252 9.71249" stroke="#1E1F20" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                </g>
-                <defs>
-                    <clipPath id="clip0_173_68">
-                        <rect width="14" height="14" fill="white" />
-                    </clipPath>
-                </defs>
-            </svg>
-        </button>
-    </form>
-    <table id="preview-records">
-        <thead>
-            <tr>
-                <th>Student Number</th>
-                <th>Last Name</th>
-                <th>First Name</th>
-                <th>Operation</th>
-            </tr>
-        </thead>
-        <tbody>
-            @if (Model == null || !Model.Any())
-            {
-                <tr>
-                    <td colspan="4" rowspan="10">
-                        <div>No records found.</div>
-                        <a asp-controller="Encode" asp-action="CreateStudentRecord" class="btn btn-create">
-                            Create Student Data
-                        </a>
-                    </td>
-                </tr>
-            }
-            else
-            {
-                foreach (var student in Model.ToList())
-                {
-                    <tr>
-                        <td>@student.StudentNumber</td>
-                        <td>@student.LastName</td>
-                        <td>@student.FirstName</td>
-                        <td>
-                            <a asp-controller="Encode"
-                               asp-action="RedirectToView"
-                               asp-route-studentNumber="@student.StudentNumber"
-                               asp-route-firstName="@student.FirstName"
-                               asp-route-lastName="@student.LastName"
-                               class="btn btn-select">
-                                Select
-                            </a>
-                        </td>
-                    </tr>
-                }
-            }
-        </tbody>
-    </table>
+    <div class="content-panel student-violation">
+        <div id="input-panel">
+            <div id="first-page">
+                <form id="search-student" asp-controller="Encode" asp-action="Search" method="get">
+                    <input class="search-id" name="searchStudent" autocomplete="firstname" placeholder="Check Student Violation Record" aria-required="true" />
+                    <button class="btn-function" type="submit">
+                        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <g clip-path="url(#clip0_173_68)">
+                                <path d="M6.41667 11.0833C8.994 11.0833 11.0833 8.994 11.0833 6.41667C11.0833 3.83934 8.994 1.75 6.41667 1.75C3.83934 1.75 1.75 3.83934 1.75 6.41667C1.75 8.994 3.83934 11.0833 6.41667 11.0833Z" stroke="#1E1F20" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                <path d="M12.25 12.25L9.71252 9.71249" stroke="#1E1F20" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                            </g>
+                            <defs>
+                                <clipPath id="clip0_173_68">
+                                    <rect width="14" height="14" fill="white" />
+                                </clipPath>
+                            </defs>
+                        </svg>
+                    </button>
+                </form>
+                <table id="preview-records">
+                    <thead>
+                        <tr>
+                            <th>Student Number</th>
+                            <th>Last Name</th>
+                            <th>First Name</th>
+                            <th>Operation</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model == null || !Model.Any())
+                        {
+                            <tr>
+                                <td colspan="4" rowspan="10">
+                                    <div>No records found.</div>
+                                    <a asp-controller="Encode" asp-action="CreateStudentRecord" class="btn btn-create">
+                                        Create Student Data
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                        else
+                        {
+                            foreach (var student in Model.ToList())
+                            {
+                                <tr>
+                                    <td>@student.StudentNumber</td>
+                                    <td>@student.LastName</td>
+                                    <td>@student.FirstName</td>
+                                    <td>
+                                        <a asp-controller="Encode"
+                                           asp-action="RedirectToView"
+                                           asp-route-studentNumber="@student.StudentNumber"
+                                           asp-route-firstName="@student.FirstName"
+                                           asp-route-lastName="@student.LastName"
+                                           class="btn btn-select">
+                                            Select
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
 <script src="~/js/studentViolation.js" />
