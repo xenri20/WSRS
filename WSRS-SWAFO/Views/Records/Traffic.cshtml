@@ -1,4 +1,5 @@
-﻿@using WSRS_SWAFO.Helpers;
+﻿@using NUglify.Helpers
+@using WSRS_SWAFO.Helpers;
 @using WSRS_SWAFO.ViewModels
 @model TrafficRecordsIndexViewModel
 
@@ -65,7 +66,7 @@
                 <th>Student Number</th>
                 <th>Name</th>
                 <th>College</th>
-                <th>Date Paid</th>
+                <th>Official Receipt</th>
                 <th></th>
             </tr>
         </thead>
@@ -98,7 +99,7 @@
                         </td>
                         <td class="long">@record.Name</td>
                         <td>@record.College</td>
-                        <td>@(record.DatePaid is null ? "-" : record.DatePaid)</td>
+                        <td>@(record.ORNumber.IsNullOrWhiteSpace() ? "-" : record.ORNumber)</td>
                         <td>
                             <a asp-action="TrafficDetails" asp-route-id="@record.Id" class="btn-function">
                                 <svg width="32" height="32" viewBox="0 0 43 43" fill="none" xmlns="http://www.w3.org/2000/svg">

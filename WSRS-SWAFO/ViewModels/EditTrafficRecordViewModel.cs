@@ -38,6 +38,6 @@ namespace WSRS_SWAFO.ViewModels
 
         [ValidateNever]
         [Display(Name = "OR Number")]
-        public int? ORNumber { get; set; }
+        public string? ORNumber { get; set; }
     }
 }

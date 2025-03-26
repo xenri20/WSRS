@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WSRS_SWAFO.Data;
 
@@ -11,9 +12,11 @@ using WSRS_SWAFO.Data;
 namespace WSRS_SWAFO.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250321143919_ORNumberToString")]
+    partial class ORNumberToString
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -235,7 +238,7 @@ namespace WSRS_SWAFO.Migrations
 
                     b.HasKey("CollegeID");
 
-                    b.ToTable("College", (string)null);
+                    b.ToTable("College");
                 });
 
             modelBuilder.Entity("WSRS_SWAFO.Models.Offense", b =>
@@ -252,7 +255,7 @@ namespace WSRS_SWAFO.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Offenses", (string)null);
+                    b.ToTable("Offenses");
                 });
 
             modelBuilder.Entity("WSRS_SWAFO.Models.ReportEncoded", b =>
@@ -308,7 +311,7 @@ namespace WSRS_SWAFO.Migrations
 
                     b.HasIndex("StudentNumber");
 
-                    b.ToTable("ReportsEncoded", (string)null);
+                    b.ToTable("ReportsEncoded");
                 });
 
             modelBuilder.Entity("WSRS_SWAFO.Models.ReportPending", b =>
@@ -339,7 +342,7 @@ namespace WSRS_SWAFO.Migrations
 
                     b.HasIndex("StudentNumber");
 
-                    b.ToTable("ReportsPending", (string)null);
+                    b.ToTable("ReportsPending");
                 });
 
             modelBuilder.Entity("WSRS_SWAFO.Models.Student", b =>
@@ -359,7 +362,7 @@ namespace WSRS_SWAFO.Migrations
 
                     b.HasIndex("StudentNumber");
 
-                    b.ToTable("Students", (string)null);
+                    b.ToTable("Students");
                 });
 
             modelBuilder.Entity("WSRS_SWAFO.Models.TrafficReportsEncoded", b =>
@@ -409,7 +412,7 @@ namespace WSRS_SWAFO.Migrations
 
                     b.HasIndex("StudentNumber");
 
-                    b.ToTable("TrafficReportsEncoded", (string)null);
+                    b.ToTable("TrafficReportsEncoded");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -530,7 +533,7 @@ namespace WSRS_SWAFO.Migrations
                         .IsRequired();
 
                     b.HasOne("WSRS_SWAFO.Models.Student", "Student")
-                        .WithMany()
+                        .WithMany("TrafficReportsEncoded")
                         .HasForeignKey("StudentNumber")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -547,6 +550,8 @@ namespace WSRS_SWAFO.Migrations
                     b.Navigation("ReportsEncoded");
 
                     b.Navigation("ReportsPending");
+
+                    b.Navigation("TrafficReportsEncoded");
                 });
 #pragma warning restore 612, 618
         }

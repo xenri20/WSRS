@@ -209,7 +209,7 @@ namespace WSRS_SWAFO.Controllers
                     CommissionDate = tr.CommissionDate,
                     OffenseClassification = tr.Offense.Classification.ToString().Substring(0, 5) + " Traffic",
                     OffenseNature = tr.Offense.Nature,
-                    DatePaid = tr.DatePaid,
+                    ORNumber = tr.ORNumber,
                 };
 
             if (!string.IsNullOrEmpty(searchString))

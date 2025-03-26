@@ -11,7 +11,7 @@ public class DataSeeder
 {
 
     /// <summary>
-    /// Seeds students and then assigns them a report
+    /// Seeds students and then assigns them a report (administrative and traffic)
     /// </summary>
     /// <param name="filePath">Path to a valid excel file</param>
     /// <param name="context">Application's context</param>
@@ -76,6 +76,34 @@ public class DataSeeder
                 else
                 {
                     Console.WriteLine("ReportsEncoded worksheet not found.");
+                }
+
+                var trafficReportWorksheet = workbook.Worksheet("TrafficReportsEncoded");
+                if (trafficReportWorksheet != null)
+                {
+                    Console.WriteLine("Seending traffic reports...");
+                    for (int row = 2; row <= trafficReportWorksheet.LastRowUsed()!.RowNumber(); row++)
+                    {
+                        var trafficReport = new TrafficReportsEncoded
+                        {
+                            OffenseId = trafficReportWorksheet.Cell(row, 3).GetValue<int>(),
+                            StudentNumber = trafficReportWorksheet.Cell(row, 4).GetValue<int>(),
+                            CollegeID = trafficReportWorksheet.Cell(row, 5).GetValue<string>(),
+                            PlateNumber = trafficReportWorksheet.Cell(row, 6).GetValue<string>(),
+                            CommissionDate = DateHelper.ParseDate(trafficReportWorksheet.Cell(row, 7).GetValue<string>()),
+                            Place = trafficReportWorksheet.Cell(row, 8).GetValue<string>(),
+                            Remarks = trafficReportWorksheet.Cell(row, 9).GetValue<string>(),
+                            DatePaid = DateHelper.ParseDateNullable(trafficReportWorksheet.Cell(row, 10).GetValue<string>()),
+                            ORNumber = trafficReportWorksheet.Cell(row, 11).GetValue<string?>(),
+                        };
+
+                        context.TrafficReportsEncoded.Add(trafficReport);
+                        Console.WriteLine($"Added report: {trafficReport.OffenseId} - {trafficReport.StudentNumber}");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("TrafficReportsEncoded worksheet not found.");
                 }
 
                 context.SaveChanges();

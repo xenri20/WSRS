@@ -1,4 +1,5 @@
-﻿@using WSRS_SWAFO.ViewModels
+﻿@using NUglify.Helpers
+@using WSRS_SWAFO.ViewModels
 @model TrafficRecordDetailsViewModel
 
 @section customHead {
@@ -47,7 +48,7 @@
                 <dt>Date Paid</dt>
                 <dd>@(!Model.DatePaid.HasValue ? "-" : Model.FormattedDatePaid)</dd>
                 <dt>OR Number</dt>
-                <dd>@(!Model.ORNumber.HasValue ? "-" : Model.ORNumber)</dd>
+                <dd>@(Model.ORNumber.IsNullOrWhiteSpace() ? "-" : Model.ORNumber)</dd>
             </dl>
 
             <a asp-action="EditTraffic" asp-route-id="@Model.Id" class="btn dark-btn">
