@@ -7,22 +7,26 @@
 @section customHead {
     <link rel="stylesheet" href="~/css/studentViolationStyle.css" asp-append-version="true" />
 }
-<form id="page-picker" asp-controller="Encode" asp-action="StudentRecordViolation" method="post">
-    <div class="page-header">
-    <h1>
-        Step 1
-    </h1>
-    <hr />
-    <p>Pick which violation would you be recording?</p>
+<div class="content-panel student-violation">
+    <div id="input-panel">
+        <form id="page-picker" asp-controller="Encode" asp-action="StudentRecordViolation" method="post">
+            <div class="page-header">
+                <h1>
+                    Step 1
+                </h1>
+                <hr />
+                <p>Pick which violation would you be recording?</p>
+            </div>
+            <div class="modes">
+                <button type="submit" class="btn btn-create" name="violationType" value="Student Violation">
+                    Student Violation
+                </button>
+                <button type="submit" class="btn btn-create" name="violationType" value="Traffic Violation">
+                    Traffic Violation
+                </button>
+            </div>
+        </form>
     </div>
-    <div class="modes">
-        <button type="submit" class="btn btn-create" name="violationType" value="Student Violation">
-            Student Violation
-        </button>
-        <button type="submit" class="btn btn-create" name="violationType" value="Traffic Violation">
-            Traffic Violation
-        </button>
-    </div>
-</form>
+</div>
 
 <script src="~/js/studentViolation.js"> </script>
