@@ -23,10 +23,33 @@ h2 {
 
 #input-panel {
     display: flex;
+    flex-direction: column;
     align-self: center;
     justify-content: center;
-    width: 75%;
-    height: 75%;
+    width: 100%;
+    gap: 1rem;
+    padding: 1.5rem;
+    height: auto;
+    height: auto;
+}
+
+.pane-structure {
+    display: flex;
+    flex-direction: row;
+    align-self: center;
+    justify-content: center;
+    gap: 1rem;
+    width: 100%;
+}
+
+.left-content-pane, .right-content-pane {
+    display: flex;
+    flex-direction: column;
+/*    align-content: flex-start;*/
+    flex: 1;
+    gap: 1rem;
+/*    align-self: center;
+    justify-content: center;*/
 }
 
 .title {
@@ -41,7 +64,7 @@ h2 {
     }
 
 .btn {
-    align-self: flex-end;
+    align-self: flex-start;
 }
 
 /* Mode Picker */
@@ -49,7 +72,7 @@ h2 {
 #page-picker {
     display: flex;
     flex-direction: column;
-    
+
 }
 
 .modes {
@@ -92,6 +115,9 @@ h2 {
     box-sizing: border-box;
 }
 
+/*.content-panel{
+    margin-top: 0.75em;
+}*/
 
 #preview-records {
     width: 100%;
@@ -144,12 +170,12 @@ h2 {
 
 /* Page Three - Student Violation */
 
-#record-violation {
+#record-violation, .grid-system {
     display: inline-flex;
     flex-direction: column;
     justify-content: center;
     gap: 1em;
-    width: 50%;
+    width: 100%;
 }
 
 .student-information .info {
