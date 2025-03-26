@@ -6,6 +6,10 @@ h2 {
     width: 100%;
 }
 
+#grid-screen {
+    padding: 1.5rem;
+}
+
 #reportsChart {
     display: block; /* Removes any inline spacing issues */
     width: 100% !important; /* Force full width */
@@ -17,7 +21,6 @@ h2 {
     height: 500px;
     margin: auto;
 }
-
 
 #panel-footer{
     display: flex;
