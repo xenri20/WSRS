@@ -232,7 +232,22 @@ button.text-button {
     align-items: center;
     justify-content: center;
     width: 100%;
-    height: 65vh;
+/*    height: 65vh;*/
     border: 2px solid black;
     border-radius: 16px;
+}
+
+dl {
+    display: grid;
+    grid-gap: 0.5rem 2rem;
+    grid-template-columns: max-content;
+}
+
+dt {
+    font-weight: normal;
+}
+
+dd {
+    margin: 0;
+    grid-column-start: 2;
 }
