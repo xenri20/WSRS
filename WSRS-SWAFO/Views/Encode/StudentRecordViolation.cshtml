@@ -1,5 +1,4 @@
-﻿@using WSRS_SWAFO.Data.Enum
-@using WSRS_SWAFO.ViewModels
+﻿@using WSRS_SWAFO.ViewModels
 @model IQueryable<StudentRecordViewModel>
 @{
     Layout = "_EncodeLayout";
@@ -77,4 +76,7 @@
         </div>
     </div>
 </div>
-<script src="~/js/studentViolation.js" />
+
+@section Scripts {
+    <script src="~/js/studentViolation.js"></script>
+}
