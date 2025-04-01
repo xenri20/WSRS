@@ -2,8 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using System.Diagnostics;
 using WSRS_SWAFO.Models;
-using Microsoft.AspNetCore.Mvc.Routing;
-using Microsoft.AspNetCore.Authorization.Infrastructure;
 
 namespace WSRS_SWAFO.Controllers
 {
