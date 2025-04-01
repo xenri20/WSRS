@@ -18,23 +18,18 @@ namespace WSRS_SWAFO.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            throw new NotImplementedException();
         }
 
         [Route("api/[controller]/GetAllDescriptions")]
         [HttpGet]
         [Produces("application/json")]
-        public async Task<ActionResult<ReportEncoded>?> GetAllPreviousDescriptions()
+        public async Task<ActionResult<ReportEncoded>> GetAllPreviousDescriptions()
         {
             var reports = await _context.ReportsEncoded
                 .Select(r => r.Description)
                 .Distinct()
                 .ToListAsync();
-
-            if (!reports.Any())
-            {
-                return null;
-            }
 
             return Ok(reports);
         }
