@@ -95,7 +95,13 @@
                     <span class="text-danger"></span>
                 </div>
                 <div class="input-wrapper">
-                    <input asp-for="StatusOfSanction" type="text" class="input description" autocomplete="statusOfSanction" aria-required="true" />
+                    @* <input asp-for="StatusOfSanction" type="text" class="input description" autocomplete="statusOfSanction" aria-required="true" /> *@
+                    <select asp-for="StatusOfSanction" class="input" aria-required="true">
+                        <option disabled hidden selected>-- Select an option --</option>
+                        <option value="Pending">Pending</option>
+                        <option value="Ongoing">Ongoing</option>
+                        <option value="Completed">Completed</option>
+                    </select>
                     <label class="label">Status of Sanction</label>
                     <span class="text-danger"></span>
                 </div>

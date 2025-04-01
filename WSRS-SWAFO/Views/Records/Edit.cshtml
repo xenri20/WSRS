@@ -80,7 +80,12 @@
 
             @* Status of Sanction *@
             <div class="input-wrapper">
-                <input asp-for="StatusOfSanction" type="text" class="input" aria-required="true">
+                @* <input asp-for="StatusOfSanction" type="text" class="input" aria-required="true"> *@
+                <select asp-for="StatusOfSanction" class="input" aria-required="true">
+                    <option value="Pending">Pending</option>
+                    <option value="Ongoing">Ongoing</option>
+                    <option value="Completed">Completed</option>
+                </select>
                 <label asp-for="StatusOfSanction" class="label">Status<span>*</span></label>
                 <span asp-validation-for="StatusOfSanction" class="text-danger"></span>
             </div>
