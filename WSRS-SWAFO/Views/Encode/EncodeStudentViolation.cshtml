@@ -106,69 +106,6 @@
             </button>
         </div>
     </div>
-    <div class="input-wrapper">
-        <select asp-for="CollegeID" class="input" autocomplete="College" aria-required="true">
-            <option disabled hidden selected>-- Select an option --</option>
-            @foreach (var item in ViewBag.Colleges)
-            {
-                <option value="@item.CollegeID">@item.CollegeID</option>
-            }
-        </select>
-        <label class="label">College<span>*</span></label>
-        <span class="text-danger"></span>
-    </div>
-    <div class="input-wrapper">
-        <input asp-for="Course" type="text" class="input" autocomplete="CYS" aria-required="true" />
-        <label class="label">CYS<span>*</span></label>
-        <span class="text-danger"></span>
-    </div>
-    <div class="input-wrapper">
-        <input asp-for="CommissionDate" type="date" class="input" value="@DateTime.Now" autocomplete="dateOfCommission" aria-required="true" />
-        <label class="label"><span>*</span></label>
-        <span class="text-danger"></span>
-    </div>
-    <div class="input-wrapper">
-        <select class="input" id="offenseClassification" aria-required="true">
-            <option disabled hidden selected>-- Select an option --</option>
-            @foreach (var item in Html.GetEnumSelectList<OffenseClassification>().Where(e => e.Value == "0" || e.Value == "1"))
-            {
-                <option value="@item.Value">@item.Text</option>
-            }
-        </select>
-        <label class="label">Classification of Offense<span>*</span></label>
-        <span class="text-danger"></span>
-    </div>
-    <div class="input-wrapper">
-        <select asp-for="OffenseId" class="input" id="offenseNature" aria-required="true">
-            <option disabled hidden selected>-- Select an option --</option>
-        </select>
-        <label class="label">Nature of Offense<span>*</span></label>
-        <span class="text-danger"></span>
-    </div>
-    <div class="input-wrapper" id="hearingDate">
-        <input asp-for="HearingDate" type="date" class="input" value="@DateTime.Now.ToString("MM-dd-yyyy")" autocomplete="dateOfCommission" aria-required="true" />
-        <label class="label"><span>*</span></label>
-        <span class="text-danger"></span>
-    </div>
-    <div class="input-wrapper">
-        <input asp-for="Sanction" type="text" class="input" autocomplete="sanction" aria-required="true" />
-        <label class="label">Sanction<span>*</span></label>
-        <span class="text-danger"></span>
-    </div>
-    <div class="input-wrapper">
-        <input asp-for="Description" type="text" class="input description" aria-required="true" list="descriptionSuggestions"/>
-        <label class="label">Description</label>
-        <span class="text-danger"></span>
-        <datalist id="descriptionSuggestions"></datalist>
-    </div>
-    <div class="input-wrapper">
-        <input asp-for="StatusOfSanction" type="text" class="input description" autocomplete="statusOfSanction" aria-required="true" />
-        <label class="label">Status of Sanction</label>
-        <span class="text-danger"></span>
-    </div>
-    <button type="submit" class="btn btn-submit">
-        Submit
-    </button>
 </form>
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
