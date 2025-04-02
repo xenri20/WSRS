@@ -81,21 +81,6 @@ table tbody tr.empty {
     padding: 1.5rem;
 }
 
-dl {
-    display: grid;
-    grid-gap: 0.5rem 2rem;
-    grid-template-columns: max-content;
-}
-
-dt {
-    font-weight: bold;
-}
-
-dd {
-    margin: 0;
-    grid-column-start: 2;
-}
-
 /* EDIT PAGE */
 #edit {
     width: 100%;
