@@ -10,12 +10,14 @@ namespace WSRS_Student.Controllers
     [Route("student/student")]
     public class StudentController : Controller
     {
+        private readonly ApplicationDbContext _localContext;
+        private readonly AzureDbContext _azureContext;
+        private int _userStudentNumber;
 
-        private readonly ApplicationDbContext _context;
-
-        public StudentController(ApplicationDbContext context)
+        public StudentController(ApplicationDbContext localContext, AzureDbContext azureContext)
         {
-            _context = context;
+            _localContext = localContext;
+            _azureContext = azureContext;
         }
 
         public async Task<IActionResult> Violations()
