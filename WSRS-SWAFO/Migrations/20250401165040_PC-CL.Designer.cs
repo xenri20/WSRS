@@ -12,8 +12,8 @@ using WSRS_SWAFO.Data;
 namespace WSRS_SWAFO.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250213115333_EncodeStudentViolationUpdate")]
-    partial class EncodeStudentViolationUpdate
+    [Migration("20250401165040_PC-CL")]
+    partial class PCCL
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -360,6 +360,8 @@ namespace WSRS_SWAFO.Migrations
 
                     b.HasKey("StudentNumber");
 
+                    b.HasIndex("StudentNumber");
+
                     b.ToTable("Students");
                 });
 
@@ -375,14 +377,14 @@ namespace WSRS_SWAFO.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<DateTime>("CommissionDatetime")
-                        .HasColumnType("datetime2");
+                    b.Property<DateOnly>("CommissionDate")
+                        .HasColumnType("date");
 
                     b.Property<DateOnly?>("DatePaid")
                         .HasColumnType("date");
 
-                    b.Property<int?>("ORNumber")
-                        .HasColumnType("int");
+                    b.Property<string>("ORNumber")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("OffenseId")
                         .HasColumnType("int");
@@ -531,7 +533,7 @@ namespace WSRS_SWAFO.Migrations
                         .IsRequired();
 
                     b.HasOne("WSRS_SWAFO.Models.Student", "Student")
-                        .WithMany()
+                        .WithMany("TrafficReportsEncoded")
                         .HasForeignKey("StudentNumber")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -548,6 +550,8 @@ namespace WSRS_SWAFO.Migrations
                     b.Navigation("ReportsEncoded");
 
                     b.Navigation("ReportsPending");
+
+                    b.Navigation("TrafficReportsEncoded");
                 });
 #pragma warning restore 612, 618
         }

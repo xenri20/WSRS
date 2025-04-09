@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore.Migrations;
 #nullable disable
 
 namespace WSRS_SWAFO.Migrations
-{
+{ 
     /// <inheritdoc />
-    public partial class EncodeStudentViolationUpdate : Migration
+    public partial class PCCL : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -277,10 +277,10 @@ namespace WSRS_SWAFO.Migrations
                     StudentNumber = table.Column<int>(type: "int", nullable: false),
                     CollegeID = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     PlateNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CommissionDatetime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CommissionDate = table.Column<DateOnly>(type: "date", nullable: false),
                     Place = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Remarks = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ORNumber = table.Column<int>(type: "int", nullable: true),
+                    ORNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DatePaid = table.Column<DateOnly>(type: "date", nullable: true)
                 },
                 constraints: table =>
@@ -373,6 +373,11 @@ namespace WSRS_SWAFO.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_ReportsPending_StudentNumber",
                 table: "ReportsPending",
+                column: "StudentNumber");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Students_StudentNumber",
+                table: "Students",
                 column: "StudentNumber");
 
             migrationBuilder.CreateIndex(
