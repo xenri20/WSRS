@@ -1,0 +1,253 @@
+﻿@import url(../lib/fonts/typefaces.css);
+@import url(./navbarStyle.css);
+@import url(./footerStyle.css);
+
+:root {
+    --gradient-header: linear-gradient(to right, #007d3c, #000000);
+    --bold: "Product Sans Bold";
+    --medium: "Product Sans Medium Regular";
+    --regular: "Product Sans Regular";
+    --light: "Product Sans Light Regular";
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+}
+
+body {
+    width: 100vw;
+    font-family: var(--regular);
+    display: flex;
+    flex-direction: row;
+}
+
+#sidebar + .container {
+    height: 100vh;
+    max-width: 85vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow-y: scroll;
+}
+
+main {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+    padding-top: 1rem;
+    margin: 0 1rem;
+}
+
+h1 {
+    width: fit-content;
+    font-size: 3rem;
+    font-family: var(--bold);
+    background-image: var(--gradient-header);
+    background-clip: text;
+    color: transparent;
+    margin: 0;
+}
+
+    h1 > span {
+        font-family: var(--light);
+    }
+
+h2 {
+    width: fit-content;
+    font-family: var(--medium);
+    margin: 0;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+.f-medium {
+    font-family: var(--medium);
+}
+
+.input-wrapper {
+    position: relative;
+    font-family: var(--medium);
+}
+
+    .input-wrapper .input {
+        font-family: var(--medium);
+        padding: 8px 16px;
+        border: 2px solid black;
+        border-radius: 6px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .input-wrapper .label {
+        position: absolute;
+        left: 16px;
+        top: 10px;
+        background-color: #fff;
+        font-size: 12px;
+        padding: 0 4px;
+        transition: all 0.15s ease-out;
+        pointer-events: none;
+    }
+
+    .input-wrapper span {
+        font-family: var(--medium);
+    }
+
+    .input-wrapper .input:focus + .label,
+    .input-wrapper .input:not(:placeholder-shown) + .label {
+        top: -8px;
+        left: 15px;
+        font-size: 12px;
+        background-color: #fff;
+    }
+
+    .input-wrapper .input:focus::placeholder {
+        color: transparent;
+    }
+
+    .input-wrapper span {
+        color: red;
+    }
+
+.btn {
+    justify-content: center;
+        align-items: center;
+        text-decoration: none;
+        text-align: center;
+        padding: 0.25em 1em;
+        font-size: 16px;
+        font-family: var(--medium);
+        cursor: pointer;
+        color: black;
+        background-color: transparent;
+        border: 2px solid black;
+        border-radius: 32px;
+        transition: color 0.2s ease-in, background-color 0.2s ease-in;
+}
+
+    .btn:hover,
+    .btn:active,
+    .btn.active {
+        background-color: black;
+        color: white;
+    }
+
+
+    .btn:focus {
+        box-shadow: none;
+    }
+
+.btn:focus-visible {
+    outline: 2px solid black;
+    outline-offset: 2px;
+}
+
+.btn-function {
+    border: 2px solid black;
+    height: 100%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all ease-in-out 0.15s;
+}
+
+    .btn-function:hover {
+        background-color: black;
+    }
+
+        .btn-function:hover > svg path {
+            stroke: white;
+        }
+
+.dark-btn {
+    background-color: #292929;
+    border: 2px solid #292929;
+    padding: 5px 2rem;
+    color: white;
+}
+
+    .dark-btn:active {
+        background-color: #363636;
+    }
+
+.label-header {
+    font-family: var(--medium);
+}
+
+.info {
+    font-family: var(--light);
+}
+
+.modal .modal-content {
+    border-radius: 12px;
+}
+
+/* SEARCH INPUT WITH BUTTOn */
+#searchForm {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 0.5rem;
+    height: 2.5rem;
+}
+
+#searchForm > input {
+    display: flex;
+    flex-grow: 1;
+    padding: 0.5rem 1rem;
+    border: 2px solid black;
+    border-radius: 2rem;
+}
+
+.hidden {
+    display: none;
+}
+
+/* TEXT BUTTON COMPONENT */
+button.text-button {
+    background: none;
+    border: none;
+    color: inherit;
+    cursor: pointer;
+    font-size: 0.96em;
+    font-weight: 700;
+}
+
+.content-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+/*    height: 65vh;*/
+    border: 2px solid black;
+    border-radius: 16px;
+}
+
+dl {
+    display: grid;
+    grid-gap: 0.5rem 2rem;
+    grid-template-columns: max-content;
+}
+
+dt {
+    font-weight: normal;
+}
+
+dd {
+    margin: 0;
+    grid-column-start: 2;
+}

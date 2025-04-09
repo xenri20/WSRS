@@ -1,0 +1,30 @@
+﻿h2 {
+    margin-bottom: 0.75rem;
+}
+
+#account {
+    width: 100%;
+}
+
+#updatePasswordForm {
+    display: inline-flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 60ch;
+}
+
+.panel {
+    border: 2px solid black;
+    border-radius: 1rem;
+    padding: 1.5rem;
+}
+
+@media (max-width: 800px) {
+    #updatePasswordForm {
+        width: 100%;
+    }
+
+        #updatePasswordForm .btn {
+            align-self: normal;
+        }
+}

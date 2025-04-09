@@ -1,0 +1,176 @@
+﻿/* 
+    Font Source: Google Sans
+*/
+
+@import url('../lib/fonts/typefaces.css');
+
+:root {
+    --regular: 'Product Sans Regular';
+    --medium: 'Product Sans Medium Regular';
+    --lightItalic: 'Product Sans Italic';
+    --bold: 'Product Sans Bold';
+    --microsoft: 'Segoe UI Regular';
+}
+
+body {
+    background-image: linear-gradient(#00562A, #002010);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#logOnPanel {
+    box-sizing: border-box;
+    border-radius: 16px;
+    background-color: white;
+    padding: 50px 75px;
+    box-shadow: 0px 0px 5px black;
+    animation: riseUp 0.6s ease-out; 
+}
+
+@keyframes riseUp {
+    0% {
+        transform: translateY(50px); 
+        opacity: 0;
+    }
+
+    100% {
+        transform: translateY(0); 
+        opacity: 1;
+    }
+}
+
+img{
+    width: 250px;
+}
+
+h1 {
+    font-family: var(--bold);
+    font-size: 52px;
+    margin:0;
+    background-image: linear-gradient(to right, #00562A, #002010);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    -moz-background-clip: text;
+    -moz-text-fill-color: transparent;
+}
+
+.input-wrapper {
+    position: relative;
+    font-family: var(--bold);
+    width: 350px;
+}
+
+    .input-wrapper .input {
+        font-family: var(--regular);
+        padding: 8px 16px;
+        border: 2px solid black;
+        border-radius: 6px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .input-wrapper .label {
+        position: absolute;
+        left: 16px;
+        top: 28px;
+        background-color: #fff;
+        font-size: 14px;
+        padding: 0 4px;
+        transition: all 0.15s ease-out;
+        pointer-events: none;
+    }
+
+    .input-wrapper span {
+        font-family: var(--regular);
+    }
+
+    .input-wrapper .input:focus + .label,
+    .input-wrapper .input:not(:placeholder-shown) + .label {
+        top: 8px;
+        left: 15px;
+        font-size: 12px;
+        background-color: #fff;
+    }
+
+span {
+    color: red;
+}
+
+.forgot-password-link, .forgot-password-link:hover{
+    text-decoration: none;
+    font: var(--bold) !important;
+    cursor: pointer;
+    color: black;
+}
+
+
+#btnLogin {
+    font-family: var(--medium);
+    box-sizing: border-box;
+    border-radius: 32px;
+    background-color: #292929;
+    border: 2px solid #292929;
+    width: 100%;
+    padding: 5px;
+    color: white;
+    cursor: pointer;
+}
+
+    #btnLogin:active {
+        background-color: #363636;
+    }
+
+svg {
+    width: 15px;
+}
+
+#btnSSO {
+    font-family: var(--microsoft);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
+    width: 350px;
+    font-weight: 600;
+    font-size: 15px;
+    margin: 15px 0px;
+    color: white;
+    background-color: #2F2F2F;
+    cursor: pointer;
+    border: none;
+    border-radius: 0;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    -moz-transition: all 0.4s ease-in-out;
+    -o-transition: all 0.4s ease-in-out;
+    -webkit-transition: all 0.4s ease-in-out;
+}
+
+    #btnSSO:hover {
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .btnSSO:focus {
+        outline: none;
+    }
+
+#forgotPassword {
+    font-family: var(--lightItalic);
+    font-size: 16px;
+    font-style: italic;
+    text-align: right;
+}
+
+a, a:hover {
+    text-decoration: none;
+    cursor: pointer;
+    color:black;
+}
+
+footer > p {
+    font-family: var(--regular);
+    font-size: 12px;
+    margin: 0;
+    line-height: 1.4;
+}
