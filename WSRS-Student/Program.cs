@@ -5,11 +5,19 @@ using WSRS_Student.Models;
 using WSRS_Student.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
-
 var environment = builder.Environment.IsDevelopment() ? "Local" : "Azure";
-var connectionString = builder.Configuration.GetConnectionString(environment)
-    ?? throw new InvalidOperationException($"Connection string {environment} not found");
-builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
+var connectionStringLocal = builder.Configuration.GetConnectionString("Local");
+var connectionStringAzure = builder.Configuration.GetConnectionString("Azure");
+
+if (string.IsNullOrEmpty(connectionStringLocal) || string.IsNullOrEmpty(connectionStringAzure))
+{
+    throw new InvalidOperationException("Connection strings for Local or Azure not found");
+}
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(connectionStringLocal));
+
+builder.Services.AddDbContext<AzureDbContext>(options =>
+    options.UseSqlServer(connectionStringAzure));
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
