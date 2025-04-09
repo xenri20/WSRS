@@ -18,20 +18,17 @@ namespace WSRS_Student.Controllers
             _context = context;
         }
 
-        [HttpGet("")]
-        public IActionResult Violations()
+        public async Task<IActionResult> Violations()
         {
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var studentNumberClaim = User.FindFirst("StudentNumber")?.Value;
 
-            var student = _context.Students
+            if (string.IsNullOrEmpty(studentNumberClaim) || !int.TryParse(studentNumberClaim, out var studentNumber))
+                return Unauthorized();
+
+            var student = await _context.Students
                 .Include(s => s.ReportsEncoded)
                 .Include(s => s.TrafficReportsEncoded)
-                .FirstOrDefaultAsync(s => s.IdentityUserId == userId);
-
-            if (student == null)
-            {
-                return NotFound(); // Or redirect to an error page
-            }
+                .FirstOrDefaultAsync(s => s.StudentNumber == studentNumber);
 
             return View(student);
         }

@@ -23,7 +23,7 @@
                 </tr>
             </thead>
             <tbody>
-                @if (!Model.ReportsEncoded.Any() && !Model.TrafficReportsEncoded.Any())
+                @if (Model?.ReportsEncoded?.Any() != true && Model?.TrafficReportsEncoded?.Any() != true)
                 {
                     <tr>
                         <td colspan="5" class="text-center">No records to show</td>
@@ -33,7 +33,7 @@
                 {
                     var index = 0;
 
-                    if (Model.ReportsEncoded.Any())
+                    if (Model.ReportsEncoded?.Any() == true)
                     {
                         @foreach (var item in Model.ReportsEncoded)
                         {
@@ -49,7 +49,7 @@
                         }
                     }
 
-                    if (Model.TrafficReportsEncoded.Any())
+                    if (Model.TrafficReportsEncoded?.Any() == true)
                     {
                         @foreach (var item in Model.TrafficReportsEncoded)
                         {
