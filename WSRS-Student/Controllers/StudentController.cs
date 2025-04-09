@@ -22,15 +22,24 @@ namespace WSRS_Student.Controllers
 
         public async Task<IActionResult> Violations()
         {
-            var studentNumberClaim = User.FindFirst("StudentNumber")?.Value;
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            if (string.IsNullOrEmpty(studentNumberClaim) || !int.TryParse(studentNumberClaim, out var studentNumber))
+            if (userId != null)
+            {
+                var userStudentNumber = await _localContext.Users
+                    .Where(u => u.Id == userId)
+                    .Select(u => u.StudentNumber)
+                    .FirstOrDefaultAsync();
+
+            if (string.IsNullOrEmpty(userStudentNumber) || !int.TryParse(userStudentNumber, out _userStudentNumber))
                 return Unauthorized();
+            }
 
-            var student = await _context.Students
+            var student = await _azureContext.Students
                 .Include(s => s.ReportsEncoded)
                 .Include(s => s.TrafficReportsEncoded)
-                .FirstOrDefaultAsync(s => s.StudentNumber == studentNumber);
+                .FirstOrDefaultAsync(s => s.StudentNumber == _userStudentNumber); 
+
 
             return View(student);
         }
