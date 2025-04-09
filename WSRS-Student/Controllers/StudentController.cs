@@ -6,7 +6,6 @@ using WSRS_Student.Data;
 namespace WSRS_Student.Controllers
 {
     [Authorize]
-    [Route("student/student")]
     public class StudentController : Controller
     {
         private readonly AzureDbContext _azureContext;
