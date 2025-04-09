@@ -28,7 +28,9 @@ namespace WSRS_Student.Controllers
             */
             var student = await _azureContext.Students
                 .Include(s => s.ReportsEncoded)
+                    .ThenInclude(r => r.Offense)
                 .Include(s => s.TrafficReportsEncoded)
+                    .ThenInclude(tr => tr.Offense)
                 .FirstOrDefaultAsync(s => s.StudentNumber == studentNumber);
 
             return View(student);

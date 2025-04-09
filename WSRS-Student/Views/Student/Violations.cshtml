@@ -1,4 +1,6 @@
 ﻿@model Student
+@using WSRS_Student.Helper
+
 @{
     ViewData["Title"] = "Violations";
 }
@@ -40,10 +42,8 @@
                             <tr>
                                 <th scope="row">@(++index)</th>
                                 <td>@item.CommissionDate</td>
-                                @* <td>@item.Offense.Classification</td> *@
-                                <td>@item.OffenseId</td>
-                                @* <td>@item.Offense.Nature</td> *@
-                                <td>Nature of the offense</td>
+                                <td>@item.Offense.Classification.GetDisplayName()</td>
+                                <td>@item.Offense.Nature</td>
                                 <td>@item.Sanction</td>
                             </tr>
                         }
@@ -56,10 +56,8 @@
                             <tr>
                                 <th scope="row">@(++index)</th>
                                 <td>@item.CommissionDate</td>
-                                @* <td>@item.Offense.Classification</td> *@
-                                <td>@item.OffenseId</td>
-                                @* <td>@item.Offense.Nature</td> *@
-                                <td>Nature of the offense</td>
+                                <td>@item.Offense.Classification.GetDisplayName()</td>
+                                <td>@item.Offense.Nature</td>
                                 <td>@item.Remarks</td>
                             </tr>
                         }
