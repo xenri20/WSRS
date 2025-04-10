@@ -7,5 +7,5 @@ public class ApplicationDbContext : DbContext
 {
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
-    public DbSet<ReportEncoded> ReportsEncoded { get; }
+    public DbSet<ReportEncoded> ReportsEncoded { get; set; }
 }
