@@ -4,7 +4,8 @@ using WSRS_Api.Interfaces;
 using WSRS_Api.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
-var connectionString = builder.Configuration["AzureSQL"] ?? throw new InvalidOperationException("Connection string 'AzureSQL' not found.");
+// var connectionString = builder.Configuration.GetConnectionString("AzureSQL") ?? throw new InvalidOperationException("Connection string 'AzureSQL' not found.");
+var connectionString = builder.Configuration.GetConnectionString("Local") ?? throw new InvalidOperationException("Connection string 'Local' not found.");
 
 // Add services to the container.
 builder.Services.AddScoped<IViolationRepository, ViolationRepository>();
