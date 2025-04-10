@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using WSRS_Api.Data;
+using WSRS_Api.Dtos;
 using WSRS_Api.Interfaces;
-using WSRS_Api.Models;
 
 namespace WSRS_Api.Repositories;
 
@@ -14,7 +14,7 @@ public class ViolationRepository : IViolationRepository
         _context = context;
     }
 
-    public async Task<IEnumerable<ReportEncoded>> GetViolationsByStudentNumber(int studentNumber)
+    public async Task<IEnumerable<ReportEncodedDto>> GetViolationsByStudentNumber(int studentNumber)
     {
         try
         {
@@ -22,11 +22,19 @@ public class ViolationRepository : IViolationRepository
                 .AsNoTracking()
                 .Where(r => r.StudentNumber == studentNumber)
                     .Include(r => r.Offense)
+                .Select(r => new ReportEncodedDto
+                {
+                    Id = r.Id,
+                    OffenseId = r.OffenseId,
+                    CommissionDate = r.CommissionDate,
+                    Sanction = r.Sanction,
+                    Description = r.Description
+                })
                 .ToListAsync();
         }
         catch
         {
-            return Enumerable.Empty<ReportEncoded>();
+            return Enumerable.Empty<ReportEncodedDto>();
         }
     }
 }

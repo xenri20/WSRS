@@ -1,29 +1,29 @@
+using WSRS_Api.Dtos;
 using WSRS_Api.Interfaces;
-using WSRS_Api.Models;
 
 namespace WSRS_Api.Repositories;
 
-public class MockViolationRepository : IViolationRepository
+public class MockViolationRepository
 {
-    public Task<IEnumerable<ReportEncoded>> GetViolationsByStudentNumber(int studentNumber)
+    public Task<IEnumerable<ReportEncodedDto>> GetViolationsByStudentNumber(int studentNumber)
     {
-        var mockData = new List<ReportEncoded>
+        var mockData = new List<ReportEncodedDto>
         {
-            new ReportEncoded
+            new ReportEncodedDto
             {
                 Id = 1,
                 OffenseId = 101,
                 CommissionDate = new DateOnly(2025, 1, 15),
-                HearingDate = new DateOnly(2025, 2, 1),
+                // HearingDate = new DateOnly(2025, 2, 1),
                 Sanction = "Warning",
                 Description = "Late submission of assignment",
             },
-            new ReportEncoded
+            new ReportEncodedDto
             {
                 Id = 2,
                 OffenseId = 102,
                 CommissionDate = new DateOnly(2025, 3, 10),
-                HearingDate = null, // Null for minor offenses
+                // HearingDate = null, // Null for minor offenses
                 Sanction = "Warning",
                 Description = "Missed class without notice",
             }

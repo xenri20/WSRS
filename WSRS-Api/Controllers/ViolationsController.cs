@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using WSRS_Api.Dtos;
 using WSRS_Api.Interfaces;
-using WSRS_Api.Models;
 
 namespace WSRS_Api.Controllers
 {
@@ -18,7 +18,7 @@ namespace WSRS_Api.Controllers
         }
 
         [HttpGet("{studentNumber}")]
-        public async Task<ActionResult<ReportEncoded>> GetStudentViolations(int studentNumber)
+        public async Task<ActionResult<ReportEncodedDto>> GetStudentViolations(int studentNumber)
         {
             var violations = await _repository.GetViolationsByStudentNumber(studentNumber);
 
