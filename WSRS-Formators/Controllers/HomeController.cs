@@ -1,42 +1,106 @@
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
+using Microsoft.EntityFrameworkCore;
+using WSRS_Formators.Data;
 using WSRS_Formators.Models;
 
 namespace WSRS_Formators.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly EmployeeDbContext _context;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(EmployeeDbContext context)
         {
-            _logger = logger;
+            _context = context;
         }
 
+        [HttpGet]
         public IActionResult Index()
         {
             return View();
         }
 
+        [HttpGet]
         public IActionResult WSRSEmp()
         {
             return View();
         }
-
-        public IActionResult GoodMoralCertificate()
+        public IActionResult CreateReport()
         {
             return View();
         }
 
-        public IActionResult Privacy()
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateReport(ReportViolation report)
         {
-            return View();
+            if (ModelState.IsValid)
+            {
+                _context.ReportsViolation.Add(report);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Index");
+            }
+
+            return View(report);
+        }
+        [HttpPost]
+        public IActionResult WSRSEmp(int studentNumber)
+        {
+            var student = _context.Students.FirstOrDefault(s => s.StudentNumber == studentNumber);
+
+            if (student == null)
+            {
+                ViewBag.NotFound = true;
+                return View(new StudentRecordViewModel()); 
+            }
+
+
+            var viewModel = new StudentRecordViewModel
+            {
+                Student = student,
+                ReportsEncoded = _context.ReportsEncoded
+                    .Where(r => r.StudentNumber == studentNumber)
+                    .Include(r => r.Offense)
+                    .ToList(),
+                TrafficReportsEncoded = _context.TrafficReportsEncoded
+                    .Where(t => t.StudentNumber == studentNumber)
+                    .Include(t => t.Offense)
+                    .ToList()
+            };
+
+            return View(viewModel);
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+
+        [HttpPost]
+        public IActionResult Index(int studentNumber)
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+             var student = _context.Students.FirstOrDefault(s => s.StudentNumber == studentNumber);
+
+            if (student == null)
+            {
+                ViewBag.NotFound = true;
+                return View();
+            }
+
+            var reports = _context.ReportsEncoded
+                .Include(r => r.Offense)
+                .Where(r => r.StudentNumber == studentNumber)
+                .ToList();
+
+            var trafficReports = _context.TrafficReportsEncoded
+                .Include(t => t.Offense)
+                .Where(t => t.StudentNumber == studentNumber)
+                .ToList();
+
+            var model = new StudentRecordViewModel
+            {
+                Student = student,
+                ReportsEncoded = reports,
+                TrafficReportsEncoded = trafficReports
+            };
+
+            return View(model);
         }
     }
 }

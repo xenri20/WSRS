@@ -1,0 +1,49 @@
+﻿@model WSRS_Formators.Models.ReportViolation
+@{
+    ViewData["Title"] = "Create Report";
+}
+
+<div class="container mt-5">
+    <h2 class="mb-4">Create New Violation Report</h2>
+
+    <form asp-action="CreateReport" method="post" class="needs-validation" novalidate>
+        <div class="mb-3">
+            <label asp-for="StudentNumber" class="form-label">Student Number</label>
+            <input asp-for="StudentNumber" class="form-control" required />
+            <span asp-validation-for="StudentNumber" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="StudentName" class="form-label">Student Name</label>
+            <input asp-for="StudentName" class="form-control" required />
+            <span asp-validation-for="StudentName" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="College" class="form-label">College</label>
+            <input asp-for="College" class="form-control" required />
+            <span asp-validation-for="College" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="CommissionDate" class="form-label">Commission Date</label>
+            <input asp-for="CommissionDate" class="form-control" type="date" required />
+            <span asp-validation-for="CommissionDate" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Description" class="form-label">Violation Description</label>
+            <textarea asp-for="Description" class="form-control" rows="4"></textarea>
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn btn-dark">Submit Report</button>
+        <a asp-action="Index" class="btn btn-secondary ms-2">Back to Home</a>
+    </form>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
