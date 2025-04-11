@@ -18,6 +18,16 @@ namespace WSRS_Formators.Controllers
             return View();
         }
 
+        public IActionResult WSRSEmp()
+        {
+            return View();
+        }
+
+        public IActionResult GoodMoralCertificate()
+        {
+            return View();
+        }
+
         public IActionResult Privacy()
         {
             return View();
