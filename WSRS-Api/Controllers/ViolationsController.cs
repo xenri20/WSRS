@@ -18,9 +18,9 @@ namespace WSRS_Api.Controllers
         }
 
         [HttpGet("{studentNumber}")]
-        public async Task<ActionResult<ReportEncodedDto>> GetStudentViolations(int studentNumber)
+        public async Task<ActionResult<ReportEncodedDto>> GetViolationsByStudentNumber(int studentNumber)
         {
-            var violations = await _repository.GetViolationsByStudentNumber(studentNumber);
+            var violations = await _repository.GetByIdAsync(studentNumber);
 
             // Something actually went wrong if this happened
             if (violations == null) return NotFound();

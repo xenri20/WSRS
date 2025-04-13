@@ -14,7 +14,7 @@ public class ViolationRepository : IViolationRepository
         _context = context;
     }
 
-    public async Task<IEnumerable<ReportEncodedDto>> GetViolationsByStudentNumber(int studentNumber)
+    public async Task<IEnumerable<ReportEncodedDto>> GetByIdAsync(int studentNumber)
     {
         try
         {
