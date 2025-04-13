@@ -2,14 +2,15 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WSRS_Formators.Data;
 using WSRS_Formators.Models;
+using WSRS_Student.Data;
 
 namespace WSRS_Formators.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly EmployeeDbContext _context;
+        private readonly AzureDbContext _context;
 
-        public HomeController(EmployeeDbContext context)
+        public HomeController(AzureDbContext context)
         {
             _context = context;
         }
@@ -53,7 +54,6 @@ namespace WSRS_Formators.Controllers
                 ViewBag.NotFound = true;
                 return View(new StudentRecordViewModel()); 
             }
-
 
             var viewModel = new StudentRecordViewModel
             {
