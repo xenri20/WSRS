@@ -1,4 +1,6 @@
 ﻿@model Student
+@using WSRS_Student.Helper
+
 @{
     ViewData["Title"] = "Violations";
 }
@@ -23,7 +25,7 @@
                 </tr>
             </thead>
             <tbody>
-                @if (!Model.ReportsEncoded.Any() && !Model.TrafficReportsEncoded.Any())
+                @if (Model?.ReportsEncoded?.Any() != true && Model?.TrafficReportsEncoded?.Any() != true)
                 {
                     <tr>
                         <td colspan="5" class="text-center">No records to show</td>
@@ -33,33 +35,29 @@
                 {
                     var index = 0;
 
-                    if (Model.ReportsEncoded.Any())
+                    if (Model.ReportsEncoded?.Any() == true)
                     {
                         @foreach (var item in Model.ReportsEncoded)
                         {
                             <tr>
                                 <th scope="row">@(++index)</th>
                                 <td>@item.CommissionDate</td>
-                                @* <td>@item.Offense.Classification</td> *@
-                                <td>@item.OffenseId</td>
-                                @* <td>@item.Offense.Nature</td> *@
-                                <td>Nature of the offense</td>
+                                <td>@item.Offense.Classification.GetDisplayName()</td>
+                                <td>@item.Offense.Nature</td>
                                 <td>@item.Sanction</td>
                             </tr>
                         }
                     }
 
-                    if (Model.TrafficReportsEncoded.Any())
+                    if (Model.TrafficReportsEncoded?.Any() == true)
                     {
                         @foreach (var item in Model.TrafficReportsEncoded)
                         {
                             <tr>
                                 <th scope="row">@(++index)</th>
                                 <td>@item.CommissionDate</td>
-                                @* <td>@item.Offense.Classification</td> *@
-                                <td>@item.OffenseId</td>
-                                @* <td>@item.Offense.Nature</td> *@
-                                <td>Nature of the offense</td>
+                                <td>@item.Offense.Classification.GetDisplayName()</td>
+                                <td>@item.Offense.Nature</td>
                                 <td>@item.Remarks</td>
                             </tr>
                         }

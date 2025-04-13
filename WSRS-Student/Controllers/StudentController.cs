@@ -1,37 +1,37 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Security.Claims;
 using WSRS_Student.Data;
 
 namespace WSRS_Student.Controllers
 {
     [Authorize]
-    [Route("student/student")]
     public class StudentController : Controller
     {
+        private readonly AzureDbContext _azureContext;
 
-        private readonly ApplicationDbContext _context;
-
-        public StudentController(ApplicationDbContext context)
+        public StudentController(AzureDbContext azureContext)
         {
-            _context = context;
+            _azureContext = azureContext;
         }
 
-        [HttpGet("")]
-        public IActionResult Violations()
+        public async Task<IActionResult> Violations()
         {
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var studentNumberClaim = User.FindFirst("StudentNumber")?.Value;
 
-            var student = _context.Students
+            if (string.IsNullOrEmpty(studentNumberClaim) || !int.TryParse(studentNumberClaim, out var studentNumber))
+                return Unauthorized();
+
+            /*
+             This is assuming we directly query against the context, instead
+             of having an external api
+            */
+            var student = await _azureContext.Students
                 .Include(s => s.ReportsEncoded)
+                    .ThenInclude(r => r.Offense)
                 .Include(s => s.TrafficReportsEncoded)
-                .FirstOrDefaultAsync(s => s.IdentityUserId == userId);
-
-            if (student == null)
-            {
-                return NotFound(); // Or redirect to an error page
-            }
+                    .ThenInclude(tr => tr.Offense)
+                .FirstOrDefaultAsync(s => s.StudentNumber == studentNumber);
 
             return View(student);
         }
