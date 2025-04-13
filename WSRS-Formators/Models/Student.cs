@@ -11,7 +11,7 @@ namespace WSRS_Formators.Models
         public int StudentNumber { get; set; }
         public string LastName { get; set; }
         public string FirstName { get; set; }
-        public string IdentityUserId { get; set; }
+        //public string IdentityUserId { get; set; }
 
         // Navigation Properties
         public ICollection<ReportEncoded> ReportsEncoded { get; set; }
