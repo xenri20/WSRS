@@ -3,12 +3,12 @@
     ViewData["Title"] = "Student Records";
 }
 
-
 <div class="container mt-5">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2>Student Violation Reports</h2>
-        <a asp-action="CreateReport" class="btn btn-success">+ Create Violation</a>
-    </div>
+        </div>
+</div>
+
 <div class="container text-center mt-4">
         <img src="~/images/logo.png" alt="DLSU-D Logo" style="width: 100px;" />
     <h3><strong>Greetings, Mr. Figueroa!</strong></h3>
@@ -97,9 +97,15 @@
                 </table>
             }
 
-            <a asp-action="Create" asp-controller="ReportViolation" class="btn btn-dark mt-3">Create Report</a>
+        <a asp-action="CreateReport" class="btn btn-success">Create Report</a>
         }
-    
+    @if (ViewBag.NotFound == true)
+    {
+        <div>
+            <a asp-action="CreateReport" class="btn btn-success">+ Create Violation</a>
+        </div>
+    }
+
 
     <footer class="mt-5">
         <p>

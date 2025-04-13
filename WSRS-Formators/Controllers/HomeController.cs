@@ -45,14 +45,14 @@ namespace WSRS_Formators.Controllers
             return View(report);
         }
         [HttpPost]
-        public IActionResult WSRSEmp(int studentNumber)
+        public async Task<IActionResult> WSRSEmp(int studentNumber)
         {
-            var student = _context.Students.FirstOrDefault(s => s.StudentNumber == studentNumber);
+            var student = await _context.Students.FirstOrDefaultAsync(s => s.StudentNumber == studentNumber);
 
             if (student == null)
             {
                 ViewBag.NotFound = true;
-                return View(new StudentRecordViewModel()); 
+                return View(new StudentRecordViewModel());
             }
 
             var viewModel = new StudentRecordViewModel
@@ -73,9 +73,9 @@ namespace WSRS_Formators.Controllers
 
 
         [HttpPost]
-        public IActionResult Index(int studentNumber)
+        public async Task<IActionResult> Index(int studentNumber)
         {
-             var student = _context.Students.FirstOrDefault(s => s.StudentNumber == studentNumber);
+            var student = await _context.Students.FirstOrDefaultAsync(s => s.StudentNumber == studentNumber);
 
             if (student == null)
             {
@@ -83,15 +83,15 @@ namespace WSRS_Formators.Controllers
                 return View();
             }
 
-            var reports = _context.ReportsEncoded
+            var reports = await _context.ReportsEncoded
                 .Include(r => r.Offense)
                 .Where(r => r.StudentNumber == studentNumber)
-                .ToList();
+                .ToListAsync();
 
-            var trafficReports = _context.TrafficReportsEncoded
+            var trafficReports = await _context.TrafficReportsEncoded
                 .Include(t => t.Offense)
                 .Where(t => t.StudentNumber == studentNumber)
-                .ToList();
+                .ToListAsync();
 
             var model = new StudentRecordViewModel
             {
