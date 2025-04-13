@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>WSRS_Formators</RootNamespace>
+    <UserSecretsId>a63d8fb1-e80b-42ed-9bff-90e46d0b4f1f</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
