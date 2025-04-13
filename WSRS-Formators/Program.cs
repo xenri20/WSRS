@@ -1,7 +1,27 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using WSRS_Formators.Data;
+using WSRS_Student.Data;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var connectionStringLocal = builder.Configuration.GetConnectionString("AzureStudents");
+var connectionStringAzure = builder.Configuration.GetConnectionString("AzureFormator");
+
+if (string.IsNullOrEmpty(connectionStringLocal) || string.IsNullOrEmpty(connectionStringAzure))
+{
+    throw new InvalidOperationException("Connection strings for Local or Azure not found");
+}
+
+builder.Services.AddDbContext<AzureDbContext>(options =>
+    options.UseSqlServer(connectionStringLocal));
+
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/Account/Login";
+    options.ExpireTimeSpan = TimeSpan.FromHours(2);
+    options.SlidingExpiration = true;
+});
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
