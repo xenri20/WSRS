@@ -4,14 +4,22 @@ using WSRS_Api.Interfaces;
 using WSRS_Api.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
-// var connectionString = builder.Configuration.GetConnectionString("Local") ?? throw new InvalidOperationException("Connection string 'Local' not found.");
-var connectionString = builder.Configuration.GetConnectionString("AzureSQL") ?? throw new InvalidOperationException("Connection string 'AzureSQL' not found.");
+
+if (builder.Environment.IsProduction())
+{
+    var connectionString = builder.Configuration.GetConnectionString("Azure") ?? throw new InvalidOperationException("Connection string 'AzureSQL' not found.");
+    builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
+}
+else if (builder.Environment.IsDevelopment())
+{
+    // var connectionString = builder.Configuration.GetConnectionString("Local") ?? throw new InvalidOperationException("Connection string 'Local' not found.");
+    var connectionString = builder.Configuration.GetConnectionString("Azure") ?? throw new InvalidOperationException("Connection string 'AzureSQL' not found.");
+    builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
+}
 
 // Add services to the container.
 builder.Services.AddScoped<IViolationRepository, ViolationRepository>();
 // builder.Services.AddScoped<IViolationRepository, MockViolationRepository>();
-
-builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
