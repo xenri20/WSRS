@@ -8,9 +8,11 @@ namespace WSRS_Api.Repositories;
 public class ViolationRepository : IViolationRepository
 {
     private readonly ApplicationDbContext _context;
+    private readonly ILogger<ViolationRepository> _logger;
 
-    public ViolationRepository(ApplicationDbContext context)
+    public ViolationRepository(ILogger<ViolationRepository> logger, ApplicationDbContext context)
     {
+        _logger = logger;
         _context = context;
     }
 
@@ -32,8 +34,9 @@ public class ViolationRepository : IViolationRepository
                 })
                 .ToListAsync();
         }
-        catch
+        catch (Exception ex)
         {
+            _logger.LogWarning(ex.Message);
             return Enumerable.Empty<ReportEncodedDto>();
         }
     }
