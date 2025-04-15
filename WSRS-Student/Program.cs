@@ -5,7 +5,7 @@ using WSRS_Student.Models;
 using WSRS_Student.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
-var environment = builder.Environment.IsDevelopment() ? "Local" : "Azure";
+
 var connectionStringLocal = builder.Configuration.GetConnectionString("Local");
 var connectionStringAzure = builder.Configuration.GetConnectionString("Azure");
 
