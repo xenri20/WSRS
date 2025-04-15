@@ -8,9 +8,11 @@ namespace WSRS_Student.Controllers
     public class StudentController : Controller
     {
         private readonly IHttpClientFactory _httpClientFactory;
+        private readonly ILogger<StudentController> _logger;
 
-        public StudentController(IHttpClientFactory httpClientFactory)
+        public StudentController(ILogger<StudentController> logger, IHttpClientFactory httpClientFactory)
         {
+            _logger = logger;
             _httpClientFactory = httpClientFactory;
         }
 
@@ -32,10 +34,14 @@ namespace WSRS_Student.Controllers
                     var violations = await response.Content.ReadFromJsonAsync<AllReportsDto>();
                     return View(violations);
                 }
+                else 
+                {
+                    _logger.LogInformation($"Error Status: {response.StatusCode}");
+                }
             }
             catch (Exception ex)
             {
-                // TODO add logger for exception here
+                _logger.LogError($"Something went wrong getting the requested data. {ex.Message}");
             }
 
             return View(new AllReportsDto
