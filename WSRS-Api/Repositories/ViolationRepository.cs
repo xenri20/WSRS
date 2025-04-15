@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Extensions;
 using WSRS_Api.Data;
 using WSRS_Api.Dtos;
 using WSRS_Api.Interfaces;
@@ -26,10 +27,14 @@ public class ViolationRepository : IViolationRepository
                     .Include(r => r.Offense)
                 .Select(r => new ReportEncodedDto
                 {
-                    OffenseId = r.OffenseId,
+                    Offense = new OffenseDto 
+                    {
+                        Classification = r.Offense.Classification.GetDisplayName(),
+                        Nature = r.Offense.Nature,
+                        Description = r.Description
+                    },
                     CommissionDate = r.CommissionDate,
                     Sanction = r.Sanction,
-                    Description = r.Description,
                 })
                 .ToListAsync();
         }

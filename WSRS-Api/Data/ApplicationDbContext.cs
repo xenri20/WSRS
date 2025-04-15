@@ -8,4 +8,5 @@ public class ApplicationDbContext : DbContext
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
     public DbSet<ReportEncoded> ReportsEncoded { get; set; }
+    public DbSet<Offense> Offenses { get; set; }
 }
