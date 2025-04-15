@@ -1,5 +1,6 @@
-﻿@model Student
-@using WSRS_Student.Helper
+﻿@using WSRS_Api.Dtos;
+
+@model AllReportsDto;
 
 @{
     ViewData["Title"] = "Violations";
@@ -25,7 +26,7 @@
                 </tr>
             </thead>
             <tbody>
-                @if (Model?.ReportsEncoded?.Any() != true && Model?.TrafficReportsEncoded?.Any() != true)
+                @if (Model.Violations?.Any() != true && Model?.TrafficViolations?.Any() != true)
                 {
                     <tr>
                         <td colspan="5" class="text-center">No records to show</td>
@@ -35,28 +36,28 @@
                 {
                     var index = 0;
 
-                    if (Model.ReportsEncoded?.Any() == true)
+                    if (Model.Violations?.Any() == true)
                     {
-                        @foreach (var item in Model.ReportsEncoded)
+                        @foreach (var item in Model.Violations)
                         {
                             <tr>
                                 <th scope="row">@(++index)</th>
                                 <td>@item.CommissionDate</td>
-                                <td>@item.Offense.Classification.GetDisplayName()</td>
+                                <td>@item.Offense.Classification</td>
                                 <td>@item.Offense.Nature</td>
                                 <td>@item.Sanction</td>
                             </tr>
                         }
                     }
 
-                    if (Model.TrafficReportsEncoded?.Any() == true)
+                    if (Model.TrafficViolations?.Any() == true)
                     {
-                        @foreach (var item in Model.TrafficReportsEncoded)
+                        @foreach (var item in Model.TrafficViolations)
                         {
                             <tr>
                                 <th scope="row">@(++index)</th>
                                 <td>@item.CommissionDate</td>
-                                <td>@item.Offense.Classification.GetDisplayName()</td>
+                                <td>@item.Offense.Classification</td>
                                 <td>@item.Offense.Nature</td>
                                 <td>@item.Remarks</td>
                             </tr>
