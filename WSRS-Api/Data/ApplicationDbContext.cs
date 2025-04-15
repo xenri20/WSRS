@@ -9,4 +9,5 @@ public class ApplicationDbContext : DbContext
 
     public DbSet<ReportEncoded> ReportsEncoded { get; set; }
     public DbSet<Offense> Offenses { get; set; }
+    public DbSet<TrafficReportEncoded> TrafficReportsEncoded { get; set; }
 }

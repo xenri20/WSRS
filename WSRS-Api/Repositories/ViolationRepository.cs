@@ -17,31 +17,59 @@ public class ViolationRepository : IViolationRepository
         _context = context;
     }
 
-    public async Task<IEnumerable<ReportEncodedDto>> GetByIdAsync(int studentNumber)
+    public async Task<AllReportsDto> GetByIdAsync(int studentNumber)
     {
         try
         {
-            return await _context.ReportsEncoded
+            var violations = await _context.ReportsEncoded
                 .AsNoTracking()
                 .Where(r => r.StudentNumber == studentNumber)
                     .Include(r => r.Offense)
                 .Select(r => new ReportEncodedDto
                 {
-                    Offense = new OffenseDto 
+                    Offense = new OffenseDto
                     {
                         Classification = r.Offense.Classification.GetDisplayName(),
                         Nature = r.Offense.Nature,
-                        Description = r.Description
                     },
+                    Description = r.Description,
                     CommissionDate = r.CommissionDate,
                     Sanction = r.Sanction,
                 })
                 .ToListAsync();
+
+            var trafficViolations = await _context.TrafficReportsEncoded
+                .AsNoTracking()
+                .Where(tr => tr.StudentNumber == studentNumber)
+                    .Include(tr => tr.Offense)
+                .Select(tr => new TrafficReportEncodedDto
+                {
+                    Offense = new OffenseDto
+                    {
+                        Classification = tr.Offense.Classification.GetDisplayName(),
+                        Nature = tr.Offense.Nature,
+                    },
+                    CommissionDate = tr.CommissionDate,
+                    Remarks = tr.Remarks,
+                })
+                .ToListAsync();
+
+            return new AllReportsDto
+            {
+                Violations = violations,
+                TrafficViolations = trafficViolations
+            };
         }
         catch (Exception ex)
         {
             _logger.LogWarning(ex.Message);
-            return Enumerable.Empty<ReportEncodedDto>();
         }
+
+        // return an empty list just in case something goes wrong
+        return new AllReportsDto
+        {
+            Violations = [],
+            TrafficViolations = []
+        };
     }
 }

@@ -4,5 +4,5 @@ namespace WSRS_Api.Interfaces;
 
 public interface IViolationRepository
 {
-    Task<IEnumerable<ReportEncodedDto>> GetByIdAsync(int studentNumber);
+    Task<AllReportsDto> GetByIdAsync(int studentNumber);
 }
