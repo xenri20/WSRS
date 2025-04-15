@@ -26,11 +26,10 @@ public class ViolationRepository : IViolationRepository
                     .Include(r => r.Offense)
                 .Select(r => new ReportEncodedDto
                 {
-                    Id = r.Id,
                     OffenseId = r.OffenseId,
                     CommissionDate = r.CommissionDate,
                     Sanction = r.Sanction,
-                    Description = r.Description
+                    Description = r.Description,
                 })
                 .ToListAsync();
         }
