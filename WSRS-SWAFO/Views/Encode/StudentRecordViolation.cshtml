@@ -28,50 +28,54 @@
                         </svg>
                     </button>
                 </form>
-                <table id="preview-records">
-                    <thead>
-                        <tr>
-                            <th>Student Number</th>
-                            <th>Last Name</th>
-                            <th>First Name</th>
-                            <th>Operation</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if (Model == null || !Model.Any())
-                        {
-                            <tr class="empty">
-                                <td colspan="4" rowspan="10">
-                                    <div>No records found.</div>
-                                    <a asp-controller="Encode" asp-action="CreateStudentRecord" class="btn btn-create">
-                                        Create Student Data
-                                    </a>
-                                </td>
+
+                <div class="table-responsive">
+                    <table id="preview-records">
+                        <thead>
+                            <tr>
+                                <th>Student Number</th>
+                                <th>Last Name</th>
+                                <th>First Name</th>
+                                <th>Operation</th>
                             </tr>
-                        }
-                        else
-                        {
-                            foreach (var student in Model.ToList())
+                        </thead>
+                        <tbody>
+                            @if (Model == null || !Model.Any())
                             {
-                                <tr>
-                                    <td>@student.StudentNumber</td>
-                                    <td>@student.LastName</td>
-                                    <td>@student.FirstName</td>
-                                    <td>
-                                        <a asp-controller="Encode"
-                                           asp-action="RedirectToView"
-                                           asp-route-studentNumber="@student.StudentNumber"
-                                           asp-route-firstName="@student.FirstName"
-                                           asp-route-lastName="@student.LastName"
-                                           class="btn btn-select">
-                                            Select
+                                <tr class="empty">
+                                    <td colspan="4" rowspan="10">
+                                        <div>No records found.</div>
+                                        <a asp-controller="Encode" asp-action="CreateStudentRecord" class="btn btn-create">
+                                            Create Student Data
                                         </a>
                                     </td>
                                 </tr>
                             }
-                        }
-                    </tbody>
-                </table>
+                            else
+                            {
+                                foreach (var student in Model.ToList())
+                                {
+                                    <tr>
+                                        <td>@student.StudentNumber</td>
+                                        <td>@student.LastName</td>
+                                        <td>@student.FirstName</td>
+                                        <td>
+                                            <a asp-controller="Encode"
+                                               asp-action="RedirectToView"
+                                               asp-route-studentNumber="@student.StudentNumber"
+                                               asp-route-firstName="@student.FirstName"
+                                               asp-route-lastName="@student.LastName"
+                                               class="btn btn-select">
+                                                Select
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
             </div>
         </div>
     </div>

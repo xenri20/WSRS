@@ -30,7 +30,7 @@ h2 {
     gap: 1rem;
     padding: 1.5rem;
     height: auto;
-    height: auto;
+    overflow-x: scroll;
 }
 
 .pane-structure {
