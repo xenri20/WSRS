@@ -118,7 +118,6 @@ input[type="number"] {
     text-decoration: none;
     text-align: center;
     padding: 0.25em 1em;
-    font-size: 16px;
     font-family: var(--medium);
     cursor: pointer;
     color: black;
@@ -325,6 +324,6 @@ table tbody tr.empty {
     gap: 0.75rem;
     align-items: center;
     margin-bottom: 1rem;
-    height: 2.25rem;
+    height: 2.5rem;
 }
 
