@@ -312,3 +312,12 @@ table tbody tr.empty {
     gap: 0.5rem;
 }
 
+/* TITLE HEADING WITH A BUTTON */
+.title {
+    display: inline-flex;
+    gap: 0.75rem;
+    align-items: center;
+    margin-bottom: 1rem;
+    height: 2.25rem;
+}
+

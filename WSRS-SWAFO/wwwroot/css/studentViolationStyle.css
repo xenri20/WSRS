@@ -52,17 +52,6 @@ h2 {
     justify-content: center;*/
 }
 
-.title {
-    display: flex;
-    gap: 0.75em;
-    align-items: center;
-    line-height: 0;
-}
-
-    .title > a {
-        cursor: pointer;
-    }
-
 .btn {
     align-self: flex-start;
 }
@@ -97,22 +86,21 @@ h2 {
     flex: 1;
 }
 
-#search-student {
+ SEARCH INPUT WITH BUTTOn */
+#searchForm {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    gap: 0.5em;
+    gap: 0.5rem;
+    height: 2.5rem;
 }
 
-.search-id {
+#searchForm > input {
     display: flex;
-    flex: 1;
-    min-width: 0;
-    font-family: var(--nav-link);
-    padding: 8px 16px;
+    flex-grow: 1;
+    padding: 0.5rem 1rem;
     border: 2px solid black;
-    border-radius: 32px;
-    box-sizing: border-box;
+    border-radius: 2rem;
 }
 
 /*.content-panel{
@@ -135,7 +123,6 @@ h2 {
     display: inline-flex;
     flex-direction: column;
     justify-content: center;
-    gap: 1em;
     width: 100%;
 }
 
