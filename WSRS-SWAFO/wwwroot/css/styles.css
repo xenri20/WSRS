@@ -321,7 +321,7 @@ table tbody tr.empty {
 
 /* TITLE HEADING WITH A BUTTON */
 .title {
-    display: inline-flex;
+    display: flex;
     gap: 0.75rem;
     align-items: center;
     margin-bottom: 1rem;
