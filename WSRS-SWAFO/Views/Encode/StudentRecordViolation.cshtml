@@ -40,7 +40,7 @@
                     <tbody>
                         @if (Model == null || !Model.Any())
                         {
-                            <tr>
+                            <tr class="empty">
                                 <td colspan="4" rowspan="10">
                                     <div>No records found.</div>
                                     <a asp-controller="Encode" asp-action="CreateStudentRecord" class="btn btn-create">

@@ -8,56 +8,6 @@
     margin: 1rem auto;
 }
 
-/* GENERIC TABLE */
-table {
-    width: 100%;
-    border: 2px solid black;
-    border-radius: 12px;
-    border-collapse: separate;
-    border-spacing: 0;
-    font-family: var(--light);
-    overflow: hidden;
-}
-
-table th,
-table td {
-    padding: 0.5rem;
-}
-
-table td.long {
-    width: 35ch;
-}
-
-table thead {
-    background-color: black;
-    color: white;
-    display: table-header-group;
-}
-
-table thead a {
-    text-decoration: none;
-    color: white;
-}
-
-table thead a:hover {
-    color: white;
-    filter: brightness(95%);
-}
-
-table tbody {
-    overflow-y: auto;
-    height: 100%;
-}
-
-table tbody tr:hover {
-    background-color: #eee;
-}
-
-table tbody tr.empty {
-    background-color: inherit;
-    text-align: center;
-}
-
 /* GENERAL */
 .title {
     display: flex;
