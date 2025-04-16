@@ -8,12 +8,6 @@
     margin: 1rem auto;
 }
 
-.panel {
-    border: 2px solid black;
-    border-radius: 1rem;
-    padding: 1.5rem;
-}
-
 /* EDIT PAGE */
 #edit {
     width: 100%;

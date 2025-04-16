@@ -8,101 +8,103 @@
 @section customHead {
     <link rel="stylesheet" href="~/css/studentViolationStyle.css" asp-append-version="true" />
 }
-<form id="record-violation" asp-controller="Encode" asp-action="CreateTrafficReport" method="post">
-    <div class="title">
-        <a asp-controller="Encode" asp-action="StudentRecordViolation" class="btn-function">
-            <svg width="32" height="32" viewBox="0 0 43 43" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M16 22L24 14" stroke="black" stroke-width="2" stroke-linecap="round" />
-                <path d="M16 22L24 30" stroke="black" stroke-width="2" stroke-linecap="round" />
-            </svg>
-        </a>
-        <h2>Record Violation</h2>
-    </div>
-    <div class="content-panel student-violation">
-        <div id="input-panel">
-            <div id="student-information">
-                @* <div class="label-header" asp-for="StudentNumber">Student Number: <span class="info">@Model.StudentNumber</span></div> *@
-                <input hidden asp-for="StudentNumber" value="@Model.StudentNumber" readonly />
-                @* <div class="label-header">Student Name: <span class="info">@Model.Student.FirstName @Model.Student.LastName</span></div> *@
-                <h3>Student Information</h3>
-                <dl>
-                    <dt>Student Number:</dt>
-                    <dd>@Model.StudentNumber</dd>
-                    <dt>Student Name:</dt>
-                    <dd>@Model.Student.FirstName @Model.Student.LastName</dd>
-                </dl>
-            </div>
-            <div class="pane-structure">
-                <div class="left-content-pane">
-                    <div class="input-wrapper">
-                        <select asp-for="CollegeID" class="input" autocomplete="College" aria-required="true">
-                            <option disabled hidden selected>-- Select an option --</option>
-                            @foreach (var item in ViewBag.Colleges)
-                            {
-                                <option value="@item.CollegeID">@item.CollegeID</option>
-                            }
-                        </select>
-                        <label class="label">College<span>*</span></label>
-                        <span class="text-danger"></span>
-                    </div>
-                    <div class="input-wrapper">
-                        <input asp-for="CommissionDate" type="date" class="input" value="@DateTime.Now" autocomplete="dateOfCommission" aria-required="true" />
-                        <label class="label"><span>*</span></label>
-                        <span class="text-danger"></span>
-                    </div>
-                    <div class="input-wrapper">
-                        <select class="input" id="offenseClassification" aria-required="true">
-                            <option disabled hidden selected>-- Select an option --</option>
-                            @foreach (var item in Html.GetEnumSelectList<OffenseClassification>().Where(e => e.Value == "2" || e.Value == "3"))
-                            {
-                                <option value="@item.Value">@item.Text</option>
-                            }
-                        </select>
-                        <label class="label">Classification of Offense<span>*</span></label>
-                        <span class="text-danger"></span>
-                    </div>
-                    <div class="input-wrapper">
-                        <select asp-for="OffenseId" class="input" id="offenseNature" aria-required="true">
-                            <option disabled hidden selected>-- Select an option --</option>
-                        </select>
-                        <label class="label">Nature of Offense<span>*</span></label>
-                        <span class="text-danger"></span>
-                    </div>
-                    <div class="input-wrapper">
-                        <input asp-for="PlateNumber" type="text" class="input" autocomplete="PlateNumber" aria-required="true" />
-                        <label class="label">Plate Number<span>*</span></label>
-                        <span class="text-danger"></span>
-                    </div>
-                </div>
-                <div class="right-content-pane">
-                    <div class="input-wrapper">
-                        <input asp-for="Remarks" type="text" class="input description" autocomplete="Remarks" aria-required="true" />
-                        <label class="label">Remarks</label>
-                        <span class="text-danger"></span>
-                    </div>
-                    <div class="input-wrapper">
-                        <input asp-for="Place" type="text" class="input" autocomplete="Place" aria-required="true" />
-                        <label class="label">Place</label>
-                        <span class="text-danger"></span>
-                    </div>
-                    <div class="input-wrapper">
-                        <input asp-for="ORNumber" type="number" class="input" autocomplete="ORNumber" aria-required="true" />
-                        <label class="label">Official Receipt Number</label>
-                        <span class="text-danger"></span>
-                    </div>
-                    <div class="input-wrapper">
-                        <input asp-for="DatePaid" type="date" class="input" value="@DateTime.Now" autocomplete="Date Paid" aria-required="true" />
-                        <label class="label">Date Paid</label>
-                        <span class="text-danger"></span>
-                    </div>
-                </div>
-            </div>
-            <button type="submit" class="btn btn-submit">
-                Submit
-            </button>
+
+<div class="title">
+    <a asp-controller="Encode" asp-action="StudentRecordViolation" class="btn-function">
+        <svg width="32" height="32" viewBox="0 0 43 43" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M16 22L24 14" stroke="black" stroke-width="2" stroke-linecap="round" />
+            <path d="M16 22L24 30" stroke="black" stroke-width="2" stroke-linecap="round" />
+        </svg>
+    </a>
+    <h2>Step 3</h2>
+</div>
+
+<p>Record and encode the violation in the system</p>
+
+<div class="panel">
+    <form id="record-violation" asp-controller="Encode" asp-action="CreateTrafficReport" method="post">
+        <div id="student-information">
+            @* <div class="label-header" asp-for="StudentNumber">Student Number: <span class="info">@Model.StudentNumber</span></div> *@
+            <input hidden asp-for="StudentNumber" value="@Model.StudentNumber" readonly />
+            @* <div class="label-header">Student Name: <span class="info">@Model.Student.FirstName @Model.Student.LastName</span></div> *@
+            <h3>Student Information</h3>
+            <dl>
+                <dt>Student Number:</dt>
+                <dd>@Model.StudentNumber</dd>
+                <dt>Student Name:</dt>
+                <dd>@Model.Student.FirstName @Model.Student.LastName</dd>
+            </dl>
         </div>
-    </div>
-</form>
+        <div class="pane-structure">
+            <div class="content-pane">
+                <div class="input-wrapper">
+                    <select asp-for="CollegeID" class="input" autocomplete="College" aria-required="true">
+                        <option disabled hidden selected>-- Select an option --</option>
+                        @foreach (var item in ViewBag.Colleges)
+                        {
+                            <option value="@item.CollegeID">@item.CollegeID</option>
+                        }
+                    </select>
+                    <label class="label">College<span>*</span></label>
+                    <span class="text-danger"></span>
+                </div>
+                <div class="input-wrapper">
+                    <input asp-for="CommissionDate" type="date" class="input" value="@DateTime.Now" autocomplete="dateOfCommission" aria-required="true" />
+                    <label class="label"><span>*</span></label>
+                    <span class="text-danger"></span>
+                </div>
+                <div class="input-wrapper">
+                    <select class="input" id="offenseClassification" aria-required="true">
+                        <option disabled hidden selected>-- Select an option --</option>
+                        @foreach (var item in Html.GetEnumSelectList<OffenseClassification>().Where(e => e.Value == "2" || e.Value == "3"))
+                        {
+                            <option value="@item.Value">@item.Text</option>
+                        }
+                    </select>
+                    <label class="label">Classification of Offense<span>*</span></label>
+                    <span class="text-danger"></span>
+                </div>
+                <div class="input-wrapper">
+                    <select asp-for="OffenseId" class="input" id="offenseNature" aria-required="true">
+                        <option disabled hidden selected>-- Select an option --</option>
+                    </select>
+                    <label class="label">Nature of Offense<span>*</span></label>
+                    <span class="text-danger"></span>
+                </div>
+                <div class="input-wrapper">
+                    <input asp-for="PlateNumber" type="text" class="input" autocomplete="PlateNumber" aria-required="true" />
+                    <label class="label">Plate Number<span>*</span></label>
+                    <span class="text-danger"></span>
+                </div>
+            </div>
+            <div class="content-pane">
+                <div class="input-wrapper">
+                    <input asp-for="Remarks" type="text" class="input description" autocomplete="Remarks" aria-required="true" />
+                    <label class="label">Remarks</label>
+                    <span class="text-danger"></span>
+                </div>
+                <div class="input-wrapper">
+                    <input asp-for="Place" type="text" class="input" autocomplete="Place" aria-required="true" />
+                    <label class="label">Place</label>
+                    <span class="text-danger"></span>
+                </div>
+                <div class="input-wrapper">
+                    <input asp-for="ORNumber" type="number" class="input" autocomplete="ORNumber" aria-required="true" />
+                    <label class="label">Official Receipt Number</label>
+                    <span class="text-danger"></span>
+                </div>
+                <div class="input-wrapper">
+                    <input asp-for="DatePaid" type="date" class="input" value="@DateTime.Now" autocomplete="Date Paid" aria-required="true" />
+                    <label class="label">Date Paid</label>
+                    <span class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-submit">
+            Submit
+        </button>
+    </form>
+</div>
 
 @section Scripts {
     <script src="~/js/studentViolation.js"></script>

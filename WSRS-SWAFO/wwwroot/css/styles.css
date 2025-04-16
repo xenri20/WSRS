@@ -228,16 +228,15 @@ button.text-button {
     font-weight: 700;
 }
 
-.content-panel {
+/*.content-panel {
     display: flex;
     flex-direction: column;
-    align-items: center;
     justify-content: center;
     width: 100%;
     border: 2px solid black;
     border-radius: 16px;
 }
-
+*/
 dl {
     display: grid;
     grid-gap: 0.5rem 2rem;
@@ -327,3 +326,9 @@ table tbody tr.empty {
     height: 2.5rem;
 }
 
+/* A PANEL WITH BORDERS */
+.panel {
+    border: 2px solid black;
+    border-radius: 1rem;
+    padding: 1.5rem;
+}
