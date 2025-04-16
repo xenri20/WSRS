@@ -50,6 +50,7 @@ h1 {
     background-clip: text;
     color: transparent;
     margin: 0;
+    font-weight: 600;
 }
 
     h1 > span {
@@ -60,6 +61,7 @@ h2 {
     width: fit-content;
     font-family: var(--medium);
     margin: 0;
+    font-weight: 600;
 }
 
 input:focus,
