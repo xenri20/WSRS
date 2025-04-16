@@ -33,10 +33,6 @@ h2 {
         gap: 5px;
     }
 
-        #panel-footer > button:hover img {
-            filter: invert(1);
-        }
-
         #panel-footer > button img {
             transform: scale(0.9);
             transition: filter 0.3s ease-in-out;

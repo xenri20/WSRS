@@ -55,8 +55,9 @@
                     <span class="text-danger"></span>
                 </div>
                 <div class="input-wrapper">
+                    @* TODO Later fix this date *@
                     <input asp-for="CommissionDate" type="date" class="input" value="@DateTime.Now" autocomplete="dateOfCommission" aria-required="true" />
-                    <label class="label"><span>*</span></label>
+                    <label class="label">Commission Date<span>*</span></label>
                     <span class="text-danger"></span>
                 </div>
                 <div class="input-wrapper">
@@ -107,7 +108,7 @@
                 </div>
             </div>
             </div>
-            <button type="submit" class="btn btn-submit">
+            <button type="submit" class="btn btn-submit dark-btn">
                 Submit
             </button>
         </div>

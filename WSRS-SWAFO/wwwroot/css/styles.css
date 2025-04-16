@@ -61,6 +61,12 @@ h2 {
     margin: 0;
 }
 
+input:focus,
+select:focus {
+    outline: 2px solid #007d3c;
+    outline-offset: 1px; 
+}
+
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
     -webkit-appearance: none;
@@ -91,9 +97,9 @@ input[type="number"] {
 
     .input-wrapper .label {
         position: absolute;
-        left: 16px;
-        top: 10px;
-        background-color: #fff;
+        top: -8px;
+        left: 15px;
+        background-color: white;
         font-size: 12px;
         padding: 0 4px;
         transition: all 0.15s ease-out;
@@ -102,38 +108,23 @@ input[type="number"] {
 
     .input-wrapper span {
         font-family: var(--medium);
-    }
-
-    .input-wrapper .input:focus + .label,
-    .input-wrapper .input:not(:placeholder-shown) + .label {
-        top: -8px;
-        left: 15px;
-        font-size: 12px;
-        background-color: #fff;
-    }
-
-    .input-wrapper .input:focus::placeholder {
-        color: transparent;
-    }
-
-    .input-wrapper span {
         color: red;
     }
 
 .btn {
     justify-content: center;
-        align-items: center;
-        text-decoration: none;
-        text-align: center;
-        padding: 0.25em 1em;
-        font-size: 16px;
-        font-family: var(--medium);
-        cursor: pointer;
-        color: black;
-        background-color: transparent;
-        border: 2px solid black;
-        border-radius: 32px;
-        transition: color 0.2s ease-in, background-color 0.2s ease-in;
+    align-items: center;
+    text-decoration: none;
+    text-align: center;
+    padding: 0.25em 1em;
+    font-size: 16px;
+    font-family: var(--medium);
+    cursor: pointer;
+    color: black;
+    background-color: transparent;
+    border: 2px solid black;
+    border-radius: 32px;
+    transition: color 0.2s ease-in, background-color 0.2s ease-in;
 }
 
     .btn:hover,
@@ -143,14 +134,20 @@ input[type="number"] {
         color: white;
     }
 
-
     .btn:focus {
         box-shadow: none;
+        background-color: black;
+        color: white;
     }
 
 .btn:focus-visible {
     outline: 2px solid black;
     outline-offset: 2px;
+}
+
+.btn:hover img,
+.btn:focus img {
+    filter: invert(1);
 }
 
 .btn-function {
@@ -162,12 +159,16 @@ input[type="number"] {
     align-items: center;
     justify-content: center;
     transition: all ease-in-out 0.15s;
+    background-color: white;
 }
 
+    .btn-function:focus-visible,
     .btn-function:hover {
         background-color: black;
+        color: white;
     }
 
+        .btn-function:focus-visible > svg path,
         .btn-function:hover > svg path {
             stroke: white;
         }
