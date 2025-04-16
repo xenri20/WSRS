@@ -8,15 +8,6 @@
     margin: 1rem auto;
 }
 
-/* ROW OF BUTTONS */
-.button-group {
-    display: flex;
-    flex-direction: row;
-    justify-content: start;
-    align-items: center;
-    gap: 0.5rem;
-}
-
 /* GENERIC TABLE */
 table {
     width: 100%;

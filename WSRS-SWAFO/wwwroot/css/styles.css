@@ -251,3 +251,13 @@ dd {
     margin: 0;
     grid-column-start: 2;
 }
+
+/* ROW OF BUTTONS */
+.button-group {
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
+    gap: 0.5rem;
+}
+
