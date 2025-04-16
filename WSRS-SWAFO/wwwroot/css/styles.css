@@ -8,6 +8,7 @@
     --medium: "Product Sans Medium Regular";
     --regular: "Product Sans Regular";
     --light: "Product Sans Light Regular";
+    font-size: 14px;
 }
 
 * {
@@ -140,7 +141,8 @@ input[type="number"] {
         color: white;
     }
 
-.btn:focus-visible {
+.btn:focus-visible,
+.btn-function:focus-visible {
     outline: 2px solid black;
     outline-offset: 2px;
 }
@@ -253,6 +255,10 @@ dd {
 }
 
 /* GENERIC TABLE */
+.table-responsive {
+    overflow-x: scroll;
+}
+
 table {
     width: 100%;
     border: 2px solid black;
@@ -267,6 +273,7 @@ table {
 table th,
 table td {
     padding: 0.5rem;
+    min-width: 14ch;
 }
 
 table td.long {
