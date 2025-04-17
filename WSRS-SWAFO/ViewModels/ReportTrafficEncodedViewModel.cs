@@ -6,20 +6,21 @@ namespace WSRS_SWAFO.ViewModels
 {
     public class ReportTrafficEncodedViewModel
     {
-        [Key]
         public int Id { get; set; }
-
-        [Required(ErrorMessage = "Select an Offense first!")]
-        [Display(Name = "Offense")]
-        [ForeignKey("Offense")]
-        public int OffenseId { get; set; }
-        public Offense Offense { get; set; } // Navigation Property
 
         [Required(ErrorMessage = "Student ID is required")]
         [Display(Name = "Student Number")]
         [ForeignKey("Student")]
         public int StudentNumber { get; set; }
         public Student Student { get; set; } // Navigation Property
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+
+        [Required(ErrorMessage = "Select an Offense first!")]
+        [Display(Name = "Offense")]
+        [ForeignKey("Offense")]
+        public int OffenseId { get; set; }
+        public Offense Offense { get; set; } // Navigation Property
 
         [Required(ErrorMessage = "College is required")]
         [Display(Name = "College")]

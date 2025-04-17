@@ -25,9 +25,6 @@
 <div class="panel">
     <form id="record-violation" asp-controller="Encode" asp-action="EncodeStudentViolation" method="post">
         <div id="student-information">
-            @* <div class="label-header" asp-for="StudentNumber">Student Number: <span class="info">@Model.StudentNumber</span></div> *@
-            <input hidden asp-for="StudentNumber" value="@Model.StudentNumber" readonly />
-            @* <div class="label-header">Student Name: <span class="info"></span></div> *@
             <h3>Student Information</h3>
             <dl>
                 <dt>Student Number:</dt>
@@ -35,8 +32,9 @@
                 <dt>Student Name:</dt>
                 <dd>@Model.FirstName @Model.LastName</dd>
             </dl>
-            @* <input hidden asp-for="FirstName" value="@Model.FirstName" readonly /> *@
-            @* <input hidden asp-for="LastName" value="@Model.LastName" readonly /> *@
+            <input hidden asp-for="StudentNumber" value="@Model.StudentNumber" readonly />
+            <input hidden asp-for="FirstName" value="@Model.FirstName" readonly />
+            <input hidden asp-for="LastName" value="@Model.LastName" readonly />
         </div>
         <div class="pane-structure">
             <div class="content-pane">
@@ -88,13 +86,13 @@
                     <span class="text-danger"></span>
                 </div>
                 <div class="input-wrapper">
-                    <input asp-for="Sanction" type="text" class="input" autocomplete="sanction" aria-required="true" />
-                    <label class="label">Sanction<span>*</span></label>
+                    <input asp-for="Description" type="text" class="input description" autocomplete="description" aria-required="true" />
+                    <label class="label">Description</label>
                     <span class="text-danger"></span>
                 </div>
                 <div class="input-wrapper">
-                    <input asp-for="Description" type="text" class="input description" autocomplete="description" aria-required="true" />
-                    <label class="label">Description</label>
+                    <input asp-for="Sanction" type="text" class="input" autocomplete="sanction" aria-required="true" />
+                    <label class="label">Sanction<span>*</span></label>
                     <span class="text-danger"></span>
                 </div>
                 <div class="input-wrapper">
@@ -110,7 +108,7 @@
                 </div>
             </div>
         </div>
-        <button type="submit" class="btn btn-submit dark-btn">
+        <button type="submit" class="btn dark-btn">
             Submit
         </button>
     </form>
