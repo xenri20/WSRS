@@ -4,7 +4,10 @@
 @{
     Layout = "_EncodeLayout";
     ViewData["Title"] = "Student Violation";
+
+    string today = DateOnly.FromDateTime(DateTime.Now).ToString("yyyy-MM-dd");
 }
+
 @section customHead {
     <link rel="stylesheet" href="~/css/studentViolationStyle.css" asp-append-version="true" />
 }
@@ -49,8 +52,8 @@
                     <span class="text-danger"></span>
                 </div>
                 <div class="input-wrapper">
-                    <input asp-for="CommissionDate" type="date" class="input" value="@DateTime.Now" autocomplete="dateOfCommission" aria-required="true" />
-                    <label class="label"><span>*</span></label>
+                    <input asp-for="CommissionDate" type="date" class="input" value="@today" autocomplete="dateOfCommission" aria-required="true" />
+                    <label class="label">Commission Date<span>*</span></label>
                     <span class="text-danger"></span>
                 </div>
                 <div class="input-wrapper">
