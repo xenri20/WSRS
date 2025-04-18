@@ -1,4 +1,4 @@
-﻿@using WSRS_SWAFO.ViewModels
+@using WSRS_SWAFO.ViewModels
 @model IQueryable<StudentRecordViewModel>
 @{
     Layout = "_EncodeLayout";
@@ -7,7 +7,7 @@
 @section customHead {
     <link rel="stylesheet" href="~/css/studentViolationStyle.css" asp-append-version="true" />
 }
-
+<partial name="_StudentModalPartial" />
 <div class="title">
     <a asp-action="EncodingMode" class="btn-function">
         <svg width="32" height="32" viewBox="0 0 43 43" fill="none" xmlns="http://www.w3.org/2000/svg">
