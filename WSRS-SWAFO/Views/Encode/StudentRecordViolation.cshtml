@@ -1,4 +1,4 @@
-@using WSRS_SWAFO.ViewModels
+﻿@using WSRS_SWAFO.ViewModels
 @model IQueryable<StudentRecordViewModel>
 @{
     Layout = "_EncodeLayout";
@@ -66,7 +66,11 @@
                         foreach (var student in Model.ToList())
                         {
                             <tr>
-                                <td>@student.StudentNumber</td>
+                                <td>
+                                    <button type="button" class="text-button" data-student="@student.StudentNumber" data-bs-toggle="modal" data-bs-target="#studentModal">
+                                        @student.StudentNumber
+                                </button>
+                                </td>
                                 <td>@student.LastName</td>
                                 <td>@student.FirstName</td>
                                 <td>
@@ -88,7 +92,7 @@
 
     </div>
 </div>
-
-@section Scripts {
-    <script src="~/js/studentViolation.js"></script>
+@section scripts {
+<script src="~/js/studentViolation.js"></script>
+<script src="~/js/components/studentModal.js" type="module" asp-append-version="true"></script>
 }
