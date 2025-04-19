@@ -9,12 +9,10 @@ namespace WSRS_Api.Controllers
     [ApiController]
     public class ReportController : ControllerBase
     {
-        private readonly ILogger<ReportController> _logger;
         private readonly ReportRepository _repository;
 
-        public ReportController(ILogger<ReportController> logger, ReportRepository repository)
+        public ReportController(ReportRepository repository)
         {
-            _logger = logger;
             _repository = repository;
         }
 
@@ -24,7 +22,7 @@ namespace WSRS_Api.Controllers
         {
             var postedStudentViolation = _repository.PostStudentViolation(FormatorId, Description, StudentNumber);
 
-if (postedStudentViolation == null) return NotFound();
+            if (postedStudentViolation == null) return NotFound();
 
             return Ok(postedStudentViolation);
         }
