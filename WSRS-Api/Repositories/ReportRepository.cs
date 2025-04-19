@@ -19,7 +19,9 @@ namespace WSRS_Api.Repositories
 
         public Task<ReportPendingDto> PostStudentViolation(string FormatorId, string Description, int StudentNumber)
         {
-            var reportPending = new ReportPendingDto
+            try
+            {
+                var reportPending = new ReportPendingDto
                 {
                     FormatorId = FormatorId,
                     Description = Description,
@@ -29,6 +31,11 @@ namespace WSRS_Api.Repositories
 
                 _context.ReportPending.Any(reportPending);
                 _context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex.Message);
+            }
         }
     }
 }
