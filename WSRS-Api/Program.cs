@@ -19,6 +19,8 @@ else if (builder.Environment.IsDevelopment())
 
 // Add services to the container.
 builder.Services.AddScoped<IViolationRepository, ViolationRepository>();
+builder.Services.AddScoped<ReportRepository>();
+
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
