@@ -4,6 +4,8 @@
 
 @{
     ViewData["Title"] = "Manage Records";
+
+    static string GetClassficationStyle(string classification) => classification.Split(" ")[0].ToLower();
 }
 
 
@@ -49,72 +51,79 @@
             </div>
         </form>
     </div>
-    <table id="recordsTable">
-        <thead>
-            <tr>
-                <th>
-                    <a asp-action="Index"
-                       asp-controller="Records"
-                       asp-route-sortOrder="@Model.CommissionDateSort"
-                       asp-route-currentFilter="@Model.CurrentFilter">
-                        @* TODO Place this action to a reversible icon *@
-                        Commission Date
-                    </a>
-                </th>
-                <th>Classification</th>
-                <th>Nature</th>
-                <th>Student Number</th>
-                <th>Name</th>
-                <th>College</th>
-                <th>Status</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @if (!Model.Pagination.Items.Any())
-            {
-                <tr class="empty">
-                    <td colspan="7">
-                        <div>No records found.</div>
-                        <form asp-controller="Encode" asp-action="StudentRecordViolation" method="post">
-                            <button type="submit" class="btn" name="violationType" value="Student Violation">
-                                Encode new record
-                            </button>
-                        </form>
-                    </td>
+
+    <div class="table-responsive">
+        <table id="recordsTable">
+            <thead>
+                <tr>
+                    <th>
+                        <a asp-action="Index"
+                           asp-controller="Records"
+                           asp-route-sortOrder="@Model.CommissionDateSort"
+                           asp-route-currentFilter="@Model.CurrentFilter">
+                            @* TODO Place this action to a reversible icon *@
+                            Commission Date
+                        </a>
+                    </th>
+                    <th>Classification</th>
+                    <th>Nature</th>
+                    <th>Student Number</th>
+                    <th>Name</th>
+                    <th>College</th>
+                    <th>Status</th>
+                    <th></th>
                 </tr>
-            }
-            else
-            {
-                @foreach (var record in Model.Pagination.Items)
+            </thead>
+            <tbody>
+                @if (!Model.Pagination.Items.Any())
                 {
-                    <tr>
-                        <td>@record.FormattedCommissionDate</td>
-                        <td>@record.OffenseClassification</td>
-                        <td class="long">@StringHelper.TruncateWithEllipsis(record.OffenseNature, 40)</td>
-                        <td>
-                            <button type="button" class="text-button" data-student="@record.StudentNumber" data-bs-toggle="modal" data-bs-target="#studentModal">
-                                @record.StudentNumber
-                            </button>
-                        </td>
-                        <td class="long">@record.Name</td>
-                        <td>@record.College</td>
-                        <td>@record.Status</td>
-                        <td>
-                            <a asp-action="Details" asp-route-id="@record.Id" class="btn-function">
-                                <svg width="32" height="32" viewBox="0 0 43 43" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <g transform="rotate(180, 21.5, 21.5)">
-                                        <path d="M16 22L24 14" stroke="black" stroke-width="2" stroke-linecap="round" />
-                                        <path d="M16 22L24 30" stroke="black" stroke-width="2" stroke-linecap="round" />
-                                    </g>
-                                </svg>
-                            </a>
+                    <tr class="empty">
+                        <td colspan="7">
+                            <div>No records found.</div>
+                            <form asp-controller="Encode" asp-action="StudentRecordViolation" method="post">
+                                <button type="submit" class="btn" name="violationType" value="Student Violation">
+                                    Encode new record
+                                </button>
+                            </form>
                         </td>
                     </tr>
                 }
-            }
-        </tbody>
-    </table>
+                else
+                {
+                    @foreach (var record in Model.Pagination.Items)
+                    {
+                        <tr>
+                            <td>@record.FormattedCommissionDate</td>
+                            <td>
+                                <span class="@GetClassficationStyle(record.OffenseClassification)">
+                                    @record.OffenseClassification
+                                </span>
+                            </td>
+                            <td class="long">@StringHelper.TruncateWithEllipsis(record.OffenseNature, 40)</td>
+                            <td>
+                                <button type="button" class="text-button" data-student="@record.StudentNumber" data-bs-toggle="modal" data-bs-target="#studentModal">
+                                    @record.StudentNumber
+                                </button>
+                            </td>
+                            <td class="long">@record.Name</td>
+                            <td>@record.College</td>
+                            <td>@record.Status</td>
+                            <td>
+                                <a asp-action="Details" asp-route-id="@record.Id" class="btn-function">
+                                    <svg width="32" height="32" viewBox="0 0 43 43" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <g transform="rotate(180, 21.5, 21.5)">
+                                            <path d="M16 22L24 14" stroke="black" stroke-width="2" stroke-linecap="round" />
+                                            <path d="M16 22L24 30" stroke="black" stroke-width="2" stroke-linecap="round" />
+                                        </g>
+                                    </svg>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
 
     @* Pagination Controls *@
     <div class="row mt-2 p-1">

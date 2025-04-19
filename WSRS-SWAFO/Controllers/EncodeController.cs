@@ -49,6 +49,8 @@ namespace WSRS_SWAFO.Controllers
                 .Take(5)
                 .ToListAsync();
 
+            ViewData["ViolationType"] = violationType == "Student Violation" ? "Regular" : "Traffic";
+
             // Returns queried list
             return View(students.AsQueryable());
         }
@@ -153,7 +155,7 @@ namespace WSRS_SWAFO.Controllers
 
             if (violationType == "Traffic Violation")
             {
-                return RedirectToAction("EncodeTrafficViolation", new
+                return RedirectToAction(nameof(EncodeTrafficViolation), new
                 {
                     studentNumber = studentNumber,
                     firstName = firstName,
@@ -293,6 +295,7 @@ namespace WSRS_SWAFO.Controllers
             };
 
             ViewBag.Colleges = _context.College.ToList();
+
             return View(studentInfo);
         }
         public IActionResult CreateOffense()

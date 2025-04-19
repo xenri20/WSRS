@@ -4,40 +4,42 @@
 @{
     Layout = "_EncodeLayout";
     ViewData["Title"] = "Student Violation";
+
+    string today = DateOnly.FromDateTime(DateTime.Now).ToString("yyyy-MM-dd");
 }
 
 @section customHead {
     <link rel="stylesheet" href="~/css/studentViolationStyle.css" asp-append-version="true" />
 }
-<form id="record-violation" asp-controller="Encode" asp-action="EncodeStudentViolation" method="post">
-    <div class="title">
-        <a asp-controller="Encode" asp-action="StudentRecordViolation" class="btn-back">
-            <svg width="32" height="32" viewBox="0 0 43 43" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="21.5" cy="21.5" r="20.5" stroke="black" stroke-width="2" />
-                <path d="M16 22L24 14" stroke="black" stroke-width="2" stroke-linecap="round" />
-                <path d="M16 22L24 30" stroke="black" stroke-width="2" stroke-linecap="round" />
-            </svg>
-        </a>
-        <h2>Record Violation</h2>
-    </div>
-    <div class="content-panel student-violation">
-        <div id="input-panel">
-                <div id="student-information">
-                    @* <div class="label-header" asp-for="StudentNumber">Student Number: <span class="info">@Model.StudentNumber</span></div> *@
-                    <input hidden asp-for="StudentNumber" value="@Model.StudentNumber" readonly />
-                    @* <div class="label-header">Student Name: <span class="info"></span></div> *@
-                    <h3>Student Information</h3>
-                    <dl>
-                        <dt>Student Number:</dt>
-                            <dd>@Model.StudentNumber</dd>
-                        <dt>Student Name:</dt>
-                            <dd>@Model.FirstName @Model.LastName</dd>
-                    </dl>
-                    @* <input hidden asp-for="FirstName" value="@Model.FirstName" readonly /> *@
-                    @* <input hidden asp-for="LastName" value="@Model.LastName" readonly /> *@
-                </div>
-            <div class="pane-structure"> 
-            <div class="left-content-pane">
+
+<div class="title">
+    <a asp-controller="Encode" asp-action="StudentRecordViolation" class="btn-function">
+        <svg width="32" height="32" viewBox="0 0 43 43" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M16 22L24 14" stroke="black" stroke-width="2" stroke-linecap="round" />
+            <path d="M16 22L24 30" stroke="black" stroke-width="2" stroke-linecap="round" />
+        </svg>
+    </a>
+    <h2>Step 3</h2>
+</div>
+
+<p>Record and encode the violation in the system</p>
+
+<div class="panel">
+    <form id="record-violation" asp-controller="Encode" asp-action="EncodeStudentViolation" method="post">
+        <div id="student-information">
+            <h3>Student Information</h3>
+            <dl>
+                <dt>Student Number:</dt>
+                <dd>@Model.StudentNumber</dd>
+                <dt>Student Name:</dt>
+                <dd>@Model.FirstName @Model.LastName</dd>
+            </dl>
+            <input hidden asp-for="StudentNumber" value="@Model.StudentNumber" readonly />
+            <input hidden asp-for="FirstName" value="@Model.FirstName" readonly />
+            <input hidden asp-for="LastName" value="@Model.LastName" readonly />
+        </div>
+        <div class="pane-structure">
+            <div class="content-pane">
                 <div class="input-wrapper">
                     <select asp-for="CollegeID" class="input" autocomplete="College" aria-required="true">
                         <option disabled hidden selected>-- Select an option --</option>
@@ -55,8 +57,9 @@
                     <span class="text-danger"></span>
                 </div>
                 <div class="input-wrapper">
-                    <input asp-for="CommissionDate" type="date" class="input" value="@DateTime.Now" autocomplete="dateOfCommission" aria-required="true" />
-                    <label class="label"><span>*</span></label>
+                    @* TODO Later fix this date *@
+                    <input asp-for="CommissionDate" type="date" class="input" value="@today" autocomplete="dateOfCommission" aria-required="true" />
+                    <label class="label">Commission Date<span>*</span></label>
                     <span class="text-danger"></span>
                 </div>
                 <div class="input-wrapper">
@@ -78,20 +81,20 @@
                     <span class="text-danger"></span>
                 </div>
             </div>
-            <div class="right-content-pane">
+            <div class="content-pane">
                 <div class="input-wrapper" id="hearingDate">
-                    <input asp-for="HearingDate" type="date" class="input" value="@DateTime.Now.ToString("MM-dd-yyyy")" autocomplete="dateOfCommission" aria-required="true" />
+                    <input asp-for="HearingDate" type="date" class="input" autocomplete="dateOfCommission" aria-required="true" />
                     <label class="label"><span>*</span></label>
-                    <span class="text-danger"></span>
-                </div>
-                <div class="input-wrapper">
-                    <input asp-for="Sanction" type="text" class="input" autocomplete="sanction" aria-required="true" />
-                    <label class="label">Sanction<span>*</span></label>
                     <span class="text-danger"></span>
                 </div>
                 <div class="input-wrapper">
                     <input asp-for="Description" type="text" class="input description" autocomplete="description" aria-required="true" />
                     <label class="label">Description</label>
+                    <span class="text-danger"></span>
+                </div>
+                <div class="input-wrapper">
+                    <input asp-for="Sanction" type="text" class="input" autocomplete="sanction" aria-required="true" />
+                    <label class="label">Sanction<span>*</span></label>
                     <span class="text-danger"></span>
                 </div>
                 <div class="input-wrapper">
@@ -106,13 +109,12 @@
                     <span class="text-danger"></span>
                 </div>
             </div>
-            </div>
-            <button type="submit" class="btn btn-submit">
-                Submit
-            </button>
         </div>
-    </div>
-</form>
+        <button type="submit" class="btn dark-btn">
+            Submit
+        </button>
+    </form>
+</div>
 
 @section Scripts {
     <script src="~/js/offenses.js"></script>

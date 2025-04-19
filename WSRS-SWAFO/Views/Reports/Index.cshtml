@@ -11,25 +11,31 @@
 <div id="reports">
     <h1>Reports</h1>
     <div class="mt-1 button-group" role="group" aria-label="Button group example">
-        <button class="btn btn-primary major-violations" value="MajorViolations">Major Violations</button>
-        <button class="btn btn-primary minor-violations" value="MinorViolations">Minor Violations</button>
-        <button class="btn btn-primary minor-traffic" value="MinorTrafficViolations">Minor Traffic Violations</button>
-        <button class="btn btn-primary major-traffic" value="MajorTrafficViolations">Major Traffic Violations</button>
-
-        <!-- Date range selection -->
-        <label for="startDate">Start Date:</label>
-        <input type="date" id="startDate">
-
-        <label for="endDate">End Date:</label>
-        <input type="date" id="endDate">
-
-        <button id="applyFilterBtn" class="btn btn-primary">Apply Filter</button>
-        <button id="clearFilterBtn" class="btn btn-secondary">Clear Filter</button>
+        <button class="btn major-violations" value="MajorViolations">Major</button>
+        <button class="btn minor-violations" value="MinorViolations">Minor</button>
+        <button class="btn minor-traffic" value="MinorTrafficViolations">Minor Traffic</button>
+        <button class="btn major-traffic" value="MajorTrafficViolations">Major Traffic</button>
     </div>
+
     <hr />
-    <div class="content-panel reports">
+
+    <!-- Date range selection -->
+    <div class="mb-3 button-group">
+        <div class="input-wrapper w-25">
+            <input type="date" class="input" id="startDate">
+            <label for="startDate" class="label">Start Date</label>
+        </div>
+        <div class="input-wrapper w-25">
+            <input type="date" class="input" id="endDate">
+            <label for="endDate" class="label">End Date</label>
+        </div>
+        <button id="applyFilterBtn" class="btn">Apply Filter</button>
+        <button id="clearFilterBtn" class="btn">Clear Filter</button>
+    </div>
+
+    <div class="reports">
         <!-- Container for larger chart -->
-        <div id="grid-screen">
+        <div class="panel">
             <div id="statistics">
                 <canvas id="reportsChart"></canvas>
             </div>
@@ -45,38 +51,36 @@
 
 <!-- Generate Report Modal -->
 <div class="modal fade" id="generateReportModal" tabindex="-1" aria-labelledby="generateReportModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="generateReportModalLabel">Generate Excel Report</h5>
+                <h3 class="modal-title" id="generateReportModalLabel">Generate Excel Report</h3>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="generateReportForm" class="p-4 border rounded bg-light shadow">
-                    <h5 class="text-center mb-3">Generate Excel Report</h5>
-
-                    <div class="mb-3">
-                        <label for="fileName" class="form-label fw-bold">📂 Excel File Name</label>
-                        <input type="text" class="form-control" id="fileName" name="fileName" required placeholder="Enter file name">
+                <form id="generateReportForm" class="p-3">
+                    <div class="mb-3 input-wrapper">
+                        <input type="text" class="input" id="fileName" name="fileName" required>
+                        <label for="fileName" class="label">Excel File Name</label>
                         <div class="invalid-feedback">File name is required.</div>
                     </div>
 
                     <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label for="reportStartDate" class="form-label fw-bold">📅 Start Date</label>
-                            <input type="date" class="form-control" id="reportStartDate" name="reportStartDate" required>
+                        <div class="mb-3 input-wrapper">
+                            <input type="date" class="input" id="reportStartDate" name="reportStartDate" required>
+                            <label for="reportStartDate" class="label">Start Date</label>
                             <div class="invalid-feedback">Start date is required.</div>
                         </div>
 
-                        <div class="col-md-6 mb-3">
-                            <label for="reportEndDate" class="form-label fw-bold">📅 End Date</label>
-                            <input type="date" class="form-control" id="reportEndDate" name="reportEndDate" required>
+                        <div class="mb-3 input-wrapper">
+                            <input type="date" class="input" id="reportEndDate" name="reportEndDate" required>
+                            <label for="reportEndDate" class="label">End Date</label>
                             <div class="invalid-feedback">End date is required.</div>
                         </div>
                     </div>
 
                     <div class="text-center">
-                        <button type="submit" class="btn btn-success w-100">📊 Generate Report</button>
+                        <button type="submit" class="btn dark-btn w-100">Generate Report</button>
                     </div>
                 </form>
 

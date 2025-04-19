@@ -1,18 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Globalization;
-using System.IO;
-using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using ClosedXML.Excel;
 using WSRS_SWAFO.Data;
 using WSRS_SWAFO.Data.Enum;
 using WSRS_SWAFO.Models;
-using Microsoft.EntityFrameworkCore;
-using DocumentFormat.OpenXml.Bibliography;
 
 namespace WSRS_SWAFO.Controllers
 {
@@ -365,7 +358,7 @@ namespace WSRS_SWAFO.Controllers
             statsPopulationRep.Columns().AdjustToContents();
 
             var sanctionNatureList = workbook.Worksheets.Add("Nature of sanctions");
-            
+
 
             // Title: "SANCTIONS IMPOSED FOR MAJOR OFFENSES COMMITTED"
             int sanctionRow = 1;
@@ -785,42 +778,6 @@ namespace WSRS_SWAFO.Controllers
             workbook.SaveAs(stream);
             return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"{fileName}.xlsx");
         }
-        private string GetCollege<T>(T record)
-        {
-            if (record is ReportEncoded report)
-            {
-                if (report.College == null || string.IsNullOrWhiteSpace(report.College.CollegeID))
-                {
-                    _logger.LogWarning("Missing College for ReportEncoded record.");
-                    return "Unknown";
-                }
-                return report.College.CollegeID;
-            }
-
-            if (record is TrafficReportsEncoded trafficReport)
-            {
-                if (trafficReport.College == null || string.IsNullOrWhiteSpace(trafficReport.College.CollegeID))
-                {
-                    _logger.LogWarning("Missing College for TrafficReportsEncoded record.");
-                    return "Unknown";
-                }
-                return trafficReport.College.CollegeID;
-            }
-
-            return "Unknown";
-        }
-
-
-        private int GetMonth<T>(T record)
-        {
-            if (record is ReportEncoded report)
-                return report.CommissionDate.Month;
-            if (record is TrafficReportsEncoded trafficReport)
-                return trafficReport.CommissionDate.Month;
-
-            return 0;
-        }
-
 
         public class ViolationRequest
         {

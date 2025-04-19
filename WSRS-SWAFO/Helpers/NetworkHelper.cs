@@ -1,5 +1,4 @@
-using System.Net.Http;
-using System.Threading.Tasks;
+namespace WSRS_SWAFO.Helpers;
 
 public class NetworkHelper
 {

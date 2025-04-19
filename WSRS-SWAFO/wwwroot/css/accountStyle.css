@@ -13,12 +13,6 @@
     width: 60ch;
 }
 
-.panel {
-    border: 2px solid black;
-    border-radius: 1rem;
-    padding: 1.5rem;
-}
-
 @media (max-width: 800px) {
     #updatePasswordForm {
         width: 100%;

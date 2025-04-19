@@ -6,10 +6,6 @@ h2 {
     width: 100%;
 }
 
-#grid-screen {
-    padding: 1.5rem;
-}
-
 #reportsChart {
     display: block; /* Removes any inline spacing issues */
     width: 100% !important; /* Force full width */
@@ -32,10 +28,6 @@ h2 {
         align-items: center;
         gap: 5px;
     }
-
-        #panel-footer > button:hover img {
-            filter: invert(1);
-        }
 
         #panel-footer > button img {
             transform: scale(0.9);

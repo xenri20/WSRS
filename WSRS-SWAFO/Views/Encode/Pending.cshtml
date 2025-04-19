@@ -1,5 +1,85 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@* @model *@
 @{
+    Layout = "_EncodeLayout";
+    ViewData["Title"] = "ReportsPending";
+}
+
+@section customHead {
+    <link rel="stylesheet" href="~/css/studentViolationStyle.css" asp-append-version="true" />
+}
+
+<div class="pending">
+    <div class="control-group mb-3">
+        <form method="get" id="searchForm">
+            <input type="search" name="searchString" placeholder="Search" aria-required="true" value="">
+
+            <div class="button-group">
+                <button type="submit" class="btn-function">
+                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <g clip-path="url(#clip0_173_68)">
+                            <path d="M6.41667 11.0833C8.994 11.0833 11.0833 8.994 11.0833 6.41667C11.0833 3.83934 8.994 1.75 6.41667 1.75C3.83934 1.75 1.75 3.83934 1.75 6.41667C1.75 8.994 3.83934 11.0833 6.41667 11.0833Z"
+                                  stroke="#1E1F20" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M12.25 12.25L9.71252 9.71249" stroke="#1E1F20" stroke-width="2" stroke-linecap="round"
+                                  stroke-linejoin="round" />
+                        </g>
+                        <defs>
+                            <clipPath id="clip0_173_68">
+                                <rect width="14" height="14" fill="white" />
+                            </clipPath>
+                        </defs>
+                    </svg>
+                </button>
+            </div>
+        </form>
+    </div>
+    
+    <div class="report-list">
+        @* TODO Should be looped over soon when there's a model with pagination (below) *@
+        @for (int i = 0; i < 5; i++)
+        {
+            <div class="report-tile">
+                <span class="report-tile-item">
+                    <div class="label">
+                        Report Creation
+                    </div>
+                    <div>
+                        Data
+                    </div>
+                </span>
+                <span class="report-tile-item">
+                    <div class="label">
+                        Student ID
+                    </div>
+                    <div>
+                        Data
+                    </div>
+                </span>
+                <span class="report-tile-item">
+                    <div class="label">
+                        Formator
+                    </div>
+                    <div>
+                        Data
+                    </div>
+                </span>
+                <span class="button-group">
+                    <button>Complete</button>
+                </span>
+                <a asp-action="" asp-route-id="" class="btn-function">
+                    <svg width="32" height="32" viewBox="0 0 43 43" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <g transform="rotate(180, 21.5, 21.5)">
+                            <path d="M16 22L24 14" stroke="black" stroke-width="2" stroke-linecap="round" />
+                            <path d="M16 22L24 30" stroke="black" stroke-width="2" stroke-linecap="round" />
+                        </g>
+                    </svg>
+                </a>
+            </div>
+        }
+        
+        @* TODO Add Pagination here *@
+    </div>
+</div>
+
+@section Scripts {
+    
 }

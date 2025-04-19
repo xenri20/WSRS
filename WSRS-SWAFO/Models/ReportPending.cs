@@ -8,12 +8,13 @@ namespace WSRS_SWAFO.Models
         [Key]
         public int Id { get; set; }
 
+        // Should be changed later since database is different
         [ForeignKey("ApplicationUser")]
         public string FormatorId { get; set; }
         public ApplicationUser Formator { get; set; } // Navigation Property
         
         public string Description { get; set; }
-        public DateTime CommissionDatetime { get; set; }
+        public DateOnly ReportDate { get; set; }
 
         [ForeignKey("Student")]
         public int StudentNumber { get; set; }
