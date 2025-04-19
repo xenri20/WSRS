@@ -10,7 +10,7 @@ namespace WSRS_Api.Controllers
     public class ReportController : ControllerBase
     {
         private readonly ILogger<ReportController> _logger;
-        private readonly ReportRepository _repository
+        private readonly ReportRepository _repository;
 
         public ReportController(ILogger<ReportController> logger, ReportRepository repository)
         {
