@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WSRS_Api.Data;
 using WSRS_Api.Dtos;
@@ -17,11 +18,11 @@ namespace WSRS_Api.Repositories
             _context = context;
         }
 
-        public Task<ReportPendingDto> PostStudentViolation(string FormatorId, string Description, int StudentNumber)
+        public ActionResult<ReportPending> PostStudentViolation(string FormatorId, string Description, int StudentNumber)
         {
             try
             {
-                var reportPending = new ReportPendingDto
+                var reportPending = new ReportPending
                 {
                     FormatorId = FormatorId,
                     Description = Description,
@@ -29,13 +30,17 @@ namespace WSRS_Api.Repositories
                     StudentNumber = StudentNumber
                 };
 
-                _context.ReportPending.Any(reportPending);
+                _context.ReportPending.Add(reportPending);
                 _context.SaveChanges();
+
+                return new OkObjectResult(reportPending);
             }
             catch (Exception ex)
             {
                 _logger.LogWarning(ex.Message);
             }
+
+            return null;
         }
     }
 }
