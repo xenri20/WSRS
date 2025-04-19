@@ -24,6 +24,9 @@ namespace WSRS_Api.Controllers
         {
             var postedStudentViolation = _repository.PostStudentViolation(FormatorId, Description, StudentNumber);
 
+if (postedStudentViolation == null) return NotFound();
+
+            return Ok(postedStudentViolation);
         }
     }
 }
