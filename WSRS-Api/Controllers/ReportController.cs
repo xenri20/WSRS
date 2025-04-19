@@ -20,8 +20,10 @@ namespace WSRS_Api.Controllers
 
         // POST api/<ReportController>
         [HttpPost]
-        public IActionResult PostStudentViolation()
+        public IActionResult PostStudentViolation(string FormatorId, string Description, int StudentNumber)
         {
+            var postedStudentViolation = _repository.PostStudentViolation(FormatorId, Description, StudentNumber);
+
         }
     }
 }
