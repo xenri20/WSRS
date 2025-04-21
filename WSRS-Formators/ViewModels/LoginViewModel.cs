@@ -1,12 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace WSRS_SWAFO.ViewModels
+namespace WSRS_Formators.ViewModels
 {
     public class LoginViewModel
     {
         [Display(Name = "Email Address")]
         [Required(ErrorMessage = "Email Address is required")]
-        public string EmailAddress { get; set; }
+        public string UserName { get; set; }
 
         [Display(Name = "Password")]
         [Required(ErrorMessage = "Password is required")]

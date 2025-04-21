@@ -13,7 +13,7 @@ namespace WSRS_Formators.Models
         //public ApplicationUser Formator { get; set; } // Navigation Property
         
         public string Description { get; set; }
-        public DateTime CommissionDatetime { get; set; }
+        public DateOnly CommissionDate { get; set; }
 
         [ForeignKey("Student")]
         public int StudentNumber { get; set; }

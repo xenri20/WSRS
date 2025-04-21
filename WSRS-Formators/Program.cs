@@ -1,11 +1,13 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using WSRS_Formators.Data;
+using WSRS_Formators.Models;
 using WSRS_Student.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var connectionStringLocal = builder.Configuration.GetConnectionString("AzureStudents");
+// Load connection strings
+var connectionStringLocal = builder.Configuration.GetConnectionString("Local");
 var connectionStringAzure = builder.Configuration.GetConnectionString("AzureFormator");
 
 if (string.IsNullOrEmpty(connectionStringLocal) || string.IsNullOrEmpty(connectionStringAzure))
@@ -13,9 +15,19 @@ if (string.IsNullOrEmpty(connectionStringLocal) || string.IsNullOrEmpty(connecti
     throw new InvalidOperationException("Connection strings for Local or Azure not found");
 }
 
+// Add DB contexts
 builder.Services.AddDbContext<AzureDbContext>(options =>
     options.UseSqlServer(connectionStringLocal));
 
+builder.Services.AddDbContext<AuthDbContext>(options =>
+    options.UseSqlServer(connectionStringLocal));
+
+// Configure Identity
+builder.Services.AddIdentity<FormatorUser, IdentityRole>()
+    .AddEntityFrameworkStores<AuthDbContext>()
+    .AddDefaultTokenProviders();
+
+// Cookie settings
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.LoginPath = "/Account/Login";
@@ -23,32 +35,37 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.SlidingExpiration = true;
 });
 
-// Add services to the container.
+// MVC setup
 builder.Services.AddControllersWithViews();
-
-builder.Services.AddDbContext<EmployeeDbContext>(options =>
-options.UseSqlServer( builder.Configuration.GetConnectionString("DefaultConnection")) 
-);
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Middleware pipeline
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Account}/{action=Login}/{id?}");
+
+// Seed roles and admin user
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var initializer = new ApplicationDbInitializer(
+        services.GetRequiredService<UserManager<FormatorUser>>(),
+        services.GetRequiredService<RoleManager<IdentityRole>>()
+    );
+    await initializer.SeedAsync();
+}
 
 app.Run();
