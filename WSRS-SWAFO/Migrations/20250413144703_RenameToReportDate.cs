@@ -12,7 +12,7 @@ namespace WSRS_SWAFO.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.RenameColumn(
-                name: "CommissionDate",
+                name: "CommissionDatetime",
                 table: "ReportsPending",
                 newName: "ReportDate");
 
@@ -37,7 +37,7 @@ namespace WSRS_SWAFO.Migrations
             migrationBuilder.RenameColumn(
                 name: "ReportDate",
                 table: "ReportsPending",
-                newName: "CommissionDate");
+                newName: "CommissionDatetime");
         }
     }
 }
