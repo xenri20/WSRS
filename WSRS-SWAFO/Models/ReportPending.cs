@@ -7,17 +7,11 @@ namespace WSRS_SWAFO.Models
     {
         [Key]
         public int Id { get; set; }
-
-        // Should be changed later since database is different
-        [ForeignKey("ApplicationUser")]
-        public string FormatorId { get; set; }
-        public ApplicationUser Formator { get; set; } // Navigation Property
-        
+        public int FormatorId { get; set; }
+        public string Formator { get; set; } 
         public string Description { get; set; }
         public DateOnly ReportDate { get; set; }
-
-        [ForeignKey("Student")]
         public int StudentNumber { get; set; }
-        public Student Student { get; set; } // Navigation Property
+        public bool IsArchived { get; set; }
     }
 }
