@@ -11,6 +11,8 @@ namespace WSRS_SWAFO.Models
         public string Description { get; set; }
         public DateOnly ReportDate { get; set; }
         public int StudentNumber { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
         public bool IsArchived { get; set; }
     }
 }
