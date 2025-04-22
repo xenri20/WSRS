@@ -18,28 +18,54 @@ namespace WSRS_Api.Repositories
             _context = context;
         }
 
-        public ActionResult<ReportPending> PostStudentViolation(string FormatorId, string Description, int StudentNumber)
+        public ReportsPendingDto? PostStudentViolation(int FormatorId, string Description, int StudentNumber, string Formator)
         {
             try
             {
-                var reportPending = new ReportPending
+                if (string.IsNullOrWhiteSpace(Description))
+                {
+                    throw new ArgumentException("Description cannot be null or empty.", nameof(Description));
+                }
+
+                if (string.IsNullOrWhiteSpace(Formator))
+                {
+                    throw new ArgumentException("Formator cannot be null or empty.", nameof(Formator));
+                }
+
+                if (StudentNumber <= 0)
+                {
+                    throw new ArgumentException("StudentNumber must be greater than zero.", nameof(StudentNumber));
+                }
+
+                var reportPending = new ReportsPending
                 {
                     FormatorId = FormatorId,
                     Description = Description,
-                    CommissionDatetime = DateTime.Now,
-                    StudentNumber = StudentNumber
+                    StudentNumber = StudentNumber,
+                    ReportDate = DateOnly.FromDateTime(DateTime.Now),
+                    Formator = Formator,
+                    IsArchived = false
                 };
 
-                _context.ReportPending.Add(reportPending);
+                _context.ReportsPending.Add(reportPending);
                 _context.SaveChanges();
 
-                return new OkObjectResult(reportPending);
+                var reportPendingDto = new ReportsPendingDto
+                {
+                    FormatorId = reportPending.FormatorId,
+                    Description = reportPending.Description,
+                    StudentNumber = reportPending.StudentNumber,
+                    ReportDate = reportPending.ReportDate,
+                    Formator = reportPending.Formator,
+                    IsArchived = reportPending.IsArchived
+                };
+
+                return reportPendingDto;
             }
             catch (Exception ex)
             {
                 _logger.LogWarning(ex.Message);
             }
-
             return null;
         }
     }
