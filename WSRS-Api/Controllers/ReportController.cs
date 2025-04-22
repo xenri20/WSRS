@@ -18,13 +18,13 @@ namespace WSRS_Api.Controllers
 
         // POST api/<ReportController>
         [HttpPost]
-        public IActionResult PostStudentViolation(string FormatorId, string Description, int StudentNumber)
+        public IActionResult PostStudentViolation(int FormatorId, string Description, int StudentNumber, string Formator)
         {
-            var postedStudentViolation = _repository.PostStudentViolation(FormatorId, Description, StudentNumber);
+            var postedStudentViolation = _repository.PostStudentViolation(FormatorId, Description, StudentNumber, Formator);
 
-            if (postedStudentViolation == null) return NotFound();
+            if (postedStudentViolation != null) return Ok(postedStudentViolation);
 
-            return Ok(postedStudentViolation);
+            return BadRequest("An error occurred while processing the report.");
         }
     }
 }
