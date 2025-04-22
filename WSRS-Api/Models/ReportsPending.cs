@@ -4,19 +4,15 @@ using WSRS_Api.Models;
 
 namespace WSRS_Api.Models
 {
-    public class ReportPending
+    public class ReportsPending
     {
         [Key]
         public int Id { get; set; }
-
-        [ForeignKey("ApplicationUser")]
-        public string FormatorId { get; set; } // Navigation Property
-
+        public int FormatorId { get; set; }
+        public string Formator { get; set; }
         public string Description { get; set; }
-        public DateTime CommissionDatetime { get; set; }
-
-        [ForeignKey("Student")]
+        public DateOnly ReportDate { get; set; }
         public int StudentNumber { get; set; }
-        public Student Student { get; set; } // Navigation Property
+        public bool IsArchived { get; set; }
     }
 }
