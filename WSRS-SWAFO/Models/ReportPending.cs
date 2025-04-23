@@ -13,6 +13,8 @@ namespace WSRS_SWAFO.Models
         public int StudentNumber { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public string College { get; set; }
+        public string CourseYearSection { get; set; }
         public bool IsArchived { get; set; }
     }
 }
