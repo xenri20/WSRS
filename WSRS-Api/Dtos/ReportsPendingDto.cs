@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WSRS_Api.Dtos
 {
@@ -16,6 +15,14 @@ namespace WSRS_Api.Dtos
         [Required]
         public int StudentNumber { get; set; }
         [Required]
-        public bool IsArchived { get; set; }
+        public string FirstName { get; set; }
+        [Required]
+        public string LastName { get; set; }
+        [Required]
+        public string College { get; set; }
+        [Required]
+        public string CourseYearSection { get; set; }
+
+        // Removed IsArchived so that it won't be validated
     }
 }

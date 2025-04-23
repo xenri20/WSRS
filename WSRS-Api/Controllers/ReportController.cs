@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using WSRS_Api.Dtos;
 using WSRS_Api.Repositories;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -18,9 +19,9 @@ namespace WSRS_Api.Controllers
 
         // POST api/<ReportController>
         [HttpPost]
-        public IActionResult PostStudentViolation(int FormatorId, string Description, int StudentNumber, string Formator)
+        public IActionResult PostStudentViolation(ReportsPendingDto reportDto)
         {
-            var postedStudentViolation = _repository.PostStudentViolation(FormatorId, Description, StudentNumber, Formator);
+            var postedStudentViolation = _repository.PostStudentViolation(reportDto);
 
             if (postedStudentViolation != null) return Ok(postedStudentViolation);
 

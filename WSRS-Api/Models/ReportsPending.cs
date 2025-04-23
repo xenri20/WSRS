@@ -1,6 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using WSRS_Api.Models;
 
 namespace WSRS_Api.Models
 {
@@ -13,6 +11,10 @@ namespace WSRS_Api.Models
         public string Description { get; set; }
         public DateOnly ReportDate { get; set; }
         public int StudentNumber { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string College { get; set; }
+        public string CourseYearSection { get; set; }
         public bool IsArchived { get; set; }
     }
 }

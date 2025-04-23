@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using System.ComponentModel.DataAnnotations;
 using WSRS_Api.Data;
 using WSRS_Api.Dtos;
 using WSRS_Api.Models;
@@ -18,49 +16,40 @@ namespace WSRS_Api.Repositories
             _context = context;
         }
 
-        public ReportsPendingDto? PostStudentViolation(int FormatorId, string Description, int StudentNumber, string Formator)
+        public ReportsPendingDto? PostStudentViolation(ReportsPendingDto reportDto)
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(Description))
-                {
-                    throw new ArgumentException("Description cannot be null or empty.", nameof(Description));
-                }
+                // Model validation
+                var validationContext = new ValidationContext(reportDto);
+                var validationResults = new List<ValidationResult>();
 
-                if (string.IsNullOrWhiteSpace(Formator))
+                if (!Validator.TryValidateObject(reportDto, validationContext, validationResults, true))
                 {
-                    throw new ArgumentException("Formator cannot be null or empty.", nameof(Formator));
-                }
-
-                if (StudentNumber <= 0)
-                {
-                    throw new ArgumentException("StudentNumber must be greater than zero.", nameof(StudentNumber));
+                    foreach (var validationResult in validationResults)
+                    {
+                        _logger.LogWarning(validationResult.ErrorMessage);
+                    }
+                    throw new ArgumentException("The provided report is invalid.");
                 }
 
                 var reportPending = new ReportsPending
                 {
-                    FormatorId = FormatorId,
-                    Description = Description,
-                    StudentNumber = StudentNumber,
-                    ReportDate = DateOnly.FromDateTime(DateTime.Now),
-                    Formator = Formator,
+                    FormatorId = reportDto.FormatorId,
+                    Description = reportDto.Description,
+                    StudentNumber = reportDto.StudentNumber,
+                    ReportDate = reportDto.ReportDate,
+                    Formator = reportDto.Formator,
+                    FirstName = reportDto.FirstName,
+                    LastName = reportDto.LastName,
+                    College = reportDto.College,
+                    CourseYearSection = reportDto.CourseYearSection,
                     IsArchived = false
                 };
 
                 _context.ReportsPending.Add(reportPending);
                 _context.SaveChanges();
-
-                var reportPendingDto = new ReportsPendingDto
-                {
-                    FormatorId = reportPending.FormatorId,
-                    Description = reportPending.Description,
-                    StudentNumber = reportPending.StudentNumber,
-                    ReportDate = reportPending.ReportDate,
-                    Formator = reportPending.Formator,
-                    IsArchived = reportPending.IsArchived
-                };
-
-                return reportPendingDto;
+                return reportDto;
             }
             catch (Exception ex)
             {
