@@ -35,6 +35,12 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.SlidingExpiration = true;
 });
 
+builder.Services.AddHttpClient("WSRS_Api", client =>
+{
+    client.BaseAddress = new Uri(builder.Configuration.GetSection("API_BASE_URL").Value 
+        ?? throw new InvalidOperationException("API_BASE_URL is not configured."));
+});
+
 // MVC setup
 builder.Services.AddControllersWithViews();
 
