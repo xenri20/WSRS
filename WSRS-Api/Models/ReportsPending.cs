@@ -6,7 +6,7 @@ namespace WSRS_Api.Models
     {
         [Key]
         public int Id { get; set; }
-        public int FormatorId { get; set; }
+        public long FormatorId { get; set; }
         public string Formator { get; set; }
         public string Description { get; set; }
         public DateOnly ReportDate { get; set; }

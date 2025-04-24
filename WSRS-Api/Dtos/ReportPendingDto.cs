@@ -5,7 +5,7 @@ namespace WSRS_Api.Dtos
     public class ReportPendingDto
     {
         [Required]
-        public int FormatorId { get; set; }
+        public long FormatorId { get; set; }
         [Required]
         public string Formator { get; set; }
         [Required]
