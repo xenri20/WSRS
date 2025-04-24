@@ -1,5 +1,62 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@using WSRS_Formators.ViewModels
+@model CreateReportViewModel
+
 @{
+    ViewData["Title"] = "Create Report";
+    bool studentFound = ViewBag.StudentFound ?? false;
+}
+
+<div class="container mt-5">
+    <h2 class="mb-4">Create New Violation Report</h2>
+
+    <form asp-action="CreateReport" method="post" novalidate>
+        <input asp-for="ReportDate" type="hidden" value="@DateOnly.FromDateTime(DateTime.Now)" />
+
+        <div class="mb-3">
+            <label asp-for="StudentNumber" class="form-label"></label>
+            <input asp-for="StudentNumber" class="form-control" />
+            <span asp-validation-for="StudentNumber" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="FirstName" class="form-label"></label>
+            <input asp-for="FirstName" class="form-control" />
+            <span asp-validation-for="FirstName" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="LastName" class="form-label"></label>
+            <input asp-for="LastName" class="form-control" />
+            <span asp-validation-for="LastName" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="College" class="form-label"></label>
+            <input asp-for="College" class="form-control" />
+            <span asp-validation-for="College" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="CourseYearSection" class="form-label"></label>
+            <input asp-for="CourseYearSection" class="form-control" />
+            <span asp-validation-for="CourseYearSection" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Description" class="form-label"></label>
+            <textarea asp-for="Description" class="form-control" rows="4"></textarea>
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+
+        @* Optional(outside scope): Upload file input  *@
+
+        <button type="submit" class="btn btn-dark">Submit Report</button>
+        <a asp-action="Index" class="btn btn-secondary ms-2">Back to Home</a>
+    </form>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

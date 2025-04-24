@@ -1,9 +1,5 @@
 ﻿@using WSRS_Formators.ViewModels
-@model StudentViolationsViewModel?
-
-@{
-    ViewData["Title"] = "Report Violation";
-}
+@model StudentViolationsViewModel
 
 <div class="container mt-5">
     <div class="d-flex justify-content-between align-items-center mb-4">
@@ -13,91 +9,98 @@
 
 <div class="container text-center mt-4">
     <img src="~/assets/img/logo.png" alt="DLSU-D Logo" style="width: 100px;" />
-    <h3>
-        <strong>
-            Greetings, @User.FindFirst("FullName")?.Value
-        </strong>
-    </h3>
     <p>Search Student Record to check record.</p>
 
-    <form asp-action="Index" asp-route-studentNumber="" class="d-flex justify-content-center mb-3" method="get">
+    <form asp-action="Index" class="d-flex justify-content-center mb-3" method="get">
         <input type="search" name="studentNumber" class="form-control rounded-pill w-50"
-            placeholder="Enter Student Number" />
-        <button type="submit" class="btn btn-dark ms-2"><i class="bi bi-search"></i>Search</button>
+               placeholder="Enter Student Number" value="@Model.StudentNumber" />
+        <button type="submit" class="btn btn-dark ms-2">
+            <i class="bi bi-search"></i>Search
+        </button>
     </form>
 
-    @if (Model == null)
+    @if (Model.StudentNumber != null)
     {
-        <div class="text-center text-danger fw-bold">NO RECORDS FOUND!</div>
-        <div>
-            <a asp-action="Create" asp-route-studentNumber="" class="btn btn-success">Create Violation</a>
-        </div>
-    }
-    else 
-    {
-        <div class="text-center">
-            <h5>@Model.Student.FirstName @Model.Student.LastName</h5>
-            <p>@Model.Student.StudentNumber</p>
-        </div>
-
-        <h6>Previous Records:</h6>
-
-        <!-- GENERAL VIOLATIONS -->
-        @if (Model.Violations.Any())
+        @if (Model.Violations != null || Model.TrafficViolations != null)
         {
-            <h6>General Violations</h6>
-            <table class="table table-bordered text-center">
-                <thead class="table-dark">
-                    <tr>
-                        <th>Commission Date</th>
-                        <th>Classification</th>
-                        <th>Nature of Offense</th>
-                        <th>Sanction</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var report in Model.Violations)
-                    {
+            <div class="text-center">
+                <h5>@Model.GetFullName()</h5>
+                <p>@Model.StudentNumber</p>
+            </div>
+
+            <h6>Previous Records:</h6>
+
+            <!-- GENERAL VIOLATIONS -->
+            @if (Model.Violations.Any())
+            {
+                <h6>General Violations</h6>
+                <table class="table table-bordered text-center">
+                    <thead class="table-dark">
                         <tr>
-                            <td>@report.CommissionDate.ToShortDateString()</td>
-                            <td>@report.Offense.Classification</td>
-                            <td>@report.Offense.Nature</td>
-                            <td>@report.Sanction</td>
+                            <th>Commission Date</th>
+                            <th>Classification</th>
+                            <th>Nature of Offense</th>
+                            <th>Sanction</th>
                         </tr>
-                    }
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @foreach (var report in Model.Violations)
+                        {
+                            <tr>
+                                <td>@report.CommissionDate.ToShortDateString()</td>
+                                <td>@report.Offense.Classification</td>
+                                <td>@report.Offense.Nature</td>
+                                <td>@report.Sanction</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+
+            <!-- TRAFFIC VIOLATIONS -->
+            @if (Model.TrafficViolations.Any())
+            {
+                <h6>Traffic Violations</h6>
+                <table class="table table-bordered text-center">
+                    <thead class="table-secondary">
+                        <tr>
+                            <th>Commission Date</th>
+                            <th>Nature of Offense</th>
+                            <th>Classification</th>
+                            <th>Remarks</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var traffic in Model.TrafficViolations)
+                        {
+                            <tr>
+                                <td>@traffic.CommissionDate.ToShortDateString()</td>
+                                <td>@traffic.Offense?.Nature</td>
+                                <td>@traffic.Offense?.Classification</td>
+                                <td>@traffic.Remarks</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+
+            <a asp-action="Create" asp-route-studentNumber="@Model.StudentNumber" class="btn btn-success">
+                Create Report
+            </a>
+        }
+        else
+        {
+            <div class="text-center text-danger fw-bold">NO RECORDS FOUND!</div>
+            <div>
+                <a class="btn btn-success" asp-action="Create">
+                    Create Violation
+                </a>
+            </div>
+
         }
 
-        <!-- TRAFFIC VIOLATIONS -->
-        @if (Model.TrafficViolations.Any())
-        {
-            <h6>Traffic Violations</h6>
-            <table class="table table-bordered text-center">
-                <thead class="table-secondary">
-                    <tr>
-                        <th>Commission Date</th>
-                        <th>Nature of Offense</th>
-                        <th>Classification</th>
-                        <th>Remarks</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var traffic in Model.TrafficViolations)
-                    {
-                        <tr>
-                            <td>@traffic.CommissionDate.ToShortDateString()</td>
-                            <td>@traffic.Offense?.Nature</td>
-                            <td>@traffic.Offense?.Classification</td>
-                            <td>@traffic.Remarks</td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        }
-
-        <a asp-action="Create" asp-route-studentNumber="@Model.Student.StudentNumber" class="btn btn-success">Create Report</a>
     }
+
 
     <footer class="mt-5">
         <p>
