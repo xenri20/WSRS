@@ -21,6 +21,10 @@ public class ViolationRepository : IViolationRepository
     {
         try
         {
+            var student = await _context.Students
+                .AsNoTracking()
+                .FirstOrDefaultAsync(s => s.StudentNumber == studentNumber);
+
             var violations = await _context.ReportsEncoded
                 .AsNoTracking()
                 .Where(r => r.StudentNumber == studentNumber)
@@ -56,6 +60,7 @@ public class ViolationRepository : IViolationRepository
 
             return new AllReportsDto
             {
+                Student = student!,
                 Violations = violations,
                 TrafficViolations = trafficViolations
             };
@@ -68,6 +73,7 @@ public class ViolationRepository : IViolationRepository
         // return an empty list just in case something goes wrong
         return new AllReportsDto
         {
+            Student = {},
             Violations = [],
             TrafficViolations = []
         };
