@@ -26,8 +26,10 @@
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="#">-</a></li>
                             <li><a class="dropdown-item" href="#">-</a></li>
-                            <li><a class="dropdown-item" asp-controller="ReportViolation" asp-action="Index">Report
-                                    Violation</a>
+                            <li>
+                                <a class="dropdown-item" asp-controller="ReportViolation" asp-action="Index">
+                                    Report Violation
+                                </a>
                             </li>
                         </ul>
                     </li>
@@ -38,7 +40,9 @@
                         </a>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="#">Account Settings</a></li>
-                            <li><a class="dropdown-item" href="#">Logout</a></li>
+                            <form asp-controller="Account" asp-action="Logout" method="post">
+                            <li><button class="dropdown-item" href="#">Logout</button></li>
+                            </form>
                         </ul>
                     </li>
                 </ul>

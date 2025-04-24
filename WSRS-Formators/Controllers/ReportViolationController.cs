@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using WSRS_Formators.Dtos;
@@ -6,6 +7,7 @@ using WSRS_Formators.ViewModels;
 
 namespace WSRS_Formators.Controllers
 {
+    [Authorize]
     public class ReportViolationController : Controller
     {
         private readonly IHttpClientFactory _httpClientFactory;

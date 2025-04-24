@@ -61,7 +61,7 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Account}/{action=Login}/{id?}");
+    pattern: "{controller=Account}/{action=Index}/{id?}");
 
 // Seed roles and admin user
 using (var scope = app.Services.CreateScope())

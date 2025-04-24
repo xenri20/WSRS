@@ -1,11 +1,12 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using WSRS_Formators.Data;
 using WSRS_Formators.Models;
 using WSRS_Student.Data;
 
 namespace WSRS_Formators.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly AzureDbContext _context;
