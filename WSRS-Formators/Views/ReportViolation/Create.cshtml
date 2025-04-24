@@ -6,10 +6,10 @@
     bool studentFound = ViewBag.StudentFound ?? false;
 }
 
-<div class="container mt-5">
+<div class="container mt-5 mw-100">
     <h2 class="mb-4">Create New Violation Report</h2>
 
-    <form asp-action="CreateReport" method="post" novalidate>
+    <form asp-action="Create" method="post">
         <input asp-for="ReportDate" type="hidden" value="@DateOnly.FromDateTime(DateTime.Now)" />
 
         <div class="mb-3">

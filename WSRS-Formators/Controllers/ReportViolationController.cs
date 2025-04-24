@@ -76,26 +76,34 @@ namespace WSRS_Formators.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([FromBody] ReportPendingDto reportDto)
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> Create(CreateReportViewModel model)
         {
-            /*
-            Intercept the value of the model before validating
-             - add the user's employee id to reportDto as FormatorId
-             - add the user's name to reportDto as Formator
-            */
             var currentUser = await _userManager.GetUserAsync(User);
             if (currentUser == null)
             {
                 ModelState.AddModelError(string.Empty, "Unable to retrieve info of current user.");
-                return View(reportDto);
+                return View(model);
             }
-            reportDto.FormatorId = currentUser.EmployeeId;
-            reportDto.Formator = currentUser.FullName;
 
             if (!ModelState.IsValid)
             {
-                return View(reportDto);
+                return View(model);
             }
+
+            var reportDto = new ReportPendingDto
+            {
+                FormatorId = currentUser.EmployeeId,
+                Formator = currentUser.FullName,
+                ReportDate = model.ReportDate,
+                StudentNumber = model.StudentNumber,
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                College = model.College,
+                CourseYearSection = model.CourseYearSection,
+                Description = model.Description
+            };
 
             var client = _httpClientFactory.CreateClient("WSRS_Api");
 
@@ -106,6 +114,9 @@ namespace WSRS_Formators.Controllers
                 var result = await response.Content.ReadFromJsonAsync<ReportPendingDto>();
                 return RedirectToAction(nameof(Index));
             }
+
+            var errorContent = await response.Content.ReadAsStringAsync();
+            _logger.LogError("API Response: {StatusCode}, Content: {Content}", response.StatusCode, errorContent);
 
             return RedirectToAction(nameof(Index));
         }
