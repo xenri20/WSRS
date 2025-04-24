@@ -16,7 +16,7 @@ namespace WSRS_Api.Repositories
             _context = context;
         }
 
-        public ReportsPendingDto? PostStudentViolation(ReportsPendingDto reportDto)
+        public ReportPendingDto? PostStudentViolation(ReportPendingDto reportDto)
         {
             try
             {

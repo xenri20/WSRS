@@ -2,7 +2,7 @@
 
 namespace WSRS_Api.Dtos
 {
-    public class ReportsPendingDto
+    public class ReportPendingDto
     {
         [Required]
         public int FormatorId { get; set; }

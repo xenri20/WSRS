@@ -12,7 +12,7 @@ if (builder.Environment.IsProduction())
 }
 else if (builder.Environment.IsDevelopment())
 {
-    // var connectionString = builder.Configuration.GetConnectionString("Local") ?? throw new InvalidOperationException("Connection string 'Local' not found.");
+    //var connectionString = builder.Configuration.GetConnectionString("Local") ?? throw new InvalidOperationException("Connection string 'Local' not found.");
     var connectionString = builder.Configuration.GetConnectionString("Azure") ?? throw new InvalidOperationException("Connection string 'AzureSQL' not found.");
     builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
 }
