@@ -1,22 +1,24 @@
 ﻿@model WSRS_Formators.Models.ReportViolation
 @{
     ViewData["Title"] = "Create Report";
+    bool studentFound = ViewBag.StudentFound ?? false;
 }
 
 <div class="container mt-5">
     <h2 class="mb-4">Create New Violation Report</h2>
 
     <form asp-action="CreateReport" method="post" class="needs-validation" novalidate>
-        <div class="mb-3">
-            <label asp-for="StudentNumber" class="form-label">Student Number</label>
-            <input asp-for="StudentNumber" class="form-control" required />
-            <span asp-validation-for="StudentNumber" class="text-danger"></span>
+        <div class="form-group">
+            <label asp-for="StudentNumber"></label>
+            <input asp-for="StudentNumber" class="form-control" type="number"
+                   value="@(!studentFound ? "" : Model.StudentNumber.ToString())"
+                   readonly="@(studentFound ? "readonly" : null)" />
         </div>
 
-        <div class="mb-3">
-            <label asp-for="StudentName" class="form-label">Student Name</label>
-            <input asp-for="StudentName" class="form-control" required />
-            <span asp-validation-for="StudentName" class="text-danger"></span>
+        <div class="form-group">
+            <label asp-for="StudentName"></label>
+            <input asp-for="StudentName" class="form-control"
+                   readonly="@(studentFound ? "readonly" : null)" />
         </div>
 
         <div class="mb-3">

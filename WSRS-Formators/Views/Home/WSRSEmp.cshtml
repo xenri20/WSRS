@@ -97,7 +97,8 @@
                 </table>
             }
 
-        <a asp-action="CreateReport" class="btn btn-success">Create Report</a>
+        <a asp-action="CreateReport" asp-route-studentNumber="@Model.Student.StudentNumber" asp-route-studentName="@Model.Student.FirstName @Model.Student.LastName" class="btn btn-success">Create Report</a>
+
         }
     @if (ViewBag.NotFound == true)
     {

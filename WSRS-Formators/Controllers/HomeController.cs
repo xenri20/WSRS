@@ -26,9 +26,40 @@ namespace WSRS_Formators.Controllers
         {
             return View();
         }
-        public IActionResult CreateReport()
+        [HttpGet]
+        public async Task<IActionResult> CreateReport(int? StudentNumber = null)
         {
-            return View();
+            var report = new ReportViolation();
+
+            if (StudentNumber.HasValue)
+            {
+                var student = await _context.Students.FindAsync(StudentNumber.Value);
+                if (student != null)
+                {
+                    report.StudentNumber = student.StudentNumber;
+                    report.StudentName = $"{student.FirstName} {student.LastName}";
+                    report.College = " ";  // Set the college if needed
+                    report.CommissionDate = DateOnly.FromDateTime(DateTime.Today);  // Set today's date as CommissionDate
+
+                    // Indicate that the student was found
+                    ViewBag.StudentFound = true;
+                }
+                else
+                {
+                    // Indicate that no student was found
+                    ViewBag.StudentFound = false;
+                    // In case no student is found, we clear the student number and make fields editable
+                    report.CommissionDate = DateOnly.FromDateTime(DateTime.Today);  // Set today's date for CommissionDate
+                }
+            }
+            else
+            {
+                // If no student number is provided, create a new empty report and set the CommissionDate
+                ViewBag.StudentFound = false;
+                report.CommissionDate = DateOnly.FromDateTime(DateTime.Today);
+            }
+
+            return View(report);
         }
 
         [HttpPost]
