@@ -84,7 +84,12 @@
                 </table>
             }
 
-            <a asp-action="Create" asp-route-studentNumber="@Model.StudentNumber" class="btn btn-success">
+            <a class="btn btn-success"
+                asp-action="Create" 
+                asp-route-studentNumber="@Model.StudentNumber"
+                asp-route-firstName="@Model.FirstName"
+                asp-route-lastName="@Model.LastName"
+            >   
                 Create Report
             </a>
         }

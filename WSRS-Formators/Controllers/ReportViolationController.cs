@@ -68,9 +68,20 @@ namespace WSRS_Formators.Controllers
         }
 
         [HttpGet]
-        public IActionResult Create([FromRoute] int? studentNumber)
+        public IActionResult Create(
+            [FromQuery] int? studentNumber, 
+            [FromQuery] string? firstName, 
+            [FromQuery] string? lastName)
         {
-            if (studentNumber != null) ViewBag.StudentNumber = studentNumber;
+            if (studentNumber != null || !string.IsNullOrEmpty(firstName) || !string.IsNullOrEmpty(lastName))
+            {
+                ViewData["StudentNumber"] = studentNumber;
+                ViewData["FirstName"] = firstName;
+                ViewData["LastName"] = lastName;
+
+                return View();
+            }
+
             return View();
         }
 

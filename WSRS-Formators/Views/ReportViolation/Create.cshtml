@@ -3,7 +3,10 @@
 
 @{
     ViewData["Title"] = "Create Report";
-    bool studentFound = ViewBag.StudentFound ?? false;
+
+    var studentNumber = ViewData["StudentNumber"];
+    var firstName = ViewData["FirstName"];
+    var lastName = ViewData["LastName"];
 }
 
 <div class="container mt-5 mw-100">
@@ -12,23 +15,43 @@
     <form asp-action="Create" method="post">
         <input asp-for="ReportDate" type="hidden" value="@DateOnly.FromDateTime(DateTime.Now)" />
 
-        <div class="mb-3">
-            <label asp-for="StudentNumber" class="form-label"></label>
-            <input asp-for="StudentNumber" class="form-control" />
-            <span asp-validation-for="StudentNumber" class="text-danger"></span>
-        </div>
+        @if(studentNumber != null || firstName != null || lastName != null)
+        {
+            <div class="mb-3">
+                <label asp-for="StudentNumber" class="form-label"></label>
+                <input asp-for="StudentNumber" class="form-control" disabled readonly />
+            </div>
 
-        <div class="mb-3">
-            <label asp-for="FirstName" class="form-label"></label>
-            <input asp-for="FirstName" class="form-control" />
-            <span asp-validation-for="FirstName" class="text-danger"></span>
-        </div>
+            <div class="mb-3">
+                <label asp-for="FirstName" class="form-label"></label>
+                <input asp-for="FirstName" class="form-control" disabled readonly />
+            </div>
 
-        <div class="mb-3">
-            <label asp-for="LastName" class="form-label"></label>
-            <input asp-for="LastName" class="form-control" />
-            <span asp-validation-for="LastName" class="text-danger"></span>
-        </div>
+            <div class="mb-3">
+                <label asp-for="LastName" class="form-label"></label>
+                <input asp-for="LastName" class="form-control" disabled readonly />
+            </div>
+        }
+        else
+        {
+            <div class="mb-3">
+                <label asp-for="StudentNumber" class="form-label"></label>
+                <input asp-for="StudentNumber" class="form-control" />
+                <span asp-validation-for="StudentNumber" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="FirstName" class="form-label"></label>
+                <input asp-for="FirstName" class="form-control" />
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="LastName" class="form-label"></label>
+                <input asp-for="LastName" class="form-control" />
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+        }
 
         <div class="mb-3">
             <label asp-for="College" class="form-label"></label>
