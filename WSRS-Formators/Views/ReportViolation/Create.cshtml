@@ -15,21 +15,25 @@
     <form asp-action="Create" method="post" class="create-form">
         <input asp-for="ReportDate" type="hidden" value="@DateOnly.FromDateTime(DateTime.Now)" />
 
-        @if(studentNumber != null || firstName != null || lastName != null)
+        @if ((studentNumber != null && firstName != null && lastName != null)
+        || (Model.StudentNumber != null && !string.IsNullOrEmpty(Model.FirstName) && !string.IsNullOrEmpty(Model.LastName)))
         {
             <div class="mb-3">
                 <label asp-for="StudentNumber" class="form-label"></label>
-                <input asp-for="StudentNumber" class="form-control" disabled readonly />
+                <input asp-for="StudentNumber" class="form-control" value="@(studentNumber ?? Model.StudentNumber)" disabled readonly />
+                <input asp-for="StudentNumber" type="hidden" value="@(studentNumber ?? Model.StudentNumber)"  />
             </div>
 
             <div class="mb-3">
                 <label asp-for="FirstName" class="form-label"></label>
-                <input asp-for="FirstName" class="form-control" disabled readonly />
+                <input asp-for="FirstName" class="form-control" value="@(firstName ?? Model.FirstName)" disabled readonly />
+                <input asp-for="FirstName" type="hidden" value="@(firstName ?? Model.FirstName)" />
             </div>
 
             <div class="mb-3">
                 <label asp-for="LastName" class="form-label"></label>
-                <input asp-for="LastName" class="form-control" disabled readonly />
+                <input asp-for="LastName" class="form-control" value="@(lastName ?? Model.LastName)" disabled readonly />
+                <input asp-for="LastName" type="hidden" value="@(lastName ?? Model.LastName)" />
             </div>
         }
         else
