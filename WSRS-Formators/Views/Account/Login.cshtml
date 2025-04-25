@@ -5,11 +5,15 @@
     Layout = "_LoginLayout"; // nasa shared folder to
 }
 
+@section CustomHead {
+    <link rel="stylesheet" href="~/css/login.css" asp-append-version="true" />
+}
+
 <div class="container d-flex justify-content-center align-items-center flex-column">
     <div class="box-wrapper">
         <div class="container-fluid justify-content-start p-0">
             <h1 class="">Login to DLSU-D</h1>
-            <p class="">Enter you username and password to log in</p>
+            <p class="">Enter your Employee ID and password to sign in</p>
         </div>
         <form id="loginForm" method="post" asp-action="Login">
             <div class="input-group mb-3">
