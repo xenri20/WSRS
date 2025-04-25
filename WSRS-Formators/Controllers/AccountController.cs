@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 using WSRS_Formators.Models;
 using WSRS_Formators.ViewModels;
 
@@ -42,15 +43,26 @@ namespace WSRS_Formators.Controllers
 
             // Find user by EmployeeId instead of UserName (email)
             var user = await _userManager.Users.FirstOrDefaultAsync(f => f.EmployeeId == model.UserName);
+
             if (user != null)
             {
-                var result = await _signInManager.PasswordSignInAsync(user, model.Password, false, false);
-                if (result.Succeeded)
+                var passwordCheck = await _userManager.CheckPasswordAsync(user, model.Password);
+                if (passwordCheck) 
+                {
+                    var claims = new List<Claim>
+                    {
+                        new Claim("EmployeeId", user.EmployeeId.ToString()),
+                        new Claim("FullName", user.FullName)
+                    };
+
+                    await _signInManager.SignInWithClaimsAsync(user, isPersistent: false, additionalClaims: claims);
+
                     return RedirectToAction("Index", "Home");
+                }
             }
 
-            TempData["Error"] = "Invalid login credentials. Please try again.";
             ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+            TempData["Error"] = "Invalid login credentials. Please try again.";
             return View(model);
         }
 
