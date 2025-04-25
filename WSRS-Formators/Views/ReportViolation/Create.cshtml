@@ -9,10 +9,10 @@
     var lastName = ViewData["LastName"];
 }
 
-<div class="container mt-5 mw-100">
+<main class="container">
     <h2 class="mb-4">Create New Violation Report</h2>
 
-    <form asp-action="Create" method="post">
+    <form asp-action="Create" method="post" class="create-form">
         <input asp-for="ReportDate" type="hidden" value="@DateOnly.FromDateTime(DateTime.Now)" />
 
         @if(studentNumber != null || firstName != null || lastName != null)
@@ -74,9 +74,9 @@
         @* Optional(outside scope): Upload file input  *@
 
         <button type="submit" class="btn btn-dark">Submit Report</button>
-        <a asp-action="Index" class="btn btn-secondary ms-2">Back to Home</a>
+        <a asp-action="Index" class="btn btn-secondary ms-2">Cancel</a>
     </form>
-</div>
+</main>
 
 @section Scripts {
     @{

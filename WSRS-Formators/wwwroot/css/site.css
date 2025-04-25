@@ -26,3 +26,7 @@ main.home {
     display: flex;
     align-items: center;
 }
+
+.table-responsive {
+    overflow-x: scroll;
+}
