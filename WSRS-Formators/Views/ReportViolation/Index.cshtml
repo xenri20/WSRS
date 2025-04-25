@@ -10,10 +10,10 @@
             <img src="~/assets/img/logo.png" alt="DLSU-D Logo" style="width: 100px;" />
             <p>Search to check record</p>
 
-            <form asp-action="Index" class="d-flex justify-content-center text-center" method="get" style="width: 100%">
+            <form asp-action="Index" class="d-flex justify-content-center gap-2" method="get" style="width: 100%">
                 <input type="search" name="studentNumber" class="form-control rounded-pill w-100"
                        placeholder="Enter Student Number" value="@Model.StudentNumber" />
-                <button type="submit" class="btn btn-dark ms-2">
+                <button type="submit" class="btn btn-dark fw-bold">
                     <i class="bi bi-search"></i>Search
                 </button>
             </form>
@@ -89,7 +89,7 @@
                         </div>
 
                         <div class="d-flex justify-content-center">
-                            <a class="btn btn-success"
+                            <a class="btn btn-success fw-bold w-100"
                                asp-action="Create"
                                asp-route-studentNumber="@Model.StudentNumber"
                                asp-route-firstName="@Model.FirstName"
@@ -103,7 +103,7 @@
                 {
                     <div class="text-center text-danger fw-bold">NO RECORDS FOUND!</div>
                     <div>
-                        <a class="btn btn-success" asp-action="Create">
+                        <a class="btn btn-success fw-bold" asp-action="Create">
                             Create Violation
                         </a>
                     </div>

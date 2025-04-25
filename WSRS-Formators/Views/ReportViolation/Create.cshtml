@@ -77,8 +77,10 @@
 
         @* Optional(outside scope): Upload file input  *@
 
-        <button type="submit" class="btn btn-dark">Submit Report</button>
-        <a asp-action="Index" class="btn btn-secondary ms-2">Cancel</a>
+        <div class="d-flex flex-column gap-2">
+            <button type="submit" class="btn btn-dark fw-bold w-100">Submit Report</button>
+            <a asp-action="Index" class="btn btn-secondary fw-bold w-100">Cancel</a>
+        </div>
     </form>
 </main>
 
