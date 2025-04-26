@@ -17,5 +17,9 @@ namespace WSRS_SWAFO.ViewModels
         [Required(ErrorMessage = "Student's Last Name is required")]
         [Display(Name = "Last Name")]
         public string LastName { get; set; }
+
+        [Required(ErrorMessage = "Student's Email is required")]
+        [Display(Name = "Email Address")]
+        public string Email { get; set; }
     }
 }

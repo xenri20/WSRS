@@ -1,4 +1,6 @@
-﻿@model WSRS_SWAFO.ViewModels.StudentRecordViewModel
+﻿@using WSRS_SWAFO.ViewModels
+@model StudentRecordViewModel
+
 @{
     Layout = "_EncodeLayout";
     ViewData["Title"] = "Student Violation";
@@ -27,19 +29,24 @@
             <h3>Student Information</h3>
 
             <div class="input-wrapper">
-                <input asp-for="StudentNumber" type="number" class="input" autocomplete="StudentNumber" aria-required="true" required />
+                <input asp-for="StudentNumber" type="number" class="input" autocomplete="StudentNumber" aria-required="true" />
                 <label class="label">Student Number<span>*</span></label>
                 <span asp-validation-for="StudentNumber" class="text-danger"></span>
             </div>
             <div class="input-wrapper">
-                <input asp-for="FirstName" type="text" class="input" autocomplete="firstname" aria-required="true" required />
+                <input asp-for="FirstName" type="text" class="input" autocomplete="firstname" aria-required="true" />
                 <label class="label">First Name<span>*</span></label>
                 <span asp-validation-for="FirstName" class="text-danger"></span>
             </div>
             <div class="input-wrapper">
-                <input asp-for="LastName" type="text" class="input" autocomplete="LastName" aria-required="true" required />
+                <input asp-for="LastName" type="text" class="input" autocomplete="LastName" aria-required="true" />
                 <label class="label">Last Name<span>*</span></label>
                 <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+            <div class="input-wrapper">
+                <input asp-for="Email" type="email" class="input" aria-required="true" />
+                <label class="label">Email<span>*</span></label>
+                <span asp-validation-for="Email" class="text-danger"></span>
             </div>
             <button class="btn btn-next" type="submit">
                 Next

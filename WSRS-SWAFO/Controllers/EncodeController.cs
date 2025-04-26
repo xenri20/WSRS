@@ -109,17 +109,19 @@ namespace WSRS_SWAFO.Controllers
             {
                 StudentNumber = model.StudentNumber,
                 FirstName = model.FirstName,
-                LastName = model.LastName
+                LastName = model.LastName,
+                Email = model.Email
             };
 
             _context.Students.Add(student);
             _context.SaveChanges();
 
-            return RedirectToAction("EncodeStudentViolation", new
+            return RedirectToAction(nameof(EncodeStudentViolation), new
             {
                 studentNumber = student.StudentNumber,
                 firstName = student.FirstName,
-                lastName = student.LastName
+                lastName = student.LastName,
+                email = student.Email
             });
         }
 
