@@ -1,5 +1,5 @@
 ﻿@using WSRS_Formators.ViewModels
-@model CreateReportViewModel
+@model CreateReportViewModel?
 
 @{
     ViewData["Title"] = "Create Report";
@@ -16,7 +16,7 @@
         <input asp-for="ReportDate" type="hidden" value="@DateOnly.FromDateTime(DateTime.Now)" />
 
         @if ((studentNumber != null && firstName != null && lastName != null)
-        || (Model.StudentNumber != null && !string.IsNullOrEmpty(Model.FirstName) && !string.IsNullOrEmpty(Model.LastName)))
+        || (Model?.StudentNumber != null && !string.IsNullOrEmpty(Model.FirstName) && !string.IsNullOrEmpty(Model.LastName)))
         {
             <div class="mb-3">
                 <label asp-for="StudentNumber" class="form-label"></label>
