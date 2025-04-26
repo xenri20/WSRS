@@ -110,7 +110,7 @@ namespace WSRS_SWAFO.Controllers
                 StudentNumber = model.StudentNumber,
                 FirstName = model.FirstName,
                 LastName = model.LastName,
-                Email = model.Email
+                Email = model.Email.ToLower()
             };
 
             _context.Students.Add(student);
@@ -120,8 +120,7 @@ namespace WSRS_SWAFO.Controllers
             {
                 studentNumber = student.StudentNumber,
                 firstName = student.FirstName,
-                lastName = student.LastName,
-                email = student.Email
+                lastName = student.LastName
             });
         }
 
