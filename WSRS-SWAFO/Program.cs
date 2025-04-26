@@ -70,7 +70,11 @@ builder.Services.ConfigureApplicationCookie(options =>
 
 // https://dotnettutorials.net/lesson/difference-between-addmvc-and-addmvccore-method/
 // Adds features support for MVC and Pages
-builder.Services.AddMvc();
+builder.Services.AddMvc()
+    .AddMvcOptions(options =>
+    {
+        options.ModelBindingMessageProvider.SetValueMustNotBeNullAccessor(_ => "This field is required.");
+    });
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddMemoryCache();
 builder.Services.AddSession(options =>
