@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using WSRS_Formators.Data;
 using WSRS_Formators.Models;
-using WSRS_Student.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,9 +15,6 @@ if (string.IsNullOrEmpty(connectionStringLocal) || string.IsNullOrEmpty(connecti
 }
 
 // Add DB contexts
-builder.Services.AddDbContext<AzureDbContext>(options =>
-    options.UseSqlServer(connectionStringLocal));
-
 builder.Services.AddDbContext<AuthDbContext>(options =>
     options.UseSqlServer(connectionStringLocal));
 
