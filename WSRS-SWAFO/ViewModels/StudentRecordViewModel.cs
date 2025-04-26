@@ -6,8 +6,8 @@ namespace WSRS_SWAFO.ViewModels
 {
     public class StudentRecordViewModel
     {
-        [Required(ErrorMessage = "Student ID is required")]
-        [Remote(action: "CheckStudentID", controller: "Encode", ErrorMessage = "Student ID is already taken.")]
+        [Required(ErrorMessage = "Student Number is required")]
+        [Remote(action: "CheckStudentID", controller: "Encode", ErrorMessage = "Student Number is already taken")]
         [Display(Name = "Student Number")]
         public int StudentNumber { get; set; }
 
