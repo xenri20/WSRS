@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
 using WSRS_SWAFO.Data;
 using WSRS_SWAFO.Data.Enum;
 using WSRS_SWAFO.Models;
@@ -81,12 +80,6 @@ namespace WSRS_SWAFO.Controllers
                 {
                     studentsQuery = studentsQuery.Where(s => s.LastName.Contains(searchStudent) || s.FirstName.Contains(searchStudent));
                 }
-            var toastMessage = new ToastViewModel
-            {
-                Title = "Success",
-                Message = "Registered a new student in the system."
-            };
-            TempData["Result"] = JsonConvert.SerializeObject(toastMessage);
 
                 // Once existed, compiler creates table query
                 var ExistingStudent = studentsQuery.Select(s => new StudentRecordViewModel
