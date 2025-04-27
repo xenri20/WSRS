@@ -8,7 +8,7 @@ namespace WSRS_SWAFO.ViewModels
     {
         public int Id { get; set; }
 
-        [Required(ErrorMessage = "Student ID is required")]
+        [Required(ErrorMessage = "Student Number is required")]
         [Display(Name = "Student Number")]
         [ForeignKey("Student")]
         public int StudentNumber { get; set; }

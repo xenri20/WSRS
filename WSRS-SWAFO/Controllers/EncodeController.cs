@@ -112,7 +112,8 @@ namespace WSRS_SWAFO.Controllers
             {
                 StudentNumber = model.StudentNumber,
                 FirstName = model.FirstName,
-                LastName = model.LastName
+                LastName = model.LastName,
+                Email = model.Email.ToLower()
             };
 
             _context.Students.Add(student);
@@ -128,7 +129,7 @@ namespace WSRS_SWAFO.Controllers
                 Console.WriteLine($"Email send failed: {ex.Message}");
             }
 
-            return RedirectToAction("EncodeStudentViolation", new
+            return RedirectToAction(nameof(EncodeStudentViolation), new
             {
                 studentNumber = student.StudentNumber,
                 firstName = student.FirstName,
