@@ -1,6 +1,6 @@
 ﻿@using WSRS_SWAFO.Data.Enum
 @using WSRS_SWAFO.ViewModels
-@model ReportTrafficEncodedViewModel
+@model TrafficReportEncodedViewModel
 @{
     Layout = "_EncodeLayout";
     ViewData["Title"] = "Student Violation";
@@ -25,14 +25,14 @@
 <p>Record and encode the violation in the system</p>
 
 <div class="panel">
-    <form id="record-violation" asp-controller="Encode" asp-action="CreateTrafficReport" method="post">
+    <form id="record-violation" asp-controller="Encode" asp-action="EncodeTrafficViolation" method="post">
         <div id="student-information">
             <h3>Student Information</h3>
             <dl>
                 <dt>Student Number:</dt>
                 <dd>@Model.StudentNumber</dd>
                 <dt>Student Name:</dt>
-                <dd>@Model.Student.FirstName @Model.Student.LastName</dd>
+                <dd>@Model.FirstName @Model.LastName</dd>
             </dl>
             <input hidden asp-for="StudentNumber" value="@Model.StudentNumber" readonly />
             <input hidden asp-for="FirstName" value="@Model.FirstName" readonly />

@@ -260,24 +260,69 @@ namespace WSRS_SWAFO.Controllers
             return RedirectToAction(nameof(StudentRecordViolation));
         }
 
+        [HttpGet]
+        public IActionResult EncodeTrafficViolation(
+            [FromQuery] int studentNumber,
+            [FromQuery] string firstName,
+            [FromQuery] string lastName)
+        {
+            var referer = Request.Headers["Referer"].ToString();
+            if (string.IsNullOrEmpty(referer))
+            {
+                return RedirectToAction(nameof(StudentRecordViolation));
+            }
+
+            var studentInfo = new TrafficReportEncodedViewModel
+            {
+                StudentNumber = studentNumber,
+                FirstName = firstName,
+                LastName = lastName
+            };
+
+            ViewBag.Colleges = _context.College.ToList();
+
+            return View(studentInfo);
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateTrafficReport(TrafficReportsEncoded trafficReport)
+        public async Task<IActionResult> EncodeTrafficViolation(TrafficReportEncodedViewModel viewModel)
         {
             if (!ModelState.IsValid)
             {
-                try
+                return RedirectToAction(nameof(EncodeTrafficViolation), new
                 {
-                    _context.TrafficReportsEncoded.Add(trafficReport);
-                    await _context.SaveChangesAsync();
-                    return RedirectToAction("StudentRecordViolation");
-                }
-                catch (Exception ex)
-                {
-                    ModelState.AddModelError("", "Unable to save data: " + ex.Message);
-                }
+                    studentNumber = viewModel.StudentNumber,
+                    firstName = viewModel.FirstName,
+                    lastName = viewModel.LastName
+                });
             }
-            return View(trafficReport);
+
+            var studentTrafficReport = new TrafficReportsEncoded
+            {
+                OffenseId = viewModel.OffenseId,
+                StudentNumber = viewModel.StudentNumber,
+                CollegeID = viewModel.CollegeID,
+                CommissionDate = viewModel.CommissionDate,
+                PlateNumber = viewModel.PlateNumber,
+                Place = viewModel.Place,
+                Remarks = viewModel.Remarks,
+                ORNumber = viewModel.ORNumber,
+                DatePaid = viewModel.DatePaid
+            };
+
+            try
+            {
+                _context.TrafficReportsEncoded.Add(studentTrafficReport);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(StudentRecordViolation));
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", "Unable to save data: " + ex.Message);
+            }
+
+            return View(studentTrafficReport);
         }
 
 
@@ -298,28 +343,6 @@ namespace WSRS_SWAFO.Controllers
             return View();
         }
 
-        public IActionResult EncodeTrafficViolation(int studentNumber, string firstName, string lastName)
-        {
-            var referer = Request.Headers["Referer"].ToString();
-            if (string.IsNullOrEmpty(referer))
-            {
-                return RedirectToAction("StudentRecordViolation");
-            }
-            var studentInfo = new ReportTrafficEncodedViewModel
-            {
-                StudentNumber = studentNumber,
-                Student = new Student
-                {
-                    StudentNumber = studentNumber,
-                    FirstName = firstName,
-                    LastName = lastName
-                }
-            };
-
-            ViewBag.Colleges = _context.College.ToList();
-
-            return View(studentInfo);
-        }
         public IActionResult CreateOffense()
         {
             // Retrieve all offenses and sort them by Classification
