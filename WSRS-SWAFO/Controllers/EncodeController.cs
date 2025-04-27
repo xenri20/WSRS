@@ -5,6 +5,7 @@ using WSRS_SWAFO.Data;
 using WSRS_SWAFO.Data.Enum;
 using WSRS_SWAFO.Models;
 using WSRS_SWAFO.ViewModels;
+using WSRS_SWAFO.Interfaces;
 
 namespace WSRS_SWAFO.Controllers
 {
@@ -12,10 +13,12 @@ namespace WSRS_SWAFO.Controllers
     public class EncodeController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IEmailSender _emailSender;
 
-        public EncodeController(ApplicationDbContext context)
+        public EncodeController(ApplicationDbContext context, IEmailSender emailSender)
         {
             _context = context;
+            _emailSender = emailSender;
         }
 
         // Mode Switch
@@ -98,7 +101,7 @@ namespace WSRS_SWAFO.Controllers
 
         // Create Student Entry - POST Function
         [HttpPost]
-        public IActionResult CreateNewStudent(StudentRecordViewModel model)
+        public async Task<IActionResult> CreateNewStudent(StudentRecordViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -114,6 +117,16 @@ namespace WSRS_SWAFO.Controllers
 
             _context.Students.Add(student);
             _context.SaveChanges();
+
+            try
+            {
+                await _emailSender.SendEmailAsync("swafomatortest@outlook.com", "You have been violated!", "This is just a test");
+                Console.WriteLine("Email Sent Successfully~");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Email send failed: {ex.Message}");
+            }
 
             return RedirectToAction("EncodeStudentViolation", new
             {
