@@ -1,11 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
 using WSRS_SWAFO.Data;
 using WSRS_SWAFO.Data.Enum;
 using WSRS_SWAFO.Models;
 using WSRS_SWAFO.ViewModels;
 using WSRS_SWAFO.Interfaces;
+using System.Reflection;
 
 namespace WSRS_SWAFO.Controllers
 {
@@ -465,6 +467,17 @@ namespace WSRS_SWAFO.Controllers
 
 
             return RedirectToAction(nameof(CreateCollege));
+        }
+
+        private void SetToastMessage(string message, string title = "", string cssClassName = "bg-white")
+        {
+            var toastMessage = new ToastViewModel
+            {
+                Title = title,
+                Message = message,
+                CssClassName = cssClassName
+            };
+            TempData["Result"] = JsonSerializer.Serialize(toastMessage);
         }
     }
 }
