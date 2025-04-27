@@ -5,6 +5,7 @@ using WSRS_SWAFO.Data;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using WSRS_SWAFO.Services;
+using WSRS_SWAFO.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
@@ -43,6 +44,9 @@ builder.Services.AddAuthentication(options =>
         }
     };
 });
+
+builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
+builder.Services.AddScoped<IEmailSender, EmailService>();
 
 builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
 {
