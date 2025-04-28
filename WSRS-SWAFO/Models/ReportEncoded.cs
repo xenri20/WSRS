@@ -22,9 +22,8 @@ namespace WSRS_SWAFO.Models
         [JsonIgnore]
         public Student Student { get; set; } // Navigation Property
 
-        [ForeignKey("ApplicationUser")]
         public string? FormatorId { get; set; } // Nullable if needed
-        public ApplicationUser? Formator { get; set; }
+        public string? Formator { get; set; }
 
         public DateOnly CommissionDate { get; set; }
         public string Course { get; set; }
