@@ -15,6 +15,5 @@ namespace WSRS_SWAFO.Models
         public string LastName { get; set; }
         public string College { get; set; }
         public string CourseYearSection { get; set; }
-        public bool IsArchived { get; set; }
     }
 }

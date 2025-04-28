@@ -1,6 +1,8 @@
 ﻿@using System.Globalization
 @using System.Security.Claims
-@model WSRS_SWAFO.ViewModels.AccountViewModel
+@using System.Text.Json
+@using WSRS_SWAFO.ViewModels
+@model AccountViewModel
 
 @{
     ViewData["Title"] = "Account";
@@ -13,6 +15,20 @@
 
 @section customHead {
     <link rel="stylesheet" href="~/css/accountStyle.css" asp-append-version="true" />
+}
+
+@if (TempData["LogOutMessage"] is string messageJson && !string.IsNullOrEmpty(messageJson))
+{
+    var message = JsonSerializer.Deserialize<ToastViewModel>(messageJson);
+    <partial name="_ToastPartial" model="@message" />
+
+    <script>
+        // Will redirect the user in 6 seconds
+
+        setTimeout(() => {
+            window.location.href = '@Url.Action("SignOut", "LogOn")';
+        }, 6000); 
+    </script>
 }
 
 <div id="account">
@@ -37,4 +53,5 @@
 
 @section scripts {
     <script src="~/js/account.js" asp-append-version="true" ></script>
+
 }

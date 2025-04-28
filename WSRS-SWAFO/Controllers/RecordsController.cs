@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
 using WSRS_SWAFO.Data;
 using WSRS_SWAFO.Models;
 using WSRS_SWAFO.ViewModels;
@@ -164,23 +165,35 @@ namespace WSRS_SWAFO.Controllers
                 return View(editRecordVM);
             }
 
-            var updatedRecord = new ReportEncoded
+            try
             {
-                Id = editRecordVM.Id,
-                StudentNumber = editRecordVM.StudentNumber,
-                CollegeID = editRecordVM.College,
-                OffenseId = editRecordVM.OffenseId,
-                Course = editRecordVM.Course,
-                CommissionDate = editRecordVM.CommissionDate,
-                HearingDate = editRecordVM.HearingDate,
-                Sanction = editRecordVM.Sanction,
-                Description = editRecordVM.Description,
-                StatusOfSanction = editRecordVM.StatusOfSanction,
-            };
+                var updatedRecord = new ReportEncoded
+                {
+                    Id = editRecordVM.Id,
+                    StudentNumber = editRecordVM.StudentNumber,
+                    CollegeID = editRecordVM.College,
+                    OffenseId = editRecordVM.OffenseId,
+                    Course = editRecordVM.Course,
+                    CommissionDate = editRecordVM.CommissionDate,
+                    HearingDate = editRecordVM.HearingDate,
+                    Sanction = editRecordVM.Sanction,
+                    Description = editRecordVM.Description,
+                    StatusOfSanction = editRecordVM.StatusOfSanction,
+                };
 
-            _context.Update(updatedRecord);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Details), new { id = editRecordVM.Id });
+                _context.Update(updatedRecord);
+                await _context.SaveChangesAsync();
+
+                SetToastMessage(title: "Success", message: "A record has been edited successfully.");
+                return RedirectToAction(nameof(Details), new { id = editRecordVM.Id });
+            }
+            catch (Exception ex)
+            {
+                SetToastMessage(title: "Error", message: "Something went wrong modifying your data.", cssClassName: "bg-danger text-white");
+                _logger.LogError(ex.Message);
+            }
+
+            return View(editRecordVM);
         }
 
         public async Task<IActionResult> Traffic(
@@ -200,17 +213,17 @@ namespace WSRS_SWAFO.Controllers
 
             var records = from tr in _context.TrafficReportsEncoded.AsNoTracking()
                     .Include(tr => tr.Student)
-                select new TrafficRecordsViewModel
-                {
-                    Id = tr.Id,
-                    Name = string.Concat(tr.Student.FirstName, " ", tr.Student.LastName),
-                    StudentNumber = tr.StudentNumber,
-                    College = tr.CollegeID,
-                    CommissionDate = tr.CommissionDate,
-                    OffenseClassification = tr.Offense.Classification.ToString().Substring(0, 5) + " Traffic",
-                    OffenseNature = tr.Offense.Nature,
-                    ORNumber = tr.ORNumber,
-                };
+                          select new TrafficRecordsViewModel
+                          {
+                              Id = tr.Id,
+                              Name = string.Concat(tr.Student.FirstName, " ", tr.Student.LastName),
+                              StudentNumber = tr.StudentNumber,
+                              College = tr.CollegeID,
+                              CommissionDate = tr.CommissionDate,
+                              OffenseClassification = tr.Offense.Classification.ToString().Substring(0, 5) + " Traffic",
+                              OffenseNature = tr.Offense.Nature,
+                              ORNumber = tr.ORNumber,
+                          };
 
             if (!string.IsNullOrEmpty(searchString))
             {
@@ -329,23 +342,46 @@ namespace WSRS_SWAFO.Controllers
                 return View(editTrafficRecordVM);
             }
 
-            var updatedRecord = new TrafficReportsEncoded
+            try
             {
-                Id = editTrafficRecordVM.Id,
-                StudentNumber = editTrafficRecordVM.StudentNumber,
-                CollegeID = editTrafficRecordVM.College,
-                OffenseId = editTrafficRecordVM.OffenseId,
-                CommissionDate = editTrafficRecordVM.CommissionDate,
-                PlateNumber = editTrafficRecordVM.PlateNumber,
-                Place = editTrafficRecordVM.Place,
-                Remarks = editTrafficRecordVM.Remarks,
-                DatePaid = editTrafficRecordVM.DatePaid,
-                ORNumber = editTrafficRecordVM.ORNumber,
-            };
+                var updatedRecord = new TrafficReportsEncoded
+                {
+                    Id = editTrafficRecordVM.Id,
+                    StudentNumber = editTrafficRecordVM.StudentNumber,
+                    CollegeID = editTrafficRecordVM.College,
+                    OffenseId = editTrafficRecordVM.OffenseId,
+                    CommissionDate = editTrafficRecordVM.CommissionDate,
+                    PlateNumber = editTrafficRecordVM.PlateNumber,
+                    Place = editTrafficRecordVM.Place,
+                    Remarks = editTrafficRecordVM.Remarks,
+                    DatePaid = editTrafficRecordVM.DatePaid,
+                    ORNumber = editTrafficRecordVM.ORNumber,
+                };
 
-            _context.Update(updatedRecord);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(TrafficDetails), new { id = editTrafficRecordVM.Id });
+                _context.Update(updatedRecord);
+                await _context.SaveChangesAsync();
+
+                SetToastMessage(title: "Success", message: "A traffic record has been edited successfully.");
+                return RedirectToAction(nameof(TrafficDetails), new { id = editTrafficRecordVM.Id });
+            }
+            catch (Exception ex)
+            {
+                SetToastMessage(title: "Error", message: "Something went wrong modifying your data.", cssClassName: "bg-danger text-white");
+                _logger.LogError(ex.Message);
+            }
+
+            return View(editTrafficRecordVM);
+        }
+
+        private void SetToastMessage(string message, string title = "", string cssClassName = "bg-white")
+        {
+            var toastMessage = new ToastViewModel
+            {
+                Title = title,
+                Message = message,
+                CssClassName = cssClassName
+            };
+            TempData["Result"] = JsonSerializer.Serialize(toastMessage);
         }
     }
 }

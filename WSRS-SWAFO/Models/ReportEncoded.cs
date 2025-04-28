@@ -9,22 +9,21 @@ namespace WSRS_SWAFO.Models
         [Key]
         public int Id { get; set; }
 
-        [ForeignKey("Offense"), DatabaseGenerated(DatabaseGeneratedOption.None)]
+        [ForeignKey(nameof(Offense)), DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int OffenseId { get; set; }
         public Offense Offense { get; set; } // Navigation Property
 
-        [ForeignKey("College")]
+        [ForeignKey(nameof(College))]
         public string CollegeID { get; set; }
         public College College { get; set; }
 
-        [ForeignKey("Student")]
+        [ForeignKey(nameof(Student))]
         public int StudentNumber { get; set; }
         [JsonIgnore]
         public Student Student { get; set; } // Navigation Property
 
-        [ForeignKey("ApplicationUser")]
         public string? FormatorId { get; set; } // Nullable if needed
-        public ApplicationUser? Formator { get; set; }
+        public string? Formator { get; set; }
 
         public DateOnly CommissionDate { get; set; }
         public string Course { get; set; }

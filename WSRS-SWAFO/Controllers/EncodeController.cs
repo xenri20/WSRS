@@ -1,11 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
 using WSRS_SWAFO.Data;
 using WSRS_SWAFO.Data.Enum;
 using WSRS_SWAFO.Models;
 using WSRS_SWAFO.ViewModels;
 using WSRS_SWAFO.Interfaces;
+using System.Reflection;
 
 namespace WSRS_SWAFO.Controllers
 {
@@ -13,12 +15,19 @@ namespace WSRS_SWAFO.Controllers
     public class EncodeController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly ILogger<EncodeController> _logger;
         private readonly IEmailSender _emailSender;
 
-        public EncodeController(ApplicationDbContext context, IEmailSender emailSender)
+        public EncodeController(ApplicationDbContext context, ILogger<EncodeController> logger, IEmailSender emailSender)
         {
             _context = context;
+            _logger = logger;
             _emailSender = emailSender;
+        }
+
+        public IActionResult Index()
+        {
+            return RedirectToAction(nameof(EncodingMode));
         }
 
         // Mode Switch
@@ -49,6 +58,7 @@ namespace WSRS_SWAFO.Controllers
                     LastName = student.LastName,
                     FirstName = student.FirstName
                 })
+                .AsNoTracking()
                 .Take(5)
                 .ToListAsync();
 
@@ -75,6 +85,7 @@ namespace WSRS_SWAFO.Controllers
                 {
                     studentsQuery = studentsQuery.Where(s => s.LastName.Contains(searchStudent) || s.FirstName.Contains(searchStudent));
                 }
+
                 // Once existed, compiler creates table query
                 var ExistingStudent = studentsQuery.Select(s => new StudentRecordViewModel
                 {
@@ -82,9 +93,9 @@ namespace WSRS_SWAFO.Controllers
                     LastName = s.LastName,
                     FirstName = s.FirstName
                 });
-                return View("StudentRecordViolation", ExistingStudent);
+                return View(nameof(StudentRecordViolation), ExistingStudent);
             }
-            return View("StudentRecordViolation", null);
+            return View(nameof(StudentRecordViolation), null);
         }
 
         // Page 2 - Create Student Data (If no student present) - Index
@@ -93,7 +104,7 @@ namespace WSRS_SWAFO.Controllers
             var referer = Request.Headers["Referer"].ToString();
             if (string.IsNullOrEmpty(referer))
             {
-                return RedirectToAction("StudentRecordViolation");
+                return RedirectToAction(nameof(StudentRecordViolation));
             }
 
             return View();
@@ -105,7 +116,8 @@ namespace WSRS_SWAFO.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View("CreateStudentRecord", model);
+                SetToastMessage(message: "Please fill in the required fields.");
+                return View(nameof(CreateStudentRecord), model);
             }
 
             var student = new Student
@@ -116,8 +128,17 @@ namespace WSRS_SWAFO.Controllers
                 Email = model.Email.ToLower()
             };
 
-            _context.Students.Add(student);
-            _context.SaveChanges();
+            try
+            {
+                _context.Students.Add(student);
+                await _context.SaveChangesAsync();
+                SetToastMessage(title: "Success", message: "A student was registered successfully.");
+            }
+            catch (Exception ex)
+            {
+                SetToastMessage(title: "Error", message: "Something went wrong while submitting your data.", cssClassName: "bg-danger text-white");
+                _logger.LogError(ex.Message);
+            }
 
             try
             {
@@ -161,9 +182,9 @@ namespace WSRS_SWAFO.Controllers
             {
                 return RedirectToAction(nameof(EncodeStudentViolation), new
                 {
-                    studentNumber = studentNumber,
-                    firstName = firstName,
-                    lastName = lastName
+                    studentNumber,
+                    firstName,
+                    lastName
                 });
             }
 
@@ -171,9 +192,9 @@ namespace WSRS_SWAFO.Controllers
             {
                 return RedirectToAction(nameof(EncodeTrafficViolation), new
                 {
-                    studentNumber = studentNumber,
-                    firstName = firstName,
-                    lastName = lastName
+                    studentNumber,
+                    firstName,
+                    lastName
                 });
             }
 
@@ -212,6 +233,8 @@ namespace WSRS_SWAFO.Controllers
         {
             if (!ModelState.IsValid)
             {
+                SetToastMessage(message: "Please fill in the required fields.");
+
                 return RedirectToAction(nameof(EncodeStudentViolation), new
                 {
                     studentNumber = reportEncodedVM.StudentNumber,
@@ -237,10 +260,16 @@ namespace WSRS_SWAFO.Controllers
 
                 _context.ReportsEncoded.Add(studentReport);
                 await _context.SaveChangesAsync();
+
+                SetToastMessage(title: "Success", message: "A report has been encoded successfully.");
+
+                return RedirectToAction(nameof(StudentRecordViolation));
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("", "Unable to save data: " + ex.Message);
+                SetToastMessage(title: "Error", message: "Something went wrong encoding your data.", cssClassName: "bg-danger text-white");
+                _logger.LogError(ex.Message);
+
                 return RedirectToAction(nameof(EncodeStudentViolation), new
                 {
                     studentNumber = reportEncodedVM.StudentNumber,
@@ -248,30 +277,79 @@ namespace WSRS_SWAFO.Controllers
                     lastName = reportEncodedVM.LastName
                 });
             }
+        }
 
-            return RedirectToAction(nameof(StudentRecordViolation));
+        [HttpGet]
+        public IActionResult EncodeTrafficViolation(
+            [FromQuery] int studentNumber,
+            [FromQuery] string firstName,
+            [FromQuery] string lastName)
+        {
+            var referer = Request.Headers["Referer"].ToString();
+            if (string.IsNullOrEmpty(referer))
+            {
+                return RedirectToAction(nameof(StudentRecordViolation));
+            }
+
+            var studentInfo = new TrafficReportEncodedViewModel
+            {
+                StudentNumber = studentNumber,
+                FirstName = firstName,
+                LastName = lastName
+            };
+
+            ViewBag.Colleges = _context.College.ToList();
+
+            return View(studentInfo);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateTrafficReport(TrafficReportsEncoded trafficReport)
+        public async Task<IActionResult> EncodeTrafficViolation(TrafficReportEncodedViewModel viewModel)
         {
             if (!ModelState.IsValid)
             {
-                try
+                SetToastMessage(message: "Please fill in the required fields.");
+                
+                return RedirectToAction(nameof(EncodeTrafficViolation), new
                 {
-                    _context.TrafficReportsEncoded.Add(trafficReport);
-                    await _context.SaveChangesAsync();
-                    return RedirectToAction("StudentRecordViolation");
-                }
-                catch (Exception ex)
-                {
-                    ModelState.AddModelError("", "Unable to save data: " + ex.Message);
-                }
+                    studentNumber = viewModel.StudentNumber,
+                    firstName = viewModel.FirstName,
+                    lastName = viewModel.LastName
+                });
             }
-            return View(trafficReport);
-        }
 
+            var studentTrafficReport = new TrafficReportsEncoded
+            {
+                OffenseId = viewModel.OffenseId,
+                StudentNumber = viewModel.StudentNumber,
+                CollegeID = viewModel.CollegeID,
+                CommissionDate = viewModel.CommissionDate,
+                PlateNumber = viewModel.PlateNumber,
+                Place = viewModel.Place,
+                Remarks = viewModel.Remarks,
+                ORNumber = viewModel.ORNumber,
+                DatePaid = viewModel.DatePaid
+            };
+
+            try
+            {
+                _context.TrafficReportsEncoded.Add(studentTrafficReport);
+                await _context.SaveChangesAsync();
+
+                SetToastMessage(title: "Success", message: "A traffic report has been encoded successfully.");
+
+                return RedirectToAction(nameof(StudentRecordViolation));
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", "Unable to save data: " + ex.Message);
+                SetToastMessage(title: "Error", message: "Something went wrong encoding your data.", cssClassName: "bg-danger text-white");
+                _logger.LogError(ex.Message);
+            }
+
+            return View(studentTrafficReport);
+        }
 
         // Returns offense Nature to JSON - GET Function
         [HttpGet]
@@ -290,28 +368,6 @@ namespace WSRS_SWAFO.Controllers
             return View();
         }
 
-        public IActionResult EncodeTrafficViolation(int studentNumber, string firstName, string lastName)
-        {
-            var referer = Request.Headers["Referer"].ToString();
-            if (string.IsNullOrEmpty(referer))
-            {
-                return RedirectToAction("StudentRecordViolation");
-            }
-            var studentInfo = new ReportTrafficEncodedViewModel
-            {
-                StudentNumber = studentNumber,
-                Student = new Student
-                {
-                    StudentNumber = studentNumber,
-                    FirstName = firstName,
-                    LastName = lastName
-                }
-            };
-
-            ViewBag.Colleges = _context.College.ToList();
-
-            return View(studentInfo);
-        }
         public IActionResult CreateOffense()
         {
             // Retrieve all offenses and sort them by Classification
@@ -459,6 +515,17 @@ namespace WSRS_SWAFO.Controllers
 
 
             return RedirectToAction(nameof(CreateCollege));
+        }
+
+        private void SetToastMessage(string message, string title = "", string cssClassName = "bg-white")
+        {
+            var toastMessage = new ToastViewModel
+            {
+                Title = title,
+                Message = message,
+                CssClassName = cssClassName
+            };
+            TempData["Result"] = JsonSerializer.Serialize(toastMessage);
         }
     }
 }
