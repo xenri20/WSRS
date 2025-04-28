@@ -5,7 +5,7 @@ using WSRS_SWAFO.Models;
 
 namespace WSRS_SWAFO.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "AppRole.Admin, AppRole.Member")]
     public class DashboardController : Controller
     {
         private readonly ILogger<DashboardController> _logger;
