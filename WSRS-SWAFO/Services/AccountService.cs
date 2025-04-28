@@ -70,8 +70,12 @@ namespace WSRS_SWAFO.Services
             if (!string.IsNullOrEmpty(loginHint))
             {
                 // Sync Azure AD claims with ASP.NET Identity claims
-                var additionalClaims = new List<Claim>();
-                additionalClaims.Add(new Claim("login_hint", loginHint));
+                var additionalClaims = new List<Claim>
+                {
+                    new Claim("login_hint", loginHint),
+                    new Claim(ClaimTypes.Surname, surname!),
+                    new Claim(ClaimTypes.GivenName, firstName!),
+                };
 
                 await _signInManager.SignInWithClaimsAsync(user, isPersistent: false, additionalClaims: additionalClaims);
             }
