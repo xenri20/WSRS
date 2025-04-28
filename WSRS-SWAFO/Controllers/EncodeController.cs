@@ -9,7 +9,7 @@ using WSRS_SWAFO.Interfaces;
 
 namespace WSRS_SWAFO.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "AppRole.Admin")]
     public class EncodeController : Controller
     {
         private readonly ApplicationDbContext _context;
