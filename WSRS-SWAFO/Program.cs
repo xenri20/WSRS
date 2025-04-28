@@ -49,7 +49,7 @@ builder.Services.AddAuthentication(options =>
         OnTokenValidated = async context =>
         {
             var accountService = context.HttpContext.RequestServices.GetRequiredService<AccountService>();
-            await accountService.HandleUserSignInAsync(context.Principal);
+            await accountService.HandleUserSignInAsync(context.Principal!);
         }
     };
 });
