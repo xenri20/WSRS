@@ -43,7 +43,8 @@ namespace WSRS_SWAFO.Data
                 {
                     var user = new ApplicationUser();
 
-                    user.Name = "N/A";
+                    user.Surname = "N/A";
+                    user.FirstName = "N/A";
                     user.UserName = adminEmail;
                     user.Email = adminEmail;
 

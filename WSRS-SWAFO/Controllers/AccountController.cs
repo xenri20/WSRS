@@ -26,7 +26,7 @@ namespace WSRS_SWAFO.Controllers
                 return RedirectToAction("Index", "LogOn");
             }
 
-            var accountVM = new AccountViewModel { Email = user!.Email, Name = user!.Name };
+            var accountVM = new AccountViewModel { Email = user.Email!, Name = user.FirstName + user.Surname };
             return View(accountVM);
         }
 
