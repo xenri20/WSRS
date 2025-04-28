@@ -1,5 +1,10 @@
-﻿@{
+﻿@using System.Security.Claims
+@using System.Globalization;
+@{
     ViewData["Title"] = "Dashboard";
+    TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
+    string surname = textInfo.ToTitleCase(User.FindFirst(ClaimTypes.Surname)?.Value.ToLower()!);
+    string firstName = textInfo.ToTitleCase(User.FindFirst(ClaimTypes.GivenName)?.Value.ToLower()!);
 }
 
 @section customHead {
@@ -7,7 +12,7 @@
 }
 
 <div id="dashboard">
-    <h1>Greetings, <span>Ms. Fernandez!</span></h1>
+    <h1>Greetings, <span>@firstName @surname</span></h1>
     <div class="subtitle">You can start with</div>
     <div id="categFunc" class="box-row">
         @if (User.IsInRole("AppRole.Admin"))
