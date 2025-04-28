@@ -93,9 +93,9 @@ namespace WSRS_SWAFO.Controllers
                     LastName = s.LastName,
                     FirstName = s.FirstName
                 });
-                return View("StudentRecordViolation", ExistingStudent);
+                return View(nameof(StudentRecordViolation), ExistingStudent);
             }
-            return View("StudentRecordViolation", null);
+            return View(nameof(StudentRecordViolation), null);
         }
 
         // Page 2 - Create Student Data (If no student present) - Index
@@ -104,7 +104,7 @@ namespace WSRS_SWAFO.Controllers
             var referer = Request.Headers["Referer"].ToString();
             if (string.IsNullOrEmpty(referer))
             {
-                return RedirectToAction("StudentRecordViolation");
+                return RedirectToAction(nameof(StudentRecordViolation));
             }
 
             return View();
@@ -117,7 +117,7 @@ namespace WSRS_SWAFO.Controllers
             if (!ModelState.IsValid)
             {
                 SetToastMessage(message: "Please fill in the required fields.");
-                return View("CreateStudentRecord", model);
+                return View(nameof(CreateStudentRecord), model);
             }
 
             var student = new Student

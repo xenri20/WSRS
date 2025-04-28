@@ -4,6 +4,7 @@
     Layout = "_EncodeLayout";
     ViewData["Title"] = "Student Violation";
 }
+
 @section customHead {
     <link rel="stylesheet" href="~/css/studentViolationStyle.css" asp-append-version="true" />
 }
@@ -16,6 +17,12 @@
         </svg>
     </a>
     <h2>Step 2</h2>
+    @if (ViewData["ViolationType"] != null && ViewData["ViolationType"] is string violationType && !string.IsNullOrEmpty(violationType))
+    {
+        <span class="pill-indicator bg-success @(violationType == "Regular" ? "bg-success text-white" : "bg-warning text-black")">
+            @violationType
+        </span>
+    }
 </div>
 
 <p>Check for an existing violation record</p>

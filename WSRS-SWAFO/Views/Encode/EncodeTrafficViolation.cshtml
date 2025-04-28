@@ -4,6 +4,7 @@
 @{
     Layout = "_EncodeLayout";
     ViewData["Title"] = "Student Violation";
+    ViewData["ViolationType"] = "Traffic";
 
     string today = DateOnly.FromDateTime(DateTime.Now).ToString("yyyy-MM-dd");
 }
@@ -13,13 +14,21 @@
 }
 
 <div class="title">
-    <a asp-controller="Encode" asp-action="StudentRecordViolation" class="btn-function">
-        <svg width="32" height="32" viewBox="0 0 43 43" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M16 22L24 14" stroke="black" stroke-width="2" stroke-linecap="round" />
-            <path d="M16 22L24 30" stroke="black" stroke-width="2" stroke-linecap="round" />
-        </svg>
-    </a>
+    <form asp-controller="Encode" asp-action="StudentRecordViolation" method="post">
+        <button type="submit" class="btn-function" name="violationType" value="Traffic Violation">
+            <svg width="32" height="32" viewBox="0 0 43 43" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M16 22L24 14" stroke="black" stroke-width="2" stroke-linecap="round" />
+                <path d="M16 22L24 30" stroke="black" stroke-width="2" stroke-linecap="round" />
+            </svg>
+        </button>
+    </form>
     <h2>Step 3</h2>
+    @if (ViewData["ViolationType"] != null)
+    {
+        <span class="pill-indicator bg-warning text-black">
+            @ViewData["ViolationType"]
+        </span>
+    }
 </div>
 
 <p>Record and encode the violation in the system</p>
