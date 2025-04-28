@@ -15,6 +15,8 @@ builder.Logging.AddDebug();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
 
+builder.Services.AddTransient<ApplicationDbInitializer>();
+
 builder.Services.AddScoped<AccountService>();
 
 builder.Services.AddAuthentication(options =>
