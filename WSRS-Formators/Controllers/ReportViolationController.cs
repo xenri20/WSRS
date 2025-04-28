@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 using WSRS_Formators.Dtos;
 using WSRS_Formators.Models;
 using WSRS_Formators.ViewModels;
@@ -130,6 +131,17 @@ namespace WSRS_Formators.Controllers
             _logger.LogError("API Response: {StatusCode}, Content: {Content}", response.StatusCode, errorContent);
 
             return RedirectToAction(nameof(Index));
+        }
+
+        private void SetToastMessage(string message, string title = "", string cssClassName = "bg-white")
+        {
+            var toastMessage = new ToastViewModel
+            {
+                Title = title,
+                Message = message,
+                CssClassName = cssClassName
+            };
+            TempData["Result"] = JsonSerializer.Serialize(toastMessage);
         }
     }
 }
