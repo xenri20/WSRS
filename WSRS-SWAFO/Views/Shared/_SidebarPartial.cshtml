@@ -1,73 +1,79 @@
 ﻿<!-- Sign Out Modal  -->
 <div class="modal fade" id="signOutModal" tabindex="-1" aria-labelledby="signOutModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-body">
-        <h1 class="modal-title fs-2" id="signOutModalLabel">
-          Sign Out
-        </h1>
-        Are you sure you want to sign out?
-      </div>
-      <div class="modal-footer">
-        <button class="btn" type="button" data-bs-dismiss="modal">
-          No
-        </button>
-        <form id="signOutForm" asp-controller="LogOn" asp-action="SignOut" method="post">
-          <button class="btn dark-btn" type="submit">
-            Yes
-          </button>
-        </form>
-      </div>
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <h1 class="modal-title fs-2" id="signOutModalLabel">
+                    Sign Out
+                </h1>
+                Are you sure you want to sign out?
+            </div>
+            <div class="modal-footer">
+                <button class="btn" type="button" data-bs-dismiss="modal">
+                    No
+                </button>
+                <form id="signOutForm" asp-controller="LogOn" asp-action="SignOut" method="post">
+                    <button class="btn dark-btn" type="submit">
+                        Yes
+                    </button>
+                </form>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 
 <!-- Sidebar -->
 <nav id="sidebar">
-  <img src="/assets/img/logo-mini.png" class="logo-mini" />
-  <div id="sidePanel">
-    <div id="sel">
-      <a asp-controller="Dashboard" asp-action="Index" class="dashboard-nav">
-        <svg class="icons" width="18" height="19" viewBox="0 0 18 19" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path
-            d="M1 10.5H7C7.55 10.5 8 10.05 8 9.5V1.5C8 0.95 7.55 0.5 7 0.5H1C0.45 0.5 0 0.95 0 1.5V9.5C0 10.05 0.45 10.5 1 10.5ZM1 18.5H7C7.55 18.5 8 18.05 8 17.5V13.5C8 12.95 7.55 12.5 7 12.5H1C0.45 12.5 0 12.95 0 13.5V17.5C0 18.05 0.45 18.5 1 18.5ZM11 18.5H17C17.55 18.5 18 18.05 18 17.5V9.5C18 8.95 17.55 8.5 17 8.5H11C10.45 8.5 10 8.95 10 9.5V17.5C10 18.05 10.45 18.5 11 18.5ZM10 1.5V5.5C10 6.05 10.45 6.5 11 6.5H17C17.55 6.5 18 6.05 18 5.5V1.5C18 0.95 17.55 0.5 17 0.5H11C10.45 0.5 10 0.95 10 1.5Z"
-            fill="currentColor" />
-        </svg>
-        <div>Dashboard</div>
-      </a>
-      <a asp-controller="Encode" asp-action="EncodingMode" class="encode-nav">
-        <svg class="icons" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path
-            d="M18 7.5V6.5L12 0.5H2C0.89 0.5 0 1.39 0 2.5V16.5C0 17.0304 0.210714 17.5391 0.585786 17.9142C0.960859 18.2893 1.46957 18.5 2 18.5H8V16.63L16.39 8.24C16.83 7.8 17.39 7.56 18 7.5ZM11 2L16.5 7.5H11V2ZM19.85 11.69L18.87 12.67L16.83 10.63L17.81 9.65C18 9.45 18.33 9.45 18.53 9.65L19.85 10.97C20.05 11.17 20.05 11.5 19.85 11.69ZM16.13 11.33L18.17 13.37L12.04 19.5H10V17.46L16.13 11.33Z"
-            fill="currentColor" />
-        </svg>
-        <div>Encode</div>
-      </a>
-      <a asp-controller="Records" asp-action="Index" class="records-nav">
-        <svg class="icons" width="18" height="19" viewBox="0 0 18 19" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path
-            d="M16.5 0.5H1.5C1.10218 0.5 0.720644 0.658035 0.43934 0.93934C0.158035 1.22064 0 1.60218 0 2V17C0 17.3978 0.158035 17.7794 0.43934 18.0607C0.720644 18.342 1.10218 18.5 1.5 18.5H11.6897C11.8867 18.5003 12.0818 18.4616 12.2638 18.3862C12.4458 18.3107 12.611 18.2 12.75 18.0603L17.5603 13.25C17.7 13.111 17.8107 12.9458 17.8862 12.7638C17.9616 12.5818 18.0003 12.3867 18 12.1897V2C18 1.60218 17.842 1.22064 17.5607 0.93934C17.2794 0.658035 16.8978 0.5 16.5 0.5ZM6 5.75H12C12.1989 5.75 12.3897 5.82902 12.5303 5.96967C12.671 6.11032 12.75 6.30109 12.75 6.5C12.75 6.69891 12.671 6.88968 12.5303 7.03033C12.3897 7.17098 12.1989 7.25 12 7.25H6C5.80109 7.25 5.61032 7.17098 5.46967 7.03033C5.32902 6.88968 5.25 6.69891 5.25 6.5C5.25 6.30109 5.32902 6.11032 5.46967 5.96967C5.61032 5.82902 5.80109 5.75 6 5.75ZM9 13.25H6C5.80109 13.25 5.61032 13.171 5.46967 13.0303C5.32902 12.8897 5.25 12.6989 5.25 12.5C5.25 12.3011 5.32902 12.1103 5.46967 11.9697C5.61032 11.829 5.80109 11.75 6 11.75H9C9.19891 11.75 9.38968 11.829 9.53033 11.9697C9.67098 12.1103 9.75 12.3011 9.75 12.5C9.75 12.6989 9.67098 12.8897 9.53033 13.0303C9.38968 13.171 9.19891 13.25 9 13.25ZM6 10.25C5.80109 10.25 5.61032 10.171 5.46967 10.0303C5.32902 9.88968 5.25 9.69891 5.25 9.5C5.25 9.30109 5.32902 9.11032 5.46967 8.96967C5.61032 8.82902 5.80109 8.75 6 8.75H12C12.1989 8.75 12.3897 8.82902 12.5303 8.96967C12.671 9.11032 12.75 9.30109 12.75 9.5C12.75 9.69891 12.671 9.88968 12.5303 10.0303C12.3897 10.171 12.1989 10.25 12 10.25H6ZM12 16.6897V12.5H16.1906L12 16.6897Z"
-            fill="currentColor" />
-        </svg>
-        <div>Records</div>
-      </a>
-      <a asp-controller="Reports" asp-action="Index" class="reports-nav">
-        <svg class="icons" width="18" height="19" viewBox="0 0 18 19" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path
-            d="M16 0.5H2C0.9 0.5 0 1.4 0 2.5V16.5C0 17.6 0.9 18.5 2 18.5H16C17.1 18.5 18 17.6 18 16.5V2.5C18 1.4 17.1 0.5 16 0.5ZM6 14.5H4V7.5H6V14.5ZM10 14.5H8V4.5H10V14.5ZM14 14.5H12V10.5H14V14.5Z"
-            fill="currentColor" />
-        </svg>
-        <div>Reports</div>
-      </a>
+    <img src="/assets/img/logo-mini.png" class="logo-mini" />
+    <div id="sidePanel">
+        <div id="sel">
+            <a asp-controller="Dashboard" asp-action="Index" class="dashboard-nav">
+                <svg class="icons" width="18" height="19" viewBox="0 0 18 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                    d="M1 10.5H7C7.55 10.5 8 10.05 8 9.5V1.5C8 0.95 7.55 0.5 7 0.5H1C0.45 0.5 0 0.95 0 1.5V9.5C0 10.05 0.45 10.5 1 10.5ZM1 18.5H7C7.55 18.5 8 18.05 8 17.5V13.5C8 12.95 7.55 12.5 7 12.5H1C0.45 12.5 0 12.95 0 13.5V17.5C0 18.05 0.45 18.5 1 18.5ZM11 18.5H17C17.55 18.5 18 18.05 18 17.5V9.5C18 8.95 17.55 8.5 17 8.5H11C10.45 8.5 10 8.95 10 9.5V17.5C10 18.05 10.45 18.5 11 18.5ZM10 1.5V5.5C10 6.05 10.45 6.5 11 6.5H17C17.55 6.5 18 6.05 18 5.5V1.5C18 0.95 17.55 0.5 17 0.5H11C10.45 0.5 10 0.95 10 1.5Z"
+                    fill="currentColor" />
+                </svg>
+                <div>Dashboard</div>
+            </a>
+            @if (User.IsInRole("AppRole.Admin"))
+            {
+                <a asp-controller="Encode" asp-action="EncodingMode" class="encode-nav">
+                    <svg class="icons" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                        d="M18 7.5V6.5L12 0.5H2C0.89 0.5 0 1.39 0 2.5V16.5C0 17.0304 0.210714 17.5391 0.585786 17.9142C0.960859 18.2893 1.46957 18.5 2 18.5H8V16.63L16.39 8.24C16.83 7.8 17.39 7.56 18 7.5ZM11 2L16.5 7.5H11V2ZM19.85 11.69L18.87 12.67L16.83 10.63L17.81 9.65C18 9.45 18.33 9.45 18.53 9.65L19.85 10.97C20.05 11.17 20.05 11.5 19.85 11.69ZM16.13 11.33L18.17 13.37L12.04 19.5H10V17.46L16.13 11.33Z"
+                        fill="currentColor" />
+                    </svg>
+                    <div>Encode</div>
+                </a>
+            }
+            @if (User.IsInRole("AppRole.Admin") || User.IsInRole("AppRole.Member"))
+            {
+                <a asp-controller="Records" asp-action="Index" class="records-nav">
+                    <svg class="icons" width="18" height="19" viewBox="0 0 18 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                        d="M16.5 0.5H1.5C1.10218 0.5 0.720644 0.658035 0.43934 0.93934C0.158035 1.22064 0 1.60218 0 2V17C0 17.3978 0.158035 17.7794 0.43934 18.0607C0.720644 18.342 1.10218 18.5 1.5 18.5H11.6897C11.8867 18.5003 12.0818 18.4616 12.2638 18.3862C12.4458 18.3107 12.611 18.2 12.75 18.0603L17.5603 13.25C17.7 13.111 17.8107 12.9458 17.8862 12.7638C17.9616 12.5818 18.0003 12.3867 18 12.1897V2C18 1.60218 17.842 1.22064 17.5607 0.93934C17.2794 0.658035 16.8978 0.5 16.5 0.5ZM6 5.75H12C12.1989 5.75 12.3897 5.82902 12.5303 5.96967C12.671 6.11032 12.75 6.30109 12.75 6.5C12.75 6.69891 12.671 6.88968 12.5303 7.03033C12.3897 7.17098 12.1989 7.25 12 7.25H6C5.80109 7.25 5.61032 7.17098 5.46967 7.03033C5.32902 6.88968 5.25 6.69891 5.25 6.5C5.25 6.30109 5.32902 6.11032 5.46967 5.96967C5.61032 5.82902 5.80109 5.75 6 5.75ZM9 13.25H6C5.80109 13.25 5.61032 13.171 5.46967 13.0303C5.32902 12.8897 5.25 12.6989 5.25 12.5C5.25 12.3011 5.32902 12.1103 5.46967 11.9697C5.61032 11.829 5.80109 11.75 6 11.75H9C9.19891 11.75 9.38968 11.829 9.53033 11.9697C9.67098 12.1103 9.75 12.3011 9.75 12.5C9.75 12.6989 9.67098 12.8897 9.53033 13.0303C9.38968 13.171 9.19891 13.25 9 13.25ZM6 10.25C5.80109 10.25 5.61032 10.171 5.46967 10.0303C5.32902 9.88968 5.25 9.69891 5.25 9.5C5.25 9.30109 5.32902 9.11032 5.46967 8.96967C5.61032 8.82902 5.80109 8.75 6 8.75H12C12.1989 8.75 12.3897 8.82902 12.5303 8.96967C12.671 9.11032 12.75 9.30109 12.75 9.5C12.75 9.69891 12.671 9.88968 12.5303 10.0303C12.3897 10.171 12.1989 10.25 12 10.25H6ZM12 16.6897V12.5H16.1906L12 16.6897Z"
+                        fill="currentColor" />
+                    </svg>
+                    <div>Records</div>
+                </a>
+                <a asp-controller="Reports" asp-action="Index" class="reports-nav">
+                    <svg class="icons" width="18" height="19" viewBox="0 0 18 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                        d="M16 0.5H2C0.9 0.5 0 1.4 0 2.5V16.5C0 17.6 0.9 18.5 2 18.5H16C17.1 18.5 18 17.6 18 16.5V2.5C18 1.4 17.1 0.5 16 0.5ZM6 14.5H4V7.5H6V14.5ZM10 14.5H8V4.5H10V14.5ZM14 14.5H12V10.5H14V14.5Z"
+                        fill="currentColor" />
+                    </svg>
+                    <div>Reports</div>
+                </a>
 
-      <a asp-controller="Account" asp-action="Index" class="account-nav">
-        <svg class="icons" width="18" height="19" viewBox="0 0 18 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <a asp-controller="Account" asp-action="Index" class="account-nav">
+                    <svg class="icons" width="18" height="19" viewBox="0 0 18 19" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path
             d="M16 0.5H2C0.9 0.5 0 1.4 0 2.5V16.5C0 17.6 0.9 18.5 2 18.5H16C17.1 18.5 18 17.6 18 16.5V2.5C18 1.4 17.1 0.5 16 0.5ZM9 3.5C10.93 3.5 12.5 5.07 12.5 7C12.5 8.93 10.93 10.5 9 10.5C7.07 10.5 5.5 8.93 5.5 7C5.5 5.07 7.07 3.5 9 3.5ZM16 16.5H2V16.27C2 15.65 2.28 15.07 2.76 14.69C4.47 13.32 6.64 12.5 9 12.5C11.36 12.5 13.53 13.32 15.24 14.69C15.72 15.07 16 15.66 16 16.27V16.5Z"
             fill="currentColor" />
         </svg>
         <div>Account</div>
       </a>
+      }
     </div>
     <div id="logout">
       <hr />
