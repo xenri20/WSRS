@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Text.Json;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using WSRS_SWAFO.Models;
@@ -18,6 +19,7 @@ namespace WSRS_SWAFO.Controllers
             _signInManager = signInManager;
         }
 
+        [HttpGet]
         public async Task<IActionResult> IndexAsync()
         {
             var user = await _userManager.GetUserAsync(User);
@@ -26,10 +28,24 @@ namespace WSRS_SWAFO.Controllers
                 return RedirectToAction("Index", "LogOn");
             }
 
+            if (TempData["LogOut"] is true)
+            {
+                var message = new ToastViewModel
+                {
+                    Title = "Success",
+                    Message = "Offline password has been set. You are now being logged out",
+                    CssClassName = "bg-white"
+                };
+
+                TempData["LogOutMessage"] = JsonSerializer.Serialize(message);
+            }
+
+            //var accountVM = new AccountViewModel { Email = user!.Email, FirstName = user!.FirstName, LastName = user!.LastName};
             var accountVM = new AccountViewModel { Email = user!.Email, Name = user!.Name };
             return View(accountVM);
         }
 
+        [HttpGet]
         public async Task<IActionResult> UpdatePasswordAsync()
         {
             var user = await _userManager.GetUserAsync(User);
@@ -94,10 +110,8 @@ namespace WSRS_SWAFO.Controllers
 
             await _userManager.UpdateSecurityStampAsync(user);
 
-            // TODO Add modal to show change successful and user is not being logged out
-
-            await _signInManager.SignOutAsync();
-            return RedirectToAction("Index", "LogOn");
+            TempData["LogOut"] = true;
+            return RedirectToAction(nameof(Index));
         }
     }
 }
