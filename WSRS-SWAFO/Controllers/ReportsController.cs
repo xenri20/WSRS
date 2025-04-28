@@ -9,7 +9,7 @@ using WSRS_SWAFO.Models;
 
 namespace WSRS_SWAFO.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "AppRole.Admin, AppRole.Member")]
     public class ReportsController : Controller
     {
         private readonly ILogger<ReportsController> _logger;
