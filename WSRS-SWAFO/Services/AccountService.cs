@@ -1,4 +1,5 @@
 ﻿using System.Security.Claims;
+using System.Security.Principal;
 using DocumentFormat.OpenXml.InkML;
 using DocumentFormat.OpenXml.Spreadsheet;
 using Microsoft.AspNetCore.Identity;
@@ -28,7 +29,7 @@ namespace WSRS_SWAFO.Services
             var firstName = claimsIdentity?.FindFirst(ClaimTypes.GivenName)?.Value;
 
             // Find the user based on their Azure AD unique identifier
-            var user = await _userManager.FindByEmailAsync(claimsIdentity.FindFirst("preferred_username")?.Value);
+            var user = await _userManager.FindByEmailAsync(claimsIdentity!.FindFirst("preferred_username")?.Value!);
             // Or create this user
             if (user == null)
             {
@@ -64,7 +65,7 @@ namespace WSRS_SWAFO.Services
             }
             
             // For promptless sign out purposes (e.g. no more choosing which user to sign out as)
-            var loginHint = claimsIdentity.FindFirst("login_hint")?.Value;
+            var loginHint = claimsIdentity!.FindFirst("login_hint")?.Value;
 
             if (!string.IsNullOrEmpty(loginHint))
             {
