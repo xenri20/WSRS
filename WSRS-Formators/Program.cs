@@ -38,7 +38,11 @@ builder.Services.AddHttpClient("WSRS_Api", client =>
         ?? throw new InvalidOperationException("API_BASE_URL is not configured."));
 });
 
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews()
+    .AddMvcOptions(options =>
+    {
+        options.ModelBindingMessageProvider.SetValueMustNotBeNullAccessor(_ => "This field is required.");
+    });
 
 var app = builder.Build();
 
