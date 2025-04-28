@@ -796,7 +796,6 @@
 
   <ItemGroup>
     <Folder Include="Migrations\" />
-    <Folder Include="wwwroot\js\components\" />
   </ItemGroup>
 
 </Project>

@@ -1,12 +1,15 @@
-﻿<!DOCTYPE html>
+﻿@using WSRS_Formators.ViewModels
+@using System.Text.Json
+
+<!DOCTYPE html>
 <html>
 
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>DLSU-D Staff Portal</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 
 <body>
@@ -51,6 +54,18 @@
         </div>
     </nav>
 
+    <div class="toast-container position-fixed bottom-0 start-0 p-3" style="z-index: 1055;">
+        @if (TempData["Result"] != null && TempData["Result"] is string messageJson && !string.IsNullOrEmpty(messageJson))
+        {
+            var message = JsonSerializer.Deserialize<ToastViewModel>(messageJson);
+
+            if (message != null)
+            {
+                <partial name="_ToastPartial" model="@message" />
+            }
+        }
+    </div>
+
     <div class="wrapper">
         <div class="container">
             @RenderBody()
@@ -61,7 +76,9 @@
         </footer>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/components/toast.js" asp-asp-append-version="true"></script>
     @RenderSection("Scripts", required: false)
 </body>
 
