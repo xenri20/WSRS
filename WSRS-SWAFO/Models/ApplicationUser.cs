@@ -9,5 +9,13 @@ namespace WSRS_SWAFO.Models
         [PersonalData]
         [Column(TypeName = "nvarchar(100)")]
         public string Name { get; set; }
+
+        [PersonalData]
+        [Column(TypeName = "nvarchar(100)")]
+        public string Surname { get; set; }
+
+        [PersonalData]
+        [Column(TypeName = "nvarchar(100)")]
+        public string FirstName { get; set; }
     }
 }
