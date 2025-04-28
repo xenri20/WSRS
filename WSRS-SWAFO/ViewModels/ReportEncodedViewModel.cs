@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using WSRS_SWAFO.Models;
 
 namespace WSRS_SWAFO.ViewModels
 {
@@ -8,22 +9,21 @@ namespace WSRS_SWAFO.ViewModels
         public int Id {  get; set; }
 
         [Display(Name = "Student Number")]
-        [ForeignKey("Student")]
+        [ForeignKey(nameof(Student))]
         public int StudentNumber { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
 
         [Required(ErrorMessage = "Select an Offense first!")]
         [Display(Name = "Offense")]
-        [ForeignKey("Offense")]
+        [ForeignKey(nameof(Offense))]
         public int OffenseId { get; set; }
 
         [Required(ErrorMessage = "College is required")]
         [Display(Name = "College")]
-        [ForeignKey("College")]
+        [ForeignKey(nameof(College))]
         public string CollegeID { get; set; }
 
-        //[ForeignKey(nameof(Formator)] // Add formator table soon
         public string? Formator { get; set; } // Nullable if needed
 
         [Required(ErrorMessage = "Commision Date is required")]
