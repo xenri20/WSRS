@@ -1,4 +1,6 @@
 ﻿using System.Security.Claims;
+using DocumentFormat.OpenXml.InkML;
+using DocumentFormat.OpenXml.Spreadsheet;
 using Microsoft.AspNetCore.Identity;
 using WSRS_SWAFO.Models;
 
@@ -21,7 +23,7 @@ namespace WSRS_SWAFO.Services
         {
             var claimsIdentity = principal.Identity as ClaimsIdentity;
 
-            var email = claimsIdentity.FindFirst("preferred_username")?.Value;
+            var email = claimsIdentity?.FindFirst("preferred_username")?.Value;
 
             // Find the user based on their Azure AD unique identifier
             var user = await _userManager.FindByEmailAsync(claimsIdentity.FindFirst("preferred_username")?.Value);
@@ -35,7 +37,20 @@ namespace WSRS_SWAFO.Services
                     UserName = email,
                     Name = claimsIdentity.FindFirst("name")?.Value,
                 };
+
+                var role = claimsIdentity?.FindAll(ClaimTypes.Role)
+                    .Select(r => r.Value)
+                    .ToList();
+
                 var result = await _userManager.CreateAsync(user);
+
+                if (role != null)
+                {
+                    await _userManager.AddToRolesAsync(user, role);
+                } else
+                {
+                    await _userManager.AddToRoleAsync(user, "AppRole.Member");
+                }
 
                 if (result.Succeeded)
                 {
