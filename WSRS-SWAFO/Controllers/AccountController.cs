@@ -6,7 +6,7 @@ using WSRS_SWAFO.ViewModels;
 
 namespace WSRS_SWAFO.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "AppRole.Admin, AppRole.Member")]
     public class AccountController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
