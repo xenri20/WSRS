@@ -124,9 +124,12 @@ namespace WSRS_Formators.Controllers
             if (response.IsSuccessStatusCode)
             {
                 var result = await response.Content.ReadFromJsonAsync<ReportPendingDto>();
+
+                SetToastMessage("Your report has been submitted, thank you.", title: "Success");
                 return RedirectToAction(nameof(Index));
             }
 
+            SetToastMessage("Something went wrong submitting your report.", title: "Error", cssClassName: "bg-danger text-white");
             var errorContent = await response.Content.ReadAsStringAsync();
             _logger.LogError("API Response: {StatusCode}, Content: {Content}", response.StatusCode, errorContent);
 
