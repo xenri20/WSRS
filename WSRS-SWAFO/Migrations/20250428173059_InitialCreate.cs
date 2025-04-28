@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace WSRS_SWAFO.Migrations
 {
     /// <inheritdoc />
-    public partial class EncodeStudentViolationUpdate : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -31,6 +31,8 @@ namespace WSRS_SWAFO.Migrations
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(100)", nullable: false),
+                    Surname = table.Column<string>(type: "nvarchar(100)", nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(100)", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -76,12 +78,35 @@ namespace WSRS_SWAFO.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ReportsPending",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    FormatorId = table.Column<long>(type: "bigint", nullable: false),
+                    Formator = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ReportDate = table.Column<DateOnly>(type: "date", nullable: false),
+                    StudentNumber = table.Column<int>(type: "int", nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    College = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CourseYearSection = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsArchived = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ReportsPending", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Students",
                 columns: table => new
                 {
                     StudentNumber = table.Column<int>(type: "int", nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -240,34 +265,6 @@ namespace WSRS_SWAFO.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ReportsPending",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    FormatorId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CommissionDatetime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    StudentNumber = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ReportsPending", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ReportsPending_AspNetUsers_FormatorId",
-                        column: x => x.FormatorId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ReportsPending_Students_StudentNumber",
-                        column: x => x.StudentNumber,
-                        principalTable: "Students",
-                        principalColumn: "StudentNumber",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "TrafficReportsEncoded",
                 columns: table => new
                 {
@@ -277,10 +274,10 @@ namespace WSRS_SWAFO.Migrations
                     StudentNumber = table.Column<int>(type: "int", nullable: false),
                     CollegeID = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     PlateNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CommissionDatetime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CommissionDate = table.Column<DateOnly>(type: "date", nullable: false),
                     Place = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Remarks = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ORNumber = table.Column<int>(type: "int", nullable: true),
+                    ORNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DatePaid = table.Column<DateOnly>(type: "date", nullable: true)
                 },
                 constraints: table =>
@@ -366,13 +363,8 @@ namespace WSRS_SWAFO.Migrations
                 column: "StudentNumber");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ReportsPending_FormatorId",
-                table: "ReportsPending",
-                column: "FormatorId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ReportsPending_StudentNumber",
-                table: "ReportsPending",
+                name: "IX_Students_StudentNumber",
+                table: "Students",
                 column: "StudentNumber");
 
             migrationBuilder.CreateIndex(

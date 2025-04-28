@@ -178,6 +178,10 @@ namespace WSRS_SWAFO.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(100)");
+
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
 
@@ -207,6 +211,10 @@ namespace WSRS_SWAFO.Migrations
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Surname")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
@@ -355,12 +363,7 @@ namespace WSRS_SWAFO.Migrations
                     b.Property<int>("StudentNumber")
                         .HasColumnType("int");
 
-                    b.Property<int?>("StudentNumber1")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("StudentNumber1");
 
                     b.ToTable("ReportsPending");
                 });
@@ -523,13 +526,6 @@ namespace WSRS_SWAFO.Migrations
                     b.Navigation("Student");
                 });
 
-            modelBuilder.Entity("WSRS_SWAFO.Models.ReportPending", b =>
-                {
-                    b.HasOne("WSRS_SWAFO.Models.Student", null)
-                        .WithMany("ReportsPending")
-                        .HasForeignKey("StudentNumber1");
-                });
-
             modelBuilder.Entity("WSRS_SWAFO.Models.TrafficReportsEncoded", b =>
                 {
                     b.HasOne("WSRS_SWAFO.Models.College", "College")
@@ -560,8 +556,6 @@ namespace WSRS_SWAFO.Migrations
             modelBuilder.Entity("WSRS_SWAFO.Models.Student", b =>
                 {
                     b.Navigation("ReportsEncoded");
-
-                    b.Navigation("ReportsPending");
 
                     b.Navigation("TrafficReportsEncoded");
                 });

@@ -12,8 +12,8 @@ using WSRS_SWAFO.Data;
 namespace WSRS_SWAFO.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250213115333_EncodeStudentViolationUpdate")]
-    partial class EncodeStudentViolationUpdate
+    [Migration("20250428173059_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -181,6 +181,10 @@ namespace WSRS_SWAFO.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(100)");
+
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
 
@@ -210,6 +214,10 @@ namespace WSRS_SWAFO.Migrations
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Surname")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
@@ -322,25 +330,43 @@ namespace WSRS_SWAFO.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("CommissionDatetime")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("College")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CourseYearSection")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("FormatorId")
+                    b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Formator")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("FormatorId")
+                        .HasColumnType("bigint");
+
+                    b.Property<bool>("IsArchived")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateOnly>("ReportDate")
+                        .HasColumnType("date");
 
                     b.Property<int>("StudentNumber")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("FormatorId");
-
-                    b.HasIndex("StudentNumber");
 
                     b.ToTable("ReportsPending");
                 });
@@ -349,6 +375,10 @@ namespace WSRS_SWAFO.Migrations
                 {
                     b.Property<int>("StudentNumber")
                         .HasColumnType("int");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -359,6 +389,8 @@ namespace WSRS_SWAFO.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("StudentNumber");
+
+                    b.HasIndex("StudentNumber");
 
                     b.ToTable("Students");
                 });
@@ -375,14 +407,14 @@ namespace WSRS_SWAFO.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<DateTime>("CommissionDatetime")
-                        .HasColumnType("datetime2");
+                    b.Property<DateOnly>("CommissionDate")
+                        .HasColumnType("date");
 
                     b.Property<DateOnly?>("DatePaid")
                         .HasColumnType("date");
 
-                    b.Property<int?>("ORNumber")
-                        .HasColumnType("int");
+                    b.Property<string>("ORNumber")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("OffenseId")
                         .HasColumnType("int");
@@ -497,25 +529,6 @@ namespace WSRS_SWAFO.Migrations
                     b.Navigation("Student");
                 });
 
-            modelBuilder.Entity("WSRS_SWAFO.Models.ReportPending", b =>
-                {
-                    b.HasOne("WSRS_SWAFO.Models.ApplicationUser", "Formator")
-                        .WithMany()
-                        .HasForeignKey("FormatorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("WSRS_SWAFO.Models.Student", "Student")
-                        .WithMany("ReportsPending")
-                        .HasForeignKey("StudentNumber")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Formator");
-
-                    b.Navigation("Student");
-                });
-
             modelBuilder.Entity("WSRS_SWAFO.Models.TrafficReportsEncoded", b =>
                 {
                     b.HasOne("WSRS_SWAFO.Models.College", "College")
@@ -531,7 +544,7 @@ namespace WSRS_SWAFO.Migrations
                         .IsRequired();
 
                     b.HasOne("WSRS_SWAFO.Models.Student", "Student")
-                        .WithMany()
+                        .WithMany("TrafficReportsEncoded")
                         .HasForeignKey("StudentNumber")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -547,7 +560,7 @@ namespace WSRS_SWAFO.Migrations
                 {
                     b.Navigation("ReportsEncoded");
 
-                    b.Navigation("ReportsPending");
+                    b.Navigation("TrafficReportsEncoded");
                 });
 #pragma warning restore 612, 618
         }
