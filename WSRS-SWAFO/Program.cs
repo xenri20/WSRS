@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using WSRS_SWAFO.Services;
 using WSRS_SWAFO.Interfaces;
+using Microsoft.IdentityModel.Tokens;
+using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
@@ -35,6 +37,11 @@ builder.Services.AddAuthentication(options =>
     options.ResponseType = "code";
     options.SaveTokens = true;
     options.UseTokenLifetime = true;
+
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        RoleClaimType = "roles"
+    };
 
     // Map OIDC claims to ASP.NET Identity
     options.Events = new OpenIdConnectEvents
