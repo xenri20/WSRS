@@ -154,7 +154,8 @@ app.MapControllerRoute(
     pattern: "{controller=LogOn}/{action=Index}/{id?}");
 app.MapRazorPages();
 
-//await AppDbInitializer.CreateRoles(app);
+var initializer = app.Services.GetRequiredService<ApplicationDbInitializer>();
+await initializer.SeedRoles(app);
 //await AppDbInitializer.CreateAdmin(app);
 
 app.Run();
