@@ -4,7 +4,6 @@
 @{
     Layout = "_EncodeLayout";
     ViewData["Title"] = "Student Violation";
-    ViewData["ViolationType"] = "Traffic";
 
     string today = DateOnly.FromDateTime(DateTime.Now).ToString("yyyy-MM-dd");
 }
@@ -23,12 +22,9 @@
         </button>
     </form>
     <h2>Step 3</h2>
-    @if (ViewData["ViolationType"] != null)
-    {
-        <span class="pill-indicator bg-warning text-black">
-            @ViewData["ViolationType"]
-        </span>
-    }
+    <span class="pill-indicator bg-warning text-black">
+        Traffic
+    </span>
 </div>
 
 <p>Record and encode the violation in the system</p>

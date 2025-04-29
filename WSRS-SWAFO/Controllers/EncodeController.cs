@@ -62,8 +62,7 @@ namespace WSRS_SWAFO.Controllers
                 .Take(5)
                 .ToListAsync();
 
-            ViewData["ViolationType"] = violationType == "Student Violation" ? "Regular" : "Traffic";
-
+            TempData["ViolationType"] = violationType; // for pill indicator
             // Returns queried list
             return View(students.AsQueryable());
         }
@@ -99,6 +98,7 @@ namespace WSRS_SWAFO.Controllers
         }
 
         // Page 2 - Create Student Data (If no student present) - Index
+        [HttpGet]
         public IActionResult CreateStudentRecord()
         {
             var referer = Request.Headers["Referer"].ToString();
