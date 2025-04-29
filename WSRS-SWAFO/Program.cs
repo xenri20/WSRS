@@ -167,7 +167,6 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=LogOn}/{action=Index}/{id?}");
-app.MapRazorPages();
 
 var initializer = app.Services.GetRequiredService<ApplicationDbInitializer>();
 await initializer.SeedRoles(app);
