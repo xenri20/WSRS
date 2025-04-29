@@ -7,7 +7,6 @@ using WSRS_SWAFO.Data.Enum;
 using WSRS_SWAFO.Models;
 using WSRS_SWAFO.ViewModels;
 using WSRS_SWAFO.Interfaces;
-using System.Reflection;
 
 namespace WSRS_SWAFO.Controllers
 {
@@ -363,11 +362,73 @@ namespace WSRS_SWAFO.Controllers
             return Json(offenseNature);
         }
 
+        [HttpGet]
         public IActionResult Pending()
         {
-            return View();
+            var archived = _context.ArchivedReportsPending
+                .AsNoTracking()
+                .Select(a => a.ReportPendingId);
+
+            var activeReports = _context.ReportsPending
+                .AsNoTracking()
+                .Where(r => !archived.Contains(r.Id))
+                .OrderByDescending(r => r.ReportDate)
+                .Take(5)
+                .ToList();
+
+            var pendingVM = new PendingViewModel
+            {
+                ReportsPending = activeReports
+            };
+
+            HttpContext.Session.SetString("ViolationType", "Student Violation");
+            return View(pendingVM);
         }
 
+        [HttpPost("{id:int}")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ArchivePending(int id)
+        {
+            var archived = new ArchivedReportPending
+            {
+                ReportPendingId = id,
+                ArchivedAt = DateTime.Now
+            };
+
+            try
+            {
+                _context.ArchivedReportsPending.Add(archived);
+                await _context.SaveChangesAsync();
+                SetToastMessage("A pending report has been archived.");
+                return RedirectToAction(nameof(Pending));
+            }
+            catch (Exception ex)
+            {
+                SetToastMessage(title: "Error", message: "Something went wrong with your message", cssClassName: "bg-danger text-white");
+                _logger.LogError(ex.Message);
+            }
+
+            return RedirectToAction(nameof(Pending));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult EncodeFromPending(ReportPending report)
+        {
+            var studentInfo = new ReportEncodedViewModel
+            {
+                StudentNumber = report.StudentNumber,
+                CollegeID = report.College,
+                CommissionDate = report.ReportDate,
+                Formator = report.Formator,
+                Course = report.CourseYearSection,
+                Description = report.Description,
+            };
+
+            return RedirectToAction(nameof(EncodeStudentViolation), studentInfo);
+        }
+
+        [HttpGet]
         public IActionResult CreateOffense()
         {
             // Retrieve all offenses and sort them by Classification
