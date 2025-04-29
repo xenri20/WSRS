@@ -8,6 +8,7 @@ using WSRS_SWAFO.Models;
 using WSRS_SWAFO.ViewModels;
 using WSRS_SWAFO.Interfaces;
 using System.Reflection;
+using Hangfire;
 
 namespace WSRS_SWAFO.Controllers
 {
@@ -139,17 +140,9 @@ namespace WSRS_SWAFO.Controllers
                 SetToastMessage(title: "Error", message: "Something went wrong while submitting your data.", cssClassName: "bg-danger text-white");
                 _logger.LogError(ex.Message);
             }
-
-            try
-            {
-                await _emailSender.SendEmailAsync("swafomatortest@outlook.com", "You have been violated!", "This is just a test");
-                Console.WriteLine("Email Sent Successfully~");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Email send failed: {ex.Message}");
-            }
-
+            
+            BackgroundJob.Enqueue(() => _emailSender.SendEmailAsync(student.Email, "You have been violated!", "This is just a test"));
+           
             return RedirectToAction(nameof(EncodeStudentViolation), new
             {
                 studentNumber = student.StudentNumber,
