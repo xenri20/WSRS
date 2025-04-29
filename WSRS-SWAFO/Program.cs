@@ -10,6 +10,7 @@ using Microsoft.IdentityModel.Tokens;
 using Hangfire;
 using Hangfire.Dashboard;
 using System.Security.Claims;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
@@ -100,8 +101,17 @@ builder.Services.AddSession(options =>
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
-
 var app = builder.Build();
+
+app.UseHangfireDashboard("/hangfire", new DashboardOptions
+{
+    DisplayStorageConnectionString = false,
+
+    Authorization = new[]
+    {
+        new AppRoleAuthorizationFilter("Admin")
+    }
+});
 
 if (!app.Environment.IsDevelopment())
 {
