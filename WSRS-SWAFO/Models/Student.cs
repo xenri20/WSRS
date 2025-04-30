@@ -16,8 +16,6 @@ namespace WSRS_SWAFO.Models
         // Navigation Properties
         public ICollection<ReportEncoded> ReportsEncoded { get; set; }
         public ICollection<TrafficReportsEncoded> TrafficReportsEncoded { get; set; }
-        [NotMapped]
-        public ICollection<ReportPending> ReportsPending { get; set; }
     }
 }
 
