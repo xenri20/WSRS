@@ -1,4 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
+    document.querySelector(".calendar-nav").classList.add("active");
+
     const calendarEl = document.getElementById('calendar');
     if (!calendarEl) {
         console.warn('Calendar container not found.');

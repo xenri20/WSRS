@@ -1,121 +1,98 @@
-﻿<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FullCalendar with Draggable Events</title>
-
-    <!-- Bootstrap CSS -->
-    <link href="/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
-
+﻿@section customHead {
     <!-- FullCalendar CSS (local) -->
     <link href="/lib/fullcalendar-6.1.17/dist/index.global.min.css" rel="stylesheet" />
+    <link href="~/css/calendarStyle.css" rel="stylesheet" />
+}
 
-    <style>
-        body {
-            padding: 20px;
-            background-color: #f8f9fa;
-        }
-
-        #calendar {
-            background: white;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-        }
-    </style>
-</head>
-
-<body>
-    <div class="container">
-        <h1 class="mb-4 text-center">Hearing Calendar </h1>
-        <button class="btn btn-success mb-4" data-bs-toggle="modal" data-bs-target="#addScheduleModal">
-            Add Hearing Schedule
-        </button>
-        <div id="calendar"></div>
-
-        <!-- Add Schedule Modal -->
-        <div class="modal fade" id="addScheduleModal" tabindex="-1" aria-labelledby="addScheduleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <form id="addScheduleForm">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="addScheduleModalLabel">Add Hearing Schedule</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="mb-3">
-                                <label for="studentNumber" class="form-label">Student Number</label>
-                                <input type="number" class="form-control" id="studentNumber" name="StudentNumber" required>
-                                <small id="studentInfo" class="text-muted"></small>
-                            </div>
-                            <div class="mb-3">
-                                <label for="title" class="form-label">Title</label>
-                                <input type="text" class="form-control" id="title" name="Title" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="date" class="form-label">Date and Time</label>
-                                <input type="datetime-local" class="form-control" id="scheduledDate" name="ScheduledDate" required>
-
-
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary">Save Schedule</button>
-                        </div>
-                    </div>
-                </form>
+<!-- Add Schedule Modal -->
+<div class="modal fade" id="addScheduleModal" tabindex="-1" aria-labelledby="addScheduleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-fullscreen-lg-down">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addScheduleModalLabel">Add Hearing Schedule</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-        </div>
+            <form id="addScheduleForm">
+                <div class="modal-body">
 
-        <!-- Modal for Event Details -->
-        <div class="modal fade" id="eventModal" tabindex="-1" aria-labelledby="eventModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <form id="editEventForm">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="eventModalLabel">Event Details</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <input type="hidden" id="eventId" /> <!-- Hidden event ID -->
-                            <div class="mb-2">
-                                <label>Student Number</label>
-                                <input type="text" id="eventStudentNumber" class="form-control" readonly />
-                            </div>
-                            <div class="mb-2">
-                                <label>Student Name</label>
-                                <input type="text" id="eventStudentName" class="form-control" readonly />
-                            </div>
-                            <div class="mb-2">
-                                <label>Email</label>
-                                <input type="text" id="eventStudentEmail" class="form-control" readonly />
-                            </div>
-                            <div class="mb-2">
-                                <label>Title</label>
-                                <input type="text" id="eventTitleInput" class="form-control" readonly />
-                            </div>
-                            <div class="mb-2">
-                                <label>Date</label>
-                                <input type="datetime-local" id="eventDateInput" class="form-control" readonly />
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" id="editEvent">Edit</button>
-                            <button type="submit" class="btn btn-primary" id="saveEvent" style="display: none;">Save Changes</button>
-                            <button type="button" class="btn btn-danger" id="deleteEvent">Delete</button>
-                        </div>
+                    <div class="mb-3">
+                        <label for="studentNumber" class="form-label">Student Number</label>
+                        <input type="number" class="form-control" id="studentNumber" name="StudentNumber" required>
+                        <small id="studentInfo" class="text-muted"></small>
                     </div>
-                </form>
-            </div>
+                    <div class="mb-3">
+                        <label for="title" class="form-label">Title</label>
+                        <input type="text" class="form-control" id="title" name="Title" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="date" class="form-label">Date and Time</label>
+                        <input type="datetime-local" class="form-control" id="scheduledDate" name="ScheduledDate" required>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn">Save Schedule</button>
+                </div>
+            </form>
         </div>
+    </div>
+</div>
 
-        <!-- Bootstrap JS Bundle -->
-        <script src="/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Modal for Event Details -->
+<div class="modal fade" id="eventModal" tabindex="-1" aria-labelledby="eventModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-fullscreen-lg-down">
+        <form id="editEventForm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="eventModalLabel">Event Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="eventId" /> <!-- Hidden event ID -->
+                    <div class="mb-2">
+                        <label>Student Number</label>
+                        <input type="text" id="eventStudentNumber" class="form-control" readonly />
+                    </div>
+                    <div class="mb-2">
+                        <label>Student Name</label>
+                        <input type="text" id="eventStudentName" class="form-control" readonly />
+                    </div>
+                    <div class="mb-2">
+                        <label>Email</label>
+                        <input type="text" id="eventStudentEmail" class="form-control" readonly />
+                    </div>
+                    <div class="mb-2">
+                        <label>Title</label>
+                        <input type="text" id="eventTitleInput" class="form-control" readonly />
+                    </div>
+                    <div class="mb-2">
+                        <label>Date</label>
+                        <input type="datetime-local" id="eventDateInput" class="form-control" readonly />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn" id="editEvent">Edit</button>
+                    <button type="submit" class="btn" id="saveEvent" style="display: none;">Save Changes</button>
+                    <button type="button" class="btn" id="deleteEvent">Delete</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
 
-        <!-- FullCalendar JS (local) -->
-        <script src="/lib/fullcalendar-6.1.17/dist/index.global.min.js"></script>
+<div class="container d-flex flex-column">
+    <h1>Hearing Calendar </h1>
+    <hr />
+    <button class="btn mb-3" data-bs-toggle="modal" data-bs-target="#addScheduleModal">
+        Add Hearing Schedule
+    </button>
 
-        <script src="~/js/hearing-calendar.js"></script>
-</body>
-</html>
+    <div id="calendar"></div>
+
+    <!-- FullCalendar JS (local) -->
+    <script src="/lib/fullcalendar-6.1.17/dist/index.global.min.js"></script>
+</div>
+
+@section scripts {
+    <script src="~/js/hearing-calendar.js"></script>
+}
