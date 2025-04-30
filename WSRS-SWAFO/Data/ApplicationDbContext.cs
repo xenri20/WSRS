@@ -11,6 +11,7 @@ namespace WSRS_SWAFO.Data
         public DbSet<Student> Students { get; set; }
         public DbSet<Offense> Offenses { get; set; }
         public DbSet<College> College { get; set; } 
+        public DbSet<HearingSchedules> HearingSchedules { get; set; } 
         public DbSet<ReportEncoded> ReportsEncoded { get; set; }
         public DbSet<ReportPending> ReportsPending { get; set; } // read-only replicated from Azure
         public DbSet<TrafficReportsEncoded> TrafficReportsEncoded { get; set; }
