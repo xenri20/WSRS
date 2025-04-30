@@ -88,5 +88,15 @@ namespace WSRS_Api.Repositories
             }
             return null;
         }
+
+        public async Task UpdateStudentReportPatch(int id, JsonPatchDocument<ReportsPending> pending)
+        {
+             var existingReport = GetById(id);
+             if (existingReport != null)
+             {
+                pending.ApplyTo(existingReport);
+                await _context.SaveChangesAsync();
+             }
+        }
     }
 }

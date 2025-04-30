@@ -12,8 +12,8 @@ if (builder.Environment.IsProduction())
 }
 else if (builder.Environment.IsDevelopment())
 {
-    //var connectionString = builder.Configuration.GetConnectionString("Local") ?? throw new InvalidOperationException("Connection string 'Local' not found.");
-    var connectionString = builder.Configuration.GetConnectionString("Azure") ?? throw new InvalidOperationException("Connection string 'AzureSQL' not found.");
+    var connectionString = builder.Configuration.GetConnectionString("Local") ?? throw new InvalidOperationException("Connection string 'Local' not found.");
+    // var connectionString = builder.Configuration.GetConnectionString("Azure") ?? throw new InvalidOperationException("Connection string 'AzureSQL' not found.");
     builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
 }
 
@@ -21,8 +21,7 @@ else if (builder.Environment.IsDevelopment())
 builder.Services.AddScoped<IViolationRepository, ViolationRepository>();
 builder.Services.AddScoped<ReportRepository>();
 
-
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddNewtonsoftJson();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.Mvc;
 using WSRS_Api.Dtos;
+using WSRS_Api.Models;
 using WSRS_Api.Repositories;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -40,6 +42,20 @@ namespace WSRS_Api.Controllers
             if (postedStudentViolation != null) return Ok(postedStudentViolation);
 
             return BadRequest("An error occurred while processing the report.");
+        }
+
+        // PATCH api/<ReportController>
+        [HttpPatch("{id:int}")]
+        [Consumes("application/json-patch+json")]
+        public async Task<IActionResult> PatchStudentReport(int id, [FromBody] JsonPatchDocument<ReportsPending> pending)
+        {
+            if (pending == null)
+            {
+                return BadRequest("Patch document cannot be null.");
+            }
+
+            await _repository.UpdateStudentReportPatch(id, pending);
+            return Ok();
         }
     }
 }
