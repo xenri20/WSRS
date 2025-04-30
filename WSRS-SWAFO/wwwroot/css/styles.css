@@ -133,6 +133,10 @@ button {
     transition: color 0.2s ease-in, background-color 0.2s ease-in;
 }
 
+    .btn.active {
+        transition: none;
+    }
+
     .btn:hover,
     .btn:active,
     .btn.active {
