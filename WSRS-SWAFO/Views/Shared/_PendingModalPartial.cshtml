@@ -1,4 +1,5 @@
-﻿@model ReportPending
+﻿@using WSRS_SWAFO.Dtos
+@model ReportPendingDto
 
 @{
     var formattedReportDate = Model.ReportDate.ToString("yyyy-MM-dd");
@@ -8,17 +9,18 @@
     <div class="modal-dialog modal-dialog-centered modal-lg modal-fullscreen-lg-down">
         <div class="modal-content">
             <div class="modal-header">
+                <h3 class="modal-title">Report Details</h3>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body m-2">
-                <form asp-action="EncodeFromPending" method="post">
+                <form asp-action="EncodeFromPending" method="post" class="d-flex flex-column gap-3">
                     <div class="input-wrapper">
                         <input asp-for="ReportDate" type="date" class="input" value="@formattedReportDate" readonly>
                         <label asp-for="ReportDate" class="label"></label>
                     </div>
 
                     <div class="input-wrapper">
-                        <input asp-for="StudentNumber" type="date" class="input" readonly>
+                        <input asp-for="StudentNumber" type="text" class="input" readonly>
                         <label asp-for="StudentNumber" class="label"></label>
                     </div>
 
@@ -43,7 +45,7 @@
                     </div>
 
                     <div class="input-wrapper">
-                        <input asp-for="Description" type="text" class="input" rows="3" readonly>
+                        <textarea asp-for="Description" type="text" class="input" rows="3" readonly></textarea>
                         <label asp-for="Description" class="label"></label>
                     </div>
 

@@ -87,6 +87,12 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.Cookie.IsEssential = true;
 });
 
+builder.Services.AddHttpClient("WSRS-Api", client =>
+{
+    client.BaseAddress = new Uri(builder.Configuration.GetSection("API_BASE_URL").Value
+        ?? throw new InvalidOperationException("API_BASE_URL is not configured."));
+});
+
 // https://dotnettutorials.net/lesson/difference-between-addmvc-and-addmvccore-method/
 // Adds features support for MVC and Pages
 builder.Services.AddMvc()
@@ -160,6 +166,8 @@ app.UseStaticFiles();
 app.UseSession();
 
 app.UseRouting();
+
+app.UseHttpMethodOverride();
 
 app.UseAuthentication();
 app.UseAuthorization();

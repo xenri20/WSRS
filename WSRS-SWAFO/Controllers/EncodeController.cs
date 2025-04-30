@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Text;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
@@ -8,6 +9,7 @@ using WSRS_SWAFO.Models;
 using WSRS_SWAFO.ViewModels;
 using WSRS_SWAFO.Interfaces;
 using Hangfire;
+using WSRS_SWAFO.Dtos;
 
 namespace WSRS_SWAFO.Controllers
 {
@@ -17,12 +19,14 @@ namespace WSRS_SWAFO.Controllers
         private readonly ApplicationDbContext _context;
         private readonly ILogger<EncodeController> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly IHttpClientFactory _httpClientFactory;
 
-        public EncodeController(ApplicationDbContext context, ILogger<EncodeController> logger, IEmailSender emailSender)
+        public EncodeController(ApplicationDbContext context, ILogger<EncodeController> logger, IEmailSender emailSender, IHttpClientFactory httpClientFactory)
         {
             _context = context;
             _logger = logger;
             _emailSender = emailSender;
+            _httpClientFactory = httpClientFactory;
         }
 
         public IActionResult Index()
@@ -198,7 +202,9 @@ namespace WSRS_SWAFO.Controllers
         public IActionResult EncodeStudentViolation(
             [FromQuery] int studentNumber,
             [FromQuery] string firstName,
-            [FromQuery] string lastName)
+            [FromQuery] string lastName,
+            [FromQuery] string? course = null,
+            [FromQuery] string? collegeId = null)
         {
             var referer = Request.Headers["Referer"].ToString();
             if (string.IsNullOrEmpty(referer))
@@ -210,7 +216,9 @@ namespace WSRS_SWAFO.Controllers
             {
                 StudentNumber = studentNumber,
                 FirstName = firstName,
-                LastName = lastName
+                LastName = lastName,
+                Course = course,
+                CollegeID = collegeId
             };
 
             ViewBag.Colleges = _context.College.ToList();
@@ -363,44 +371,75 @@ namespace WSRS_SWAFO.Controllers
         }
 
         [HttpGet]
-        public IActionResult Pending()
+        public async Task<IActionResult> Pending()
         {
-            var archived = _context.ArchivedReportsPending
-                .AsNoTracking()
-                .Select(a => a.ReportPendingId);
+            var client = _httpClientFactory.CreateClient("WSRS-Api");
 
-            var activeReports = _context.ReportsPending
-                .AsNoTracking()
-                .Where(r => !archived.Contains(r.Id))
-                .OrderByDescending(r => r.ReportDate)
-                .Take(5)
-                .ToList();
+            var response = await client.GetAsync("report");
 
-            var pendingVM = new PendingViewModel
+            if (response.IsSuccessStatusCode)
             {
-                ReportsPending = activeReports
-            };
+                var data = await response.Content.ReadFromJsonAsync<List<ReportPendingDto>>();
 
-            HttpContext.Session.SetString("ViolationType", "Student Violation");
-            return View(pendingVM);
+                if (data != null)
+                {
+                    var activeReports = data.Where(r => !r.IsArchived);
+
+                    var pendingVM = new PendingViewModel
+                    {
+                        ReportsPending = activeReports
+                    };
+
+                    HttpContext.Session.SetString("ViolationType", "Student Violation");
+                    return View(pendingVM);
+                }
+            }
+            else
+            {
+                _logger.LogError($"Something went wrong getting report pending data with status code: {response.StatusCode}");
+
+            }
+
+            return View();
         }
 
         [HttpPost("{id:int}")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ArchivePending(int id)
         {
-            var archived = new ArchivedReportPending
-            {
-                ReportPendingId = id,
-                ArchivedAt = DateTime.Now
-            };
+            var client = _httpClientFactory.CreateClient("WSRS-Api");
 
             try
             {
-                _context.ArchivedReportsPending.Add(archived);
-                await _context.SaveChangesAsync();
-                SetToastMessage("A pending report has been archived.");
-                return RedirectToAction(nameof(Pending));
+                // patch document
+                var archivePatch = new[]
+                {
+                    new
+                    {
+                        op = "replace", path = "/isArchived", value = "true"
+                    }
+                };
+
+                var jsonPatch = JsonSerializer.Serialize(archivePatch);
+
+                var content = new StringContent(jsonPatch, Encoding.UTF8, "application/json-patch+json");
+                var request = new HttpRequestMessage(HttpMethod.Patch, $"report/{id}")
+                {
+                    Content = content
+                };
+
+                var response = await client.SendAsync(request);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    SetToastMessage("A pending report has been archived.");
+                    return RedirectToAction(nameof(Pending));
+                }
+                else
+                {
+                    SetToastMessage(title: "Error", message: "Failed to archive the report.", cssClassName: "bg-danger text-white");
+                    _logger.LogError($"PATCH failed with status code: {response.StatusCode}");
+                }
             }
             catch (Exception ex)
             {
@@ -413,16 +452,16 @@ namespace WSRS_SWAFO.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult EncodeFromPending(ReportPending report)
+        public IActionResult EncodeFromPending(ReportPendingDto report)
         {
             var studentInfo = new ReportEncodedViewModel
             {
                 StudentNumber = report.StudentNumber,
+                FirstName = report.FirstName,
+                LastName = report.LastName,
                 CollegeID = report.College,
-                CommissionDate = report.ReportDate,
                 Formator = report.Formator,
                 Course = report.CourseYearSection,
-                Description = report.Description,
             };
 
             return RedirectToAction(nameof(EncodeStudentViolation), studentInfo);

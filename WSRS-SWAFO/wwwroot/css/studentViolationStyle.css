@@ -126,6 +126,11 @@ h2 {
     font-weight: 600;
 }
 
+.report-list {
+    height: 600px;
+    overflow-y: scroll;
+}
+
 @media only screen and (max-width:475px) {
     #category-function {
         flex-direction: column;
@@ -149,5 +154,9 @@ h2 {
 
     .pane-structure:has(.content-pane + .content-pane) {
         display: block;  
+    }
+
+    .report-list {
+        font-size: 0.75rem;
     }
 }

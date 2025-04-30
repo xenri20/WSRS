@@ -1,9 +1,9 @@
-﻿using WSRS_SWAFO.Models;
+﻿using WSRS_SWAFO.Dtos;
 
 namespace WSRS_SWAFO.ViewModels
 {
     public class PendingViewModel
     {
-        public IEnumerable<ReportPending> ReportsPending { get; set; }
+        public IEnumerable<ReportPendingDto> ReportsPending { get; set; }
     }
 }
