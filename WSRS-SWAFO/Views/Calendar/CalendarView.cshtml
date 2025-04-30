@@ -13,20 +13,19 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form id="addScheduleForm">
-                <div class="modal-body">
-
-                    <div class="mb-3">
-                        <label for="studentNumber" class="form-label">Student Number</label>
-                        <input type="number" class="form-control" id="studentNumber" name="StudentNumber" required>
+                <div class="modal-body d-flex flex-column gap-2">
+                    <div class="input-wrapper mb-3">
+                        <label for="studentNumber" class="label">Student Number</label>
+                        <input type="number" class="input" id="studentNumber" name="StudentNumber" required>
                         <small id="studentInfo" class="text-muted"></small>
                     </div>
-                    <div class="mb-3">
-                        <label for="title" class="form-label">Title</label>
-                        <input type="text" class="form-control" id="title" name="Title" required>
+                    <div class="input-wrapper mb-3">
+                        <label for="title" class="label">Title</label>
+                        <input type="text" class="input" id="title" name="Title" required>
                     </div>
-                    <div class="mb-3">
-                        <label for="date" class="form-label">Date and Time</label>
-                        <input type="datetime-local" class="form-control" id="scheduledDate" name="ScheduledDate" required>
+                    <div class="input-wrapper mb-3">
+                        <label for="date" class="label">Date and Time</label>
+                        <input type="datetime-local" class="input" id="scheduledDate" name="ScheduledDate" required>
                     </div>
 
                 </div>
@@ -47,27 +46,27 @@
                     <h5 class="modal-title" id="eventModalLabel">Event Details</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body d-flex flex-column gap-2">
                     <input type="hidden" id="eventId" /> <!-- Hidden event ID -->
-                    <div class="mb-2">
-                        <label>Student Number</label>
-                        <input type="text" id="eventStudentNumber" class="form-control" readonly />
+                    <div class="input-wrapper mb-2">
+                        <label class="label">Student Number</label>
+                        <input type="text" id="eventStudentNumber" class="input" readonly />
                     </div>
-                    <div class="mb-2">
-                        <label>Student Name</label>
-                        <input type="text" id="eventStudentName" class="form-control" readonly />
+                    <div class="input-wrapper mb-2">
+                        <label class="label">Student Name</label>
+                        <input type="text" id="eventStudentName" class="input" readonly />
                     </div>
-                    <div class="mb-2">
-                        <label>Email</label>
-                        <input type="text" id="eventStudentEmail" class="form-control" readonly />
+                    <div class="input-wrapper mb-2">
+                        <labe class="label">Email</labe>
+                        <input type="text" id="eventStudentEmail" class="input" readonly />
                     </div>
-                    <div class="mb-2">
-                        <label>Title</label>
-                        <input type="text" id="eventTitleInput" class="form-control" readonly />
+                    <div class="input-wrapper mb-2">
+                        <labe class="label">Title</labe>
+                        <input type="text" id="eventTitleInput" class="input" readonly />
                     </div>
-                    <div class="mb-2">
-                        <label>Date</label>
-                        <input type="datetime-local" id="eventDateInput" class="form-control" readonly />
+                    <div class="input-wrapper mb-2">
+                        <labe class="label">Date</labe>
+                        <input type="datetime-local" id="eventDateInput" class="input" readonly />
                     </div>
                 </div>
                 <div class="modal-footer">
