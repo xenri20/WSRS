@@ -17,6 +17,20 @@ namespace WSRS_Api.Controllers
             _repository = repository;
         }
 
+        [HttpGet]
+        public IActionResult GetAllStudentReports()
+        {
+            var reports = _repository.GetAll();
+            return Ok(reports);
+        }
+
+        [HttpGet("{id:int}")]
+        public IActionResult GetAllStudentReports(int id)
+        {
+            var report = _repository.GetById(id);
+            return Ok(report);
+        }
+
         // POST api/<ReportController>
         [HttpPost]
         public IActionResult PostStudentViolation(ReportPendingDto reportDto)
