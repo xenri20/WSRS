@@ -119,6 +119,16 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    const addScheduleModal = document.getElementById('addScheduleModal');
+    if (addScheduleModal) {
+        addScheduleModal.addEventListener('shown.bs.modal', () => {
+            const dateInput = document.getElementById('scheduledDate');
+            const now = new Date();
+            const localNow = now.toISOString().slice(0, 16); // Format to YYYY-MM-DDTHH:MM
+            dateInput.min = localNow;
+        });
+    }
+
     const addForm = document.getElementById('addScheduleForm');
     if (addForm) {
         addForm.addEventListener('submit', function (e) {
@@ -127,7 +137,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const hearingData = {
                 StudentNumber: parseInt(document.getElementById("studentNumber").value),
                 Title: document.getElementById("title").value,
-                ScheduledDate: document.getElementById("scheduledDate").value
+                ScheduledDate: document.getElementById("scheduledDate").value // Ensure the datetime is in the correct format
             };
 
             fetch('/HearingScheduling/AddHearing', {
@@ -149,7 +159,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     alert('An error occurred while saving.');
                 });
         });
-
     }
 
     calendar.render();

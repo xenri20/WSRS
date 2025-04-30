@@ -89,6 +89,9 @@ namespace WSRS_SWAFO.Controllers
                 return Json(new { success = false, error = "Invalid data received." });
             }
 
+            // Directly use the ScheduledDate from the hearingScheduling object
+            DateTime scheduledDate = hearingScheduling.ScheduledDate;
+
             var student = await _context.Students.FirstOrDefaultAsync(s => s.StudentNumber == hearingScheduling.StudentNumber);
             if (student == null)
             {
@@ -98,7 +101,7 @@ namespace WSRS_SWAFO.Controllers
             var newSchedule = new HearingSchedules
             {
                 Title = hearingScheduling.Title,
-                ScheduledDate = hearingScheduling.ScheduledDate,
+                ScheduledDate = scheduledDate, // Store the datetime correctly
                 StudentNumber = hearingScheduling.StudentNumber,
                 Student = student
             };
@@ -113,16 +116,13 @@ namespace WSRS_SWAFO.Controllers
                 {
                     id = newSchedule.Id,
                     title = newSchedule.Title,
-                    start = newSchedule.ScheduledDate.ToString("o"),
+                    start = newSchedule.ScheduledDate.ToString("o"), // Ensure the datetime format is consistent
                     studentNumber = student.StudentNumber,
                     fullName = student.FirstName + " " + student.LastName,
                     email = student.Email
                 }
             });
         }
-
-
-
 
 
     }
