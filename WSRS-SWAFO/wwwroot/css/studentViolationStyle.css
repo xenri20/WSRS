@@ -1,20 +1,5 @@
 ﻿#encode {
-    align-self: center;
     width: 100%;
-}
-
-#category-function {
-    display: inline-flex;
-    flex-direction: row;
-}
-        #category-function > a:hover,
-        #category-function > a:active {
-            background-color: black;
-            color: white;
-        }
-
-.student-encode, .traffic-encode {
-    margin-right: 0.5em;
 }
 
 h2 {
@@ -129,18 +114,6 @@ h2 {
 .report-list {
     height: 600px;
     overflow-y: scroll;
-}
-
-@media only screen and (max-width:475px) {
-    #category-function {
-        flex-direction: column;
-        gap: 0.4em;
-    }
-
-    #submit-section {
-        flex-direction: column;
-        width: 50%;
-    }
 }
 
 @media only screen and (max-width:800px) {
