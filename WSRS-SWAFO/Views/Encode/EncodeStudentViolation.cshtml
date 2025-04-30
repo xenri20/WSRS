@@ -6,7 +6,6 @@
     ViewData["Title"] = "Student Violation";
 
     string today = DateOnly.FromDateTime(DateTime.Now).ToString("yyyy-MM-dd");
-    ViewData["ViolationType"] = "Regular";
 }
 
 @section customHead {
@@ -23,12 +22,9 @@
         </button>
     </form>
     <h2>Step 3</h2>
-    @if (ViewData["ViolationType"] != null)
-    {
-        <span class="pill-indicator bg-success text-white">
-            @ViewData["ViolationType"]
-        </span>
-    }
+    <span class="pill-indicator bg-success text-white">
+        Regular
+    </span>
 </div>
 
 <p>Record and encode the violation in the system</p>

@@ -7,6 +7,7 @@ using WSRS_SWAFO.Data.Enum;
 using WSRS_SWAFO.Models;
 using WSRS_SWAFO.ViewModels;
 using WSRS_SWAFO.Interfaces;
+using Hangfire;
 
 namespace WSRS_SWAFO.Controllers
 {
@@ -61,8 +62,7 @@ namespace WSRS_SWAFO.Controllers
                 .Take(5)
                 .ToListAsync();
 
-            ViewData["ViolationType"] = violationType == "Student Violation" ? "Regular" : "Traffic";
-
+            TempData["ViolationType"] = violationType; // for pill indicator
             // Returns queried list
             return View(students.AsQueryable());
         }
@@ -98,6 +98,7 @@ namespace WSRS_SWAFO.Controllers
         }
 
         // Page 2 - Create Student Data (If no student present) - Index
+        [HttpGet]
         public IActionResult CreateStudentRecord()
         {
             var referer = Request.Headers["Referer"].ToString();
@@ -138,17 +139,9 @@ namespace WSRS_SWAFO.Controllers
                 SetToastMessage(title: "Error", message: "Something went wrong while submitting your data.", cssClassName: "bg-danger text-white");
                 _logger.LogError(ex.Message);
             }
-
-            try
-            {
-                await _emailSender.SendEmailAsync("swafomatortest@outlook.com", "You have been violated!", "This is just a test");
-                Console.WriteLine("Email Sent Successfully~");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Email send failed: {ex.Message}");
-            }
-
+            
+            BackgroundJob.Enqueue(() => _emailSender.SendEmailAsync(student.Email, "You have been violated!", "This is just a test"));
+           
             return RedirectToAction(nameof(EncodeStudentViolation), new
             {
                 studentNumber = student.StudentNumber,
