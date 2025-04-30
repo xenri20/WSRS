@@ -235,21 +235,21 @@ namespace WSRS_SWAFO.Controllers
                 });
             }
 
+            var studentReport = new ReportEncoded
+            {
+                OffenseId = reportEncodedVM.OffenseId,
+                StudentNumber = reportEncodedVM.StudentNumber,
+                CollegeID = reportEncodedVM.CollegeID,
+                CommissionDate = reportEncodedVM.CommissionDate,
+                // FormatorId = reportEncodedVM.FormatorId,
+                Course = reportEncodedVM.Course,
+                Description = reportEncodedVM.Description,
+                Sanction = reportEncodedVM.Sanction,
+                StatusOfSanction = reportEncodedVM.StatusOfSanction
+            };
+
             try
             {
-                var studentReport = new ReportEncoded
-                {
-                    OffenseId = reportEncodedVM.OffenseId,
-                    StudentNumber = reportEncodedVM.StudentNumber,
-                    CollegeID = reportEncodedVM.CollegeID,
-                    CommissionDate = reportEncodedVM.CommissionDate,
-                    // FormatorId = reportEncodedVM.FormatorId,
-                    Course = reportEncodedVM.Course,
-                    Description = reportEncodedVM.Description,
-                    Sanction = reportEncodedVM.Sanction,
-                    StatusOfSanction = reportEncodedVM.StatusOfSanction
-                };
-
                 _context.ReportsEncoded.Add(studentReport);
                 await _context.SaveChangesAsync();
 
@@ -259,16 +259,18 @@ namespace WSRS_SWAFO.Controllers
             }
             catch (Exception ex)
             {
+                ModelState.AddModelError("", "Unable to save data: " + ex.Message);
                 SetToastMessage(title: "Error", message: "Something went wrong encoding your data.", cssClassName: "bg-danger text-white");
                 _logger.LogError(ex.Message);
 
-                return RedirectToAction(nameof(EncodeStudentViolation), new
-                {
-                    studentNumber = reportEncodedVM.StudentNumber,
-                    firstName = reportEncodedVM.FirstName,
-                    lastName = reportEncodedVM.LastName
-                });
             }
+
+            return RedirectToAction(nameof(EncodeStudentViolation), new
+            {
+                studentNumber = reportEncodedVM.StudentNumber,
+                firstName = reportEncodedVM.FirstName,
+                lastName = reportEncodedVM.LastName
+            });
         }
 
         [HttpGet]
@@ -340,7 +342,12 @@ namespace WSRS_SWAFO.Controllers
                 _logger.LogError(ex.Message);
             }
 
-            return View(studentTrafficReport);
+            return RedirectToAction(nameof(EncodeTrafficViolation), new
+            {
+                studentNumber = viewModel.StudentNumber,
+                firstName = viewModel.FirstName,
+                lastName = viewModel.LastName
+            });
         }
 
         // Returns offense Nature to JSON - GET Function
