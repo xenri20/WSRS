@@ -54,12 +54,12 @@
                         }
                     </select>
                     <label class="label">College<span>*</span></label>
-                    <span class="text-danger"></span>
+                    <span asp-validation-for="CollegeID" class="text-danger"></span>
                 </div>
                 <div class="input-wrapper">
                     <input asp-for="CommissionDate" type="date" class="input" value="@today" autocomplete="dateOfCommission" aria-required="true" />
                     <label class="label">Commission Date<span>*</span></label>
-                    <span class="text-danger"></span>
+                    <span asp-validation-for="CommissionDate" class="text-danger"></span>
                 </div>
                 <div class="input-wrapper">
                     <select class="input" id="offenseClassification" aria-required="true">
@@ -70,41 +70,38 @@
                         }
                     </select>
                     <label class="label">Classification of Offense<span>*</span></label>
-                    <span class="text-danger"></span>
                 </div>
                 <div class="input-wrapper">
                     <select asp-for="OffenseId" class="input" id="offenseNature" aria-required="true">
                         <option disabled hidden selected>-- Select an option --</option>
                     </select>
                     <label class="label">Nature of Offense<span>*</span></label>
-                    <span class="text-danger"></span>
+                    <span asp-validation-for="OffenseId" class="text-danger"></span>
                 </div>
                 <div class="input-wrapper">
                     <input asp-for="PlateNumber" type="text" class="input" autocomplete="PlateNumber" aria-required="true" />
                     <label class="label">Plate Number<span>*</span></label>
-                    <span class="text-danger"></span>
+                    <span asp-validation-for="PlateNumber" class="text-danger"></span>
                 </div>
             </div>
             <div class="content-pane">
                 <div class="input-wrapper">
                     <input asp-for="Remarks" type="text" class="input description" autocomplete="Remarks" aria-required="true" />
                     <label class="label">Remarks</label>
-                    <span class="text-danger"></span>
+                    <span asp-validation-for="Remarks" class="text-danger"></span>
                 </div>
                 <div class="input-wrapper">
                     <input asp-for="Place" type="text" class="input" autocomplete="Place" aria-required="true" />
                     <label class="label">Place</label>
-                    <span class="text-danger"></span>
+                    <span asp-validation-for="Place" class="text-danger"></span>
                 </div>
                 <div class="input-wrapper">
-                    <input asp-for="ORNumber" type="number" class="input" autocomplete="ORNumber" aria-required="true" />
+                    <input asp-for="ORNumber" type="number" class="input" autocomplete="ORNumber" />
                     <label class="label">Official Receipt Number</label>
-                    <span class="text-danger"></span>
                 </div>
                 <div class="input-wrapper">
-                    <input asp-for="DatePaid" type="date" class="input" value="@DateTime.Now" autocomplete="Date Paid" aria-required="true" />
+                    <input asp-for="DatePaid" type="date" class="input" value="@DateTime.Now" autocomplete="Date Paid" />
                     <label class="label">Date Paid</label>
-                    <span class="text-danger"></span>
                 </div>
             </div>
         </div>

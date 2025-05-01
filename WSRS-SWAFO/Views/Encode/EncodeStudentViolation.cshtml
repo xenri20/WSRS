@@ -52,18 +52,18 @@
                         }
                     </select>
                     <label class="label">College<span>*</span></label>
-                    <span class="text-danger"></span>
+                    <span asp-validation-for="CollegeID" class="text-danger"></span>
                 </div>
                 <div class="input-wrapper">
                     <input asp-for="Course" type="text" class="input" autocomplete="CYS" aria-required="true" value="@Model.Course" />
                     <label class="label">CYS<span>*</span></label>
-                    <span class="text-danger"></span>
+                    <span asp-validation-for="Course" class="text-danger"></span>
                 </div>
                 <div class="input-wrapper">
                     @* TODO Later fix this date *@
                     <input asp-for="CommissionDate" type="date" class="input" value="@today" autocomplete="dateOfCommission" aria-required="true" />
                     <label class="label">Commission Date<span>*</span></label>
-                    <span class="text-danger"></span>
+                    <span asp-validation-for="CommissionDate" class="text-danger"></span>
                 </div>
                 <div class="input-wrapper">
                     <select class="input" id="offenseClassification" aria-required="true">
@@ -74,27 +74,26 @@
                         }
                     </select>
                     <label class="label">Classification of Offense<span>*</span></label>
-                    <span class="text-danger"></span>
                 </div>
                 <div class="input-wrapper">
                     <select asp-for="OffenseId" class="input" id="offenseNature" aria-required="true">
                         <option disabled hidden selected>-- Select an option --</option>
                     </select>
                     <label class="label">Nature of Offense<span>*</span></label>
-                    <span class="text-danger"></span>
+                    <span asp-validation-for="OffenseId" class="text-danger"></span>
                 </div>
             </div>
             <div class="content-pane">
                 <div class="input-wrapper">
                     <input asp-for="Description" type="text" class="input description" autocomplete="description" aria-required="true" list="descriptionSuggestions" />
                     <label class="label">Description</label>
-                    <span class="text-danger"></span>
+                    <span asp-validation-for="Description" class="text-danger"></span>
                     <datalist id="descriptionSuggestions"></datalist>
                 </div>
                 <div class="input-wrapper">
                     <input asp-for="Sanction" type="text" class="input" autocomplete="sanction" aria-required="true" />
                     <label class="label">Sanction<span>*</span></label>
-                    <span class="text-danger"></span>
+                    <span asp-validation-for="Sanction" class="text-danger"></span>
                 </div>
                 <div class="input-wrapper">
                     @* <input asp-for="StatusOfSanction" type="text" class="input description" autocomplete="statusOfSanction" aria-required="true" /> *@
@@ -105,7 +104,7 @@
                         <option value="Completed">Completed</option>
                     </select>
                     <label class="label">Status of Sanction</label>
-                    <span class="text-danger"></span>
+                    <span asp-validation-for="StatusOfSanction" class="text-danger"></span>
                 </div>
             </div>
         </div>
