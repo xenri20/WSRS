@@ -9,8 +9,7 @@
 
     @* For changing name to title case *@
     TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
-    string surname = textInfo.ToTitleCase(User.FindFirst(ClaimTypes.Surname)?.Value.ToLower()!);
-    string firstName = textInfo.ToTitleCase(User.FindFirst(ClaimTypes.GivenName)?.Value.ToLower()!);
+    string fullname = textInfo.ToTitleCase(Model.Name.ToLower());
 }
 
 @section customHead {
@@ -40,7 +39,7 @@
             <dt>Email</dt>
             <dd>@Model.Email.ToLower()</dd>
             <dt>Name</dt>
-            <dd>@firstName @surname</dd>
+            <dd>@fullname</dd>
         </dl>
     </section>
 
