@@ -24,6 +24,9 @@
             <h2>Edit Record</h2>
         </div>
         <form asp-action="EditTraffic" asp-route-id="@Model.Id" class="panel" method="post">
+            <div class="d-flex align-items-center gap-2">
+                <h3 class="mb-0">Traffic Record No.</h3><span class="pill-indicator bg-warning">@Model.Id</span>
+            </div>
             <dl>
                 <dt>Student Number</dt>
                 <dd>@Model.Student.StudentNumber</dd>
