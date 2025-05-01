@@ -34,9 +34,6 @@ namespace WSRS_SWAFO.ViewModels
         [Display(Name = "CYS")]
         public string Course { get; set; }
 
-        [Display(Name = "Hearing Date")]
-        public DateOnly? HearingDate { get; set; }
-
         [Required(ErrorMessage = "Sanction is required")]
         [Display(Name = "Sanction")]
         public string Sanction { get; set; }

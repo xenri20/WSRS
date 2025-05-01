@@ -103,7 +103,10 @@ namespace WSRS_SWAFO.Controllers
 
         // Page 2 - Create Student Data (If no student present) - Index
         [HttpGet]
-        public IActionResult CreateStudentRecord()
+        public IActionResult CreateStudentRecord(
+            int? studentNumber,
+            string? firstName,
+            string? lastName)
         {
             var referer = Request.Headers["Referer"].ToString();
             if (string.IsNullOrEmpty(referer))
@@ -111,12 +114,18 @@ namespace WSRS_SWAFO.Controllers
                 return RedirectToAction(nameof(StudentRecordViolation));
             }
 
+            if (HttpContext.Session.GetString("ViolationType") is string violationType &&
+                violationType == "Traffic Violation")
+            {
+                TempData["FromTraffic"] = true;
+            }
+
             return View();
         }
 
         // Create Student Entry - POST Function
         [HttpPost]
-        public async Task<IActionResult> CreateNewStudent(StudentRecordViewModel model)
+        public async Task<IActionResult> CreateNewStudent(StudentRecordViewModel model, bool fromPending = false, bool fromTraffic = false)
         {
             if (!ModelState.IsValid)
             {
@@ -145,8 +154,15 @@ namespace WSRS_SWAFO.Controllers
             }
             
             BackgroundJob.Enqueue(() => _emailSender.SendEmailAsync(student.Email, "You have been violated!", "This is just a test"));
-           
-            return RedirectToAction(nameof(EncodeStudentViolation), new
+
+            if (fromPending)
+            {
+                return RedirectToAction(nameof(Pending));
+            }
+
+            var redirect = fromTraffic ? nameof(EncodeTrafficViolation) : nameof(EncodeStudentViolation);
+
+            return RedirectToAction(redirect, new
             {
                 studentNumber = student.StudentNumber,
                 firstName = student.FirstName,
@@ -263,7 +279,7 @@ namespace WSRS_SWAFO.Controllers
 
                 SetToastMessage(title: "Success", message: "A report has been encoded successfully.");
 
-                return RedirectToAction(nameof(StudentRecordViolation));
+                return RedirectToAction(nameof(EncodingMode));
             }
             catch (Exception ex)
             {
@@ -301,6 +317,12 @@ namespace WSRS_SWAFO.Controllers
             };
 
             ViewBag.Colleges = _context.College.ToList();
+
+            if (HttpContext.Session.GetString("ViolationType") is string violationType &&
+                violationType == "Traffic Violation")
+            {
+                TempData["FromTraffic"] = true;
+            }
 
             return View(studentInfo);
         }
@@ -341,7 +363,7 @@ namespace WSRS_SWAFO.Controllers
 
                 SetToastMessage(title: "Success", message: "A traffic report has been encoded successfully.");
 
-                return RedirectToAction(nameof(StudentRecordViolation));
+                return RedirectToAction(nameof(EncodingMode));
             }
             catch (Exception ex)
             {
@@ -518,17 +540,36 @@ namespace WSRS_SWAFO.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult EncodeFromPending(ReportPendingDto report)
         {
-            var studentInfo = new ReportEncodedViewModel
-            {
-                StudentNumber = report.StudentNumber,
-                FirstName = report.FirstName,
-                LastName = report.LastName,
-                CollegeID = report.College,
-                Formator = report.Formator,
-                Course = report.CourseYearSection,
-            };
+            // Check if student exists
+            var student = _context.Students.Find(report.StudentNumber);
 
-            return RedirectToAction(nameof(EncodeStudentViolation), studentInfo);
+            if (student != null)
+            {
+                var studentInfo = new ReportEncodedViewModel
+                {
+                    StudentNumber = report.StudentNumber,
+                    FirstName = report.FirstName,
+                    LastName = report.LastName,
+                    CollegeID = report.College,
+                    Formator = report.Formator,
+                    Course = report.CourseYearSection,
+                };
+
+                return RedirectToAction(nameof(EncodeStudentViolation), studentInfo);
+            }
+            else
+            {
+                var studentInfo = new StudentRecordViewModel
+                {
+                    StudentNumber = report.StudentNumber,
+                    FirstName = report.FirstName,
+                    LastName = report.LastName,
+                };
+
+                TempData["FromPending"] = true;
+                SetToastMessage("The student reported does not exist yet. Create their record first.");
+                return RedirectToAction(nameof(CreateStudentRecord), studentInfo);
+            }
         }
 
         [HttpGet]

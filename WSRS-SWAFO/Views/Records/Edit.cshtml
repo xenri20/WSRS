@@ -10,7 +10,6 @@
     string fullName = string.Concat(Model.Student.FirstName, " ", Model.Student.LastName);
 
     string formattedCommissionDate = Model.CommissionDate.ToString("yyyy-MM-dd");
-    string formattedHearingDate = Model.HearingDate?.ToString("yyyy-MM-dd") ?? string.Empty;
     string today = DateOnly.FromDateTime(DateTime.Now).ToString("yyyy-MM-dd");
 
     ViewData["Title"] = "Edit Record";
@@ -24,6 +23,9 @@
             <h2>Edit Record</h2>
         </div>
         <form asp-action="Edit" asp-route-id="@Model.Id" class="panel">
+            <div class="d-flex align-items-center gap-2">
+                <h3 class="mb-0">Record No.</h3><span class="pill-indicator bg-success text-white">@Model.Id</span>
+            </div>
             <dl>
                 <input asp-for="Id" type="hidden" value="@Model.Id">
 
@@ -60,16 +62,6 @@
                 <label asp-for="CommissionDate" class="label">Commission Date<span>*</span></label>
                 <span asp-validation-for="CommissionDate" class="text-danger"></span>
             </div>
-
-            @* Hearing Date*@
-            @if (Model.Offense.Classification == OffenseClassification.Major)
-            {
-                <div class="input-wrapper">
-                    <input asp-for="HearingDate" type="date" class="input" value="@(string.IsNullOrEmpty(formattedHearingDate) ? today : formattedHearingDate)" aria-required="true">
-                    <label asp-for="HearingDate" class="label">Hearing Date<span>*</span></label>
-                    <span asp-validation-for="HearingDate" class="text-danger"></span>
-                </div>
-            }
 
             @* Sanction *@
             <div class="input-wrapper">

@@ -3,8 +3,8 @@
 
 @{
     Layout = "_EncodeLayout";
-    ViewData["Title"] = "Student Violation";
-    var violationType = TempData.Peek("ViolationType");
+    bool fromTraffic = TempData["FromTraffic"] is true;
+    bool fromPending = TempData["FromPending"] is true;
 }
 
 @section customHead {
@@ -12,32 +12,43 @@
 }
 
 <div class="title">
-    <form asp-controller="Encode" asp-action="StudentRecordViolation" method="post">
-        <button type="submit" class="btn-function" name="violationType" value="@violationType">
+    @if (fromPending)
+    {
+        <a asp-action="Pending" class="btn-function">
             <svg width="32" height="32" viewBox="0 0 43 43" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M16 22L24 14" stroke="black" stroke-width="2" stroke-linecap="round" />
                 <path d="M16 22L24 30" stroke="black" stroke-width="2" stroke-linecap="round" />
             </svg>
-        </button>
-    </form>
-    <h2>Step 2.5</h2>
+        </a>
+    }
+    else
+    {
+        <form asp-controller="Encode" asp-action="StudentRecordViolation" method="post">
+            <button type="submit" class="btn-function" name="violationType" value="@(fromTraffic ? "Traffic Violation" : "Student Violation")">
+                <svg width="32" height="32" viewBox="0 0 43 43" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M16 22L24 14" stroke="black" stroke-width="2" stroke-linecap="round" />
+                    <path d="M16 22L24 30" stroke="black" stroke-width="2" stroke-linecap="round" />
+                </svg>
+            </button>
+        </form>
+    }
+    <h2>New Student Record</h2>
 </div>
 
 <p>Create a new record for the student</p>
 
-<form id="create-new" asp-controller="Encode" asp-action="CreateNewStudent">
+<form id="create-new" asp-controller="Encode" asp-action="CreateNewStudent" asp-route-fromPending="@fromPending" asp-route-fromTraffic="@fromTraffic" method="post">
     <div class="panel">
         <div class="content-pane">
-
             <h3>Student Information</h3>
 
             <div class="input-wrapper">
-                <input asp-for="StudentNumber" type="number" class="input" autocomplete="StudentNumber" aria-required="true" />
+                <input asp-for="StudentNumber" type="number" class="input" aria-required="true" />
                 <label class="label">Student Number<span>*</span></label>
                 <span asp-validation-for="StudentNumber" class="text-danger"></span>
             </div>
             <div class="input-wrapper">
-                <input asp-for="FirstName" type="text" class="input" autocomplete="firstname" aria-required="true" />
+                <input asp-for="FirstName" type="text" class="input" aria-required="true" />
                 <label class="label">First Name<span>*</span></label>
                 <span asp-validation-for="FirstName" class="text-danger"></span>
             </div>

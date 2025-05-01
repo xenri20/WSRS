@@ -3,8 +3,6 @@
 @model ReportEncodedViewModel
 @{
     Layout = "_EncodeLayout";
-    ViewData["Title"] = "Student Violation";
-
     string today = DateOnly.FromDateTime(DateTime.Now).ToString("yyyy-MM-dd");
 }
 
@@ -87,11 +85,6 @@
                 </div>
             </div>
             <div class="content-pane">
-                <div class="input-wrapper" id="hearingDate">
-                    <input asp-for="HearingDate" type="date" class="input" autocomplete="dateOfCommission" aria-required="true" />
-                    <label class="label"><span>*</span></label>
-                    <span class="text-danger"></span>
-                </div>
                 <div class="input-wrapper">
                     <input asp-for="Description" type="text" class="input description" autocomplete="description" aria-required="true" />
                     <label class="label">Description</label>

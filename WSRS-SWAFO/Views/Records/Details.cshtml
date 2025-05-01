@@ -24,6 +24,9 @@
             <h2>Details</h2>
         </div>
         <div class="panel">
+            <div class="d-flex align-items-center gap-2 mb-3">
+                <h3 class="mb-0">Record No.</h3><span class="pill-indicator bg-success text-white">@Model.Id</span>
+            </div>
             <dl>
                 <dt>Student Number</dt>
                 <dd>@Model.StudentNumber</dd>
@@ -40,11 +43,6 @@
                 <dd>@Model.Nature</dd>
                 <dt>Commission Date</dt>
                 <dd>@Model.FormattedCommissionDate</dd>
-                @if (Model.Classification == OffenseClassification.Major)
-                {
-                    <dt>Hearing Date</dt>
-                    <dd>@(string.IsNullOrEmpty(Model.FormattedHearingDate) ? "-" : Model.FormattedHearingDate)</dd>
-                }
                 <dt>Sanction</dt>
                 <dd>@Model.Sanction</dd>
                 <dt>Status</dt>

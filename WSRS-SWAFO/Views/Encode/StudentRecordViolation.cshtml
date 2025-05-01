@@ -2,7 +2,6 @@
 @model IQueryable<StudentRecordViewModel>
 @{
     Layout = "_EncodeLayout";
-    ViewData["Title"] = "Student Violation";
 }
 
 @section customHead {
@@ -22,7 +21,7 @@
         var indicator = violationType == "Student Violation" ? "Regular" : "Traffic";
 
         <span class="pill-indicator bg-success @(indicator == "Regular" ? "bg-success text-white" : "bg-warning text-black")">
-            @violationType
+            @indicator
         </span>
     }
 </div>
