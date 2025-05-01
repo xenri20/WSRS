@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using WSRS_SWAFO.Helpers;
 using WSRS_SWAFO.Models;
 
 namespace WSRS_SWAFO.ViewModels
@@ -26,8 +27,9 @@ namespace WSRS_SWAFO.ViewModels
 
         public string? Formator { get; set; } // Nullable if needed
 
-        [Required(ErrorMessage = "Commision Date is required")]
-        [Display(Name = "Commision Date")]
+        [Required(ErrorMessage = "Commission Date is required")]
+        [Display(Name = "Commission Date")]
+        [DateNotInPast(ErrorMessage = "The date must be today or later.")]
         public DateOnly CommissionDate { get; set; }
 
         [Required(ErrorMessage = "CYS is required")]

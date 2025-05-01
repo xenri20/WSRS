@@ -129,7 +129,7 @@ namespace WSRS_SWAFO.Controllers
         {
             if (!ModelState.IsValid)
             {
-                SetToastMessage(message: "Please fill in the required fields.");
+                SetToastMessage(message: "Please fill in the required fields appropriately.");
                 return View(nameof(CreateStudentRecord), model);
             }
 
@@ -249,14 +249,10 @@ namespace WSRS_SWAFO.Controllers
         {
             if (!ModelState.IsValid)
             {
-                SetToastMessage(message: "Please fill in the required fields.");
+                SetToastMessage(message: "Please fill in the required fields appropriately.");
+                ViewBag.Colleges = _context.College.ToList();
 
-                return RedirectToAction(nameof(EncodeStudentViolation), new
-                {
-                    studentNumber = reportEncodedVM.StudentNumber,
-                    firstName = reportEncodedVM.FirstName,
-                    lastName = reportEncodedVM.LastName
-                });
+                return View(reportEncodedVM);
             }
 
             var studentReport = new ReportEncoded
@@ -333,14 +329,10 @@ namespace WSRS_SWAFO.Controllers
         {
             if (!ModelState.IsValid)
             {
-                SetToastMessage(message: "Please fill in the required fields.");
-                
-                return RedirectToAction(nameof(EncodeTrafficViolation), new
-                {
-                    studentNumber = viewModel.StudentNumber,
-                    firstName = viewModel.FirstName,
-                    lastName = viewModel.LastName
-                });
+                SetToastMessage(message: "Please fill in the required fields appropriately.");
+                ViewBag.Colleges = _context.College.ToList();
+
+                return View(viewModel);
             }
 
             var studentTrafficReport = new TrafficReportsEncoded

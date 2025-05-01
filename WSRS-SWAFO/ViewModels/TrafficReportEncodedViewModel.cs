@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using WSRS_SWAFO.Helpers;
 
 namespace WSRS_SWAFO.ViewModels
 {
@@ -20,6 +21,7 @@ namespace WSRS_SWAFO.ViewModels
 
         [Required(ErrorMessage = "Commission Date is required")]
         [Display(Name = "Commission Date")]
+        [DateNotInPast(ErrorMessage = "The date must be today or later.")]
         public DateOnly CommissionDate { get; set; }
 
         [Required(ErrorMessage = "Plate Number is required!")]
