@@ -63,6 +63,7 @@ namespace WSRS_SWAFO.Controllers
         public async Task<IActionResult> UpdatePasswordAsync()
         {
             var user = await _userManager.GetUserAsync(User);
+            TempData["hasPassword"] = user?.PasswordHash is null ? false : true;
             if (user == null)
             {
                 return RedirectToAction("Index", "LogOn");
