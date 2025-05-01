@@ -114,12 +114,18 @@ namespace WSRS_SWAFO.Controllers
                 return RedirectToAction(nameof(StudentRecordViolation));
             }
 
+            if (HttpContext.Session.GetString("ViolationType") is string violationType &&
+                violationType == "Traffic Violation")
+            {
+                TempData["FromTraffic"] = true;
+            }
+
             return View();
         }
 
         // Create Student Entry - POST Function
         [HttpPost]
-        public async Task<IActionResult> CreateNewStudent(StudentRecordViewModel model)
+        public async Task<IActionResult> CreateNewStudent(StudentRecordViewModel model, bool fromPending = false, bool fromTraffic = false)
         {
             if (!ModelState.IsValid)
             {
@@ -148,8 +154,15 @@ namespace WSRS_SWAFO.Controllers
             }
             
             BackgroundJob.Enqueue(() => _emailSender.SendEmailAsync(student.Email, "You have been violated!", "This is just a test"));
-           
-            return RedirectToAction(nameof(EncodeStudentViolation), new
+
+            if (fromPending)
+            {
+                return RedirectToAction(nameof(Pending));
+            }
+
+            var redirect = fromTraffic ? nameof(EncodeTrafficViolation) : nameof(EncodeStudentViolation);
+
+            return RedirectToAction(redirect, new
             {
                 studentNumber = student.StudentNumber,
                 firstName = student.FirstName,
@@ -304,6 +317,12 @@ namespace WSRS_SWAFO.Controllers
             };
 
             ViewBag.Colleges = _context.College.ToList();
+
+            if (HttpContext.Session.GetString("ViolationType") is string violationType &&
+                violationType == "Traffic Violation")
+            {
+                TempData["FromTraffic"] = true;
+            }
 
             return View(studentInfo);
         }
@@ -541,7 +560,7 @@ namespace WSRS_SWAFO.Controllers
                     LastName = report.LastName,
                 };
 
-                TempData["Pending"] = true;
+                TempData["FromPending"] = true;
                 SetToastMessage("The student reported does not exist yet. Create their record first.");
                 return RedirectToAction(nameof(CreateStudentRecord), studentInfo);
             }

@@ -3,10 +3,8 @@
 
 @{
     Layout = "_EncodeLayout";
-    ViewData["Title"] = "Student Violation";
-    var violationType = TempData.Peek("ViolationType");
-
-    bool fromPending = TempData["Pending"] is true;
+    bool fromTraffic = TempData["FromTraffic"] is true;
+    bool fromPending = TempData["FromPending"] is true;
 }
 
 @section customHead {
@@ -26,7 +24,7 @@
     else
     {
         <form asp-controller="Encode" asp-action="StudentRecordViolation" method="post">
-            <button type="submit" class="btn-function" name="violationType" value="@violationType">
+            <button type="submit" class="btn-function" name="violationType" value="@(fromTraffic ? "Traffic Violation" : "Student Violation")">
                 <svg width="32" height="32" viewBox="0 0 43 43" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M16 22L24 14" stroke="black" stroke-width="2" stroke-linecap="round" />
                     <path d="M16 22L24 30" stroke="black" stroke-width="2" stroke-linecap="round" />
@@ -39,7 +37,7 @@
 
 <p>Create a new record for the student</p>
 
-<form id="create-new" asp-controller="Encode" asp-action="CreateNewStudent">
+<form id="create-new" asp-controller="Encode" asp-action="CreateNewStudent" asp-route-fromPending="@fromPending" asp-route-fromTraffic="@fromTraffic" method="post">
     <div class="panel">
         <div class="content-pane">
             <h3>Student Information</h3>
