@@ -86,9 +86,10 @@
             </div>
             <div class="content-pane">
                 <div class="input-wrapper">
-                    <input asp-for="Description" type="text" class="input description" autocomplete="description" aria-required="true" />
+                    <input asp-for="Description" type="text" class="input description" autocomplete="description" aria-required="true" list="descriptionSuggestions" />
                     <label class="label">Description</label>
                     <span class="text-danger"></span>
+                    <datalist id="descriptionSuggestions"></datalist>
                 </div>
                 <div class="input-wrapper">
                     <input asp-for="Sanction" type="text" class="input" autocomplete="sanction" aria-required="true" />
