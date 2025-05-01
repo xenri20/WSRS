@@ -1,7 +1,10 @@
-﻿using System.Text.Json;
+﻿using System.Security.Claims;
+using System.Text.Json;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using WSRS_SWAFO.Data;
 using WSRS_SWAFO.Models;
 using WSRS_SWAFO.ViewModels;
 
@@ -12,17 +15,20 @@ namespace WSRS_SWAFO.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly ApplicationDbContext _context;
 
-        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, ApplicationDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _context = context;
         }
 
         [HttpGet]
         public async Task<IActionResult> IndexAsync()
         {
-            var user = await _userManager.GetUserAsync(User);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
             if (user == null)
             {
                 return RedirectToAction("Index", "LogOn");
@@ -39,9 +45,12 @@ namespace WSRS_SWAFO.Controllers
 
                 TempData["LogOutMessage"] = JsonSerializer.Serialize(message);
             }
+            var accountVM = new AccountViewModel
+            {
+                Email = user.Email!,
+                Name = user.FirstName + " " + user.Surname
+            };
 
-            //var accountVM = new AccountViewModel { Email = user!.Email, FirstName = user!.FirstName, LastName = user!.LastName};
-            var accountVM = new AccountViewModel { Email = user.Email!, Name = user.FirstName + user.Surname };
             return View(accountVM);
         }
 
