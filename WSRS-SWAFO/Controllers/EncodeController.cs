@@ -403,7 +403,7 @@ namespace WSRS_SWAFO.Controllers
             return View();
         }
 
-        [HttpPost("{id:int}")]
+        [HttpPost("[controller]/archive/{id:int}")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ArchivePending(int id)
         {
@@ -432,12 +432,70 @@ namespace WSRS_SWAFO.Controllers
 
                 if (response.IsSuccessStatusCode)
                 {
-                    SetToastMessage("A pending report has been archived.");
+                    SetToastMessage(
+                        message: "A pending report has been archived.", 
+                        button: new ToastButton
+                        {
+                            Name = "Undo", 
+                            Action = "UndoArchivePending",
+                            Controller = "Encode",
+                            RouteValues = new Dictionary<string, object>
+                            {
+                                { "id", id }
+                            }
+                        });
                     return RedirectToAction(nameof(Pending));
                 }
                 else
                 {
                     SetToastMessage(title: "Error", message: "Failed to archive the report.", cssClassName: "bg-danger text-white");
+                    _logger.LogError($"PATCH failed with status code: {response.StatusCode}");
+                }
+            }
+            catch (Exception ex)
+            {
+                SetToastMessage(title: "Error", message: "Something went wrong with your message", cssClassName: "bg-danger text-white");
+                _logger.LogError(ex.Message);
+            }
+
+            return RedirectToAction(nameof(Pending));
+        }
+
+        [HttpPost("[controller]/undo-archive/")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UndoArchivePending(int id)
+        {
+            var client = _httpClientFactory.CreateClient("WSRS-Api");
+
+            try
+            {
+                // patch document
+                var archivePatch = new[]
+                {
+                    new
+                    {
+                        op = "replace", path = "/isArchived", value = "false"
+                    }
+                };
+
+                var jsonPatch = JsonSerializer.Serialize(archivePatch);
+
+                var content = new StringContent(jsonPatch, Encoding.UTF8, "application/json-patch+json");
+                var request = new HttpRequestMessage(HttpMethod.Patch, $"report/{id}")
+                {
+                    Content = content
+                };
+
+                var response = await client.SendAsync(request);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    SetToastMessage("An action has been undone.");
+                    return RedirectToAction(nameof(Pending));
+                }
+                else
+                {
+                    SetToastMessage(title: "Error", message: "Failed to undo your action.", cssClassName: "bg-danger text-white");
                     _logger.LogError($"PATCH failed with status code: {response.StatusCode}");
                 }
             }
@@ -617,13 +675,14 @@ namespace WSRS_SWAFO.Controllers
             return RedirectToAction(nameof(CreateCollege));
         }
 
-        private void SetToastMessage(string message, string title = "", string cssClassName = "bg-white")
+        private void SetToastMessage(string message, string title = "", string cssClassName = "bg-white", ToastButton? button = null)
         {
             var toastMessage = new ToastViewModel
             {
                 Title = title,
                 Message = message,
-                CssClassName = cssClassName
+                CssClassName = cssClassName,
+                Button = button
             };
             TempData["Result"] = JsonSerializer.Serialize(toastMessage);
         }
