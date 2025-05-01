@@ -20,6 +20,7 @@
         <partial name="_FooterPartial" />
     </div>
 
+    <!-- Normal Toast -->
     <div class="toast-container position-fixed bottom-0 start-0 p-3" style="z-index: 1055;">
         @if (TempData["Result"] != null && TempData["Result"] is string messageJson && !string.IsNullOrEmpty(messageJson))
         {

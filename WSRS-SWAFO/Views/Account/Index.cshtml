@@ -16,19 +16,27 @@
     <link rel="stylesheet" href="~/css/accountStyle.css" asp-append-version="true" />
 }
 
-@if (TempData["LogOutMessage"] is string messageJson && !string.IsNullOrEmpty(messageJson))
-{
-    var message = JsonSerializer.Deserialize<ToastViewModel>(messageJson);
-    <partial name="_ToastPartial" model="@message" />
+<!-- Logout Toast -->
+<div class="toast-container position-fixed bottom-0 start-0 p-3" style="z-index: 1056;">
+    @if (TempData["LogOutMessage"] is string logoutMessageJson && !string.IsNullOrEmpty(logoutMessageJson))
+    {
+        var message = JsonSerializer.Deserialize<ToastViewModel>(logoutMessageJson);
+        <partial name="_ToastPartial" model="@message" />
 
-    <script>
-        // Will redirect the user in 6 seconds
+        <script>
+            // Will redirect the user in 6 seconds
 
-        setTimeout(() => {
-            window.location.href = '@Url.Action("SignOut", "LogOn")';
-        }, 6000); 
-    </script>
-}
+            setTimeout(() => {
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = '@Url.Action("SignOut", "LogOn")';
+
+                document.body.appendChild(form);
+                form.submit();
+            }, 6000);
+        </script>
+    }
+</div>
 
 <div id="account">
     <h1>@ViewData["Title"]</h1>
