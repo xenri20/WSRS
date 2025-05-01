@@ -9,10 +9,18 @@
     <div class="modal-dialog modal-dialog-centered modal-lg modal-fullscreen-lg-down">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 class="modal-title">Report Details</h3>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body m-2">
+                @* <h2 class="modal-title">Report No. <span><code>@Model.Id</code></span></h2> *@
+                <div class="modal-title d-flex align-items-center gap-2">
+                    <h2>Report no.</h2><span class="pill-indicator bg-secondary text-white fw-bold">@Model.Id</span>
+                </div>
+                <dl>
+                    <dt>Created by</dt>
+                    <dd>@Model.Formator</dd>
+                </dl>
+
                 <form asp-action="EncodeFromPending" method="post" class="d-flex flex-column gap-3">
                     <div class="input-wrapper">
                         <input asp-for="ReportDate" type="date" class="input" value="@formattedReportDate" readonly>
@@ -51,7 +59,6 @@
 
                     <div class="d-flex justify-content-between">
                         <button type="submit" class="btn dark-btn">Accept</button>
-                        <button type="button" class="btn" data-bs-dismiss="modal">Cancel</button>
                     </div>
                 </form>
             </div>
