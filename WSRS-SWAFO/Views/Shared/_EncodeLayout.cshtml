@@ -24,9 +24,11 @@
                         Encode Violation
                     </a>
                     @if (await NetworkHelper.IsOnline() == true)
-                    <a asp-controller="Encode" asp-action="Pending" class="pending-encode btn">
-                        Pending
-                    </a>
+                    {
+                        <a asp-controller="Encode" asp-action="Pending" class="pending-encode btn">
+                            Pending
+                        </a>
+                    }
                 </div>
                 <hr>
                 @RenderBody()
