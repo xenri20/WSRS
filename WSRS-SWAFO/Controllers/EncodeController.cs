@@ -373,6 +373,12 @@ namespace WSRS_SWAFO.Controllers
         [HttpGet]
         public async Task<IActionResult> Pending()
         {
+            var referer = Request.Headers["Referer"].ToString();
+            if (string.IsNullOrEmpty(referer))
+            {
+                return RedirectToAction(nameof(StudentRecordViolation));
+            }
+
             var client = _httpClientFactory.CreateClient("WSRS-Api");
 
             var response = await client.GetAsync("report");
