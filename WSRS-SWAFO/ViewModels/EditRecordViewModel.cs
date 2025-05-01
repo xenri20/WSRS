@@ -8,6 +8,8 @@ namespace WSRS_SWAFO.ViewModels
     {
         // Values to be displayed
         public int Id { get; set; }
+
+        [ValidateNever]
         public int StudentNumber { get; set; }
 
         [ValidateNever]
@@ -33,9 +35,14 @@ namespace WSRS_SWAFO.ViewModels
 
         public string? Formator { get; set; }
 
+        [Required]
+        [Display(Name = "previous date")]
+        public DateOnly? OriginalDate { get; set; }
+
         // Commission date should not be later than today's date
         [Required(ErrorMessage = "Please enter a date")]
         [Display(Name = "Commission Date")]
+        [DateNotBefore(nameof(OriginalDate))]
         public DateOnly CommissionDate { get; set; }
 
         [Required(ErrorMessage = "Please enter a sanction")]

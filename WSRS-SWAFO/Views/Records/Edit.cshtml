@@ -9,6 +9,7 @@
     string fullName = string.Concat(Model.FirstName, " ", Model.LastName);
 
     string formattedCommissionDate = Model.CommissionDate.ToString("yyyy-MM-dd");
+    string originalDate = Model.OriginalDate?.ToString("yyyy-MM-dd") ?? Model.CommissionDate.ToString("yyyy-MM-dd");
 
     ViewData["Title"] = "Edit Record";
 }
@@ -52,6 +53,7 @@
 
             @* Commission Date *@
             <div class="input-wrapper">
+                <input asp-for="OriginalDate" type="hidden" class="input" value="@originalDate" aria-required="true">
                 <input asp-for="CommissionDate" type="date" class="input" value="@formattedCommissionDate" aria-required="true">
                 <label asp-for="CommissionDate" class="label">Commission Date<span>*</span></label>
                 <span asp-validation-for="CommissionDate" class="text-danger"></span>

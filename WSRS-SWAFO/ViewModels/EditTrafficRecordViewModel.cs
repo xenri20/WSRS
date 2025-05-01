@@ -24,10 +24,13 @@ namespace WSRS_SWAFO.ViewModels
         [ValidateNever]
         public OffenseClassification Classification { get; set; }
 
-        // Values that can be edited
+        [Required]
+        [Display(Name = "previous date")]
+        public DateOnly? OriginalDate { get; set; }
 
         [Required(ErrorMessage = "Please enter a date")]
         [Display(Name = "Commission Date")]
+        [DateNotBefore(nameof(OriginalDate))]
         public DateOnly CommissionDate { get; set; }
 
         [Required(ErrorMessage = "Please enter the plate number")]
@@ -42,8 +45,8 @@ namespace WSRS_SWAFO.ViewModels
         [Display(Name = "Remarks")]
         public string Remarks { get; set; }
 
-        [ValidateNever]
         [Display(Name = "Date Paid")]
+        [DateNotBefore(nameof(CommissionDate), ErrorMessage = "Date cannot be before the Commission Date")]
         public DateOnly? DatePaid { get; set; }
 
         [ValidateNever]
