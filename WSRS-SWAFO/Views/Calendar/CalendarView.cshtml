@@ -50,13 +50,12 @@
 </div>
 
 <!-- Modal for Event Details -->
-<div class="modal fade" id="eventModal" tabindex="-1" aria-labelledby="eventModalLabel" aria-hidden="true">
+<div class="modal fade" id="eventModal" tabindex="-1" aria-labelledby="eventModalLabel" data-bs-backdrop="static" data-bs-keyboard="false" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-fullscreen-lg-down">
         <form id="editEventForm">
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title" id="eventModalLabel">Event Details</h4>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body d-flex flex-column gap-2">
                     <input type="hidden" id="eventId" /> <!-- Hidden event ID -->
@@ -85,8 +84,11 @@
                     <div>
                         <button type="button" class="btn" id="editEvent">Edit</button>
                         <button type="submit" class="btn dark-btn" id="saveEvent" style="display: none;">Save Changes</button>
+                        <button type="button" class="btn bg-danger border-danger text-white" id="deleteEvent" style="display: none;">Delete</button>
                     </div>
-                    <button type="button" class="btn bg-danger border-danger text-white" id="deleteEvent">Delete</button>
+                    <div>
+                        <button type="button" class="btn" id="cancelEdit" data-bs-dismiss="modal">Cancel</button>
+                    </div>
                 </div>
             </div>
         </form>

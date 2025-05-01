@@ -55,6 +55,19 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('eventTitleInput').readOnly = false;
             document.getElementById('eventDateInput').readOnly = false;
             document.getElementById('saveEvent').style.display = 'inline-block';
+            document.getElementById('deleteEvent').style.display = 'inline-block';
+            editBtn.style.display = 'none';
+        });
+    }
+
+    const cancelEditBtn = document.getElementById('cancelEdit');
+    if (cancelEditBtn) {
+        cancelEditBtn.addEventListener('click', function () {
+            document.getElementById('eventTitleInput').readOnly = true;
+            document.getElementById('eventDateInput').readOnly = true;
+            document.getElementById('saveEvent').style.display = 'none';
+            document.getElementById('deleteEvent').style.display = 'none';
+            editBtn.style.display = 'inline-block';
         });
     }
 
