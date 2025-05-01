@@ -263,7 +263,7 @@ namespace WSRS_SWAFO.Controllers
 
                 SetToastMessage(title: "Success", message: "A report has been encoded successfully.");
 
-                return RedirectToAction(nameof(StudentRecordViolation));
+                return RedirectToAction(nameof(EncodingMode));
             }
             catch (Exception ex)
             {
@@ -341,7 +341,7 @@ namespace WSRS_SWAFO.Controllers
 
                 SetToastMessage(title: "Success", message: "A traffic report has been encoded successfully.");
 
-                return RedirectToAction(nameof(StudentRecordViolation));
+                return RedirectToAction(nameof(EncodingMode));
             }
             catch (Exception ex)
             {
