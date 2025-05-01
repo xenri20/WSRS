@@ -118,7 +118,6 @@ namespace WSRS_SWAFO.Controllers
                 Classification = record.Offense.Classification,
                 Sanction = record.Sanction,
                 Status = record.StatusOfSanction,
-                HearingDate = record.HearingDate,
                 Description = record.Description
             };
 
@@ -147,7 +146,6 @@ namespace WSRS_SWAFO.Controllers
                 OffenseId = record.OffenseId,
                 Offense = record.Offense,
                 CommissionDate = record.CommissionDate,
-                HearingDate = record.HearingDate,
                 Sanction = record.Sanction,
                 StatusOfSanction = record.StatusOfSanction,
                 Description = record.Description,
@@ -175,7 +173,6 @@ namespace WSRS_SWAFO.Controllers
                     OffenseId = editRecordVM.OffenseId,
                     Course = editRecordVM.Course,
                     CommissionDate = editRecordVM.CommissionDate,
-                    HearingDate = editRecordVM.HearingDate,
                     Sanction = editRecordVM.Sanction,
                     Description = editRecordVM.Description,
                     StatusOfSanction = editRecordVM.StatusOfSanction,

@@ -28,9 +28,6 @@ namespace WSRS_SWAFO.ViewModels
         [Display(Name = "Commission Date")]
         public DateOnly CommissionDate { get; set; }
 
-        [Display(Name = "Hearing Date")]
-        public DateOnly? HearingDate { get; set; }
-
         [Required(ErrorMessage = "Please enter a sanction")]
         [Display(Name = "Sanction")]
         public string Sanction { get; set; }
