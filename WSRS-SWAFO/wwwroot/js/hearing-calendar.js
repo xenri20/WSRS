@@ -1,6 +1,12 @@
 document.addEventListener('DOMContentLoaded', function () {
     document.querySelector(".calendar-nav").classList.add("active");
 
+    const toastMessage = localStorage.getItem("showToast");
+    if (toastMessage) {
+        showToast(toastMessage, "success");
+        localStorage.removeItem("showToast");
+    }
+
     const calendarEl = document.getElementById('calendar');
     if (!calendarEl) {
         console.warn('Calendar container not found.');
@@ -71,10 +77,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 .then(res => res.json())
                 .then(data => {
                     if (data.success) {
-                        alert("Updated successfully!");
+                        localStorage.setItem("showToast", "Updated event successfully!");
                         location.reload();
                     } else {
-                        alert("Update failed.");
+                        showToast("Update failed.", "danger");
                     }
                 });
         });
@@ -89,10 +95,10 @@ document.addEventListener('DOMContentLoaded', function () {
                     .then(res => res.json())
                     .then(data => {
                         if (data.success) {
-                            alert("Deleted successfully.");
+                            localStorage.setItem("showToast", "Deleted successfully");
                             location.reload();
                         } else {
-                            alert("Deletion failed.");
+                            showToast("Deletion of schedule failed.", "danger");
                         }
                     });
             }
@@ -150,10 +156,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 .then(res => res.json())
                 .then(data => {
                     if (data.success) {
-                        alert("Hearing scheduled successfully.");
+                        localStorage.setItem("showToast", "Hearing scheduled successfully");
                         location.reload();
                     } else {
-                        alert("Error: " + data.error);
+                        showToast("Scheduling failed.", "danger");
                     }
                 })
                 .catch(error => {
@@ -165,3 +171,20 @@ document.addEventListener('DOMContentLoaded', function () {
 
     calendar.render();
 });
+
+function showToast(message, type = 'success') {
+    const toastEl = document.getElementById('jsToast');
+    const toastBody = document.getElementById('jsToastMessage');
+
+    toastBody.textContent = message;
+
+    // Adjust styling based on type
+    if (type === 'danger') {
+        toastEl.classList.add(`bg-${type}`, 'text-white');
+    } else {
+        toastEl.classList.add('bg-white', 'text-black');
+    }
+
+    const bsToast = new bootstrap.Toast(toastEl);
+    bsToast.show();
+}
