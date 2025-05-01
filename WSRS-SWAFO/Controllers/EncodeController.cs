@@ -103,7 +103,10 @@ namespace WSRS_SWAFO.Controllers
 
         // Page 2 - Create Student Data (If no student present) - Index
         [HttpGet]
-        public IActionResult CreateStudentRecord()
+        public IActionResult CreateStudentRecord(
+            int? studentNumber,
+            string? firstName,
+            string? lastName)
         {
             var referer = Request.Headers["Referer"].ToString();
             if (string.IsNullOrEmpty(referer))
@@ -512,17 +515,35 @@ namespace WSRS_SWAFO.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult EncodeFromPending(ReportPendingDto report)
         {
-            var studentInfo = new ReportEncodedViewModel
-            {
-                StudentNumber = report.StudentNumber,
-                FirstName = report.FirstName,
-                LastName = report.LastName,
-                CollegeID = report.College,
-                Formator = report.Formator,
-                Course = report.CourseYearSection,
-            };
+            // Check if student exists
+            var student = _context.Students.Find(report.StudentNumber);
 
-            return RedirectToAction(nameof(EncodeStudentViolation), studentInfo);
+            if (student != null)
+            {
+                var studentInfo = new ReportEncodedViewModel
+                {
+                    StudentNumber = report.StudentNumber,
+                    FirstName = report.FirstName,
+                    LastName = report.LastName,
+                    CollegeID = report.College,
+                    Formator = report.Formator,
+                    Course = report.CourseYearSection,
+                };
+
+                return RedirectToAction(nameof(EncodeStudentViolation), studentInfo);
+            }
+            else
+            {
+                var studentInfo = new StudentRecordViewModel
+                {
+                    StudentNumber = report.StudentNumber,
+                    FirstName = report.FirstName,
+                    LastName = report.LastName,
+                };
+
+                SetToastMessage("The student reported does not exist yet. Create their record first.");
+                return RedirectToAction(nameof(CreateStudentRecord), studentInfo);
+            }
         }
 
         [HttpGet]
