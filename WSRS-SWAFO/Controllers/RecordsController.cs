@@ -145,11 +145,12 @@ namespace WSRS_SWAFO.Controllers
             {
                 Id = id,
                 StudentNumber = record.StudentNumber,
-                Student = record.Student,
+                FirstName = record.Student.FirstName,
+                LastName = record.Student.LastName,
                 College = record.CollegeID,
                 Course = record.Course,
-                OffenseId = record.OffenseId,
-                Offense = record.Offense,
+                Nature = record.Offense.Nature,
+                Classification = record.Offense.Classification,
                 CommissionDate = record.CommissionDate,
                 Sanction = record.Sanction,
                 StatusOfSanction = record.StatusOfSanction,
@@ -162,27 +163,50 @@ namespace WSRS_SWAFO.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(EditRecordViewModel editRecordVM)
         {
+            var record = await _context.ReportsEncoded
+                .AsNoTracking()
+                .Include(r => r.Student)
+                .Include(r => r.Offense)
+                .FirstOrDefaultAsync(r => r.Id == editRecordVM.Id);
+
+            editRecordVM = new EditRecordViewModel
+            {
+                Id = record!.Id,
+                StudentNumber = record.StudentNumber,
+                FirstName = record.Student.FirstName,
+                LastName = record.Student.LastName,
+                College = record.CollegeID,
+                Course = editRecordVM.Course,
+                OffenseId = record.OffenseId,
+                Classification = record.Offense.Classification,
+                Nature = record.Offense.Nature,
+                CommissionDate = editRecordVM.CommissionDate,
+                Sanction = editRecordVM.Sanction,
+                StatusOfSanction = editRecordVM.StatusOfSanction,
+                Description = editRecordVM.Description,
+            };
+
             if (!ModelState.IsValid)
             {
-                ModelState.AddModelError("", "Failed to edit record.");
+                SetToastMessage(message: "Please fill in the required fields appropriately.");
                 return View(editRecordVM);
             }
 
+            var updatedRecord = new ReportEncoded
+            {
+                Id = editRecordVM.Id,
+                StudentNumber = editRecordVM.StudentNumber,
+                CollegeID = editRecordVM.College,
+                OffenseId = editRecordVM.OffenseId,
+                Course = editRecordVM.Course,
+                CommissionDate = editRecordVM.CommissionDate,
+                Sanction = editRecordVM.Sanction,
+                Description = editRecordVM.Description,
+                StatusOfSanction = editRecordVM.StatusOfSanction,
+            };
+
             try
             {
-                var updatedRecord = new ReportEncoded
-                {
-                    Id = editRecordVM.Id,
-                    StudentNumber = editRecordVM.StudentNumber,
-                    CollegeID = editRecordVM.College,
-                    OffenseId = editRecordVM.OffenseId,
-                    Course = editRecordVM.Course,
-                    CommissionDate = editRecordVM.CommissionDate,
-                    Sanction = editRecordVM.Sanction,
-                    Description = editRecordVM.Description,
-                    StatusOfSanction = editRecordVM.StatusOfSanction,
-                };
-
                 _context.Update(updatedRecord);
                 await _context.SaveChangesAsync();
 
@@ -320,10 +344,12 @@ namespace WSRS_SWAFO.Controllers
             {
                 Id = id,
                 StudentNumber = record.StudentNumber,
-                Student = record.Student,
+                FirstName = record.Student.FirstName,
+                LastName = record.Student.LastName,
                 College = record.CollegeID,
                 OffenseId = record.OffenseId,
-                Offense = record.Offense,
+                Classification = record.Offense.Classification,
+                Nature = record.Offense.Nature,
                 CommissionDate = record.CommissionDate,
                 PlateNumber = record.PlateNumber,
                 Place = record.Place,
@@ -338,28 +364,53 @@ namespace WSRS_SWAFO.Controllers
         [HttpPost]
         public async Task<IActionResult> EditTraffic(EditTrafficRecordViewModel editTrafficRecordVM)
         {
+            var record = await _context.TrafficReportsEncoded
+                .AsNoTracking()
+                .Include(r => r.Student)
+                .Include(r => r.Offense)
+                .Include(r => r.College)
+                .FirstOrDefaultAsync(r => r.Id == editTrafficRecordVM.Id);
+
+            editTrafficRecordVM = new EditTrafficRecordViewModel
+            {
+                Id = record!.Id,
+                StudentNumber = record.StudentNumber,
+                FirstName = record.Student.FirstName,
+                LastName = record.Student.LastName,
+                College = record.CollegeID,
+                OffenseId = record.OffenseId,
+                Classification = record.Offense.Classification,
+                Nature = record.Offense.Nature,
+                CommissionDate = editTrafficRecordVM.CommissionDate,
+                PlateNumber = editTrafficRecordVM.PlateNumber,
+                Place = editTrafficRecordVM.Place,
+                Remarks = editTrafficRecordVM.Remarks,
+                DatePaid = editTrafficRecordVM.DatePaid,
+                ORNumber = editTrafficRecordVM.ORNumber,
+            };
+
             if (!ModelState.IsValid)
             {
-                ModelState.AddModelError("", "Failed to edit record.");
+                SetToastMessage(message: "Please fill in the required fields appropriately.");
                 return View(editTrafficRecordVM);
             }
 
+            var updatedRecord = new TrafficReportsEncoded
+            {
+                Id = editTrafficRecordVM.Id,
+                StudentNumber = editTrafficRecordVM.StudentNumber,
+                CollegeID = editTrafficRecordVM.College,
+                OffenseId = editTrafficRecordVM.OffenseId,
+                CommissionDate = editTrafficRecordVM.CommissionDate,
+                PlateNumber = editTrafficRecordVM.PlateNumber,
+                Place = editTrafficRecordVM.Place,
+                Remarks = editTrafficRecordVM.Remarks,
+                DatePaid = editTrafficRecordVM.DatePaid,
+                ORNumber = editTrafficRecordVM.ORNumber,
+            };
+
             try
             {
-                var updatedRecord = new TrafficReportsEncoded
-                {
-                    Id = editTrafficRecordVM.Id,
-                    StudentNumber = editTrafficRecordVM.StudentNumber,
-                    CollegeID = editTrafficRecordVM.College,
-                    OffenseId = editTrafficRecordVM.OffenseId,
-                    CommissionDate = editTrafficRecordVM.CommissionDate,
-                    PlateNumber = editTrafficRecordVM.PlateNumber,
-                    Place = editTrafficRecordVM.Place,
-                    Remarks = editTrafficRecordVM.Remarks,
-                    DatePaid = editTrafficRecordVM.DatePaid,
-                    ORNumber = editTrafficRecordVM.ORNumber,
-                };
-
                 _context.Update(updatedRecord);
                 await _context.SaveChangesAsync();
 

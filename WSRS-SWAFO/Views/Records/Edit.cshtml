@@ -1,5 +1,4 @@
-﻿@using WSRS_SWAFO.Data.Enum
-@using WSRS_SWAFO.ViewModels
+﻿@using WSRS_SWAFO.ViewModels
 @model EditRecordViewModel
 
 @section customHead {
@@ -7,10 +6,9 @@
 }
 
 @{
-    string fullName = string.Concat(Model.Student.FirstName, " ", Model.Student.LastName);
+    string fullName = string.Concat(Model.FirstName, " ", Model.LastName);
 
     string formattedCommissionDate = Model.CommissionDate.ToString("yyyy-MM-dd");
-    string today = DateOnly.FromDateTime(DateTime.Now).ToString("yyyy-MM-dd");
 
     ViewData["Title"] = "Edit Record";
 }
@@ -30,23 +28,19 @@
                 <input asp-for="Id" type="hidden" value="@Model.Id">
 
                 <dt>Student Number</dt>
-                <dd>@Model.Student.StudentNumber</dd>
-                <input asp-for="StudentNumber" type="hidden" value="@Model.StudentNumber">
+                <dd>@Model.StudentNumber</dd>
 
                 <dt>Student Name</dt>
                 <dd>@fullName</dd>
 
                 <dt>College</dt>
                 <dd>@Model.College</dd>
-                <input asp-for="College" type="hidden" value="@Model.College">
-
-                <input asp-for="OffenseId" type="hidden" value="@Model.OffenseId">
 
                 <dt>Classification</dt>
-                <dd>@Model.Offense.Classification</dd>
+                <dd>@Model.Classification</dd>
 
                 <dt>Nature</dt>
-                <dd>@Model.Offense.Nature</dd>
+                <dd>@Model.Nature</dd>
             </dl>
 
             @* Course *@

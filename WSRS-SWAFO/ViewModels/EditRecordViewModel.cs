@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using System.ComponentModel.DataAnnotations;
-using WSRS_SWAFO.Models;
+using WSRS_SWAFO.Data.Enum;
 
 namespace WSRS_SWAFO.ViewModels
 {
@@ -9,10 +9,22 @@ namespace WSRS_SWAFO.ViewModels
         // Values to be displayed
         public int Id { get; set; }
         public int StudentNumber { get; set; }
-        public Student? Student { get; set; }
+
+        [ValidateNever]
+        public string LastName { get; set; }
+
+        [ValidateNever]
+        public string FirstName { get; set; }
+
+        [ValidateNever]
         public string College { get; set; }
         public int OffenseId { get; set; }
-        public Offense? Offense { get; set; }
+
+        [ValidateNever]
+        public string Nature { get; set; }
+
+        [ValidateNever]
+        public OffenseClassification Classification { get; set; }
 
         // Values that can be edited
         [Required(ErrorMessage = "Please enter student's Course, Year and Section")]
@@ -20,10 +32,8 @@ namespace WSRS_SWAFO.ViewModels
         public string Course { get; set; }
 
         public string? Formator { get; set; }
-        
-        // TODO Add validation logic when choosing dates
-        //   - Commission date should not be later than today's date
-        //   - Hearing date cannot be set before commission date
+
+        // Commission date should not be later than today's date
         [Required(ErrorMessage = "Please enter a date")]
         [Display(Name = "Commission Date")]
         public DateOnly CommissionDate { get; set; }

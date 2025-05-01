@@ -1,5 +1,4 @@
-﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
-@using WSRS_SWAFO.ViewModels
+﻿@using WSRS_SWAFO.ViewModels
 @model EditTrafficRecordViewModel
 
 @section customHead {
@@ -7,7 +6,7 @@
 }
 
 @{
-    string fullName = string.Concat(Model.Student.FirstName, " ", Model.Student.LastName);
+    string fullName = string.Concat(Model.FirstName, " ", Model.LastName);
 
     string formattedCommissionDate = Model.CommissionDate.ToString("yyyy-MM-dd");
     // string today = DateOnly.FromDateTime(DateTime.Now).ToString("yyyy-MM-dd");
@@ -29,7 +28,7 @@
             </div>
             <dl>
                 <dt>Student Number</dt>
-                <dd>@Model.Student.StudentNumber</dd>
+                <dd>@Model.StudentNumber</dd>
                 <input asp-for="StudentNumber" type="hidden" value="@Model.StudentNumber">
 
                 <dt>Student Name</dt>
@@ -42,10 +41,10 @@
                 <input asp-for="OffenseId" type="hidden" value="@Model.OffenseId">
 
                 <dt>Classification</dt>
-                <dd>@Model.Offense.Classification</dd>
+                <dd>@Model.Classification</dd>
 
                 <dt>Nature</dt>
-                <dd>@Model.Offense.Nature</dd>
+                <dd>@Model.Nature</dd>
             </dl>
 
             @* Commission Date *@

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
-using WSRS_SWAFO.Models;
+using WSRS_SWAFO.Data.Enum;
 
 namespace WSRS_SWAFO.ViewModels
 {
@@ -9,10 +9,20 @@ namespace WSRS_SWAFO.ViewModels
         // Values to be displayed
         public int Id { get; set; }
         public int StudentNumber { get; set; }
-        public Student? Student { get; set; }
+
+        [ValidateNever]
+        public string LastName { get; set; }
+
+        [ValidateNever]
+        public string FirstName { get; set; }
         public string College { get; set; }
         public int OffenseId { get; set; }
-        public Offense? Offense { get; set; }
+
+        [ValidateNever]
+        public string Nature { get; set; }
+
+        [ValidateNever]
+        public OffenseClassification Classification { get; set; }
 
         // Values that can be edited
 
