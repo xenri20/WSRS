@@ -41,7 +41,7 @@
                 <input asp-for="OffenseId" type="hidden" value="@Model.OffenseId">
 
                 <dt>Classification</dt>
-                <dd>@Model.Classification</dd>
+                <dd>@(Model.Classification.ToString().Substring(0, 5) + " Traffic")</dd>
 
                 <dt>Nature</dt>
                 <dd>@Model.Nature</dd>
