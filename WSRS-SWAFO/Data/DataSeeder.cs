@@ -34,7 +34,8 @@ public class DataSeeder
                         {
                             StudentNumber = studentWorksheet.Cell(row, 1).GetValue<int>(),
                             FirstName = studentWorksheet.Cell(row, 2).GetValue<string>(),
-                            LastName = studentWorksheet.Cell(row, 3).GetValue<string>()
+                            LastName = studentWorksheet.Cell(row, 3).GetValue<string>(),
+                            Email = studentWorksheet.Cell(row, 4).GetValue<string>()
                         };
 
                         if (!context.Students.Any(s => s.StudentNumber == student.StudentNumber))
