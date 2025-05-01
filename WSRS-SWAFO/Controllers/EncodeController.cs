@@ -541,6 +541,7 @@ namespace WSRS_SWAFO.Controllers
                     LastName = report.LastName,
                 };
 
+                TempData["Pending"] = true;
                 SetToastMessage("The student reported does not exist yet. Create their record first.");
                 return RedirectToAction(nameof(CreateStudentRecord), studentInfo);
             }
