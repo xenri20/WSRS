@@ -1,5 +1,6 @@
 ﻿@using System.Text.Json
 @using WSRS_SWAFO.ViewModels
+@using WSRS_SWAFO.Helpers
 
 <!DOCTYPE html>
 <html lang="en">
@@ -22,6 +23,7 @@
                     <a asp-controller="Encode" asp-action="EncodingMode" class="student-encode btn">
                         Encode Violation
                     </a>
+                    @if (await NetworkHelper.IsOnline() == true)
                     <a asp-controller="Encode" asp-action="Pending" class="pending-encode btn">
                         Pending
                     </a>
