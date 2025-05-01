@@ -4,6 +4,7 @@
 @{
     ViewData["Title"] = "Dashboard";
     TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
+    string fullname = textInfo.ToTitleCase(Model.Name.ToLower());
 }
 
 @section customHead {
@@ -11,7 +12,7 @@
 }
 
 <div id="dashboard">
-    <h1>Greetings, <span></span></h1>
+    <h1>Greetings, <span>@fullname</span></h1>
     <div class="subtitle">You can start with</div>
     <div id="categFunc" class="box-row">
         @if (User.IsInRole("AppRole.Admin"))

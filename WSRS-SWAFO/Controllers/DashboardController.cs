@@ -23,7 +23,7 @@ namespace WSRS_SWAFO.Controllers
 
         public IActionResult Index()
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var user = _context.Users.FirstOrDefault(u => u.Id == userId);
             if (user != null)
             {
