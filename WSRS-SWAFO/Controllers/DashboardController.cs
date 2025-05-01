@@ -25,6 +25,11 @@ namespace WSRS_SWAFO.Controllers
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var user = _context.Users.FirstOrDefault(u => u.Id == userId);
+            if (user?.PasswordHash == null)
+            {
+                return RedirectToAction("UpdatePassword", "Account");
+            }
+
             if (user != null)
             {
                 var accountVM = new AccountViewModel
