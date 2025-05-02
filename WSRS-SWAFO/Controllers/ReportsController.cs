@@ -9,7 +9,7 @@ using WSRS_SWAFO.Models;
 
 namespace WSRS_SWAFO.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "AppRole.Admin, AppRole.Member")]
     public class ReportsController : Controller
     {
         private readonly ILogger<ReportsController> _logger;
@@ -23,6 +23,11 @@ namespace WSRS_SWAFO.Controllers
 
         public IActionResult Index()
         {
+            var referer = Request.Headers["Referer"].ToString();
+            if (string.IsNullOrEmpty(referer))
+            {
+                return Content("<script>alert('External links are disabled. Use the in-app interface to proceed.'); window.history.back();</script>", "text/html");
+            }
             return View();
         }
 

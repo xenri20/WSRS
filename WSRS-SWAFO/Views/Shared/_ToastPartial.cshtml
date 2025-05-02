@@ -1,0 +1,31 @@
+﻿@using WSRS_SWAFO.ViewModels
+@model ToastViewModel
+
+@if (Model != null)
+{
+    <div id="toast" class="toast align-items-center border-0 shadow w-auto px-2 py-1 fs-6 @Model.CssClassName" role="alert" data-bs-autohide="true" data-bs-delay="8000">
+        <div class="d-flex">
+            <div class="toast-body d-flex gap-1">
+                @if (!string.IsNullOrEmpty(Model.Title))
+                {
+                    <strong>@Model.Title!</strong>
+                }
+                @Model.Message
+
+                @if (Model.Button != null && !string.IsNullOrEmpty(Model.Button.Action))
+                {
+                    <form asp-action="@Model.Button.Action" asp-controller="@Model.Button.Controller" method="post">
+                        @if (Model.Button.RouteValues != null)
+                        {
+                            @foreach (var param in Model.Button.RouteValues)
+                            {
+                                <input type="hidden" name="@param.Key" value="@param.Value" />
+                            }
+                        }
+                        <button type="submit" class="ms-2 text-button">@Model.Button.Name</button>
+                    </form>
+                }
+            </div>
+        </div>
+    </div>
+}

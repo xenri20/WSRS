@@ -34,7 +34,8 @@ public class DataSeeder
                         {
                             StudentNumber = studentWorksheet.Cell(row, 1).GetValue<int>(),
                             FirstName = studentWorksheet.Cell(row, 2).GetValue<string>(),
-                            LastName = studentWorksheet.Cell(row, 3).GetValue<string>()
+                            LastName = studentWorksheet.Cell(row, 3).GetValue<string>(),
+                            Email = studentWorksheet.Cell(row, 4).GetValue<string>()
                         };
 
                         if (!context.Students.Any(s => s.StudentNumber == student.StudentNumber))
@@ -63,7 +64,6 @@ public class DataSeeder
                             StudentNumber = reportWorksheet.Cell(row, 5).GetValue<int>(),
                             Course = reportWorksheet.Cell(row, 6).GetValue<string>(),
                             CommissionDate = DateHelper.ParseDate(reportWorksheet.Cell(row, 7).GetValue<string>()),
-                            HearingDate = DateHelper.ParseDateNullable(reportWorksheet.Cell(row, 8).GetValue<string>()),
                             Sanction = reportWorksheet.Cell(row, 9).GetValue<string>(),
                             StatusOfSanction = reportWorksheet.Cell(row, 10).GetValue<string>(),
                             Description = reportWorksheet.Cell(row, 11).GetValue<string>(),

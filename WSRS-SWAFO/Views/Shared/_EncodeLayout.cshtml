@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+@using System.Text.Json
+@using WSRS_SWAFO.ViewModels
+@using WSRS_SWAFO.Helpers
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -10,6 +14,7 @@
 </head>
 <body>
     <partial name="_SidebarPartial" />
+
     <div class="container">
         <main>
             <div id="encode">
@@ -18,9 +23,12 @@
                     <a asp-controller="Encode" asp-action="EncodingMode" class="student-encode btn">
                         Encode Violation
                     </a>
-                    <a asp-controller="Encode" asp-action="Pending" class="pending-encode btn">
-                        Pending
-                    </a>
+                    @if (await NetworkHelper.IsOnline() == true)
+                    {
+                        <a asp-controller="Encode" asp-action="Pending" class="pending-encode btn">
+                            Pending
+                        </a>
+                    }
                 </div>
                 <hr>
                 @RenderBody()
@@ -31,11 +39,25 @@
             <span>All Rights Reserved</span>
         </footer>
     </div>
+
+    <div class="toast-container position-fixed bottom-0 start-0 p-3" style="z-index: 1055;">
+        @if (TempData["Result"] != null && TempData["Result"] is string messageJson && !string.IsNullOrEmpty(messageJson))
+        {
+            var message = JsonSerializer.Deserialize<ToastViewModel>(messageJson);
+
+            if (message != null)
+            {
+                <partial name="_ToastPartial" model="@message" />
+            }
+        }
+    </div>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/encode.js"></script>
+    <script src="~/js/components/toast.js" asp-asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

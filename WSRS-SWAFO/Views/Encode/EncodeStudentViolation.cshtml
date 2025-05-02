@@ -3,8 +3,6 @@
 @model ReportEncodedViewModel
 @{
     Layout = "_EncodeLayout";
-    ViewData["Title"] = "Student Violation";
-
     string today = DateOnly.FromDateTime(DateTime.Now).ToString("yyyy-MM-dd");
 }
 
@@ -12,14 +10,21 @@
     <link rel="stylesheet" href="~/css/studentViolationStyle.css" asp-append-version="true" />
 }
 
+<partial name="_StudentModalPartial" />
+
 <div class="title">
-    <a asp-controller="Encode" asp-action="StudentRecordViolation" class="btn-function">
-        <svg width="32" height="32" viewBox="0 0 43 43" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M16 22L24 14" stroke="black" stroke-width="2" stroke-linecap="round" />
-            <path d="M16 22L24 30" stroke="black" stroke-width="2" stroke-linecap="round" />
-        </svg>
-    </a>
+    <form asp-controller="Encode" asp-action="StudentRecordViolation" method="post">
+        <button type="submit" class="btn-function" name="violationType" value="Student Violation">
+            <svg width="32" height="32" viewBox="0 0 43 43" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M16 22L24 14" stroke="black" stroke-width="2" stroke-linecap="round" />
+                <path d="M16 22L24 30" stroke="black" stroke-width="2" stroke-linecap="round" />
+            </svg>
+        </button>
+    </form>
     <h2>Step 3</h2>
+    <span class="pill-indicator bg-success text-white">
+        Regular
+    </span>
 </div>
 
 <p>Record and encode the violation in the system</p>
@@ -30,7 +35,11 @@
             <h3>Student Information</h3>
             <dl>
                 <dt>Student Number:</dt>
-                <dd>@Model.StudentNumber</dd>
+                <dd>
+                    <button type="button" class="text-button" data-student="@Model.StudentNumber" data-bs-toggle="modal" data-bs-target="#studentModal">
+                        @Model.StudentNumber
+                    </button>
+                </dd>
                 <dt>Student Name:</dt>
                 <dd>@Model.FirstName @Model.LastName</dd>
             </dl>
@@ -49,18 +58,18 @@
                         }
                     </select>
                     <label class="label">College<span>*</span></label>
-                    <span class="text-danger"></span>
+                    <span asp-validation-for="CollegeID" class="text-danger"></span>
                 </div>
                 <div class="input-wrapper">
-                    <input asp-for="Course" type="text" class="input" autocomplete="CYS" aria-required="true" />
+                    <input asp-for="Course" type="text" class="input" autocomplete="CYS" aria-required="true" value="@Model.Course" />
                     <label class="label">CYS<span>*</span></label>
-                    <span class="text-danger"></span>
+                    <span asp-validation-for="Course" class="text-danger"></span>
                 </div>
                 <div class="input-wrapper">
                     @* TODO Later fix this date *@
                     <input asp-for="CommissionDate" type="date" class="input" value="@today" autocomplete="dateOfCommission" aria-required="true" />
                     <label class="label">Commission Date<span>*</span></label>
-                    <span class="text-danger"></span>
+                    <span asp-validation-for="CommissionDate" class="text-danger"></span>
                 </div>
                 <div class="input-wrapper">
                     <select class="input" id="offenseClassification" aria-required="true">
@@ -71,31 +80,26 @@
                         }
                     </select>
                     <label class="label">Classification of Offense<span>*</span></label>
-                    <span class="text-danger"></span>
                 </div>
                 <div class="input-wrapper">
                     <select asp-for="OffenseId" class="input" id="offenseNature" aria-required="true">
                         <option disabled hidden selected>-- Select an option --</option>
                     </select>
                     <label class="label">Nature of Offense<span>*</span></label>
-                    <span class="text-danger"></span>
+                    <span asp-validation-for="OffenseId" class="text-danger"></span>
                 </div>
             </div>
             <div class="content-pane">
-                <div class="input-wrapper" id="hearingDate">
-                    <input asp-for="HearingDate" type="date" class="input" autocomplete="dateOfCommission" aria-required="true" />
-                    <label class="label"><span>*</span></label>
-                    <span class="text-danger"></span>
-                </div>
                 <div class="input-wrapper">
-                    <input asp-for="Description" type="text" class="input description" autocomplete="description" aria-required="true" />
+                    <input asp-for="Description" type="text" class="input description" autocomplete="description" aria-required="true" list="descriptionSuggestions" />
                     <label class="label">Description</label>
-                    <span class="text-danger"></span>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                    <datalist id="descriptionSuggestions"></datalist>
                 </div>
                 <div class="input-wrapper">
                     <input asp-for="Sanction" type="text" class="input" autocomplete="sanction" aria-required="true" />
                     <label class="label">Sanction<span>*</span></label>
-                    <span class="text-danger"></span>
+                    <span asp-validation-for="Sanction" class="text-danger"></span>
                 </div>
                 <div class="input-wrapper">
                     @* <input asp-for="StatusOfSanction" type="text" class="input description" autocomplete="statusOfSanction" aria-required="true" /> *@
@@ -106,7 +110,7 @@
                         <option value="Completed">Completed</option>
                     </select>
                     <label class="label">Status of Sanction</label>
-                    <span class="text-danger"></span>
+                    <span asp-validation-for="StatusOfSanction" class="text-danger"></span>
                 </div>
             </div>
         </div>
@@ -119,4 +123,5 @@
 @section Scripts {
     <script src="~/js/offenses.js"></script>
     <script src="~/js/studentViolation.js"></script>
+    <script src="~/js/components/studentModal.js" type="module" asp-append-version="true"></script>
 }

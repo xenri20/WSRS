@@ -5,12 +5,17 @@ namespace WSRS_SWAFO.Data
 {
     public class ApplicationDbInitializer
     {
+        public async Task SeedRoles(IApplicationBuilder applicationBuilder)
+        {
+            await CreateRoles(applicationBuilder);
+        }
+
         private static async Task CreateRoles(IApplicationBuilder applicationBuilder)
         {
             using (var scope = applicationBuilder.ApplicationServices.CreateScope())
             {
                 var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-                var roleNames = new[] { "Admin", "Manager", "Member" };
+                var roleNames = new[] { "AppRole.Admin", "AppRole.Member" };
 
                 foreach (var roleName in roleNames)
                 {
@@ -38,7 +43,8 @@ namespace WSRS_SWAFO.Data
                 {
                     var user = new ApplicationUser();
 
-                    user.Name = "N/A";
+                    user.Surname = "N/A";
+                    user.FirstName = "N/A";
                     user.UserName = adminEmail;
                     user.Email = adminEmail;
 

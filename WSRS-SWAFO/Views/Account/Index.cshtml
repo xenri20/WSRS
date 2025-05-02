@@ -1,17 +1,42 @@
 ﻿@using System.Globalization
-@model WSRS_SWAFO.ViewModels.AccountViewModel
+@using System.Security.Claims
+@using System.Text.Json
+@using WSRS_SWAFO.ViewModels
+@model AccountViewModel
 
 @{
     ViewData["Title"] = "Account";
 
     @* For changing name to title case *@
     TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
-    string nameTitleCase = textInfo.ToTitleCase(Model.Name.ToLower());
+    string fullname = textInfo.ToTitleCase(Model.Name.ToLower());
 }
 
 @section customHead {
     <link rel="stylesheet" href="~/css/accountStyle.css" asp-append-version="true" />
 }
+
+<!-- Logout Toast -->
+<div class="toast-container position-fixed bottom-0 start-0 p-3" style="z-index: 1056;">
+    @if (TempData["LogOutMessage"] is string logoutMessageJson && !string.IsNullOrEmpty(logoutMessageJson))
+    {
+        var message = JsonSerializer.Deserialize<ToastViewModel>(logoutMessageJson);
+        <partial name="_ToastPartial" model="@message" />
+
+        <script>
+            // Will redirect the user in 6 seconds
+
+            setTimeout(() => {
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = '@Url.Action("SignOut", "LogOn")';
+
+                document.body.appendChild(form);
+                form.submit();
+            }, 6000);
+        </script>
+    }
+</div>
 
 <div id="account">
     <h1>@ViewData["Title"]</h1>
@@ -22,7 +47,7 @@
             <dt>Email</dt>
             <dd>@Model.Email.ToLower()</dd>
             <dt>Name</dt>
-            <dd>@nameTitleCase</dd>
+            <dd>@fullname</dd>
         </dl>
     </section>
 
@@ -35,4 +60,5 @@
 
 @section scripts {
     <script src="~/js/account.js" asp-append-version="true" ></script>
+
 }

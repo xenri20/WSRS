@@ -1,4 +1,6 @@
-﻿@* @model *@
+﻿@using WSRS_SWAFO.ViewModels
+@model PendingViewModel
+
 @{
     Layout = "_EncodeLayout";
     ViewData["Title"] = "ReportsPending";
@@ -9,77 +11,79 @@
 }
 
 <div class="pending">
-    <div class="control-group mb-3">
-        <form method="get" id="searchForm">
-            <input type="search" name="searchString" placeholder="Search" aria-required="true" value="">
-
-            <div class="button-group">
-                <button type="submit" class="btn-function">
-                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <g clip-path="url(#clip0_173_68)">
-                            <path d="M6.41667 11.0833C8.994 11.0833 11.0833 8.994 11.0833 6.41667C11.0833 3.83934 8.994 1.75 6.41667 1.75C3.83934 1.75 1.75 3.83934 1.75 6.41667C1.75 8.994 3.83934 11.0833 6.41667 11.0833Z"
-                                  stroke="#1E1F20" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                            <path d="M12.25 12.25L9.71252 9.71249" stroke="#1E1F20" stroke-width="2" stroke-linecap="round"
-                                  stroke-linejoin="round" />
-                        </g>
-                        <defs>
-                            <clipPath id="clip0_173_68">
-                                <rect width="14" height="14" fill="white" />
-                            </clipPath>
-                        </defs>
-                    </svg>
-                </button>
-            </div>
-        </form>
-    </div>
-    
     <div class="report-list">
         @* TODO Should be looped over soon when there's a model with pagination (below) *@
-        @for (int i = 0; i < 5; i++)
+        @if (Model.ReportsPending.Any())
         {
-            <div class="report-tile">
-                <span class="report-tile-item">
-                    <div class="label">
-                        Report Creation
-                    </div>
-                    <div>
-                        Data
-                    </div>
-                </span>
-                <span class="report-tile-item">
-                    <div class="label">
-                        Student ID
-                    </div>
-                    <div>
-                        Data
-                    </div>
-                </span>
-                <span class="report-tile-item">
-                    <div class="label">
-                        Formator
-                    </div>
-                    <div>
-                        Data
-                    </div>
-                </span>
-                <span class="button-group">
-                    <button>Complete</button>
-                </span>
-                <a asp-action="" asp-route-id="" class="btn-function">
-                    <svg width="32" height="32" viewBox="0 0 43 43" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <g transform="rotate(180, 21.5, 21.5)">
-                            <path d="M16 22L24 14" stroke="black" stroke-width="2" stroke-linecap="round" />
-                            <path d="M16 22L24 30" stroke="black" stroke-width="2" stroke-linecap="round" />
-                        </g>
-                    </svg>
-                </a>
-            </div>
+            @foreach (var item in Model.ReportsPending)
+            {
+                <partial name="_PendingModalPartial" model="@item" />
+                <div class="report-tile">
+                    <span class="report-tile-item">
+                        <div class="label">
+                            No.
+                        </div>
+                        <div>
+                            @item.Id
+                        </div>
+                    </span>
+                    <span class="report-tile-item">
+                        <div class="label">
+                            Creation Date
+                        </div>
+                        <div>
+                            @item.FormattedReportDate
+                        </div>
+                    </span>
+                    <span class="report-tile-item">
+                        <div class="label">
+                            Student Number
+                        </div>
+                        <div>
+                            @item.StudentNumber
+                        </div>
+                    </span>
+                    <span class="report-tile-item">
+                        <div class="label">
+                            Formator
+                        </div>
+                        <div>
+                            @item.Formator
+                        </div>
+                    </span>
+                    <span class="report-tile-item long">
+                        <div class="label">
+                            Description
+                        </div>
+                        <div>
+                            @item.Description
+                        </div>
+                    </span>
+                    <span class="button-group">
+                        <form asp-action="ArchivePending" asp-route-id="@item.Id" method="post">
+                            <input type="hidden" name="_method" value="PATCH" />
+                            <button type="submit" class="btn">Archive</button>
+                        </form>
+                    </span>
+                    
+                    <button type="button" class="btn-function" data-bs-toggle="modal" data-bs-target="@($"#pendingModal{item.Id}")">
+                        <svg width="32" height="32" viewBox="0 0 43 43" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="11.5" cy="21.5" r="3" fill="currentColor" />
+                            <circle cx="21.5" cy="21.5" r="3" fill="currentColor" />
+                            <circle cx="31.5" cy="21.5" r="3" fill="currentColor" />
+                        </svg>
+                    </button>
+                </div>
+            }
         }
-        
+        else
+        {
+            <div class="text-center">There are no pending reports at the moment</div>
+        }
         @* TODO Add Pagination here *@
     </div>
 </div>
 
 @section Scripts {
-    
+    <script src="~/js/pending.js"></script>
 }

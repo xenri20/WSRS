@@ -1,27 +1,48 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Text;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
 using WSRS_SWAFO.Data;
 using WSRS_SWAFO.Data.Enum;
 using WSRS_SWAFO.Models;
 using WSRS_SWAFO.ViewModels;
+using WSRS_SWAFO.Interfaces;
+using Hangfire;
+using WSRS_SWAFO.Dtos;
 
 namespace WSRS_SWAFO.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "AppRole.Admin")]
     public class EncodeController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly ILogger<EncodeController> _logger;
+        private readonly IEmailSender _emailSender;
+        private readonly IHttpClientFactory _httpClientFactory;
 
-        public EncodeController(ApplicationDbContext context)
+        public EncodeController(ApplicationDbContext context, ILogger<EncodeController> logger, IEmailSender emailSender, IHttpClientFactory httpClientFactory)
         {
             _context = context;
+            _logger = logger;
+            _emailSender = emailSender;
+            _httpClientFactory = httpClientFactory;
+        }
+
+        public IActionResult Index()
+        {
+            return RedirectToAction(nameof(EncodingMode));
         }
 
         // Mode Switch
         // Ticks whether Student Violation or Traffic Violation
         public IActionResult EncodingMode()
         {
+            var referer = Request.Headers["Referer"].ToString();
+            if (string.IsNullOrEmpty(referer))
+            {
+                return Content("<script>alert('External links are disabled. Use the in-app interface to proceed.'); window.history.back();</script>", "text/html");
+            }
             return View();
         }
 
@@ -46,11 +67,11 @@ namespace WSRS_SWAFO.Controllers
                     LastName = student.LastName,
                     FirstName = student.FirstName
                 })
+                .AsNoTracking()
                 .Take(5)
                 .ToListAsync();
 
-            ViewData["ViolationType"] = violationType == "Student Violation" ? "Regular" : "Traffic";
-
+            TempData["ViolationType"] = violationType; // for pill indicator
             // Returns queried list
             return View(students.AsQueryable());
         }
@@ -72,6 +93,7 @@ namespace WSRS_SWAFO.Controllers
                 {
                     studentsQuery = studentsQuery.Where(s => s.LastName.Contains(searchStudent) || s.FirstName.Contains(searchStudent));
                 }
+
                 // Once existed, compiler creates table query
                 var ExistingStudent = studentsQuery.Select(s => new StudentRecordViewModel
                 {
@@ -79,18 +101,28 @@ namespace WSRS_SWAFO.Controllers
                     LastName = s.LastName,
                     FirstName = s.FirstName
                 });
-                return View("StudentRecordViolation", ExistingStudent);
+                return View(nameof(StudentRecordViolation), ExistingStudent);
             }
-            return View("StudentRecordViolation", null);
+            return View(nameof(StudentRecordViolation), null);
         }
 
         // Page 2 - Create Student Data (If no student present) - Index
-        public IActionResult CreateStudentRecord()
+        [HttpGet]
+        public IActionResult CreateStudentRecord(
+            int? studentNumber,
+            string? firstName,
+            string? lastName)
         {
             var referer = Request.Headers["Referer"].ToString();
             if (string.IsNullOrEmpty(referer))
             {
-                return RedirectToAction("StudentRecordViolation");
+                return RedirectToAction(nameof(StudentRecordViolation));
+            }
+
+            if (HttpContext.Session.GetString("ViolationType") is string violationType &&
+                violationType == "Traffic Violation")
+            {
+                TempData["FromTraffic"] = true;
             }
 
             return View();
@@ -98,24 +130,44 @@ namespace WSRS_SWAFO.Controllers
 
         // Create Student Entry - POST Function
         [HttpPost]
-        public IActionResult CreateNewStudent(StudentRecordViewModel model)
+        public async Task<IActionResult> CreateNewStudent(StudentRecordViewModel model, bool fromPending = false, bool fromTraffic = false)
         {
             if (!ModelState.IsValid)
             {
-                return View("CreateStudentRecord", model);
+                SetToastMessage(message: "Please fill in the required fields appropriately.");
+                return View(nameof(CreateStudentRecord), model);
             }
 
             var student = new Student
             {
                 StudentNumber = model.StudentNumber,
                 FirstName = model.FirstName,
-                LastName = model.LastName
+                LastName = model.LastName,
+                Email = model.Email.ToLower()
             };
 
-            _context.Students.Add(student);
-            _context.SaveChanges();
+            try
+            {
+                _context.Students.Add(student);
+                await _context.SaveChangesAsync();
+                SetToastMessage(title: "Success", message: "A student was registered successfully.");
+            }
+            catch (Exception ex)
+            {
+                SetToastMessage(title: "Error", message: "Something went wrong while submitting your data.", cssClassName: "bg-danger text-white");
+                _logger.LogError(ex.Message);
+            }
+            
+            BackgroundJob.Enqueue(() => _emailSender.SendEmailAsync(student.Email, "You have been violated!", "This is just a test"));
 
-            return RedirectToAction("EncodeStudentViolation", new
+            if (fromPending)
+            {
+                return RedirectToAction(nameof(Pending));
+            }
+
+            var redirect = fromTraffic ? nameof(EncodeTrafficViolation) : nameof(EncodeStudentViolation);
+
+            return RedirectToAction(redirect, new
             {
                 studentNumber = student.StudentNumber,
                 firstName = student.FirstName,
@@ -147,9 +199,9 @@ namespace WSRS_SWAFO.Controllers
             {
                 return RedirectToAction(nameof(EncodeStudentViolation), new
                 {
-                    studentNumber = studentNumber,
-                    firstName = firstName,
-                    lastName = lastName
+                    studentNumber,
+                    firstName,
+                    lastName
                 });
             }
 
@@ -157,9 +209,9 @@ namespace WSRS_SWAFO.Controllers
             {
                 return RedirectToAction(nameof(EncodeTrafficViolation), new
                 {
-                    studentNumber = studentNumber,
-                    firstName = firstName,
-                    lastName = lastName
+                    studentNumber,
+                    firstName,
+                    lastName
                 });
             }
 
@@ -171,7 +223,9 @@ namespace WSRS_SWAFO.Controllers
         public IActionResult EncodeStudentViolation(
             [FromQuery] int studentNumber,
             [FromQuery] string firstName,
-            [FromQuery] string lastName)
+            [FromQuery] string lastName,
+            [FromQuery] string? course = null,
+            [FromQuery] string? collegeId = null)
         {
             var referer = Request.Headers["Referer"].ToString();
             if (string.IsNullOrEmpty(referer))
@@ -183,7 +237,9 @@ namespace WSRS_SWAFO.Controllers
             {
                 StudentNumber = studentNumber,
                 FirstName = firstName,
-                LastName = lastName
+                LastName = lastName,
+                Course = course,
+                CollegeID = collegeId
             };
 
             ViewBag.Colleges = _context.College.ToList();
@@ -198,66 +254,128 @@ namespace WSRS_SWAFO.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return RedirectToAction(nameof(EncodeStudentViolation), new
-                {
-                    studentNumber = reportEncodedVM.StudentNumber,
-                    firstName = reportEncodedVM.FirstName,
-                    lastName = reportEncodedVM.LastName
-                });
+                SetToastMessage(message: "Please fill in the required fields appropriately.");
+                ViewBag.Colleges = _context.College.ToList();
+
+                return View(reportEncodedVM);
             }
+
+            var studentReport = new ReportEncoded
+            {
+                OffenseId = reportEncodedVM.OffenseId,
+                StudentNumber = reportEncodedVM.StudentNumber,
+                CollegeID = reportEncodedVM.CollegeID,
+                CommissionDate = reportEncodedVM.CommissionDate,
+                // FormatorId = reportEncodedVM.FormatorId,
+                Course = reportEncodedVM.Course,
+                Description = reportEncodedVM.Description,
+                Sanction = reportEncodedVM.Sanction,
+                StatusOfSanction = reportEncodedVM.StatusOfSanction
+            };
 
             try
             {
-                var studentReport = new ReportEncoded
-                {
-                    OffenseId = reportEncodedVM.OffenseId,
-                    StudentNumber = reportEncodedVM.StudentNumber,
-                    CollegeID = reportEncodedVM.CollegeID,
-                    CommissionDate = reportEncodedVM.CommissionDate,
-                    // FormatorId = reportEncodedVM.FormatorId,
-                    Course = reportEncodedVM.Course,
-                    Description = reportEncodedVM.Description,
-                    Sanction = reportEncodedVM.Sanction,
-                    StatusOfSanction = reportEncodedVM.StatusOfSanction
-                };
-
                 _context.ReportsEncoded.Add(studentReport);
                 await _context.SaveChangesAsync();
+
+                SetToastMessage(title: "Success", message: "A report has been encoded successfully.");
+
+                return RedirectToAction(nameof(EncodingMode));
             }
             catch (Exception ex)
             {
                 ModelState.AddModelError("", "Unable to save data: " + ex.Message);
-                return RedirectToAction(nameof(EncodeStudentViolation), new
-                {
-                    studentNumber = reportEncodedVM.StudentNumber,
-                    firstName = reportEncodedVM.FirstName,
-                    lastName = reportEncodedVM.LastName
-                });
+                SetToastMessage(title: "Error", message: "Something went wrong encoding your data.", cssClassName: "bg-danger text-white");
+                _logger.LogError(ex.Message);
+
             }
 
-            return RedirectToAction(nameof(StudentRecordViolation));
+            return RedirectToAction(nameof(EncodeStudentViolation), new
+            {
+                studentNumber = reportEncodedVM.StudentNumber,
+                firstName = reportEncodedVM.FirstName,
+                lastName = reportEncodedVM.LastName
+            });
+        }
+
+        [HttpGet]
+        public IActionResult EncodeTrafficViolation(
+            [FromQuery] int studentNumber,
+            [FromQuery] string firstName,
+            [FromQuery] string lastName)
+        {
+            var referer = Request.Headers["Referer"].ToString();
+            if (string.IsNullOrEmpty(referer))
+            {
+                return RedirectToAction(nameof(StudentRecordViolation));
+            }
+
+            var studentInfo = new TrafficReportEncodedViewModel
+            {
+                StudentNumber = studentNumber,
+                FirstName = firstName,
+                LastName = lastName
+            };
+
+            ViewBag.Colleges = _context.College.ToList();
+
+            if (HttpContext.Session.GetString("ViolationType") is string violationType &&
+                violationType == "Traffic Violation")
+            {
+                TempData["FromTraffic"] = true;
+            }
+
+            return View(studentInfo);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateTrafficReport(TrafficReportsEncoded trafficReport)
+        public async Task<IActionResult> EncodeTrafficViolation(TrafficReportEncodedViewModel viewModel)
         {
             if (!ModelState.IsValid)
             {
-                try
-                {
-                    _context.TrafficReportsEncoded.Add(trafficReport);
-                    await _context.SaveChangesAsync();
-                    return RedirectToAction("StudentRecordViolation");
-                }
-                catch (Exception ex)
-                {
-                    ModelState.AddModelError("", "Unable to save data: " + ex.Message);
-                }
-            }
-            return View(trafficReport);
-        }
+                SetToastMessage(message: "Please fill in the required fields appropriately.");
+                ViewBag.Colleges = _context.College.ToList();
 
+                return View(viewModel);
+            }
+
+            var studentTrafficReport = new TrafficReportsEncoded
+            {
+                OffenseId = viewModel.OffenseId,
+                StudentNumber = viewModel.StudentNumber,
+                CollegeID = viewModel.CollegeID,
+                CommissionDate = viewModel.CommissionDate,
+                PlateNumber = viewModel.PlateNumber,
+                Place = viewModel.Place,
+                Remarks = viewModel.Remarks,
+                ORNumber = viewModel.ORNumber,
+                DatePaid = viewModel.DatePaid
+            };
+
+            try
+            {
+                _context.TrafficReportsEncoded.Add(studentTrafficReport);
+                await _context.SaveChangesAsync();
+
+                SetToastMessage(title: "Success", message: "A traffic report has been encoded successfully.");
+
+                return RedirectToAction(nameof(EncodingMode));
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", "Unable to save data: " + ex.Message);
+                SetToastMessage(title: "Error", message: "Something went wrong encoding your data.", cssClassName: "bg-danger text-white");
+                _logger.LogError(ex.Message);
+            }
+
+            return RedirectToAction(nameof(EncodeTrafficViolation), new
+            {
+                studentNumber = viewModel.StudentNumber,
+                firstName = viewModel.FirstName,
+                lastName = viewModel.LastName
+            });
+        }
 
         // Returns offense Nature to JSON - GET Function
         [HttpGet]
@@ -271,33 +389,187 @@ namespace WSRS_SWAFO.Controllers
             return Json(offenseNature);
         }
 
-        public IActionResult Pending()
-        {
-            return View();
-        }
-
-        public IActionResult EncodeTrafficViolation(int studentNumber, string firstName, string lastName)
+        [HttpGet]
+        public async Task<IActionResult> Pending()
         {
             var referer = Request.Headers["Referer"].ToString();
             if (string.IsNullOrEmpty(referer))
             {
-                return RedirectToAction("StudentRecordViolation");
+                return RedirectToAction(nameof(StudentRecordViolation));
             }
-            var studentInfo = new ReportTrafficEncodedViewModel
+
+            var client = _httpClientFactory.CreateClient("WSRS-Api");
+
+            var response = await client.GetAsync("report");
+
+            if (response.IsSuccessStatusCode)
             {
-                StudentNumber = studentNumber,
-                Student = new Student
+                var data = await response.Content.ReadFromJsonAsync<List<ReportPendingDto>>();
+
+                if (data != null)
                 {
-                    StudentNumber = studentNumber,
-                    FirstName = firstName,
-                    LastName = lastName
+                    var activeReports = data.Where(r => !r.IsArchived);
+
+                    var pendingVM = new PendingViewModel
+                    {
+                        ReportsPending = activeReports
+                    };
+
+                    HttpContext.Session.SetString("ViolationType", "Student Violation");
+                    return View(pendingVM);
                 }
-            };
+            }
+            else
+            {
+                _logger.LogError($"Something went wrong getting report pending data with status code: {response.StatusCode}");
 
-            ViewBag.Colleges = _context.College.ToList();
+            }
 
-            return View(studentInfo);
+            return View();
         }
+
+        [HttpPost("[controller]/archive/{id:int}")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ArchivePending(int id)
+        {
+            var client = _httpClientFactory.CreateClient("WSRS-Api");
+
+            try
+            {
+                // patch document
+                var archivePatch = new[]
+                {
+                    new
+                    {
+                        op = "replace", path = "/isArchived", value = "true"
+                    }
+                };
+
+                var jsonPatch = JsonSerializer.Serialize(archivePatch);
+
+                var content = new StringContent(jsonPatch, Encoding.UTF8, "application/json-patch+json");
+                var request = new HttpRequestMessage(HttpMethod.Patch, $"report/{id}")
+                {
+                    Content = content
+                };
+
+                var response = await client.SendAsync(request);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    SetToastMessage(
+                        message: "A pending report has been archived.", 
+                        button: new ToastButton
+                        {
+                            Name = "Undo", 
+                            Action = "UndoArchivePending",
+                            Controller = "Encode",
+                            RouteValues = new Dictionary<string, object>
+                            {
+                                { "id", id }
+                            }
+                        });
+                    return RedirectToAction(nameof(Pending));
+                }
+                else
+                {
+                    SetToastMessage(title: "Error", message: "Failed to archive the report.", cssClassName: "bg-danger text-white");
+                    _logger.LogError($"PATCH failed with status code: {response.StatusCode}");
+                }
+            }
+            catch (Exception ex)
+            {
+                SetToastMessage(title: "Error", message: "Something went wrong with your message", cssClassName: "bg-danger text-white");
+                _logger.LogError(ex.Message);
+            }
+
+            return RedirectToAction(nameof(Pending));
+        }
+
+        [HttpPost("[controller]/undo-archive/")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UndoArchivePending(int id)
+        {
+            var client = _httpClientFactory.CreateClient("WSRS-Api");
+
+            try
+            {
+                // patch document
+                var archivePatch = new[]
+                {
+                    new
+                    {
+                        op = "replace", path = "/isArchived", value = "false"
+                    }
+                };
+
+                var jsonPatch = JsonSerializer.Serialize(archivePatch);
+
+                var content = new StringContent(jsonPatch, Encoding.UTF8, "application/json-patch+json");
+                var request = new HttpRequestMessage(HttpMethod.Patch, $"report/{id}")
+                {
+                    Content = content
+                };
+
+                var response = await client.SendAsync(request);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    SetToastMessage("An action has been undone.");
+                    return RedirectToAction(nameof(Pending));
+                }
+                else
+                {
+                    SetToastMessage(title: "Error", message: "Failed to undo your action.", cssClassName: "bg-danger text-white");
+                    _logger.LogError($"PATCH failed with status code: {response.StatusCode}");
+                }
+            }
+            catch (Exception ex)
+            {
+                SetToastMessage(title: "Error", message: "Something went wrong with your message", cssClassName: "bg-danger text-white");
+                _logger.LogError(ex.Message);
+            }
+
+            return RedirectToAction(nameof(Pending));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult EncodeFromPending(ReportPendingDto report)
+        {
+            // Check if student exists
+            var student = _context.Students.Find(report.StudentNumber);
+
+            if (student != null)
+            {
+                var studentInfo = new ReportEncodedViewModel
+                {
+                    StudentNumber = report.StudentNumber,
+                    FirstName = report.FirstName,
+                    LastName = report.LastName,
+                    CollegeID = report.College,
+                    Formator = report.Formator,
+                    Course = report.CourseYearSection,
+                };
+
+                return RedirectToAction(nameof(EncodeStudentViolation), studentInfo);
+            }
+            else
+            {
+                var studentInfo = new StudentRecordViewModel
+                {
+                    StudentNumber = report.StudentNumber,
+                    FirstName = report.FirstName,
+                    LastName = report.LastName,
+                };
+
+                TempData["FromPending"] = true;
+                SetToastMessage("The student reported does not exist yet. Create their record first.");
+                return RedirectToAction(nameof(CreateStudentRecord), studentInfo);
+            }
+        }
+
+        [HttpGet]
         public IActionResult CreateOffense()
         {
             // Retrieve all offenses and sort them by Classification
@@ -445,6 +717,18 @@ namespace WSRS_SWAFO.Controllers
 
 
             return RedirectToAction(nameof(CreateCollege));
+        }
+
+        private void SetToastMessage(string message, string title = "", string cssClassName = "bg-white", ToastButton? button = null)
+        {
+            var toastMessage = new ToastViewModel
+            {
+                Title = title,
+                Message = message,
+                CssClassName = cssClassName,
+                Button = button
+            };
+            TempData["Result"] = JsonSerializer.Serialize(toastMessage);
         }
     }
 }

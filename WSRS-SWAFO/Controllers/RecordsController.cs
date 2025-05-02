@@ -1,13 +1,14 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
 using WSRS_SWAFO.Data;
 using WSRS_SWAFO.Models;
 using WSRS_SWAFO.ViewModels;
 
 namespace WSRS_SWAFO.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "AppRole.Admin, AppRole.Member")]
     public class RecordsController : Controller
     {
         private readonly ILogger<ReportsController> _logger;
@@ -25,6 +26,11 @@ namespace WSRS_SWAFO.Controllers
             [FromQuery] string currentFilter,
             [FromQuery] int? pageIndex)
         {
+            var referer = Request.Headers["Referer"].ToString();
+            if (string.IsNullOrEmpty(referer))
+            {
+                return Content("<script>alert('External links are disabled. Use the in-app interface to proceed.'); window.history.back();</script>", "text/html");
+            }
             if (searchString != null)
             {
                 pageIndex = 1;
@@ -117,7 +123,6 @@ namespace WSRS_SWAFO.Controllers
                 Classification = record.Offense.Classification,
                 Sanction = record.Sanction,
                 Status = record.StatusOfSanction,
-                HearingDate = record.HearingDate,
                 Description = record.Description
             };
 
@@ -140,13 +145,13 @@ namespace WSRS_SWAFO.Controllers
             {
                 Id = id,
                 StudentNumber = record.StudentNumber,
-                Student = record.Student,
+                FirstName = record.Student.FirstName,
+                LastName = record.Student.LastName,
                 College = record.CollegeID,
                 Course = record.Course,
-                OffenseId = record.OffenseId,
-                Offense = record.Offense,
+                Nature = record.Offense.Nature,
+                Classification = record.Offense.Classification,
                 CommissionDate = record.CommissionDate,
-                HearingDate = record.HearingDate,
                 Sanction = record.Sanction,
                 StatusOfSanction = record.StatusOfSanction,
                 Description = record.Description,
@@ -158,9 +163,32 @@ namespace WSRS_SWAFO.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(EditRecordViewModel editRecordVM)
         {
+            var record = await _context.ReportsEncoded
+                .AsNoTracking()
+                .Include(r => r.Student)
+                .Include(r => r.Offense)
+                .FirstOrDefaultAsync(r => r.Id == editRecordVM.Id);
+
+            editRecordVM = new EditRecordViewModel
+            {
+                Id = record!.Id,
+                StudentNumber = record.StudentNumber,
+                FirstName = record.Student.FirstName,
+                LastName = record.Student.LastName,
+                College = record.CollegeID,
+                Course = editRecordVM.Course,
+                OffenseId = record.OffenseId,
+                Classification = record.Offense.Classification,
+                Nature = record.Offense.Nature,
+                CommissionDate = editRecordVM.CommissionDate,
+                Sanction = editRecordVM.Sanction,
+                StatusOfSanction = editRecordVM.StatusOfSanction,
+                Description = editRecordVM.Description,
+            };
+
             if (!ModelState.IsValid)
             {
-                ModelState.AddModelError("", "Failed to edit record.");
+                SetToastMessage(message: "Please fill in the required fields appropriately.");
                 return View(editRecordVM);
             }
 
@@ -172,15 +200,26 @@ namespace WSRS_SWAFO.Controllers
                 OffenseId = editRecordVM.OffenseId,
                 Course = editRecordVM.Course,
                 CommissionDate = editRecordVM.CommissionDate,
-                HearingDate = editRecordVM.HearingDate,
                 Sanction = editRecordVM.Sanction,
                 Description = editRecordVM.Description,
                 StatusOfSanction = editRecordVM.StatusOfSanction,
             };
 
-            _context.Update(updatedRecord);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Details), new { id = editRecordVM.Id });
+            try
+            {
+                _context.Update(updatedRecord);
+                await _context.SaveChangesAsync();
+
+                SetToastMessage(title: "Success", message: "A record has been edited successfully.");
+                return RedirectToAction(nameof(Details), new { id = editRecordVM.Id });
+            }
+            catch (Exception ex)
+            {
+                SetToastMessage(title: "Error", message: "Something went wrong modifying your data.", cssClassName: "bg-danger text-white");
+                _logger.LogError(ex.Message);
+            }
+
+            return View(editRecordVM);
         }
 
         public async Task<IActionResult> Traffic(
@@ -200,17 +239,17 @@ namespace WSRS_SWAFO.Controllers
 
             var records = from tr in _context.TrafficReportsEncoded.AsNoTracking()
                     .Include(tr => tr.Student)
-                select new TrafficRecordsViewModel
-                {
-                    Id = tr.Id,
-                    Name = string.Concat(tr.Student.FirstName, " ", tr.Student.LastName),
-                    StudentNumber = tr.StudentNumber,
-                    College = tr.CollegeID,
-                    CommissionDate = tr.CommissionDate,
-                    OffenseClassification = tr.Offense.Classification.ToString().Substring(0, 5) + " Traffic",
-                    OffenseNature = tr.Offense.Nature,
-                    ORNumber = tr.ORNumber,
-                };
+                          select new TrafficRecordsViewModel
+                          {
+                              Id = tr.Id,
+                              Name = string.Concat(tr.Student.FirstName, " ", tr.Student.LastName),
+                              StudentNumber = tr.StudentNumber,
+                              College = tr.CollegeID,
+                              CommissionDate = tr.CommissionDate,
+                              OffenseClassification = tr.Offense.Classification.ToString().Substring(0, 5) + " Traffic",
+                              OffenseNature = tr.Offense.Nature,
+                              ORNumber = tr.ORNumber,
+                          };
 
             if (!string.IsNullOrEmpty(searchString))
             {
@@ -305,10 +344,12 @@ namespace WSRS_SWAFO.Controllers
             {
                 Id = id,
                 StudentNumber = record.StudentNumber,
-                Student = record.Student,
+                FirstName = record.Student.FirstName,
+                LastName = record.Student.LastName,
                 College = record.CollegeID,
                 OffenseId = record.OffenseId,
-                Offense = record.Offense,
+                Classification = record.Offense.Classification,
+                Nature = record.Offense.Nature,
                 CommissionDate = record.CommissionDate,
                 PlateNumber = record.PlateNumber,
                 Place = record.Place,
@@ -323,9 +364,34 @@ namespace WSRS_SWAFO.Controllers
         [HttpPost]
         public async Task<IActionResult> EditTraffic(EditTrafficRecordViewModel editTrafficRecordVM)
         {
+            var record = await _context.TrafficReportsEncoded
+                .AsNoTracking()
+                .Include(r => r.Student)
+                .Include(r => r.Offense)
+                .Include(r => r.College)
+                .FirstOrDefaultAsync(r => r.Id == editTrafficRecordVM.Id);
+
+            editTrafficRecordVM = new EditTrafficRecordViewModel
+            {
+                Id = record!.Id,
+                StudentNumber = record.StudentNumber,
+                FirstName = record.Student.FirstName,
+                LastName = record.Student.LastName,
+                College = record.CollegeID,
+                OffenseId = record.OffenseId,
+                Classification = record.Offense.Classification,
+                Nature = record.Offense.Nature,
+                CommissionDate = editTrafficRecordVM.CommissionDate,
+                PlateNumber = editTrafficRecordVM.PlateNumber,
+                Place = editTrafficRecordVM.Place,
+                Remarks = editTrafficRecordVM.Remarks,
+                DatePaid = editTrafficRecordVM.DatePaid,
+                ORNumber = editTrafficRecordVM.ORNumber,
+            };
+
             if (!ModelState.IsValid)
             {
-                ModelState.AddModelError("", "Failed to edit record.");
+                SetToastMessage(message: "Please fill in the required fields appropriately.");
                 return View(editTrafficRecordVM);
             }
 
@@ -343,9 +409,32 @@ namespace WSRS_SWAFO.Controllers
                 ORNumber = editTrafficRecordVM.ORNumber,
             };
 
-            _context.Update(updatedRecord);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(TrafficDetails), new { id = editTrafficRecordVM.Id });
+            try
+            {
+                _context.Update(updatedRecord);
+                await _context.SaveChangesAsync();
+
+                SetToastMessage(title: "Success", message: "A traffic record has been edited successfully.");
+                return RedirectToAction(nameof(TrafficDetails), new { id = editTrafficRecordVM.Id });
+            }
+            catch (Exception ex)
+            {
+                SetToastMessage(title: "Error", message: "Something went wrong modifying your data.", cssClassName: "bg-danger text-white");
+                _logger.LogError(ex.Message);
+            }
+
+            return View(editTrafficRecordVM);
+        }
+
+        private void SetToastMessage(string message, string title = "", string cssClassName = "bg-white")
+        {
+            var toastMessage = new ToastViewModel
+            {
+                Title = title,
+                Message = message,
+                CssClassName = cssClassName
+            };
+            TempData["Result"] = JsonSerializer.Serialize(toastMessage);
         }
     }
 }

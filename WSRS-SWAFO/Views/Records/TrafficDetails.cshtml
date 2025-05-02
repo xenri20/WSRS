@@ -10,6 +10,8 @@
     ViewData["Title"] = "Details";
 }
 
+<partial name="_StudentModalPartial" />
+
 <div id="details">
     <h1>Manage Records</h1>
     <hr />
@@ -24,16 +26,23 @@
             <h2>Details</h2>
         </div>
         <div class="panel">
+            <div class="d-flex align-items-center gap-2 mb-3">
+                <h3 class="mb-0">Traffic Record No.</h3><span class="pill-indicator bg-warning">@Model.Id</span>
+            </div>
             <dl>
                 <dt>Student Number</dt>
-                <dd>@Model.StudentNumber</dd>
+                <dd>
+                    <button type="button" class="text-button" data-student="@Model.StudentNumber" data-bs-toggle="modal" data-bs-target="#studentModal">
+                        @Model.StudentNumber
+                    </button>
+                </dd>
                 <dt>Student Name</dt>
                 <dd>@Model.Name</dd>
                 <dt>College</dt>
                 <dd>@Model.College</dd>
                 <input asp-for="OffenseId" type="hidden" value="@Model.OffenseId" />
                 <dt>Classification</dt>
-                <dd>@Model.Classification</dd>
+                <dd>@(Model.Classification.ToString().Substring(0, 5) + " Traffic")</dd>
                 <dt>Nature</dt>
                 <dd>@Model.Nature</dd>
                 <dt>Commission Date</dt>
@@ -59,5 +68,6 @@
 
 @section scripts {
     <script src="~/js/records.js"></script>
+    <script src="~/js/components/studentModal.js" type="module" asp-append-version="true"></script>
 }
 

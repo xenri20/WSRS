@@ -70,6 +70,10 @@
     padding: 15px;
 }
 
+    #sidePanel a.active {
+        transition: none;
+    }
+
     #sidePanel a:hover,
     #sidePanel button:hover,
     #sidePanel .active {

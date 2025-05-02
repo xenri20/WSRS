@@ -11,11 +11,11 @@ namespace WSRS_SWAFO.Models
         public int StudentNumber { get; set; }
         public string LastName { get; set; }
         public string FirstName { get; set; }
+        public string Email { get; set; }
 
         // Navigation Properties
         public ICollection<ReportEncoded> ReportsEncoded { get; set; }
         public ICollection<TrafficReportsEncoded> TrafficReportsEncoded { get; set; }
-        public ICollection<ReportPending> ReportsPending { get; set; }
     }
 }
 

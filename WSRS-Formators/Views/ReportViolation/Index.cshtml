@@ -1,0 +1,122 @@
+﻿@using WSRS_Formators.ViewModels
+@model StudentViolationsViewModel
+
+<main>
+    <h1 class="mb-4">Report Student Violation</h1>
+
+    <div class="mt-4">
+
+        <div class="d-flex flex-column align-items-center mb-4">
+            <img src="~/assets/img/logo.png" alt="DLSU-D Logo" style="width: 100px;" />
+            <p>Search to check record</p>
+
+            <form asp-action="Index" class="d-flex justify-content-center gap-2" method="get" style="width: 100%">
+                <input type="search" name="studentNumber" class="form-control rounded-pill w-100"
+                       placeholder="Enter Student Number" value="@Model.StudentNumber" />
+                <button type="submit" class="btn btn-dark fw-bold">
+                    <i class="bi bi-search"></i>Search
+                </button>
+            </form>
+        </div>
+
+        @if (Model.StudentNumber != null)
+        {
+            <section class="info">
+                @if (Model.Violations != null || Model.TrafficViolations != null)
+                {
+                    <div class="text-center mb-2">
+                        <h5>@Model.GetFullName()</h5>
+                        <p>@Model.StudentNumber</p>
+                    </div>
+
+                    <h6 class="text-center"><small>Previous Records:</small></h6>
+
+                    <!-- GENERAL VIOLATIONS -->
+                    @if (Model.Violations.Any())
+                    {
+                        <h6><em>Violations</em></h6>
+                        <div class="table-responsive">
+                            <table class="table table-bordered text-center">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>Commission Date</th>
+                                        <th>Classification</th>
+                                        <th>Nature of Offense</th>
+                                        <th>Sanction</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var report in Model.Violations)
+                                    {
+                                        <tr>
+                                            <td>@report.CommissionDate.ToShortDateString()</td>
+                                            <td>@report.Offense.Classification</td>
+                                            <td>@report.Offense.Nature</td>
+                                            <td>@report.Sanction</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+
+                    <!-- TRAFFIC VIOLATIONS -->
+                    @if (Model.TrafficViolations.Any())
+                    {
+                        <h6><em>Traffic Violations</em></h6>
+                        <div class="table-responsive">
+                            <table class="table table-bordered text-center">
+                                <thead class="table-secondary">
+                                    <tr>
+                                        <th>Commission Date</th>
+                                        <th>Classification</th>
+                                        <th>Nature of Offense</th>
+                                        <th>Remarks</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var traffic in Model.TrafficViolations)
+                                    {
+                                        <tr>
+                                            <td>@traffic.CommissionDate.ToShortDateString()</td>
+                                            <td>@traffic.Offense.Classification</td>
+                                            <td>@traffic.Offense.Nature</td>
+                                            <td>@traffic.Remarks</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+
+                    <div class="d-flex justify-content-center">
+                        <a class="btn btn-success fw-bold w-100"
+                           asp-action="Create"
+                           asp-route-studentNumber="@Model.StudentNumber"
+                           asp-route-firstName="@Model.FirstName"
+                           asp-route-lastName="@Model.LastName">
+                            Create Report
+                        </a>
+                    </div>
+                }
+                else
+                {
+                    <div class="text-center text-danger fw-bold">NO RECORDS FOUND!</div>
+                    <div class="d-flex justify-content-center">
+                        <a class="btn btn-success fw-bold" asp-action="Create">
+                            Create Violation
+                        </a>
+                    </div>
+
+                }
+            </section>
+        }
+    </div>
+</main>
+
+<div class="container mt-5 text-center">
+    <p>
+        <small class="fw-bold">Student Welfare and Formation Office Record System</small><br />
+        <small>© 2025 De La Salle University – Dasmariñas</small>
+    </p>
+</div>

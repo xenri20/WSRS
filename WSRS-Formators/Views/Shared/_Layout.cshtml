@@ -1,0 +1,85 @@
+﻿@using WSRS_Formators.ViewModels
+@using System.Text.Json
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DLSU-D Staff Portal</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-black border-bottom box-shadow mb-3">
+        <div class="container">
+            <a class="navbar-brand text-light" asp-controller="Home" asp-action="Index">DLSU-D Staff Portal</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav flex-grow-1 justify-content-end gap-2">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-light" href="#" role="button" data-bs-toggle="dropdown">
+                            Features
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">-</a></li>
+                            <li><a class="dropdown-item" href="#">-</a></li>
+                            <li>
+                                <a class="dropdown-item" asp-controller="ReportViolation" asp-action="Index">
+                                    Report Violation
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            @User.FindFirst("FullName")?.Value.ToUpper()
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">Account Settings</a></li>
+                            <form asp-controller="Account" asp-action="Logout" method="post">
+                            <li><button class="dropdown-item">Logout</button></li>
+                            </form>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="toast-container position-fixed bottom-0 start-0 p-3" style="z-index: 1055;">
+        @if (TempData["Result"] != null && TempData["Result"] is string messageJson && !string.IsNullOrEmpty(messageJson))
+        {
+            var message = JsonSerializer.Deserialize<ToastViewModel>(messageJson);
+
+            if (message != null)
+            {
+                <partial name="_ToastPartial" model="@message" />
+            }
+        }
+    </div>
+
+    <div class="wrapper">
+        <div class="container">
+            @RenderBody()
+        </div>
+
+        <footer class="text-center text-muted">
+            <p>© 2025 - Sia, Soria, Villanueva - Capstone Project</p>
+        </footer>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/components/toast.js" asp-asp-append-version="true"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+
+</html>

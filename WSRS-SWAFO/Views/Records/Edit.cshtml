@@ -1,5 +1,4 @@
-﻿@using WSRS_SWAFO.Data.Enum
-@using WSRS_SWAFO.ViewModels
+﻿@using WSRS_SWAFO.ViewModels
 @model EditRecordViewModel
 
 @section customHead {
@@ -7,14 +6,15 @@
 }
 
 @{
-    string fullName = string.Concat(Model.Student.FirstName, " ", Model.Student.LastName);
+    string fullName = string.Concat(Model.FirstName, " ", Model.LastName);
 
     string formattedCommissionDate = Model.CommissionDate.ToString("yyyy-MM-dd");
-    string formattedHearingDate = Model.HearingDate?.ToString("yyyy-MM-dd") ?? string.Empty;
-    string today = DateOnly.FromDateTime(DateTime.Now).ToString("yyyy-MM-dd");
+    string originalDate = Model.OriginalDate?.ToString("yyyy-MM-dd") ?? Model.CommissionDate.ToString("yyyy-MM-dd");
 
     ViewData["Title"] = "Edit Record";
 }
+
+<partial name="_StudentModalPartial" />
 
 <div id="edit">
     <h1>Manage Records</h1>
@@ -24,27 +24,30 @@
             <h2>Edit Record</h2>
         </div>
         <form asp-action="Edit" asp-route-id="@Model.Id" class="panel">
+            <div class="d-flex align-items-center gap-2">
+                <h3 class="mb-0">Record No.</h3><span class="pill-indicator bg-success text-white">@Model.Id</span>
+            </div>
             <dl>
                 <input asp-for="Id" type="hidden" value="@Model.Id">
 
                 <dt>Student Number</dt>
-                <dd>@Model.Student.StudentNumber</dd>
-                <input asp-for="StudentNumber" type="hidden" value="@Model.StudentNumber">
+                <dd>
+                    <button type="button" class="text-button" data-student="@Model.StudentNumber" data-bs-toggle="modal" data-bs-target="#studentModal">
+                        @Model.StudentNumber
+                    </button>
+                </dd>
 
                 <dt>Student Name</dt>
                 <dd>@fullName</dd>
 
                 <dt>College</dt>
                 <dd>@Model.College</dd>
-                <input asp-for="College" type="hidden" value="@Model.College">
-
-                <input asp-for="OffenseId" type="hidden" value="@Model.OffenseId">
 
                 <dt>Classification</dt>
-                <dd>@Model.Offense.Classification</dd>
+                <dd>@Model.Classification</dd>
 
                 <dt>Nature</dt>
-                <dd>@Model.Offense.Nature</dd>
+                <dd>@Model.Nature</dd>
             </dl>
 
             @* Course *@
@@ -56,20 +59,11 @@
 
             @* Commission Date *@
             <div class="input-wrapper">
+                <input asp-for="OriginalDate" type="hidden" class="input" value="@originalDate" aria-required="true">
                 <input asp-for="CommissionDate" type="date" class="input" value="@formattedCommissionDate" aria-required="true">
                 <label asp-for="CommissionDate" class="label">Commission Date<span>*</span></label>
                 <span asp-validation-for="CommissionDate" class="text-danger"></span>
             </div>
-
-            @* Hearing Date*@
-            @if (Model.Offense.Classification == OffenseClassification.Major)
-            {
-                <div class="input-wrapper">
-                    <input asp-for="HearingDate" type="date" class="input" value="@(string.IsNullOrEmpty(formattedHearingDate) ? today : formattedHearingDate)" aria-required="true">
-                    <label asp-for="HearingDate" class="label">Hearing Date<span>*</span></label>
-                    <span asp-validation-for="HearingDate" class="text-danger"></span>
-                </div>
-            }
 
             @* Sanction *@
             <div class="input-wrapper">
@@ -112,4 +106,5 @@
     <partial name="_ValidationScriptsPartial" />
     <script src="~/js/records.js"></script>
     <script src="~/js/offenses.js"></script>
+    <script src="~/js/components/studentModal.js" type="module" asp-append-version="true"></script>
 }

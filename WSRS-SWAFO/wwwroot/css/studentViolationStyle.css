@@ -1,20 +1,5 @@
 ﻿#encode {
-    align-self: center;
     width: 100%;
-}
-
-#category-function {
-    display: inline-flex;
-    flex-direction: row;
-}
-        #category-function > a:hover,
-        #category-function > a:active {
-            background-color: black;
-            color: white;
-        }
-
-.student-encode, .traffic-encode {
-    margin-right: 0.5em;
 }
 
 h2 {
@@ -115,6 +100,7 @@ h2 {
 
 .report-tile {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-around;
     border: 2px solid black;
     padding: 1rem;
@@ -126,16 +112,16 @@ h2 {
     font-weight: 600;
 }
 
-@media only screen and (max-width:475px) {
-    #category-function {
-        flex-direction: column;
-        gap: 0.4em;
-    }
+.report-list {
+    height: 600px;
+    overflow-y: scroll;
+}
 
-    #submit-section {
-        flex-direction: column;
-        width: 50%;
-    }
+.report-tile .long { 
+    width: 18ch;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 @media only screen and (max-width:800px) {
@@ -149,5 +135,9 @@ h2 {
 
     .pane-structure:has(.content-pane + .content-pane) {
         display: block;  
+    }
+
+    .report-list {
+        font-size: 0.75rem;
     }
 }

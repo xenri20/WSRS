@@ -2,8 +2,8 @@
 @model IQueryable<StudentRecordViewModel>
 @{
     Layout = "_EncodeLayout";
-    ViewData["Title"] = "Student Violation";
 }
+
 @section customHead {
     <link rel="stylesheet" href="~/css/studentViolationStyle.css" asp-append-version="true" />
 }
@@ -16,6 +16,14 @@
         </svg>
     </a>
     <h2>Step 2</h2>
+    @if (TempData.Peek("ViolationType") is string violationType && !string.IsNullOrEmpty(violationType))
+    {
+        var indicator = violationType == "Student Violation" ? "Regular" : "Traffic";
+
+        <span class="pill-indicator bg-success @(indicator == "Regular" ? "bg-success text-white" : "bg-warning text-black")">
+            @indicator
+        </span>
+    }
 </div>
 
 <p>Check for an existing violation record</p>
@@ -69,7 +77,7 @@
                                 <td>
                                     <button type="button" class="text-button" data-student="@student.StudentNumber" data-bs-toggle="modal" data-bs-target="#studentModal">
                                         @student.StudentNumber
-                                </button>
+                                    </button>
                                 </td>
                                 <td>@student.LastName</td>
                                 <td>@student.FirstName</td>
@@ -93,6 +101,6 @@
     </div>
 </div>
 @section scripts {
-<script src="~/js/studentViolation.js"></script>
-<script src="~/js/components/studentModal.js" type="module" asp-append-version="true"></script>
+    <script src="~/js/studentViolation.js"></script>
+    <script src="~/js/components/studentModal.js" type="module" asp-append-version="true"></script>
 }

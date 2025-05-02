@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@using System.Text.Json
+@using WSRS_SWAFO.ViewModels
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -16,8 +19,24 @@
         </main>
         <partial name="_FooterPartial" />
     </div>
-    <script defer src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script defer src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Normal Toast -->
+    <div class="toast-container position-fixed bottom-0 start-0 p-3" style="z-index: 1055;">
+        @if (TempData["Result"] != null && TempData["Result"] is string messageJson && !string.IsNullOrEmpty(messageJson))
+        {
+            var message = JsonSerializer.Deserialize<ToastViewModel>(messageJson);
+
+            if (message != null)
+            {
+                <partial name="_ToastPartial" model="@message" />
+            }
+        }
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/components/toast.js" asp-append-version="true"></script>
+
     @await RenderSectionAsync("scripts", required: false)
 </body>
 </html>

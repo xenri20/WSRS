@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WSRS_SWAFO.Data;
 using WSRS_SWAFO.Models;
 
 namespace WSRS_SWAFO.Controllers
 {
+    [Authorize(Roles = "AppRole.Admin")]
     public class StudentsController : Controller
     {
         private readonly ILogger<StudentsController> _logger;
