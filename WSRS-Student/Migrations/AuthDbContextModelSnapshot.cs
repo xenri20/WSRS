@@ -250,6 +250,7 @@ namespace WSRS_Student.Migrations
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
+<<<<<<< HEAD
 <<<<<<< HEAD:WSRS-Student/Migrations/ApplicationDbContextModelSnapshot.cs
                     b.ToTable("AspNetUsers", (string)null);
                 });
@@ -421,6 +422,9 @@ namespace WSRS_Student.Migrations
                         .IsRequired();
 
                     b.Navigation("Student");
+=======
+                    b.ToTable("AspNetUsers", "Student");
+>>>>>>> f9dae977f1534b7b731ff04adffb927b1827cdb6
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -473,6 +477,7 @@ namespace WSRS_Student.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
+<<<<<<< HEAD
 <<<<<<< HEAD:WSRS-Student/Migrations/ApplicationDbContextModelSnapshot.cs
 
             modelBuilder.Entity("WSRS_Student.Models.ReportEncoded", b =>
@@ -537,6 +542,8 @@ namespace WSRS_Student.Migrations
                 });
 =======
 >>>>>>> c833464 (feat: add new migration for authentication):WSRS-Student/Migrations/AuthDbContextModelSnapshot.cs
+=======
+>>>>>>> f9dae977f1534b7b731ff04adffb927b1827cdb6
 #pragma warning restore 612, 618
         }
     }
