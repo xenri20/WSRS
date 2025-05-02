@@ -10,6 +10,8 @@
     <link rel="stylesheet" href="~/css/studentViolationStyle.css" asp-append-version="true" />
 }
 
+<partial name="_StudentModalPartial" />
+
 <div class="title">
     <form asp-controller="Encode" asp-action="StudentRecordViolation" method="post">
         <button type="submit" class="btn-function" name="violationType" value="Student Violation">
@@ -33,7 +35,11 @@
             <h3>Student Information</h3>
             <dl>
                 <dt>Student Number:</dt>
-                <dd>@Model.StudentNumber</dd>
+                <dd>
+                    <button type="button" class="text-button" data-student="@Model.StudentNumber" data-bs-toggle="modal" data-bs-target="#studentModal">
+                        @Model.StudentNumber
+                    </button>
+                </dd>
                 <dt>Student Name:</dt>
                 <dd>@Model.FirstName @Model.LastName</dd>
             </dl>
@@ -117,4 +123,5 @@
 @section Scripts {
     <script src="~/js/offenses.js"></script>
     <script src="~/js/studentViolation.js"></script>
+    <script src="~/js/components/studentModal.js" type="module" asp-append-version="true"></script>
 }

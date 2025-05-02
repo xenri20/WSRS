@@ -14,6 +14,8 @@
     ViewData["Title"] = "Edit Record";
 }
 
+<partial name="_StudentModalPartial" />
+
 <div id="edit">
     <h1>Manage Records</h1>
     <hr />
@@ -29,7 +31,11 @@
                 <input asp-for="Id" type="hidden" value="@Model.Id">
 
                 <dt>Student Number</dt>
-                <dd>@Model.StudentNumber</dd>
+                <dd>
+                    <button type="button" class="text-button" data-student="@Model.StudentNumber" data-bs-toggle="modal" data-bs-target="#studentModal">
+                        @Model.StudentNumber
+                    </button>
+                </dd>
 
                 <dt>Student Name</dt>
                 <dd>@fullName</dd>
@@ -100,4 +106,5 @@
     <partial name="_ValidationScriptsPartial" />
     <script src="~/js/records.js"></script>
     <script src="~/js/offenses.js"></script>
+    <script src="~/js/components/studentModal.js" type="module" asp-append-version="true"></script>
 }
