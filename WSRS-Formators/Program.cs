@@ -6,17 +6,17 @@ using WSRS_Formators.Models;
 var builder = WebApplication.CreateBuilder(args);
 
 // Load connection strings
-var connectionStringLocal = builder.Configuration.GetConnectionString("Local");
-var connectionStringAzure = builder.Configuration.GetConnectionString("AzureFormator");
+//var connectionString = builder.Configuration.GetConnectionString("Local");
+var connectionString = builder.Configuration.GetConnectionString("Azure");
 
-if (string.IsNullOrEmpty(connectionStringLocal) || string.IsNullOrEmpty(connectionStringAzure))
+if (string.IsNullOrEmpty(connectionString))
 {
-    throw new InvalidOperationException("Connection strings for Local or Azure not found");
+    throw new InvalidOperationException("Connection string not found");
 }
 
 // Add DB contexts
 builder.Services.AddDbContext<AuthDbContext>(options =>
-    options.UseSqlServer(connectionStringLocal));
+    options.UseSqlServer(connectionString));
 
 // Configure Identity
 builder.Services.AddIdentity<FormatorUser, IdentityRole>()
