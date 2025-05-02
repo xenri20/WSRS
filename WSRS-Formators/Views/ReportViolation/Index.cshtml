@@ -87,17 +87,17 @@
                                 </tbody>
                             </table>
                         </div>
-
-                        <div class="d-flex justify-content-center">
-                            <a class="btn btn-success fw-bold w-100"
-                               asp-action="Create"
-                               asp-route-studentNumber="@Model.StudentNumber"
-                               asp-route-firstName="@Model.FirstName"
-                               asp-route-lastName="@Model.LastName">
-                                Create Report
-                            </a>
-                        </div>
                     }
+
+                    <div class="d-flex justify-content-center">
+                        <a class="btn btn-success fw-bold w-100"
+                           asp-action="Create"
+                           asp-route-studentNumber="@Model.StudentNumber"
+                           asp-route-firstName="@Model.FirstName"
+                           asp-route-lastName="@Model.LastName">
+                            Create Report
+                        </a>
+                    </div>
                 }
                 else
                 {
