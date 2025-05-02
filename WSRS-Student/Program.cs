@@ -6,21 +6,18 @@ using WSRS_Student.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var connectionStringLocal = builder.Configuration.GetConnectionString("Local");
-var connectionStringAzure = builder.Configuration.GetConnectionString("Azure");
+var connectionString = builder.Configuration.GetConnectionString("Azure");
+//var connectionString = builder.Configuration.GetConnectionString("Local");
 
-if (string.IsNullOrEmpty(connectionStringLocal) || string.IsNullOrEmpty(connectionStringAzure))
+if (string.IsNullOrEmpty(connectionString))
 {
-    throw new InvalidOperationException("Connection strings for Local or Azure not found");
+    throw new InvalidOperationException("Connection string not found");
 }
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(connectionStringLocal));
-
-builder.Services.AddDbContext<AzureDbContext>(options =>
-    options.UseSqlServer(connectionStringAzure));
+builder.Services.AddDbContext<AuthDbContext>(options =>
+    options.UseSqlServer(connectionString));
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
-    .AddEntityFrameworkStores<ApplicationDbContext>();
+    .AddEntityFrameworkStores<AuthDbContext>();
 
 builder.Services.ConfigureApplicationCookie(options =>
 {
