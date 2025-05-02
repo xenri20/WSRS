@@ -1,41 +1,72 @@
-﻿@model WSRS_SWAFO.ViewModels.StudentRecordViewModel
+﻿@using WSRS_SWAFO.ViewModels
+@model StudentRecordViewModel
+
 @{
     Layout = "_EncodeLayout";
-    ViewData["Title"] = "Student Violation";
+    bool fromTraffic = TempData["FromTraffic"] is true;
+    bool fromPending = TempData["FromPending"] is true;
 }
 
 @section customHead {
     <link rel="stylesheet" href="~/css/studentViolationStyle.css" asp-append-version="true" />
 }
 
-<form id="create-new" asp-controller="Encode" asp-action="CreateNewStudent">
-    <div class="title">
-        <a asp-controller="Encode" asp-action="StudentRecordViolation" class="btn-function">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M8 12L16 6" stroke="black" stroke-width="2" stroke-linecap="round" />
-                <path d="M8 12L16 18" stroke="black" stroke-width="2" stroke-linecap="round" />
+<div class="title">
+    @if (fromPending)
+    {
+        <a asp-action="Pending" class="btn-function">
+            <svg width="32" height="32" viewBox="0 0 43 43" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M16 22L24 14" stroke="black" stroke-width="2" stroke-linecap="round" />
+                <path d="M16 22L24 30" stroke="black" stroke-width="2" stroke-linecap="round" />
             </svg>
         </a>
-        <h2>Create a New Record</h2>
+    }
+    else
+    {
+        <form asp-controller="Encode" asp-action="StudentRecordViolation" method="post">
+            <button type="submit" class="btn-function" name="violationType" value="@(fromTraffic ? "Traffic Violation" : "Student Violation")">
+                <svg width="32" height="32" viewBox="0 0 43 43" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M16 22L24 14" stroke="black" stroke-width="2" stroke-linecap="round" />
+                    <path d="M16 22L24 30" stroke="black" stroke-width="2" stroke-linecap="round" />
+                </svg>
+            </button>
+        </form>
+    }
+    <h2>New Student Record</h2>
+</div>
+
+<p>Create a new record for the student</p>
+
+<form id="create-new" asp-controller="Encode" asp-action="CreateNewStudent" asp-route-fromPending="@fromPending" asp-route-fromTraffic="@fromTraffic" method="post">
+    <div class="panel">
+        <div class="content-pane">
+            <h3>Student Information</h3>
+
+            <div class="input-wrapper">
+                <input asp-for="StudentNumber" type="number" class="input" aria-required="true" />
+                <label class="label">Student Number<span>*</span></label>
+                <span asp-validation-for="StudentNumber" class="text-danger"></span>
+            </div>
+            <div class="input-wrapper">
+                <input asp-for="FirstName" type="text" class="input" aria-required="true" />
+                <label class="label">First Name<span>*</span></label>
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+            <div class="input-wrapper">
+                <input asp-for="LastName" type="text" class="input" autocomplete="LastName" aria-required="true" />
+                <label class="label">Last Name<span>*</span></label>
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+            <div class="input-wrapper">
+                <input asp-for="Email" type="email" class="input" aria-required="true" />
+                <label class="label">Email<span>*</span></label>
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <button class="btn btn-next" type="submit">
+                Next
+            </button>
+        </div>
     </div>
-    <div class="input-wrapper">
-        <input asp-for="StudentNumber" type="number" class="input" autocomplete="StudentNumber" aria-required="true" required />
-        <label class="label">Student Number<span>*</span></label>
-        <span asp-validation-for="StudentNumber" class="text-danger"></span>
-    </div>
-    <div class="input-wrapper">
-        <input asp-for="FirstName" type="text" class="input" autocomplete="firstname" aria-required="true" required />
-        <label class="label">First Name<span>*</span></label>
-        <span asp-validation-for="FirstName" class="text-danger"></span>
-    </div>
-    <div class="input-wrapper">
-        <input asp-for="LastName" type="text" class="input" autocomplete="LastName" aria-required="true" required />
-        <label class="label">Last Name<span>*</span></label>
-        <span asp-validation-for="LastName" class="text-danger"></span>
-    </div>
-    <button class="btn btn-next" type="submit">
-        Next
-    </button>
 </form>
 
 @section Scripts {

@@ -22,6 +22,31 @@ namespace WSRS_Student.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("HearingSchedules", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("ScheduledDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("StudentNumber")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StudentNumber");
+
+                    b.ToTable("HearingSchedules");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -174,9 +199,9 @@ namespace WSRS_Student.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<string>("FullName")
+                    b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -204,9 +229,9 @@ namespace WSRS_Student.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("StudentNumber")
+                    b.Property<string>("Surname")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
@@ -235,7 +260,7 @@ namespace WSRS_Student.Migrations
 
                     b.HasKey("CollegeID");
 
-                    b.ToTable("Colleges");
+                    b.ToTable("College");
                 });
 
             modelBuilder.Entity("WSRS_Student.Models.Offense", b =>
@@ -278,8 +303,11 @@ namespace WSRS_Student.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateOnly?>("HearingDate")
-                        .HasColumnType("date");
+                    b.Property<string>("Formator")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FormatorId")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("OffenseId")
                         .HasColumnType("int");
@@ -306,39 +334,14 @@ namespace WSRS_Student.Migrations
                     b.ToTable("ReportsEncoded");
                 });
 
-            modelBuilder.Entity("WSRS_Student.Models.ReportPending", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CommissionDatetime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FormatorId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("StudentNumber")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("StudentNumber");
-
-                    b.ToTable("ReportsPending");
-                });
-
             modelBuilder.Entity("WSRS_Student.Models.Student", b =>
                 {
                     b.Property<int>("StudentNumber")
                         .HasColumnType("int");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -405,6 +408,17 @@ namespace WSRS_Student.Migrations
                     b.ToTable("TrafficReportsEncoded");
                 });
 
+            modelBuilder.Entity("HearingSchedules", b =>
+                {
+                    b.HasOne("WSRS_SWAFO.Models.Student", "Student")
+                        .WithMany()
+                        .HasForeignKey("StudentNumber")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Student");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -464,7 +478,7 @@ namespace WSRS_Student.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("WSRS_Student.Models.Offense", "Offense")
+                    b.HasOne("WSRS_SWAFO.Models.Offense", "Offense")
                         .WithMany()
                         .HasForeignKey("OffenseId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -483,18 +497,7 @@ namespace WSRS_Student.Migrations
                     b.Navigation("Student");
                 });
 
-            modelBuilder.Entity("WSRS_Student.Models.ReportPending", b =>
-                {
-                    b.HasOne("WSRS_Student.Models.Student", "Student")
-                        .WithMany("ReportsPending")
-                        .HasForeignKey("StudentNumber")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Student");
-                });
-
-            modelBuilder.Entity("WSRS_Student.Models.TrafficReportsEncoded", b =>
+            modelBuilder.Entity("WSRS_SWAFO.Models.TrafficReportsEncoded", b =>
                 {
                     b.HasOne("WSRS_Student.Models.College", "College")
                         .WithMany()
@@ -508,7 +511,7 @@ namespace WSRS_Student.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("WSRS_Student.Models.Student", "Student")
+                    b.HasOne("WSRS_SWAFO.Models.Student", "Student")
                         .WithMany("TrafficReportsEncoded")
                         .HasForeignKey("StudentNumber")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -524,8 +527,6 @@ namespace WSRS_Student.Migrations
             modelBuilder.Entity("WSRS_Student.Models.Student", b =>
                 {
                     b.Navigation("ReportsEncoded");
-
-                    b.Navigation("ReportsPending");
 
                     b.Navigation("TrafficReportsEncoded");
                 });

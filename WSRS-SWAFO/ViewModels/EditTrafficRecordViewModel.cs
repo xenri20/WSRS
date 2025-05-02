@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
-using WSRS_SWAFO.Models;
+using WSRS_SWAFO.Data.Enum;
 
 namespace WSRS_SWAFO.ViewModels
 {
@@ -9,15 +9,28 @@ namespace WSRS_SWAFO.ViewModels
         // Values to be displayed
         public int Id { get; set; }
         public int StudentNumber { get; set; }
-        public Student? Student { get; set; }
+
+        [ValidateNever]
+        public string LastName { get; set; }
+
+        [ValidateNever]
+        public string FirstName { get; set; }
         public string College { get; set; }
         public int OffenseId { get; set; }
-        public Offense? Offense { get; set; }
 
-        // Values that can be edited
+        [ValidateNever]
+        public string Nature { get; set; }
+
+        [ValidateNever]
+        public OffenseClassification Classification { get; set; }
+
+        [Required]
+        [Display(Name = "previous date")]
+        public DateOnly? OriginalDate { get; set; }
 
         [Required(ErrorMessage = "Please enter a date")]
         [Display(Name = "Commission Date")]
+        [DateNotBefore(nameof(OriginalDate))]
         public DateOnly CommissionDate { get; set; }
 
         [Required(ErrorMessage = "Please enter the plate number")]
@@ -32,8 +45,8 @@ namespace WSRS_SWAFO.ViewModels
         [Display(Name = "Remarks")]
         public string Remarks { get; set; }
 
-        [ValidateNever]
         [Display(Name = "Date Paid")]
+        [DateNotBefore(nameof(CommissionDate), ErrorMessage = "Date cannot be before the Commission Date")]
         public DateOnly? DatePaid { get; set; }
 
         [ValidateNever]

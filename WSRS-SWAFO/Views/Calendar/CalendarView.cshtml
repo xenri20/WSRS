@@ -1,0 +1,113 @@
+﻿@section customHead {
+    <!-- FullCalendar CSS (local) -->
+    <link href="/lib/fullcalendar-6.1.17/dist/index.global.min.css" rel="stylesheet" />
+    <link href="~/css/calendarStyle.css" rel="stylesheet" />
+}
+
+<!-- Toast -->
+<div class="toast-container position-fixed bottom-0 start-0 p-3" style="z-index: 1055;">
+    <div id="jsToast" class="toast align-items-center shadow border-0 w-auto px-2 py-1 fs-6" role="alert" data-bs-autohide="true" data-bs-delay="6000">
+        <div class="d-flex">
+            <div class="toast-body" id="jsToastMessage">
+                <!-- Message here -->
+            </div>
+            @* <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button> *@
+        </div>
+    </div>
+</div>
+
+<!-- Add Schedule Modal -->
+<div class="modal fade" id="addScheduleModal" tabindex="-1" aria-labelledby="addScheduleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg modal-fullscreen-lg-down">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="addScheduleModalLabel">Add Hearing Schedule</h3>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="addScheduleForm">
+                <div class="modal-body d-flex flex-column gap-2">
+                    <div class="input-wrapper mb-3">
+                        <label for="studentNumber" class="label">Student Number</label>
+                        <input type="number" class="input" id="studentNumber" name="StudentNumber" required>
+                        <small id="studentInfo" class="text-muted"></small>
+                    </div>
+                    <div class="input-wrapper mb-3">
+                        <label for="title" class="label">Title</label>
+                        <input type="text" class="input" id="title" name="Title" required>
+                    </div>
+                    <div class="input-wrapper mb-3">
+                        <label for="scheduledDate" class="label">Date and Time</label>
+                        <input type="datetime-local" class="input" id="scheduledDate" name="ScheduledDate" required>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn">Save Schedule</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for Event Details -->
+<div class="modal fade" id="eventModal" tabindex="-1" aria-labelledby="eventModalLabel" data-bs-backdrop="static" data-bs-keyboard="false" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" style="max-width: 800px; width: 100%;">
+        <form id="editEventForm" style="width: 100%;">
+            <div class="modal-content" style="width: 100%;">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="eventModalLabel">Event Details</h4>
+                </div>
+                <div class="modal-body d-flex flex-column gap-2">
+                    <input type="hidden" id="eventId" /> <!-- Hidden event ID -->
+                    <div class="input-wrapper mb-2">
+                        <label class="label">Student Number</label>
+                        <input type="text" id="eventStudentNumber" class="input" readonly />
+                    </div>
+                    <div class="input-wrapper mb-2">
+                        <label class="label">Student Name</label>
+                        <input type="text" id="eventStudentName" class="input" readonly />
+                    </div>
+                    <div class="input-wrapper mb-2">
+                        <label class="label">Email</label>
+                        <input type="text" id="eventStudentEmail" class="input" readonly />
+                    </div>
+                    <div class="input-wrapper mb-2">
+                        <label class="label">Title</label>
+                        <input type="text" id="eventTitleInput" class="input" readonly />
+                    </div>
+                    <div class="input-wrapper mb-2">
+                        <label class="label">Date</label>
+                        <input type="datetime-local" id="eventDateInput" class="input" readonly />
+                    </div>
+                </div>
+                <div class="modal-footer d-flex justify-content-between">
+                    <div>
+                        <button type="button" class="btn" id="editEvent">Edit</button>
+                        <button type="submit" class="btn dark-btn" id="saveEvent" style="display: none;">Save Changes</button>
+                        <button type="button" class="btn bg-danger border-danger text-white" id="deleteEvent" style="display: none;">Delete</button>
+                    </div>
+                    <div>
+                        <button type="button" class="btn" id="cancelEdit" data-bs-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="container d-flex flex-column">
+    <h1>Hearing Calendar </h1>
+    <hr />
+    <button class="btn mb-3" data-bs-toggle="modal" data-bs-target="#addScheduleModal">
+        Schedule a Hearing
+    </button>
+
+    <div id="calendar"></div>
+
+    <!-- FullCalendar JS (local) -->
+    <script src="/lib/fullcalendar-6.1.17/dist/index.global.min.js"></script>
+</div>
+
+@section scripts {
+    <script src="~/js/hearing-calendar.js"></script>
+}

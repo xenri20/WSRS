@@ -1,0 +1,16 @@
+﻿#calendar {
+    background: white;
+    padding: 20px;
+    border: 2px solid black;
+    border-radius: 12px;
+    margin-bottom: 2rem;
+    height: 700px;
+    overflow-y: hidden;
+}
+
+/*
+    Undo some of the calendar's unwanted styles
+*/
+thead tr:hover {
+    background: black !important;
+}

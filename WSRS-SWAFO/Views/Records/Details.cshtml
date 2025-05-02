@@ -10,14 +10,15 @@
     ViewData["Title"] = "Details";
 }
 
+<partial name="_StudentModalPartial" />
+
 <div id="details">
     <h1>Manage Records</h1>
     <hr />
     <section>
         <div class="title">
-            <a asp-action="Index">
+            <a asp-action="Index" class="btn-function">
                 <svg width="32" height="32" viewBox="0 0 43 43" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="21.5" cy="21.5" r="20.5" stroke="black" stroke-width="2" />
                     <path d="M16 22L24 14" stroke="black" stroke-width="2" stroke-linecap="round" />
                     <path d="M16 22L24 30" stroke="black" stroke-width="2" stroke-linecap="round" />
                 </svg>
@@ -25,9 +26,16 @@
             <h2>Details</h2>
         </div>
         <div class="panel">
+            <div class="d-flex align-items-center gap-2 mb-3">
+                <h3 class="mb-0">Record No.</h3><span class="pill-indicator bg-success text-white">@Model.Id</span>
+            </div>
             <dl>
                 <dt>Student Number</dt>
-                <dd>@Model.StudentNumber</dd>
+                <dd>
+                    <button type="button" class="text-button" data-student="@Model.StudentNumber" data-bs-toggle="modal" data-bs-target="#studentModal">
+                        @Model.StudentNumber
+                    </button>
+                </dd>
                 <dt>Student Name</dt>
                 <dd>@Model.Name</dd>
                 <dt>Course</dt>
@@ -41,11 +49,6 @@
                 <dd>@Model.Nature</dd>
                 <dt>Commission Date</dt>
                 <dd>@Model.FormattedCommissionDate</dd>
-                @if (Model.Classification == OffenseClassification.Major)
-                {
-                    <dt>Hearing Date</dt>
-                    <dd>@(string.IsNullOrEmpty(Model.FormattedHearingDate) ? "-" : Model.FormattedHearingDate)</dd>
-                }
                 <dt>Sanction</dt>
                 <dd>@Model.Sanction</dd>
                 <dt>Status</dt>
@@ -63,4 +66,5 @@
 
 @section scripts {
     <script src="~/js/records.js"></script>
+    <script src="~/js/components/studentModal.js" type="module" asp-append-version="true"></script>
 }

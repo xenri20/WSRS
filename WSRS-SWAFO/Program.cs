@@ -5,6 +5,12 @@ using WSRS_SWAFO.Data;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using WSRS_SWAFO.Services;
+using WSRS_SWAFO.Interfaces;
+using Microsoft.IdentityModel.Tokens;
+using Hangfire;
+using Hangfire.Dashboard;
+using System.Security.Claims;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
@@ -12,7 +18,12 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Logging.AddConsole();
 builder.Logging.AddDebug();
 
+builder.Services.AddHangfire((config) => config.UseSqlServerStorage(connectionString));
+builder.Services.AddHangfireServer();
+
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
+
+builder.Services.AddTransient<ApplicationDbInitializer>();
 
 builder.Services.AddScoped<AccountService>();
 
@@ -33,16 +44,24 @@ builder.Services.AddAuthentication(options =>
     options.SaveTokens = true;
     options.UseTokenLifetime = true;
 
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        RoleClaimType = "roles"
+    };
+
     // Map OIDC claims to ASP.NET Identity
     options.Events = new OpenIdConnectEvents
     {
         OnTokenValidated = async context =>
         {
             var accountService = context.HttpContext.RequestServices.GetRequiredService<AccountService>();
-            await accountService.HandleUserSignInAsync(context.Principal);
+            await accountService.HandleUserSignInAsync(context.Principal!);
         }
     };
 });
+
+builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
+builder.Services.AddScoped<IEmailSender, EmailService>();
 
 builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
 {
@@ -68,9 +87,19 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.Cookie.IsEssential = true;
 });
 
+builder.Services.AddHttpClient("WSRS-Api", client =>
+{
+    client.BaseAddress = new Uri(builder.Configuration.GetSection("API_BASE_URL").Value
+        ?? throw new InvalidOperationException("API_BASE_URL is not configured."));
+});
+
 // https://dotnettutorials.net/lesson/difference-between-addmvc-and-addmvccore-method/
 // Adds features support for MVC and Pages
-builder.Services.AddMvc();
+builder.Services.AddMvc()
+    .AddMvcOptions(options =>
+    {
+        options.ModelBindingMessageProvider.SetValueMustNotBeNullAccessor(_ => "This field is required.");
+    });
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddMemoryCache();
 builder.Services.AddSession(options =>
@@ -78,8 +107,17 @@ builder.Services.AddSession(options =>
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
-
 var app = builder.Build();
+
+app.UseHangfireDashboard("/hangfire", new DashboardOptions
+{
+    DisplayStorageConnectionString = false,
+
+    //Authorization = new[]
+    //{
+    //    new AppRoleAuthorizationFilter("Admin")
+    //}
+});
 
 if (!app.Environment.IsDevelopment())
 {
@@ -129,15 +167,17 @@ app.UseSession();
 
 app.UseRouting();
 
+app.UseHttpMethodOverride();
+
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=LogOn}/{action=Index}/{id?}");
-app.MapRazorPages();
 
-//await AppDbInitializer.CreateRoles(app);
+var initializer = app.Services.GetRequiredService<ApplicationDbInitializer>();
+await initializer.SeedRoles(app);
 //await AppDbInitializer.CreateAdmin(app);
 
 app.Run();

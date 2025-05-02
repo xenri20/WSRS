@@ -1,34 +1,27 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using WSRS_SWAFO.Models;
+using WSRS_SWAFO.Helpers;
 
 namespace WSRS_SWAFO.ViewModels
 {
-    public class ReportTrafficEncodedViewModel
+    public class TrafficReportEncodedViewModel
     {
-        [Key]
-        public int Id { get; set; }
+        [Required(ErrorMessage = "Student Number is required")]
+        [Display(Name = "Student Number")]
+        public int StudentNumber { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
 
         [Required(ErrorMessage = "Select an Offense first!")]
         [Display(Name = "Offense")]
-        [ForeignKey("Offense")]
         public int OffenseId { get; set; }
-        public Offense Offense { get; set; } // Navigation Property
-
-        [Required(ErrorMessage = "Student ID is required")]
-        [Display(Name = "Student Number")]
-        [ForeignKey("Student")]
-        public int StudentNumber { get; set; }
-        public Student Student { get; set; } // Navigation Property
 
         [Required(ErrorMessage = "College is required")]
         [Display(Name = "College")]
-        [ForeignKey("College")]
         public string CollegeID { get; set; }
-        public College College { get; set; }
 
         [Required(ErrorMessage = "Commission Date is required")]
         [Display(Name = "Commission Date")]
+        [DateNotInPast(ErrorMessage = "The date must be today or later.")]
         public DateOnly CommissionDate { get; set; }
 
         [Required(ErrorMessage = "Plate Number is required!")]

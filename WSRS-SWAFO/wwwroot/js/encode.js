@@ -13,9 +13,7 @@ for (btnLink of btnLinks) {
 }
 
 $(document).ready(function () {
-    const hearingDate = $('#hearingDate');
     const offense = $('#offenseNature'); // Dropdown to populate 
-    hearingDate.hide();
     offense.attr("disabled", false);
     $('#offenseClassification').change(function () {
         const classification = $(this).val(); // Get selected classification
@@ -35,14 +33,6 @@ $(document).ready(function () {
                 data.forEach(function (item) {
                     offense.append(`<option value="${item.id}">${item.nature}</option>`);
                 });
-                if (classification === "0") {
-                    hearingDate.children().first().val('');
-                    hearingDate.hide(); // Use jQuery to hide
-                } else if (classification === "1") {
-                    hearingDate.show(); // Use jQuery to show
-                } else {
-                    hearingDate.hide(); // Default case
-                }
             },
             error: function () {
                 alert('Failed to retrieve offenses.');
