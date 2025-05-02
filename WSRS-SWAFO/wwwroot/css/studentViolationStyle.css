@@ -117,6 +117,13 @@ h2 {
     overflow-y: scroll;
 }
 
+.report-tile .long { 
+    width: 18ch;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
 @media only screen and (max-width:800px) {
     .content-panel {
         width: 75vw;

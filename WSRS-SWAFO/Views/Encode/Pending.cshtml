@@ -51,6 +51,14 @@
                             @item.Formator
                         </div>
                     </span>
+                    <span class="report-tile-item long">
+                        <div class="label">
+                            Description
+                        </div>
+                        <div>
+                            @item.Description
+                        </div>
+                    </span>
                     <span class="button-group">
                         <form asp-action="ArchivePending" asp-route-id="@item.Id" method="post">
                             <input type="hidden" name="_method" value="PATCH" />
