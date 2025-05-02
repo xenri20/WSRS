@@ -3,32 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-<<<<<<<< HEAD:WSRS-Student/Migrations/20250401055242_IdentitySetup.Designer.cs
 using WSRS_Student.Data;
 
 #nullable disable
 
 namespace WSRS_Student.Migrations
 {
-    [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250401055242_IdentitySetup")]
-    partial class IdentitySetup
-========
-using WSRS_SWAFO.Data;
-
-#nullable disable
-
-namespace WSRS_SWAFO.Migrations
-{
-    [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250501103848_RemoveHearingDateInEncoded")]
-    partial class RemoveHearingDateInEncoded
->>>>>>>> main:WSRS-Student/Migrations/20250501103848_RemoveHearingDateInEncoded.Designer.cs
+    [DbContext(typeof(AuthDbContext))]
+    partial class AuthDbContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -37,8 +22,6 @@ namespace WSRS_SWAFO.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-<<<<<<<< HEAD:WSRS-Student/Migrations/20250401055242_IdentitySetup.Designer.cs
-========
             modelBuilder.Entity("HearingSchedules", b =>
                 {
                     b.Property<int>("Id")
@@ -64,7 +47,6 @@ namespace WSRS_SWAFO.Migrations
                     b.ToTable("HearingSchedules");
                 });
 
->>>>>>>> main:WSRS-Student/Migrations/20250501103848_RemoveHearingDateInEncoded.Designer.cs
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -89,7 +71,7 @@ namespace WSRS_SWAFO.Migrations
                         .HasDatabaseName("RoleNameIndex")
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
-                    b.ToTable("AspNetRoles", (string)null);
+                    b.ToTable("AspNetRoles", "Student");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -114,7 +96,7 @@ namespace WSRS_SWAFO.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("AspNetRoleClaims", (string)null);
+                    b.ToTable("AspNetRoleClaims", "Student");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -139,25 +121,16 @@ namespace WSRS_SWAFO.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("AspNetUserClaims", (string)null);
+                    b.ToTable("AspNetUserClaims", "Student");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
-<<<<<<<< HEAD:WSRS-Student/Migrations/20250401055242_IdentitySetup.Designer.cs
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProviderKey")
                         .HasColumnType("nvarchar(450)");
-========
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
-
-                    b.Property<string>("ProviderKey")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
->>>>>>>> main:WSRS-Student/Migrations/20250501103848_RemoveHearingDateInEncoded.Designer.cs
 
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("nvarchar(max)");
@@ -170,7 +143,7 @@ namespace WSRS_SWAFO.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("AspNetUserLogins", (string)null);
+                    b.ToTable("AspNetUserLogins", "Student");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
@@ -185,7 +158,7 @@ namespace WSRS_SWAFO.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("AspNetUserRoles", (string)null);
+                    b.ToTable("AspNetUserRoles", "Student");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -194,33 +167,20 @@ namespace WSRS_SWAFO.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("LoginProvider")
-<<<<<<<< HEAD:WSRS-Student/Migrations/20250401055242_IdentitySetup.Designer.cs
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(450)");
-========
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
->>>>>>>> main:WSRS-Student/Migrations/20250501103848_RemoveHearingDateInEncoded.Designer.cs
 
                     b.Property<string>("Value")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 
-                    b.ToTable("AspNetUserTokens", (string)null);
+                    b.ToTable("AspNetUserTokens", "Student");
                 });
 
-<<<<<<<< HEAD:WSRS-Student/Migrations/20250401055242_IdentitySetup.Designer.cs
             modelBuilder.Entity("WSRS_Student.Models.ApplicationUser", b =>
-========
-            modelBuilder.Entity("WSRS_SWAFO.Models.ApplicationUser", b =>
->>>>>>>> main:WSRS-Student/Migrations/20250501103848_RemoveHearingDateInEncoded.Designer.cs
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -239,15 +199,9 @@ namespace WSRS_SWAFO.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
-<<<<<<<< HEAD:WSRS-Student/Migrations/20250401055242_IdentitySetup.Designer.cs
-                    b.Property<string>("FullName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-========
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("nvarchar(100)");
->>>>>>>> main:WSRS-Student/Migrations/20250501103848_RemoveHearingDateInEncoded.Designer.cs
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -275,15 +229,9 @@ namespace WSRS_SWAFO.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
-<<<<<<<< HEAD:WSRS-Student/Migrations/20250401055242_IdentitySetup.Designer.cs
-                    b.Property<string>("StudentNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-========
                     b.Property<string>("Surname")
                         .IsRequired()
                         .HasColumnType("nvarchar(100)");
->>>>>>>> main:WSRS-Student/Migrations/20250501103848_RemoveHearingDateInEncoded.Designer.cs
 
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
@@ -302,31 +250,21 @@ namespace WSRS_SWAFO.Migrations
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
+<<<<<<< HEAD:WSRS-Student/Migrations/ApplicationDbContextModelSnapshot.cs
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-<<<<<<<< HEAD:WSRS-Student/Migrations/20250401055242_IdentitySetup.Designer.cs
             modelBuilder.Entity("WSRS_Student.Models.College", b =>
-========
-            modelBuilder.Entity("WSRS_SWAFO.Models.College", b =>
->>>>>>>> main:WSRS-Student/Migrations/20250501103848_RemoveHearingDateInEncoded.Designer.cs
                 {
                     b.Property<string>("CollegeID")
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("CollegeID");
 
-<<<<<<<< HEAD:WSRS-Student/Migrations/20250401055242_IdentitySetup.Designer.cs
-                    b.ToTable("Colleges");
-                });
-
-            modelBuilder.Entity("WSRS_Student.Models.Offense", b =>
-========
                     b.ToTable("College");
                 });
 
-            modelBuilder.Entity("WSRS_SWAFO.Models.Offense", b =>
->>>>>>>> main:WSRS-Student/Migrations/20250501103848_RemoveHearingDateInEncoded.Designer.cs
+            modelBuilder.Entity("WSRS_Student.Models.Offense", b =>
                 {
                     b.Property<int>("Id")
                         .HasColumnType("int");
@@ -343,11 +281,7 @@ namespace WSRS_SWAFO.Migrations
                     b.ToTable("Offenses");
                 });
 
-<<<<<<<< HEAD:WSRS-Student/Migrations/20250401055242_IdentitySetup.Designer.cs
             modelBuilder.Entity("WSRS_Student.Models.ReportEncoded", b =>
-========
-            modelBuilder.Entity("WSRS_SWAFO.Models.ReportEncoded", b =>
->>>>>>>> main:WSRS-Student/Migrations/20250501103848_RemoveHearingDateInEncoded.Designer.cs
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -370,16 +304,11 @@ namespace WSRS_SWAFO.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-<<<<<<<< HEAD:WSRS-Student/Migrations/20250401055242_IdentitySetup.Designer.cs
-                    b.Property<DateOnly?>("HearingDate")
-                        .HasColumnType("date");
-========
                     b.Property<string>("Formator")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FormatorId")
                         .HasColumnType("nvarchar(max)");
->>>>>>>> main:WSRS-Student/Migrations/20250501103848_RemoveHearingDateInEncoded.Designer.cs
 
                     b.Property<int>("OffenseId")
                         .HasColumnType("int");
@@ -406,51 +335,15 @@ namespace WSRS_SWAFO.Migrations
                     b.ToTable("ReportsEncoded");
                 });
 
-<<<<<<<< HEAD:WSRS-Student/Migrations/20250401055242_IdentitySetup.Designer.cs
-            modelBuilder.Entity("WSRS_Student.Models.ReportPending", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CommissionDatetime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FormatorId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("StudentNumber")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("StudentNumber");
-
-                    b.ToTable("ReportsPending");
-                });
-
             modelBuilder.Entity("WSRS_Student.Models.Student", b =>
-========
-            modelBuilder.Entity("WSRS_SWAFO.Models.Student", b =>
->>>>>>>> main:WSRS-Student/Migrations/20250501103848_RemoveHearingDateInEncoded.Designer.cs
                 {
                     b.Property<int>("StudentNumber")
                         .HasColumnType("int");
 
-<<<<<<<< HEAD:WSRS-Student/Migrations/20250401055242_IdentitySetup.Designer.cs
-========
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
->>>>>>>> main:WSRS-Student/Migrations/20250501103848_RemoveHearingDateInEncoded.Designer.cs
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -466,11 +359,7 @@ namespace WSRS_SWAFO.Migrations
                     b.ToTable("Students");
                 });
 
-<<<<<<<< HEAD:WSRS-Student/Migrations/20250401055242_IdentitySetup.Designer.cs
             modelBuilder.Entity("WSRS_Student.Models.TrafficReportsEncoded", b =>
-========
-            modelBuilder.Entity("WSRS_SWAFO.Models.TrafficReportsEncoded", b =>
->>>>>>>> main:WSRS-Student/Migrations/20250501103848_RemoveHearingDateInEncoded.Designer.cs
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -518,10 +407,11 @@ namespace WSRS_SWAFO.Migrations
                     b.HasIndex("StudentNumber");
 
                     b.ToTable("TrafficReportsEncoded");
+=======
+                    b.ToTable("AspNetUsers", "Student");
+>>>>>>> c833464 (feat: add new migration for authentication):WSRS-Student/Migrations/AuthDbContextModelSnapshot.cs
                 });
 
-<<<<<<<< HEAD:WSRS-Student/Migrations/20250401055242_IdentitySetup.Designer.cs
-========
             modelBuilder.Entity("HearingSchedules", b =>
                 {
                     b.HasOne("WSRS_SWAFO.Models.Student", "Student")
@@ -533,7 +423,6 @@ namespace WSRS_SWAFO.Migrations
                     b.Navigation("Student");
                 });
 
->>>>>>>> main:WSRS-Student/Migrations/20250501103848_RemoveHearingDateInEncoded.Designer.cs
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -545,11 +434,7 @@ namespace WSRS_SWAFO.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-<<<<<<<< HEAD:WSRS-Student/Migrations/20250401055242_IdentitySetup.Designer.cs
                     b.HasOne("WSRS_Student.Models.ApplicationUser", null)
-========
-                    b.HasOne("WSRS_SWAFO.Models.ApplicationUser", null)
->>>>>>>> main:WSRS-Student/Migrations/20250501103848_RemoveHearingDateInEncoded.Designer.cs
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -558,11 +443,7 @@ namespace WSRS_SWAFO.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-<<<<<<<< HEAD:WSRS-Student/Migrations/20250401055242_IdentitySetup.Designer.cs
                     b.HasOne("WSRS_Student.Models.ApplicationUser", null)
-========
-                    b.HasOne("WSRS_SWAFO.Models.ApplicationUser", null)
->>>>>>>> main:WSRS-Student/Migrations/20250501103848_RemoveHearingDateInEncoded.Designer.cs
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -577,11 +458,7 @@ namespace WSRS_SWAFO.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-<<<<<<<< HEAD:WSRS-Student/Migrations/20250401055242_IdentitySetup.Designer.cs
                     b.HasOne("WSRS_Student.Models.ApplicationUser", null)
-========
-                    b.HasOne("WSRS_SWAFO.Models.ApplicationUser", null)
->>>>>>>> main:WSRS-Student/Migrations/20250501103848_RemoveHearingDateInEncoded.Designer.cs
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -590,46 +467,29 @@ namespace WSRS_SWAFO.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-<<<<<<<< HEAD:WSRS-Student/Migrations/20250401055242_IdentitySetup.Designer.cs
                     b.HasOne("WSRS_Student.Models.ApplicationUser", null)
-========
-                    b.HasOne("WSRS_SWAFO.Models.ApplicationUser", null)
->>>>>>>> main:WSRS-Student/Migrations/20250501103848_RemoveHearingDateInEncoded.Designer.cs
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
+<<<<<<< HEAD:WSRS-Student/Migrations/ApplicationDbContextModelSnapshot.cs
 
-<<<<<<<< HEAD:WSRS-Student/Migrations/20250401055242_IdentitySetup.Designer.cs
             modelBuilder.Entity("WSRS_Student.Models.ReportEncoded", b =>
                 {
                     b.HasOne("WSRS_Student.Models.College", "College")
-========
-            modelBuilder.Entity("WSRS_SWAFO.Models.ReportEncoded", b =>
-                {
-                    b.HasOne("WSRS_SWAFO.Models.College", "College")
->>>>>>>> main:WSRS-Student/Migrations/20250501103848_RemoveHearingDateInEncoded.Designer.cs
                         .WithMany()
                         .HasForeignKey("CollegeID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-<<<<<<<< HEAD:WSRS-Student/Migrations/20250401055242_IdentitySetup.Designer.cs
-                    b.HasOne("WSRS_Student.Models.Offense", "Offense")
-========
                     b.HasOne("WSRS_SWAFO.Models.Offense", "Offense")
->>>>>>>> main:WSRS-Student/Migrations/20250501103848_RemoveHearingDateInEncoded.Designer.cs
                         .WithMany()
                         .HasForeignKey("OffenseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-<<<<<<<< HEAD:WSRS-Student/Migrations/20250401055242_IdentitySetup.Designer.cs
                     b.HasOne("WSRS_Student.Models.Student", "Student")
-========
-                    b.HasOne("WSRS_SWAFO.Models.Student", "Student")
->>>>>>>> main:WSRS-Student/Migrations/20250501103848_RemoveHearingDateInEncoded.Designer.cs
                         .WithMany("ReportsEncoded")
                         .HasForeignKey("StudentNumber")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -642,46 +502,21 @@ namespace WSRS_SWAFO.Migrations
                     b.Navigation("Student");
                 });
 
-<<<<<<<< HEAD:WSRS-Student/Migrations/20250401055242_IdentitySetup.Designer.cs
-            modelBuilder.Entity("WSRS_Student.Models.ReportPending", b =>
-                {
-                    b.HasOne("WSRS_Student.Models.Student", "Student")
-                        .WithMany("ReportsPending")
-                        .HasForeignKey("StudentNumber")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Student");
-                });
-
-            modelBuilder.Entity("WSRS_Student.Models.TrafficReportsEncoded", b =>
-                {
-                    b.HasOne("WSRS_Student.Models.College", "College")
-========
             modelBuilder.Entity("WSRS_SWAFO.Models.TrafficReportsEncoded", b =>
                 {
-                    b.HasOne("WSRS_SWAFO.Models.College", "College")
->>>>>>>> main:WSRS-Student/Migrations/20250501103848_RemoveHearingDateInEncoded.Designer.cs
+                    b.HasOne("WSRS_Student.Models.College", "College")
                         .WithMany()
                         .HasForeignKey("CollegeID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-<<<<<<<< HEAD:WSRS-Student/Migrations/20250401055242_IdentitySetup.Designer.cs
                     b.HasOne("WSRS_Student.Models.Offense", "Offense")
-========
-                    b.HasOne("WSRS_SWAFO.Models.Offense", "Offense")
->>>>>>>> main:WSRS-Student/Migrations/20250501103848_RemoveHearingDateInEncoded.Designer.cs
                         .WithMany()
                         .HasForeignKey("OffenseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-<<<<<<<< HEAD:WSRS-Student/Migrations/20250401055242_IdentitySetup.Designer.cs
-                    b.HasOne("WSRS_Student.Models.Student", "Student")
-========
                     b.HasOne("WSRS_SWAFO.Models.Student", "Student")
->>>>>>>> main:WSRS-Student/Migrations/20250501103848_RemoveHearingDateInEncoded.Designer.cs
                         .WithMany("TrafficReportsEncoded")
                         .HasForeignKey("StudentNumber")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -694,21 +529,14 @@ namespace WSRS_SWAFO.Migrations
                     b.Navigation("Student");
                 });
 
-<<<<<<<< HEAD:WSRS-Student/Migrations/20250401055242_IdentitySetup.Designer.cs
             modelBuilder.Entity("WSRS_Student.Models.Student", b =>
                 {
                     b.Navigation("ReportsEncoded");
 
-                    b.Navigation("ReportsPending");
-
-========
-            modelBuilder.Entity("WSRS_SWAFO.Models.Student", b =>
-                {
-                    b.Navigation("ReportsEncoded");
-
->>>>>>>> main:WSRS-Student/Migrations/20250501103848_RemoveHearingDateInEncoded.Designer.cs
                     b.Navigation("TrafficReportsEncoded");
                 });
+=======
+>>>>>>> c833464 (feat: add new migration for authentication):WSRS-Student/Migrations/AuthDbContextModelSnapshot.cs
 #pragma warning restore 612, 618
         }
     }
