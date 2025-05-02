@@ -58,7 +58,7 @@ namespace WSRS_Student.Controllers
             }
 
             ModelState.AddModelError(string.Empty, "Invalid login attempt");
-            TempData["Error"] = "Invalid offline login credentials. Please try again";
+            TempData["Error"] = "Invalid login credentials. Please try again";
             return View(); 
         }
 
