@@ -1,0 +1,41 @@
+﻿@using WSRS_Formators.ViewModels
+@model LoginViewModel
+
+@{
+    Layout = "_LoginLayout"; // nasa shared folder to
+}
+
+@section CustomHead {
+    <link rel="stylesheet" href="~/css/login.css" asp-append-version="true" />
+}
+
+<div class="container d-flex justify-content-center align-items-center flex-column">
+    <div class="box-wrapper">
+        <div class="container-fluid justify-content-start p-0">
+            <h1 class="">Login to DLSU-D</h1>
+            <p class="">Enter your Employee ID and password to sign in</p>
+        </div>
+        <form id="loginForm" method="post" asp-action="Login">
+            <div class="input-group mb-3">
+                <input type="text" asp-for="UserName" class="form-control" placeholder="Username" name="username" aria-label="Username" required>
+                <span asp-validation-for="UserName" class="text-danger"></span>
+            </div>
+
+            <div class="input-group mb-3">
+                <input type="password" asp-for="Password" class="form-control" placeholder="Password" name="password" aria-label="Password" required>
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+
+            <button class="btn btn-success w-100">Log In</button>
+            @if (TempData["Error"] != null)
+            {
+                <span class="text-danger">@TempData["Error"]</span>
+            }
+        </form>
+        <a href="#" class="link">Forgot Password</a>
+    </div>
+</div>
+
+@section scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
