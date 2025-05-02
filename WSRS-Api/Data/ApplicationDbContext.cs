@@ -15,14 +15,5 @@ public class ApplicationDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
-
-        builder.Entity<Student>()
-            .ToView(null); // prevents EF from trying to generate migrations for this read-only table
-
-        builder.Entity<ReportEncoded>()
-            .ToView(null); // prevents EF from trying to generate migrations for this read-only table
-
-        builder.Entity<TrafficReportEncoded>()
-            .ToView(null); // prevents EF from trying to generate migrations for this read-only table
     }
 }
