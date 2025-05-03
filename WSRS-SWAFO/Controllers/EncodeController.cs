@@ -285,6 +285,7 @@ namespace WSRS_SWAFO.Controllers
                 var emailSubjectVM = new EmailSubjectViewModel
                 {
                     email = student!.Email,
+                    emailMode = 0,
                     id = _context.ReportsEncoded.Last().Id,
                     name = student!.FirstName + " " + student!.LastName,
                     sanction = reportEncodedVM.Sanction
@@ -378,6 +379,7 @@ namespace WSRS_SWAFO.Controllers
                 var emailSubjectVM = new EmailSubjectViewModel
                 {
                     email = student!.Email,
+                    emailMode = 0,
                     id = _context.TrafficReportsEncoded.Last().Id,
                     name = student!.FirstName + " " + student!.LastName,
                     sanction = viewModel.Sanction
