@@ -1,0 +1,70 @@
+﻿@using WSRS_Api.Dtos;
+
+@model AllReportsDto;
+
+@{
+    ViewData["Title"] = "Violations";
+}
+
+<main class="violations">
+    <div class="container">
+        <h2>Violations</h2>
+
+        <dl>
+            <dt>Name: </dt>
+            <dd>@User.FindFirst("FullName")?.Value</dd>
+        </dl>
+
+        <table class="table table-sm table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Commission Date</th>
+                    <th scope="col">Classification</th>
+                    <th scope="col">Nature</th>
+                    <th scope="col">Sanction</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Violations?.Any() != true && Model?.TrafficViolations?.Any() != true)
+                {
+                    <tr>
+                        <td colspan="5" class="text-center">No records to show</td>
+                    </tr>
+                }
+                else
+                {
+                    var index = 0;
+
+                    if (Model.Violations?.Any() == true)
+                    {
+                        @foreach (var item in Model.Violations)
+                        {
+                            <tr>
+                                <th scope="row">@(++index)</th>
+                                <td>@item.CommissionDate</td>
+                                <td>@item.Offense.Classification</td>
+                                <td>@item.Offense.Nature</td>
+                                <td>@item.Sanction</td>
+                            </tr>
+                        }
+                    }
+
+                    if (Model.TrafficViolations?.Any() == true)
+                    {
+                        @foreach (var item in Model.TrafficViolations)
+                        {
+                            <tr>
+                                <th scope="row">@(++index)</th>
+                                <td>@item.CommissionDate</td>
+                                <td>@item.Offense.Classification</td>
+                                <td>@item.Offense.Nature</td>
+                                <td>@item.Remarks</td>
+                            </tr>
+                        }
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</main>
