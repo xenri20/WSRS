@@ -225,7 +225,8 @@ namespace WSRS_SWAFO.Controllers
             [FromQuery] string firstName,
             [FromQuery] string lastName,
             [FromQuery] string? course = null,
-            [FromQuery] string? collegeId = null)
+            [FromQuery] string? collegeId = null,
+            [FromQuery] string? note = null)
         {
             var referer = Request.Headers["Referer"].ToString();
             if (string.IsNullOrEmpty(referer))
@@ -239,7 +240,8 @@ namespace WSRS_SWAFO.Controllers
                 FirstName = firstName,
                 LastName = lastName,
                 Course = course,
-                CollegeID = collegeId
+                CollegeID = collegeId,
+                Note = note,
             };
 
             ViewBag.Colleges = _context.College.ToList();
@@ -550,6 +552,7 @@ namespace WSRS_SWAFO.Controllers
                     CollegeID = report.College,
                     Formator = report.Formator,
                     Course = report.CourseYearSection,
+                    Note = report.Description
                 };
 
                 return RedirectToAction(nameof(EncodeStudentViolation), studentInfo);

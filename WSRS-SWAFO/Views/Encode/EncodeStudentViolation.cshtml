@@ -112,6 +112,13 @@
                     <label class="label">Status of Sanction</label>
                     <span asp-validation-for="StatusOfSanction" class="text-danger"></span>
                 </div>
+                @if (@Model.Note != null)
+                {
+                    <div class="input-wrapper">
+                        <textarea asp-for="Note" type="text" class="input" rows="2" readonly disabled></textarea>
+                        <label asp-for="Note" class="label"></label>
+                    </div>
+                }
             </div>
         </div>
         <button type="submit" class="btn dark-btn">

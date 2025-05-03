@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using WSRS_SWAFO.Helpers;
 using WSRS_SWAFO.Models;
 
@@ -47,5 +48,8 @@ namespace WSRS_SWAFO.ViewModels
         [Required(ErrorMessage = "Status is required")]
         [Display(Name = "Status")]
         public string StatusOfSanction { get; set; }
+
+        // For getting the value of report from formator description
+        [ValidateNever] public string? Note { get; set; }
     }
 }
