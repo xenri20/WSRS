@@ -157,8 +157,6 @@ namespace WSRS_SWAFO.Controllers
                 SetToastMessage(title: "Error", message: "Something went wrong while submitting your data.", cssClassName: "bg-danger text-white");
                 _logger.LogError(ex.Message);
             }
-            
-            BackgroundJob.Enqueue(() => _emailSender.SendEmailAsync(student.Email, "You have been violated!", "This is just a test"));
 
             if (fromPending)
             {
@@ -275,11 +273,24 @@ namespace WSRS_SWAFO.Controllers
                 StatusOfSanction = reportEncodedVM.StatusOfSanction
             };
 
+            var student = _context.Students
+                        .Where(s => s.StudentNumber == reportEncodedVM.StudentNumber)
+                        .FirstOrDefault();
+
             try
             {
                 _context.ReportsEncoded.Add(studentReport);
                 await _context.SaveChangesAsync();
 
+                var emailSubjectVM = new EmailSubjectViewModel
+                {
+                    email = student!.Email,
+                    id = _context.ReportsEncoded.Last().Id,
+                    name = student!.FirstName + " " + student!.LastName,
+                    sanction = reportEncodedVM.Sanction
+                };
+                
+                BackgroundJob.Enqueue(() => _emailSender.SendEmailAsync(emailSubjectVM));
                 SetToastMessage(title: "Success", message: "A report has been encoded successfully.");
 
                 return RedirectToAction(nameof(EncodingMode));
@@ -355,11 +366,24 @@ namespace WSRS_SWAFO.Controllers
                 DatePaid = viewModel.DatePaid
             };
 
+            var student = _context.Students
+                        .Where(s => s.StudentNumber == studentTrafficReport.StudentNumber)
+                        .FirstOrDefault();
+
             try
             {
                 _context.TrafficReportsEncoded.Add(studentTrafficReport);
                 await _context.SaveChangesAsync();
 
+                var emailSubjectVM = new EmailSubjectViewModel
+                {
+                    email = student!.Email,
+                    id = _context.TrafficReportsEncoded.Last().Id,
+                    name = student!.FirstName + " " + student!.LastName,
+                    sanction = viewModel.Sanction
+                };
+
+                BackgroundJob.Enqueue(() => _emailSender.SendEmailAsync(emailSubjectVM));
                 SetToastMessage(title: "Success", message: "A traffic report has been encoded successfully.");
 
                 return RedirectToAction(nameof(EncodingMode));
