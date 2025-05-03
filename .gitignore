@@ -87,3 +87,6 @@ _[Ss]cripts
 ##############
 node_modules/
 
+# Env #
+appsettings.json
+appsettings.*.json
