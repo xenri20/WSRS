@@ -22,6 +22,31 @@ namespace WSRS_Student.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("HearingSchedules", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("ScheduledDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("StudentNumber")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StudentNumber");
+
+                    b.ToTable("HearingSchedules");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -174,9 +199,9 @@ namespace WSRS_Student.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<string>("FullName")
+                    b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -204,9 +229,9 @@ namespace WSRS_Student.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("StudentNumber")
+                    b.Property<string>("Surname")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
@@ -225,7 +250,181 @@ namespace WSRS_Student.Migrations
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
+<<<<<<< HEAD
+<<<<<<< HEAD:WSRS-Student/Migrations/ApplicationDbContextModelSnapshot.cs
+                    b.ToTable("AspNetUsers", (string)null);
+                });
+
+            modelBuilder.Entity("WSRS_Student.Models.College", b =>
+                {
+                    b.Property<string>("CollegeID")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("CollegeID");
+
+                    b.ToTable("College");
+                });
+
+            modelBuilder.Entity("WSRS_Student.Models.Offense", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Classification")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Nature")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Offenses");
+                });
+
+            modelBuilder.Entity("WSRS_Student.Models.ReportEncoded", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CollegeID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateOnly>("CommissionDate")
+                        .HasColumnType("date");
+
+                    b.Property<string>("Course")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Formator")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FormatorId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("OffenseId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Sanction")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("StatusOfSanction")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("StudentNumber")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CollegeID");
+
+                    b.HasIndex("OffenseId");
+
+                    b.HasIndex("StudentNumber");
+
+                    b.ToTable("ReportsEncoded");
+                });
+
+            modelBuilder.Entity("WSRS_Student.Models.Student", b =>
+                {
+                    b.Property<int>("StudentNumber")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("StudentNumber");
+
+                    b.HasIndex("StudentNumber");
+
+                    b.ToTable("Students");
+                });
+
+            modelBuilder.Entity("WSRS_Student.Models.TrafficReportsEncoded", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CollegeID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateOnly>("CommissionDate")
+                        .HasColumnType("date");
+
+                    b.Property<DateOnly?>("DatePaid")
+                        .HasColumnType("date");
+
+                    b.Property<string>("ORNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("OffenseId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Place")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PlateNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Remarks")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("StudentNumber")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CollegeID");
+
+                    b.HasIndex("OffenseId");
+
+                    b.HasIndex("StudentNumber");
+
+                    b.ToTable("TrafficReportsEncoded");
+=======
                     b.ToTable("AspNetUsers", "Student");
+>>>>>>> c833464 (feat: add new migration for authentication):WSRS-Student/Migrations/AuthDbContextModelSnapshot.cs
+                });
+
+            modelBuilder.Entity("HearingSchedules", b =>
+                {
+                    b.HasOne("WSRS_SWAFO.Models.Student", "Student")
+                        .WithMany()
+                        .HasForeignKey("StudentNumber")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Student");
+=======
+                    b.ToTable("AspNetUsers", "Student");
+>>>>>>> f9dae977f1534b7b731ff04adffb927b1827cdb6
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -278,6 +477,73 @@ namespace WSRS_Student.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
+<<<<<<< HEAD
+<<<<<<< HEAD:WSRS-Student/Migrations/ApplicationDbContextModelSnapshot.cs
+
+            modelBuilder.Entity("WSRS_Student.Models.ReportEncoded", b =>
+                {
+                    b.HasOne("WSRS_Student.Models.College", "College")
+                        .WithMany()
+                        .HasForeignKey("CollegeID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WSRS_SWAFO.Models.Offense", "Offense")
+                        .WithMany()
+                        .HasForeignKey("OffenseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WSRS_Student.Models.Student", "Student")
+                        .WithMany("ReportsEncoded")
+                        .HasForeignKey("StudentNumber")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("College");
+
+                    b.Navigation("Offense");
+
+                    b.Navigation("Student");
+                });
+
+            modelBuilder.Entity("WSRS_SWAFO.Models.TrafficReportsEncoded", b =>
+                {
+                    b.HasOne("WSRS_Student.Models.College", "College")
+                        .WithMany()
+                        .HasForeignKey("CollegeID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WSRS_Student.Models.Offense", "Offense")
+                        .WithMany()
+                        .HasForeignKey("OffenseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WSRS_SWAFO.Models.Student", "Student")
+                        .WithMany("TrafficReportsEncoded")
+                        .HasForeignKey("StudentNumber")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("College");
+
+                    b.Navigation("Offense");
+
+                    b.Navigation("Student");
+                });
+
+            modelBuilder.Entity("WSRS_Student.Models.Student", b =>
+                {
+                    b.Navigation("ReportsEncoded");
+
+                    b.Navigation("TrafficReportsEncoded");
+                });
+=======
+>>>>>>> c833464 (feat: add new migration for authentication):WSRS-Student/Migrations/AuthDbContextModelSnapshot.cs
+=======
+>>>>>>> f9dae977f1534b7b731ff04adffb927b1827cdb6
 #pragma warning restore 612, 618
         }
     }
