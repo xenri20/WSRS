@@ -6,6 +6,7 @@ namespace WSRS_SWAFO.ViewModels
     public class EmailSubjectViewModel
     {
         public string email { get; set; }
+        public int emailMode { get; set; }
         [ForeignKey(nameof(ReportEncoded))]
         public int id { get; set; }
         public string name { get; set; }
