@@ -71,6 +71,7 @@ namespace WSRS_SWAFO.Controllers
         {
             // ASP.NET Core Identity Sign out
             await _signInManager.SignOutAsync();
+            return RedirectToAction("Index", "LogOn");
         }
 
         [HttpPost]
