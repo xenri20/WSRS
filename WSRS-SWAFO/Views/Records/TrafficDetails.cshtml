@@ -58,10 +58,12 @@
                 <dt>OR Number</dt>
                 <dd>@(Model.ORNumber.IsNullOrWhiteSpace() ? "-" : Model.ORNumber)</dd>
             </dl>
-
-            <a asp-action="EditTraffic" asp-route-id="@Model.Id" class="btn dark-btn">
-                Edit
-            </a>
+            @if (User.IsInRole("AppRole.Admin"))
+            {
+                <a asp-action="EditTraffic" asp-route-id="@Model.Id" class="btn dark-btn">
+                    Edit
+                </a>
+            }
         </div>
     </section>
 </div>
