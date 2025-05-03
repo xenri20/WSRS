@@ -29,7 +29,19 @@ namespace WSRS_SWAFO.Services
             {
                 From = new MailAddress(_emailSettings.DevEmail),
                 Subject = "[#" + emailTemplate.id + "] Notice of Violation for " + emailTemplate.name + " - " + emailTemplate.sanction,
-                Body = @"<!DOCTYPE html>
+                Body = Message(emailTemplate.emailMode),
+                IsBodyHtml = true
+            };
+            mailMessage.To.Add(emailTemplate.email);
+
+            await client.SendMailAsync(mailMessage);
+        }
+
+        public string Message(int emailMode)
+        {
+            if (emailMode == 0)
+            {
+                return @"<!DOCTYPE html>
                         <html>
                         <head>
                         <meta charset=""UTF-8"">
@@ -38,23 +50,52 @@ namespace WSRS_SWAFO.Services
                         <body style=""font-family: 'Times New Roman', Times, serif; font-size: 12pt; line-height: 1.5; color: #000;"">
                         <p>Greetings from SWAFO,</p>
 
-                        <p>We hope this message finds you well. This is to formally inform you that a violation has been recorded under your name. Kindly access your Violations Portal on the DLSU-D portal for more information.</p>
+                        <p>We hope this message finds you well.</p>
 
-                        <p>Our office is committed to upholding student discipline and fairness. We encourage you to coordinate with us at the Student Welfare and Formation Office (SWAFO) at your earliest convenience to discuss the matter and address any concerns you may have.</p>
+                        <p>This is to respectfully inform you that a violation has been recorded under your name. For more details, kindly log in to your Violations Portal via the DLSU-D portal.</p>
 
-                        <p>Should you have any questions or need further clarification, please do not hesitate to visit our office at <strong>(GMH111)</strong>.</p>
+                        <p>Our office remains committed to promoting student discipline and fairness. We encourage you to coordinate with the Student Welfare and Formation Office (SWAFO) at your earliest convenience to discuss the matter or raise any concerns you may have.</p>
 
-                        <p>With Regards,<br>
+                        <p>If you need any assistance or clarification, please feel free to visit our office at <strong>GMH111</strong>.</p>
+
+                        <p style=""font-style: italic; color: #555;"">This is an automated message. Please do not reply to this email.</p>
+
+                        <p>With sincere regards,<br>
                         <strong>Student Welfare and Formation Office (SWAFO)</strong></p>
                         </body>
-                        </html>
-                        ",
-                IsBodyHtml = true
-            };
-            mailMessage.To.Add(emailTemplate.email);
+                        </html>";
+            }
 
-            await client.SendMailAsync(mailMessage);
+            if (emailMode == 1)
+            {
+                return @"<!DOCTYPE html>
+                        <html>
+                        <head>
+                        <meta charset=""UTF-8"">
+                        <title>Scheduled Hearing Notification</title>
+                        </head>
+                        <body style=""font-family: 'Times New Roman', Times, serif; font-size: 12pt; line-height: 1.5; color: #000;"">
+                        <p>Greetings from SWAFO,</p>
+
+                        <p>We hope this message finds you well.</p>
+
+                        <p>This is to respectfully inform you that a hearing has been scheduled in relation to a major violation recorded under your name. You are required to attend the hearing at <strong>GMH111</strong> on the scheduled date and time, as part of the due process.</p>
+
+                        <p>We kindly remind you to arrive on time and come prepared for the discussion. Please note that failure to attend without valid justification may lead to further disciplinary action in accordance with university policies.</p>
+
+                        <p>If you have any questions or concerns, feel free to visit the Student Welfare and Formation Office (SWAFO) for assistance.</p>
+
+                        <p style=""font-style: italic; color: #555;"">This is an automated message. Please do not reply to this email.</p>
+
+                        <p>With sincere regards,<br>
+                        <strong>Student Welfare and Formation Office (SWAFO)</strong></p>
+                        </body>
+                        </html>";
+            }
+
+            return "";
         }
+
     }
 
     public class EmailSettings
