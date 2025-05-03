@@ -66,13 +66,16 @@ namespace WSRS_SWAFO.Controllers
             TempData["Error"] = "Invalid offline login credentials. Please try again";
             return View("Index", loginViewModel);
         }
+        [HttpPost]
+        public async Task<IActionResult> SignOutPartial()
+        {
+            // ASP.NET Core Identity Sign out
+            await _signInManager.SignOutAsync();
+        }
 
         [HttpPost]
         public async Task<IActionResult> SignOut()
         {
-            // ASP.NET Core Identity Sign out
-            await _signInManager.SignOutAsync();
-
             // Azure AD Signs out. Sign out completely from the application
             bool isOnline = await NetworkHelper.IsOnline();
             if (isOnline)
