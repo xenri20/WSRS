@@ -1,17 +1,22 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Hangfire;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WSRS_SWAFO.Data;
+using WSRS_SWAFO.ViewModels;
+using WSRS_SWAFO.Interfaces;
 
 namespace WSRS_SWAFO.Controllers
 {
     public class HearingSchedulingController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IEmailSender _emailSender;
         private readonly ILogger<HearingSchedulingController> _logger;
 
-        public HearingSchedulingController(ApplicationDbContext context, ILogger<HearingSchedulingController> logger)
+        public HearingSchedulingController(ApplicationDbContext context, IEmailSender emailSender, ILogger<HearingSchedulingController> logger)
         {
             _context = context;
+            _emailSender = emailSender;
             _logger = logger;
         }
 
@@ -104,6 +109,22 @@ namespace WSRS_SWAFO.Controllers
 
             _context.HearingSchedules.Add(newSchedule);
             await _context.SaveChangesAsync();
+
+            int latestRecord = await _context.HearingSchedules
+                                   .OrderByDescending(r => r.Id)
+                                   .Select(r => r.Id)
+                                   .FirstOrDefaultAsync();
+
+            var emailSubjectVM = new EmailSubjectViewModel
+            {
+                email = student!.Email,
+                emailMode = 1,
+                id = latestRecord,
+                name = student!.FirstName + " " + student!.LastName,
+                hearingSchedule = newSchedule.ScheduledDate.ToString("MM/dd/yyyy h:mm tt")
+            };
+
+            BackgroundJob.Enqueue(() => _emailSender.SendEmailAsync(emailSubjectVM));
 
             return Json(new
             {
