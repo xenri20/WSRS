@@ -10,6 +10,7 @@ namespace WSRS_SWAFO.ViewModels
         [ForeignKey(nameof(ReportEncoded))]
         public int id { get; set; }
         public string name { get; set; }
-        public string sanction { get; set; }
+        public string? sanction { get; set; }
+        public string? hearingSchedule { get; set; }
     }
 }
