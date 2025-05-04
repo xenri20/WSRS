@@ -43,6 +43,25 @@ namespace WSRS_SWAFO.Controllers
             existing.ScheduledDate = model.ScheduledDate;
 
             await _context.SaveChangesAsync();
+
+            int idRecord = await _context.HearingSchedules
+                                   .Where(r => r.Id == model.Id)
+                                   .Select(r => r.StudentNumber)
+                                   .FirstOrDefaultAsync();
+            
+            var studentRecord = await _context.Students.Where(s => s.StudentNumber == idRecord).FirstOrDefaultAsync();
+
+            var emailSubjectVM = new EmailSubjectViewModel
+            {
+                email = studentRecord!.Email,
+                emailMode = 1,
+                id = model.Id,
+                name = studentRecord.FirstName + " " + studentRecord.LastName,
+                hearingSchedule = model.ScheduledDate.ToString("MM/dd/yyyy h:mm tt")
+            };
+
+            BackgroundJob.Enqueue(() => _emailSender.SendEmailAsync(emailSubjectVM));
+
             return Json(new { success = true });
         }
 
