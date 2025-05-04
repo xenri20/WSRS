@@ -1,4 +1,6 @@
 ﻿using DocumentFormat.OpenXml.Office2016.Presentation.Command;
+using Hangfire.Logging;
+using Microsoft.CodeAnalysis.FlowAnalysis.DataFlow;
 using Microsoft.Extensions.Options;
 using System.Net;
 using System.Net.Mail;
@@ -10,10 +12,12 @@ namespace WSRS_SWAFO.Services
     public class EmailService : IEmailSender
     {
         private readonly EmailSettings _emailSettings;
+        private readonly ILogger<EmailService> _logger;
 
-        public EmailService(IOptions<EmailSettings> emailSettings)
+        public EmailService(IOptions<EmailSettings> emailSettings, ILogger<EmailService> logger)
         {
             _emailSettings = emailSettings.Value;
+            _logger = logger;
         }
 
         public async Task SendEmailAsync(EmailSubjectViewModel emailTemplate)
@@ -59,9 +63,11 @@ namespace WSRS_SWAFO.Services
 
         public string Message(int emailMode)
         {
-            if (emailMode == 0)
+            try
             {
-                return @"<!DOCTYPE html>
+                if (emailMode == 0)
+                {
+                    return @"<!DOCTYPE html>
                         <html>
                         <head>
                         <meta charset=""UTF-8"">
@@ -84,11 +90,11 @@ namespace WSRS_SWAFO.Services
                         <strong>Student Welfare and Formation Office (SWAFO)</strong></p>
                         </body>
                         </html>";
-            }
+                }
 
-            if (emailMode == 1)
-            {
-                return @"<!DOCTYPE html>
+                if (emailMode == 1)
+                {
+                    return @"<!DOCTYPE html>
                         <html>
                         <head>
                         <meta charset=""UTF-8"">
@@ -111,9 +117,15 @@ namespace WSRS_SWAFO.Services
                         <strong>Student Welfare and Formation Office (SWAFO)</strong></p>
                         </body>
                         </html>";
+                }
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
             }
 
-            return "";
+            return "Error Has Occured.";
         }
 
     }
