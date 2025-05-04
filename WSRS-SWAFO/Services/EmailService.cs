@@ -28,13 +28,33 @@ namespace WSRS_SWAFO.Services
             var mailMessage = new MailMessage
             {
                 From = new MailAddress(_emailSettings.DevEmail),
-                Subject = "[#" + emailTemplate.id + "] Notice of Violation for " + emailTemplate.name + " - " + emailTemplate.sanction,
+                Subject = Subject(emailTemplate),
                 Body = Message(emailTemplate.emailMode),
                 IsBodyHtml = true
             };
             mailMessage.To.Add(emailTemplate.email);
 
             await client.SendMailAsync(mailMessage);
+        }
+
+        public string Subject(EmailSubjectViewModel emailTemplate)
+        {
+            try
+            {
+                if (emailTemplate.emailMode == 0)
+                {
+                    return "[#" + emailTemplate.id + "] Notice of Violation for " + emailTemplate.name + " - " + emailTemplate.sanction;
+                }
+                if (emailTemplate.emailMode == 1)
+                {
+                    return "[#" + emailTemplate.id + "Notice of Hearing Schedule for " + emailTemplate.name + " On " + emailTemplate.hearingSchedule;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
+            return "Error Has Occured";
         }
 
         public string Message(int emailMode)
