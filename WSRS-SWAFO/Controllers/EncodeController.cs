@@ -287,13 +287,18 @@ namespace WSRS_SWAFO.Controllers
                                     .Select(r => r.Id)
                                     .FirstOrDefaultAsync();
 
+                string offenseNature = await _context.Offenses
+                                    .Where(o => o.Id == reportEncodedVM.OffenseId)
+                                    .Select(o => o.Nature)
+                                    .FirstOrDefaultAsync() ?? "Unknown Offense";
+
                 var emailSubjectVM = new EmailSubjectViewModel
                 {
                     email = student!.Email,
                     emailMode = 0,
                     id = latestRecord,
                     name = student!.FirstName + " " + student!.LastName,
-                    sanction = reportEncodedVM.Sanction
+                    sanction = offenseNature
                 };
                 
                 BackgroundJob.Enqueue(() => _emailSender.SendEmailAsync(emailSubjectVM));
@@ -376,6 +381,7 @@ namespace WSRS_SWAFO.Controllers
                         .Where(s => s.StudentNumber == studentTrafficReport.StudentNumber)
                         .FirstOrDefault();
 
+
             try
             {
                 _context.TrafficReportsEncoded.Add(studentTrafficReport);
@@ -386,13 +392,18 @@ namespace WSRS_SWAFO.Controllers
                                    .Select(r => r.Id)
                                    .FirstOrDefaultAsync();
 
+                string offenseNature = await _context.Offenses
+                            .Where(o => o.Id == studentTrafficReport.OffenseId)
+                            .Select(o => o.Nature)
+                            .FirstOrDefaultAsync() ?? "Unknown Offense";
+
                 var emailSubjectVM = new EmailSubjectViewModel
                 {
                     email = student!.Email,
                     emailMode = 0,
                     id = latestRecord,
                     name = student!.FirstName + " " + student!.LastName,
-                    sanction = viewModel.Remarks
+                    sanction = offenseNature
                 };
 
                 BackgroundJob.Enqueue(() => _emailSender.SendEmailAsync(emailSubjectVM));
