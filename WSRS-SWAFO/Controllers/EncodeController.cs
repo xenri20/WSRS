@@ -282,11 +282,16 @@ namespace WSRS_SWAFO.Controllers
                 _context.ReportsEncoded.Add(studentReport);
                 await _context.SaveChangesAsync();
 
+                int latestRecord = await _context.ReportsEncoded
+                                    .OrderByDescending(r => r.Id)
+                                    .Select(r => r.Id)
+                                    .FirstOrDefaultAsync();
+
                 var emailSubjectVM = new EmailSubjectViewModel
                 {
                     email = student!.Email,
                     emailMode = 0,
-                    id = _context.ReportsEncoded.Last().Id,
+                    id = latestRecord,
                     name = student!.FirstName + " " + student!.LastName,
                     sanction = reportEncodedVM.Sanction
                 };
