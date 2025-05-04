@@ -51,7 +51,7 @@ namespace WSRS_SWAFO.Services
                 }
                 if (emailTemplate.emailMode == 1)
                 {
-                    return "[#" + emailTemplate.id + "Notice of Hearing Schedule for " + emailTemplate.name + " On " + emailTemplate.hearingSchedule;
+                    return "[#" + emailTemplate.id + "] Notice of Hearing Schedule for " + emailTemplate.name + " On " + emailTemplate.hearingSchedule;
                 }
             }
             catch (Exception ex)
