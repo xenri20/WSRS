@@ -381,11 +381,16 @@ namespace WSRS_SWAFO.Controllers
                 _context.TrafficReportsEncoded.Add(studentTrafficReport);
                 await _context.SaveChangesAsync();
 
+                int latestRecord = await _context.TrafficReportsEncoded
+                                   .OrderByDescending(r => r.Id)
+                                   .Select(r => r.Id)
+                                   .FirstOrDefaultAsync();
+
                 var emailSubjectVM = new EmailSubjectViewModel
                 {
                     email = student!.Email,
                     emailMode = 0,
-                    id = _context.TrafficReportsEncoded.Last().Id,
+                    id = latestRecord,
                     name = student!.FirstName + " " + student!.LastName,
                     sanction = viewModel.Remarks
                 };
