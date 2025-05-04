@@ -382,7 +382,7 @@ namespace WSRS_SWAFO.Controllers
                     emailMode = 0,
                     id = _context.TrafficReportsEncoded.Last().Id,
                     name = student!.FirstName + " " + student!.LastName,
-                    sanction = viewModel.Sanction
+                    sanction = viewModel.Remarks
                 };
 
                 BackgroundJob.Enqueue(() => _emailSender.SendEmailAsync(emailSubjectVM));
