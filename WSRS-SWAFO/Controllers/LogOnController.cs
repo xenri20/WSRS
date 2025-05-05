@@ -77,6 +77,8 @@ namespace WSRS_SWAFO.Controllers
         [HttpPost]
         public async Task<IActionResult> SignOut()
         {
+            await _signInManager.SignOutAsync();
+
             // Azure AD Signs out. Sign out completely from the application
             bool isOnline = await NetworkHelper.IsOnline();
             if (isOnline)

@@ -111,12 +111,6 @@ var app = builder.Build();
 
 app.UseHangfireDashboard("/hangfire", new DashboardOptions
 {
-    DisplayStorageConnectionString = false,
-
-    //Authorization = new[]
-    //{
-    //    new AppRoleAuthorizationFilter("Admin")
-    //}
 });
 
 if (!app.Environment.IsDevelopment())
