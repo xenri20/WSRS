@@ -322,7 +322,6 @@ table tbody tr.empty {
 .button-group {
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap;
     justify-content: start;
     align-items: center;
     gap: 0.5rem;
