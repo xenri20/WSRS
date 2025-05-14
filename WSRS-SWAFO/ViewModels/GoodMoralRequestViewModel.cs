@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using WSRS_Student.Data.Enum;
+using WSRS_SWAFO.Data.Enum;
 
-namespace WSRS_Student.ViewModels
+namespace WSRS_SWAFO.ViewModels
 {
     public class GoodMoralRequestViewModel
     {
