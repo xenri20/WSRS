@@ -78,4 +78,57 @@ public class ViolationRepository : IViolationRepository
             TrafficViolations = []
         };
     }
+
+    public async Task<bool> IsStudentClear(int studentNumber)
+    {
+        bool result = true;
+
+        var violations = await _context.ReportsEncoded
+            .AsNoTracking()
+            .Where(r => r.StudentNumber == studentNumber)
+            .Select(r => new ReportEncodedDto
+            {
+                Offense = new OffenseDto
+                {
+                    Classification = r.Offense.Classification.GetDisplayName(),
+                    Nature = r.Offense.Nature,
+                },
+                StatusOfSanction = r.StatusOfSanction
+            })
+            .ToListAsync();
+
+        var trafficViolations = await _context.TrafficReportsEncoded
+            .AsNoTracking()
+            .Where(tr => tr.StudentNumber == studentNumber)
+            .Select(tr => new TrafficReportEncodedDto
+            {
+                Offense = new OffenseDto
+                {
+                    Classification = tr.Offense.Classification.GetDisplayName(),
+                    Nature = tr.Offense.Nature,
+                },
+                DatePaid = tr.DatePaid,
+            })
+            .ToListAsync();
+
+        if (violations.Any())
+        {
+            if (violations.Any(v => v.StatusOfSanction != "Completed"))
+            {
+                result = false;
+                return await Task.FromResult(result);
+            }
+        }
+
+        if (trafficViolations.Any())
+        {
+            if (trafficViolations.Any(tv => tv.DatePaid == null))
+            {
+                result = false;
+                return await Task.FromResult(result);
+            }
+        }
+
+        return await Task.FromResult(result);
+    }
 }
