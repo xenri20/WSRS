@@ -367,7 +367,7 @@ namespace WSRS_SWAFO.Controllers
 
             // Title: "SANCTIONS IMPOSED FOR MAJOR OFFENSES COMMITTED"
             int sanctionRow = 1;
-            sanctionNatureList.Cell(sanctionRow, 1).Value = "SANCTIONS IMPOSED FOR MAJOR OFFENSES COMMITTED";
+            sanctionNatureList.Cell(sanctionRow, 1).Value = "SANCTIONS IMPOSED FOR MINOR AND MAJOR OFFENSES COMMITTED";
             sanctionNatureList.Row(sanctionRow).Style.Font.Bold = true;
             sanctionNatureList.Row(sanctionRow).Style.Font.FontSize = 14;
             sanctionNatureList.Row(sanctionRow).Style.Font.FontColor = XLColor.Red;

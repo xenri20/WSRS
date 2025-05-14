@@ -18,9 +18,9 @@
     <h2>Step 2</h2>
     @if (TempData.Peek("ViolationType") is string violationType && !string.IsNullOrEmpty(violationType))
     {
-        var indicator = violationType == "Student Violation" ? "Regular" : "Traffic";
+        var indicator = violationType == "Student Violation" ? "Student" : "Traffic";
 
-        <span class="pill-indicator bg-success @(indicator == "Regular" ? "bg-success text-white" : "bg-warning text-black")">
+        <span class="pill-indicator bg-success @(indicator == "Student" ? "bg-success text-white" : "bg-warning text-black")">
             @indicator
         </span>
     }
