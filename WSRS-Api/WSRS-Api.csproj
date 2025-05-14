@@ -6,6 +6,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>WSRS_Api</RootNamespace>
     <UserSecretsId>85830f40-3896-42e9-892c-0a324fe410ed</UserSecretsId>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <SelfContained>true</SelfContained>
   </PropertyGroup>
 
   <ItemGroup>
