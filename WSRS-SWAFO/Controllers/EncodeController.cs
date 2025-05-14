@@ -780,5 +780,44 @@ namespace WSRS_SWAFO.Controllers
             };
             TempData["Result"] = JsonSerializer.Serialize(toastMessage);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GMCRequests()
+        {
+            var referer = Request.Headers["Referer"].ToString();
+            if (string.IsNullOrEmpty(referer))
+            {
+                return RedirectToAction(nameof(StudentRecordViolation));
+            }
+
+            var client = _httpClientFactory.CreateClient("WSRS-Api");
+
+            var response = await client.GetAsync("gmc");
+
+            if (response.IsSuccessStatusCode)
+            {
+                var data = await response.Content.ReadFromJsonAsync<List<GMCRequestDto>>();
+
+                if (data != null)
+                {
+                    var activeRequest = data.Where(r => !r.IsApproved);
+
+                    var gmcViewModel = new GoodMoralRequestViewModel
+                    {
+                        GMCRequests = activeRequest
+                    };
+
+                    HttpContext.Session.SetString("ViolationType", "Student Violation");
+                    return View(gmcViewModel);
+                }
+            }
+            else
+            {
+                _logger.LogError($"Something went wrong getting report pending data with status code: {response.StatusCode}");
+
+            }
+
+            return View();
+        }
     }
 }
