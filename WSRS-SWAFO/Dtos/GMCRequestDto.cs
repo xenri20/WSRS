@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using WSRS_Api.Data.Enum;
+using WSRS_SWAFO.Data.Enum;
 
 namespace WSRS_SWAFO.Dtos
 {

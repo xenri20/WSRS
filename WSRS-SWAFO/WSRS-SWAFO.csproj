@@ -22,6 +22,7 @@
 		<PackageReference Include="LigerShark.WebOptimizer.Core" Version="3.0.433" />
 		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.10" />
 		<PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.10" />
+		<PackageReference Include="Microsoft.AspNetCore.JsonPatch" Version="9.0.5" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.10" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.10" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.10">
@@ -36,9 +37,4 @@
     <Folder Include="Migrations\" />
     <Folder Include="wwwroot\lib\fonts\" />
   </ItemGroup>
-
-	<ItemGroup>
-	  <ProjectReference Include="..\WSRS-Api\WSRS-Api.csproj" />
-	</ItemGroup>
-
 </Project>

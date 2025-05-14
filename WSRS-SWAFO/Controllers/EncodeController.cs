@@ -8,10 +8,8 @@ using WSRS_SWAFO.Models;
 using WSRS_SWAFO.ViewModels;
 using WSRS_SWAFO.Interfaces;
 using Hangfire;
-using Microsoft.AspNetCore.JsonPatch;
-using WSRS_Api.Data.Enum;
+using WSRS_SWAFO.Data.Enum;
 using WSRS_SWAFO.Dtos;
-using OffenseClassification = WSRS_SWAFO.Data.Enum.OffenseClassification;
 
 namespace WSRS_SWAFO.Controllers
 {
