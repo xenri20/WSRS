@@ -41,7 +41,7 @@ public class GMCController : Controller
     [ValidateAntiForgeryToken]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> PostGMCRequest(GoodMoralRequestViewModel model)
+    public async Task<IActionResult> GMCRequest(GoodMoralRequestViewModel model)
     {
         var currentUser = await _userManager.GetUserAsync(User);
         if (currentUser == null)
@@ -64,14 +64,14 @@ public class GMCController : Controller
             var result = await response.Content.ReadFromJsonAsync<GoodMoralRequestViewModel>();
 
             SetToastMessage("Your report has been submitted, thank you.", title: "Success");
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Index", "Dashboard");
         }
 
         SetToastMessage("Something went wrong submitting your request.", title: "Error", cssClassName: "bg-danger text-white");
         var errorContent = await response.Content.ReadAsStringAsync();
         _logger.LogError("API Response: {StatusCode}, Content: {Content}", response.StatusCode, errorContent);
 
-        return RedirectToAction(nameof(Index));
+        return RedirectToAction("Index", "Dashboard");
     }
 
     private void SetToastMessage(string message, string title = "", string cssClassName = "bg-white")
