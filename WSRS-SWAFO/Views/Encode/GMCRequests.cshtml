@@ -1,0 +1,87 @@
+﻿@using WSRS_SWAFO.ViewModels
+@model PendingViewModel
+
+@{
+    Layout = "_EncodeLayout";
+    ViewData["Title"] = "ReportsPending";
+}
+
+@section customHead {
+    <link rel="stylesheet" href="~/css/studentViolationStyle.css" asp-append-version="true" />
+}
+
+<div class="pending">
+    <div class="report-list">
+        @if (Model.ReportsPending.Any())
+        {
+            @foreach (var item in Model.ReportsPending)
+            {
+                <partial name="_PendingModalPartial" model="@item" />
+                <div class="report-tile">
+                    <span class="report-tile-item">
+                        <div class="label">
+                            No.
+                        </div>
+                        <div>
+                            @item.Id
+                        </div>
+                    </span>
+                    <span class="report-tile-item">
+                        <div class="label">
+                            Creation Date
+                        </div>
+                        <div>
+                            @item.FormattedReportDate
+                        </div>
+                    </span>
+                    <span class="report-tile-item">
+                        <div class="label">
+                            Student Number
+                        </div>
+                        <div>
+                            @item.StudentNumber
+                        </div>
+                    </span>
+                    <span class="report-tile-item">
+                        <div class="label">
+                            Formator
+                        </div>
+                        <div>
+                            @item.Formator
+                        </div>
+                    </span>
+                    <span class="report-tile-item long">
+                        <div class="label">
+                            Description
+                        </div>
+                        <div>
+                            @item.Description
+                        </div>
+                    </span>
+                    <span class="button-group">
+                        <form asp-action="ArchivePending" asp-route-id="@item.Id" method="post">
+                            <input type="hidden" name="_method" value="PATCH" />
+                            <button type="submit" class="btn">Archive</button>
+                        </form>
+                    </span>
+                    
+                    <button type="button" class="btn-function" data-bs-toggle="modal" data-bs-target="@($"#pendingModal{item.Id}")">
+                        <svg width="32" height="32" viewBox="0 0 43 43" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="11.5" cy="21.5" r="3" fill="currentColor" />
+                            <circle cx="21.5" cy="21.5" r="3" fill="currentColor" />
+                            <circle cx="31.5" cy="21.5" r="3" fill="currentColor" />
+                        </svg>
+                    </button>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="text-center">There are no pending reports at the moment</div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/pending.js"></script>
+}
