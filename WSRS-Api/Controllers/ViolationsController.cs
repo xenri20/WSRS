@@ -32,7 +32,7 @@ namespace WSRS_Api.Controllers
         [HttpGet("is-clear/{studentNumber}")]
         public async Task<ActionResult<bool>> IsStudentClear(int studentNumber)
         {
-            var result = _repository.IsStudentClear(studentNumber);
+            var result = await _repository.IsStudentClear(studentNumber);
             return Ok(result);
         }
     }
