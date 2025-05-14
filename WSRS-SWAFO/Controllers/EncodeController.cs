@@ -8,6 +8,7 @@ using WSRS_SWAFO.Models;
 using WSRS_SWAFO.ViewModels;
 using WSRS_SWAFO.Interfaces;
 using Hangfire;
+using Microsoft.AspNetCore.JsonPatch;
 using WSRS_Api.Data.Enum;
 using WSRS_SWAFO.Dtos;
 using OffenseClassification = WSRS_SWAFO.Data.Enum.OffenseClassification;
@@ -770,18 +771,6 @@ namespace WSRS_SWAFO.Controllers
             return RedirectToAction(nameof(CreateCollege));
         }
 
-        private void SetToastMessage(string message, string title = "", string cssClassName = "bg-white", ToastButton? button = null)
-        {
-            var toastMessage = new ToastViewModel
-            {
-                Title = title,
-                Message = message,
-                CssClassName = cssClassName,
-                Button = button
-            };
-            TempData["Result"] = JsonSerializer.Serialize(toastMessage);
-        }
-
         [HttpGet]
         public async Task<IActionResult> GMCRequests()
         {
@@ -819,6 +808,126 @@ namespace WSRS_SWAFO.Controllers
             }
 
             return View();
+        }
+
+        [HttpPost("[controller]/update-request-status/{id:int}")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateRequestStatus(int id, string action)
+        {
+            var client = _httpClientFactory.CreateClient("WSRS-Api");
+
+            try
+            {
+                // patch document
+                var requestStatusPatch = new[]
+                {
+                    new
+                    {
+                        op = "replace", path = "/isApproved", value = action == "approve" ? "1" : "2"
+                    }
+                };
+
+                var jsonPatch = JsonSerializer.Serialize(requestStatusPatch);
+
+                var content = new StringContent(jsonPatch, Encoding.UTF8, "application/json-patch+json");
+                var request = new HttpRequestMessage(HttpMethod.Patch, $"gmc/{id}")
+                {
+                    Content = content
+                };
+
+                var response = await client.SendAsync(request);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    SetToastMessage(
+                        title: "Success",
+                        message: $"A GMC request has been {(action == "approve" ? "approved" : "denied")}.",
+                        button: new ToastButton
+                        {
+                            Name = "Undo", 
+                            Action = nameof(UndoRequestStatus),
+                            Controller = "Encode",
+                            RouteValues = new Dictionary<string, object>
+                            {
+                                { "id", id }
+                            }
+                        });
+                    return RedirectToAction(nameof(GMCRequests));
+                }
+                else
+                {
+                    SetToastMessage(title: "Error", message: "Failed to process the request.", cssClassName: "bg-danger text-white");
+                    _logger.LogError($"PATCH failed with status code: {response.StatusCode}");
+                }
+            }
+            catch (Exception ex)
+            {
+                SetToastMessage(title: "Error", message: "Something went wrong with your action.", cssClassName: "bg-danger text-white");
+                _logger.LogError(ex.Message);
+            }
+
+            return RedirectToAction(nameof(GMCRequests));
+        }
+        private void SetToastMessage(string message, string title = "", string cssClassName = "bg-white", ToastButton? button = null)
+        {
+            var toastMessage = new ToastViewModel
+            {
+                Title = title,
+                Message = message,
+                CssClassName = cssClassName,
+                Button = button
+            };
+            TempData["Result"] = JsonSerializer.Serialize(toastMessage);
+        }
+
+        [HttpPost("[controller]/undo-request-status/")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UndoRequestStatus(int id, string action)
+        {
+
+            var client = _httpClientFactory.CreateClient("WSRS-Api");
+
+            try
+            {
+                // patch document
+                var requestStatusPatch = new[]
+                {
+                    new
+                    {
+                        op = "replace", path = "/isApproved", value = "0"
+                    }
+                };
+
+                var jsonPatch = JsonSerializer.Serialize(requestStatusPatch);
+
+                var content = new StringContent(jsonPatch, Encoding.UTF8, "application/json-patch+json");
+                var request = new HttpRequestMessage(HttpMethod.Patch, $"gmc/{id}")
+                {
+                    Content = content
+                };
+
+                var response = await client.SendAsync(request);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    SetToastMessage("An action has been undone.");
+                    return RedirectToAction(nameof(GMCRequests));
+                }
+                else
+                {
+                    SetToastMessage(title: "Error", message: "Failed to undo your action.", cssClassName: "bg-danger text-white");
+                    _logger.LogError($"PATCH failed with status code: {response.StatusCode}");
+                }
+            }
+            catch (Exception ex)
+            {
+                SetToastMessage(title: "Error", message: "Something went wrong with your action.", cssClassName: "bg-danger text-white");
+                _logger.LogError(ex.Message);
+            }
+
+            SetToastMessage("An action has been undone.");
+            return RedirectToAction(nameof(GMCRequests));
+
         }
     }
 }

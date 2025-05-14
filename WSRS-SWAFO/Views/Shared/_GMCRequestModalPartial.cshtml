@@ -20,7 +20,7 @@
                     <dd>@Model.FullName - @Model.StudentNumber</dd>
                 </dl>
 
-                <form asp-action="UpdateRequestStatus" method="post" class="d-flex flex-column gap-3">
+                <form asp-action="UpdateRequestStatus" asp-route-id="@Model.Id" method="post" class="d-flex flex-column gap-3">
                     <div class="input-wrapper">
                         <input asp-for="ApplicationDate" type="date" class="input" value="@formattedApplicationDate" readonly>
                         <label asp-for="ApplicationDate" class="label"></label>
