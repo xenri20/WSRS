@@ -113,7 +113,7 @@ h2 {
 }
 
 .report-list {
-    height: 600px;
+    max-height: 600px;
     overflow-y: scroll;
 }
 
