@@ -1,0 +1,82 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<main>
+    <h2 class="mb-4">Request A Good Moral Certificate</h2>
+
+    @* <form asp-action="Create" method="post" class="create-form">
+        <input asp-for="ReportDate" type="hidden" value="@DateOnly.FromDateTime(DateTime.Now)" />
+
+        @if ((studentNumber != null && firstName != null && lastName != null)
+        || (Model?.StudentNumber != null && !string.IsNullOrEmpty(Model.FirstName) && !string.IsNullOrEmpty(Model.LastName)))
+        {
+            <div class="mb-3">
+                <label asp-for="StudentNumber" class="form-label"></label>
+                <input asp-for="StudentNumber" class="form-control" value="@(studentNumber ?? Model.StudentNumber)" disabled readonly />
+                <input asp-for="StudentNumber" type="hidden" value="@(studentNumber ?? Model.StudentNumber)"  />
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="FirstName" class="form-label"></label>
+                <input asp-for="FirstName" class="form-control" value="@(firstName ?? Model.FirstName)" disabled readonly />
+                <input asp-for="FirstName" type="hidden" value="@(firstName ?? Model.FirstName)" />
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="LastName" class="form-label"></label>
+                <input asp-for="LastName" class="form-control" value="@(lastName ?? Model.LastName)" disabled readonly />
+                <input asp-for="LastName" type="hidden" value="@(lastName ?? Model.LastName)" />
+            </div>
+        }
+        else
+        {
+            <div class="mb-3">
+                <label asp-for="StudentNumber" class="form-label"></label>
+                <input asp-for="StudentNumber" class="form-control" />
+                <span asp-validation-for="StudentNumber" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="FirstName" class="form-label"></label>
+                <input asp-for="FirstName" class="form-control" />
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="LastName" class="form-label"></label>
+                <input asp-for="LastName" class="form-control" />
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+        }
+
+        <div class="mb-3">
+            <label asp-for="College" class="form-label"></label>
+            <input asp-for="College" class="form-control" />
+            <span asp-validation-for="College" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="CourseYearSection" class="form-label"></label>
+            <input asp-for="CourseYearSection" class="form-control" />
+            <span asp-validation-for="CourseYearSection" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Description" class="form-label"></label>
+            <textarea asp-for="Description" class="form-control" rows="4"></textarea>
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+
+        <div class="d-flex flex-column gap-2">
+            <button type="submit" class="btn btn-dark fw-bold w-100">Submit Report</button>
+            <a asp-action="Index" class="btn btn-secondary fw-bold w-100">Cancel</a>
+        </div>
+    </form> *@
+</main>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
