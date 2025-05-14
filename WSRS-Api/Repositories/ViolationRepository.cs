@@ -85,50 +85,30 @@ public class ViolationRepository : IViolationRepository
 
         try
         {
-            var violations = await _context.ReportsEncoded
+            var pendingViolations = await _context.ReportsEncoded
                 .AsNoTracking()
                 .Where(r => r.StudentNumber == studentNumber)
-                .Select(r => new ReportEncodedDto
-                {
-                    Offense = new OffenseDto
-                    {
-                        Classification = r.Offense.Classification.GetDisplayName(),
-                        Nature = r.Offense.Nature,
-                    },
-                    StatusOfSanction = r.StatusOfSanction
-                })
+                .Select(r => r.StatusOfSanction)
+                .Where(status => status != "Completed")
                 .ToListAsync();
 
-            var trafficViolations = await _context.TrafficReportsEncoded
+            var unpaidTrafficViolations = await _context.TrafficReportsEncoded
                 .AsNoTracking()
                 .Where(tr => tr.StudentNumber == studentNumber)
-                .Select(tr => new TrafficReportEncodedDto
-                {
-                    Offense = new OffenseDto
-                    {
-                        Classification = tr.Offense.Classification.GetDisplayName(),
-                        Nature = tr.Offense.Nature,
-                    },
-                    DatePaid = tr.DatePaid,
-                })
+                .Select(tr => tr.DatePaid) 
+                .Where(datePaid => datePaid == null)
                 .ToListAsync();
 
-            if (violations.Any())
+            if (pendingViolations.Any())
             {
-                if (violations.Any(v => v.StatusOfSanction != "Completed"))
-                {
-                    result = false;
-                    return await Task.FromResult(result);
-                }
+                result = false;
+                return await Task.FromResult(result);
             }
 
-            if (trafficViolations.Any())
+            if (unpaidTrafficViolations.Any())
             {
-                if (trafficViolations.Any(tv => tv.DatePaid == null))
-                {
-                    result = false;
-                    return await Task.FromResult(result);
-                }
+                result = false;
+                return await Task.FromResult(result);
             }
         }
         catch (Exception ex)
