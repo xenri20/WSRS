@@ -34,8 +34,9 @@ namespace WSRS_Api.Controllers
 
         // POST api/<GmcController>
         [HttpPost]
-        public IActionResult PostStudentViolation(GoodMoralRequest request)
+        public IActionResult PostGoodMoralRequest(GoodMoralRequest request)
         {
+            request.IsApproved = false;
             var postedRequest = _repository.PostGoodMoralRequest(request);
 
             if (postedRequest != null) return Ok(postedRequest);
