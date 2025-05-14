@@ -1,7 +1,11 @@
-using System.Diagnostics;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
+using System.Net.Http;
+using System.Text.Json;
 using WSRS_Student.Models;
+using WSRS_Student.ViewModels;
 
 namespace WSRS_Student.Controllers;
 
@@ -9,11 +13,15 @@ namespace WSRS_Student.Controllers;
 [Route("student/GMC")]
 public class GMCController : Controller
 {
+    private readonly IHttpClientFactory _httpClientFactory;
     private readonly ILogger<DashboardController> _logger;
+    private readonly UserManager<ApplicationUser> _userManager;
 
-    public GMCController(ILogger<DashboardController> logger)
+    public GMCController(IHttpClientFactory httpClientFactory, ILogger<DashboardController> logger, UserManager<ApplicationUser> userManager)
     {
+        _httpClientFactory = httpClientFactory;
         _logger = logger;
+        _userManager = userManager;
     }
 
     [HttpGet("")]
@@ -64,6 +72,17 @@ public class GMCController : Controller
         _logger.LogError("API Response: {StatusCode}, Content: {Content}", response.StatusCode, errorContent);
 
         return RedirectToAction(nameof(Index));
+    }
+
+    private void SetToastMessage(string message, string title = "", string cssClassName = "bg-white")
+    {
+        var toastMessage = new ToastViewModel
+        {
+            Title = title,
+            Message = message,
+            CssClassName = cssClassName
+        };
+        TempData["Result"] = JsonSerializer.Serialize(toastMessage);
     }
 }
 
