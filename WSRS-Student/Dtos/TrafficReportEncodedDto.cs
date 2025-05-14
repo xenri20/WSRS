@@ -1,4 +1,4 @@
-namespace WSRS_Api.Dtos;
+namespace WSRS_Student.Dtos;
 
 public class TrafficReportEncodedDto
 {
