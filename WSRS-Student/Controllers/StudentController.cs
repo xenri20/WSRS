@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using WSRS_Api.Dtos;
+using WSRS_Student.Dtos;
 
 namespace WSRS_Student.Controllers
 {

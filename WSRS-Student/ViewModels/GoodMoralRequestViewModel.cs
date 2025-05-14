@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using WSRS_Api.Data.Enum;
+using WSRS_Student.Data.Enum;
 
 namespace WSRS_Student.ViewModels
 {
@@ -29,7 +29,5 @@ namespace WSRS_Student.ViewModels
         [Required]
         [Display(Name = "Phone Number")]
         public string PhoneNumber { get; set; }
-
-        public RequestStatus IsApproved { get; set; }
     }
 }
