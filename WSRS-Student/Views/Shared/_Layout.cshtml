@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@using WSRS_Student.Interface;
+@using System.Security.Claims;
+@inject IStudentService StudentService;
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -25,7 +29,9 @@
                                 <li><a class="dropdown-item" href="#">-</a></li>
                                 <li><a class="dropdown-item" href="#">-</a></li>
                                 <li><a class="dropdown-item" asp-controller="Student" asp-action="Violations">Violations</a></li>
+                                @if (await StudentService.HandleStudentStatus(User)){
                                 <li><a class="dropdown-item" asp-controller="GMC" asp-action="GMCRequest">Good Moral Certificate</a></li>
+                                }
                             </ul>
                         </li>
                         <li class="nav-item dropdown">

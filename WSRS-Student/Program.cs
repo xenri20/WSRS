@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using WSRS_Student.Data;
 using WSRS_Student.Models;
 using WSRS_Student.Interfaces;
+using WSRS_Student.Interface;
+using WSRS_Student.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,6 +34,8 @@ builder.Services.AddHttpClient("WSRS_Api", client =>
     client.BaseAddress = new Uri(builder.Configuration.GetSection("API_BASE_URL").Value
         ?? throw new InvalidOperationException("API_BASE_URL is not configured."));
 });
+
+builder.Services.AddScoped<IStudentService, StudentService>();
 
 builder.Services.AddControllersWithViews();
 
