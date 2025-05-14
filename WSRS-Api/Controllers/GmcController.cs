@@ -25,7 +25,7 @@ namespace WSRS_Api.Controllers
         }
 
         // GET api/<GmcController>/id
-        [HttpGet]
+        [HttpGet("{id:int}")]
         public IActionResult GetRequest(int id)
         {
             var request = _repository.GetById(id);
