@@ -82,7 +82,7 @@ namespace WSRS_SWAFO.Services
 
                         <p>Our office remains committed to promoting student discipline and fairness. We encourage you to coordinate with the Student Welfare and Formation Office (SWAFO) at your earliest convenience to discuss the matter or raise any concerns you may have.</p>
 
-                        <p>If you need any assistance or clarification, please feel free to visit our office at <strong>GMH111</strong>.</p>
+                        <p>If you need any assistance or clarification, please feel free to contact us at <strong>+63 (46) 481-1900 local 3081</strong>, via email at <strong>swafo_helpdesk@dlsud.edu.ph</strong>, or visit our office at <strong>GMH111</strong>.</p>
 
                         <p style=""font-style: italic; color: #555;"">This is an automated message. Please do not reply to this email.</p>
 
@@ -109,7 +109,7 @@ namespace WSRS_SWAFO.Services
 
                         <p>We kindly remind you to arrive on time and come prepared for the discussion. Please note that failure to attend without valid justification may lead to further disciplinary action in accordance with university policies.</p>
 
-                        <p>If you have any questions or concerns, feel free to visit the Student Welfare and Formation Office (SWAFO) for assistance.</p>
+                        <p>If you need any assistance or clarification, please feel free to contact us at <strong>+63 (46) 481-1900 local 3081</strong>, via email at <strong>swafo_helpdesk@dlsud.edu.ph</strong>, or visit our office at <strong>GMH111</strong>.</p>
 
                         <p style=""font-style: italic; color: #555;"">This is an automated message. Please do not reply to this email.</p>
 
