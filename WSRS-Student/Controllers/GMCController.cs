@@ -27,6 +27,11 @@ public class GMCController : Controller
     [HttpGet("")]
     public IActionResult GMCRequest()
     {
+        var referer = Request.Headers["Referer"].ToString();
+        if (string.IsNullOrEmpty(referer))
+        {
+            return Content("<script>alert('External links are disabled. Use the in-app interface to proceed.'); window.history.back();</script>", "text/html");
+        }
         return View();
     }
 
