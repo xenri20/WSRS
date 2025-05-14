@@ -209,19 +209,19 @@ $(document).ready(function () {
 
     // When clicking the Reports tab, ensure Major Violations is loaded
     $(".reports-nav").click(function () {
-        $(".button-group button").removeClass("active");
+        $("#category-function button").removeClass("active"); 
         $(".major-violations").addClass("active");
         selectedViolationType = "MajorViolations";
         fetchData(selectedViolationType);
     });
 
     // Handle violation button clicks
-    $(".button-group button").click(function () {
+    $("#category-function button").click(function () {
         let violationType = $(this).val();
         if (!violationType) return;
 
         selectedViolationType = violationType;
-        $(".button-group button").removeClass("active");
+        $("#category-function button").removeClass("active"); 
         $(this).addClass("active");
 
         let startDate = $("#startDate").val();
