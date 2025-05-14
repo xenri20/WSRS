@@ -15,6 +15,6 @@ namespace WSRS_Api.Models
         public int StudentNumber { get; set; }
         public Gender Gender { get; set; }
         public string PhoneNumber { get; set; }
-        public bool IsApproved { get; set; }
+        public RequestStatus IsApproved { get; set; }
     }
 }

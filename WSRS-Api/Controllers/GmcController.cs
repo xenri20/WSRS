@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using WSRS_Api.Data.Enum;
 using WSRS_Api.Models;
 using WSRS_Api.Repositories;
 
@@ -36,7 +37,7 @@ namespace WSRS_Api.Controllers
         [HttpPost]
         public IActionResult PostGoodMoralRequest(GoodMoralRequest request)
         {
-            request.IsApproved = false;
+            request.IsApproved = RequestStatus.Pending;
             var postedRequest = _repository.PostGoodMoralRequest(request);
 
             if (postedRequest != null) return Ok(postedRequest);

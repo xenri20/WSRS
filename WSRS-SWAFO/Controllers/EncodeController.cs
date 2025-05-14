@@ -4,12 +4,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
 using WSRS_SWAFO.Data;
-using WSRS_SWAFO.Data.Enum;
 using WSRS_SWAFO.Models;
 using WSRS_SWAFO.ViewModels;
 using WSRS_SWAFO.Interfaces;
 using Hangfire;
+using WSRS_Api.Data.Enum;
 using WSRS_SWAFO.Dtos;
+using OffenseClassification = WSRS_SWAFO.Data.Enum.OffenseClassification;
 
 namespace WSRS_SWAFO.Controllers
 {
@@ -800,7 +801,7 @@ namespace WSRS_SWAFO.Controllers
 
                 if (data != null)
                 {
-                    var activeRequest = data.Where(r => !r.IsApproved);
+                    var activeRequest = data.Where(r => r.IsApproved == RequestStatus.Pending);
 
                     var gmcViewModel = new GoodMoralRequestViewModel
                     {

@@ -29,4 +29,8 @@
     <PackageReference Include="System.Net.Http.Json" Version="9.0.4" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\WSRS-Api\WSRS-Api.csproj" />
+  </ItemGroup>
+
 </Project>
