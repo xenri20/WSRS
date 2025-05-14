@@ -5,6 +5,7 @@ namespace WSRS_Student.ViewModels
 {
     public class GoodMoralRequestViewModel
     {
+        public int Id { get; set; }
         public DateOnly ApplicationDate { get; set; }
         public string Purpose { get; set; }
         public string Copies { get; set; }
