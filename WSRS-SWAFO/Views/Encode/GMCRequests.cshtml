@@ -1,5 +1,5 @@
 ﻿@using WSRS_SWAFO.ViewModels
-@model PendingViewModel
+@model GoodMoralRequestViewModel
 
 @{
     Layout = "_EncodeLayout";
@@ -12,9 +12,9 @@
 
 <div class="pending">
     <div class="report-list">
-        @if (Model.ReportsPending.Any())
+        @if (Model.GoodMoralRequest.Any())
         {
-            @foreach (var item in Model.ReportsPending)
+            @foreach (var item in Model.GoodMoralRequest)
             {
                 <partial name="_PendingModalPartial" model="@item" />
                 <div class="report-tile">
