@@ -16,7 +16,7 @@
         {
             @foreach (var item in Model.GMCRequests)
             {
-                <partial name="_PendingModalPartial" model="@item" />
+                <partial name="_GMCRequestModalPartial" model="@item" />
                 <div class="report-tile">
                     <span class="report-tile-item">
                         <div class="label">
@@ -58,20 +58,14 @@
                             @item.Purpose
                         </div>
                     </span>
+
                     <span class="button-group">
-                        <form asp-action="ArchivePending" asp-route-id="@item.Id" method="post">
-                            <input type="hidden" name="_method" value="PATCH" />
-                            <button type="submit" class="btn">Archive</button>
-                        </form>
+                        <div>
+                            <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="@($"#gmcRequestModal{item.Id}")">
+                                Action
+                            </button>
+                        </div>
                     </span>
-                    
-                    <button type="button" class="btn-function" data-bs-toggle="modal" data-bs-target="@($"#pendingModal{item.Id}")">
-                        <svg width="32" height="32" viewBox="0 0 43 43" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="11.5" cy="21.5" r="3" fill="currentColor" />
-                            <circle cx="21.5" cy="21.5" r="3" fill="currentColor" />
-                            <circle cx="31.5" cy="21.5" r="3" fill="currentColor" />
-                        </svg>
-                    </button>
                 </div>
             }
         }
