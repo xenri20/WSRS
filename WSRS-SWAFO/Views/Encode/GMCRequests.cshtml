@@ -12,9 +12,9 @@
 
 <div class="pending">
     <div class="report-list">
-        @if (Model.GoodMoralRequest.Any())
+        @if (Model.GMCRequests.Any())
         {
-            @foreach (var item in Model.GoodMoralRequest)
+            @foreach (var item in Model.GMCRequests)
             {
                 <partial name="_PendingModalPartial" model="@item" />
                 <div class="report-tile">
@@ -31,7 +31,7 @@
                             Creation Date
                         </div>
                         <div>
-                            @item.FormattedReportDate
+                            @item.ApplicationDate
                         </div>
                     </span>
                     <span class="report-tile-item">
@@ -44,18 +44,18 @@
                     </span>
                     <span class="report-tile-item">
                         <div class="label">
-                            Formator
+                            Full Name
                         </div>
                         <div>
-                            @item.Formator
+                            @item.FullName
                         </div>
                     </span>
                     <span class="report-tile-item long">
                         <div class="label">
-                            Description
+                            Purpose
                         </div>
                         <div>
-                            @item.Description
+                            @item.Purpose
                         </div>
                     </span>
                     <span class="button-group">
