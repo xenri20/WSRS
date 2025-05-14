@@ -83,50 +83,57 @@ public class ViolationRepository : IViolationRepository
     {
         bool result = true;
 
-        var violations = await _context.ReportsEncoded
-            .AsNoTracking()
-            .Where(r => r.StudentNumber == studentNumber)
-            .Select(r => new ReportEncodedDto
-            {
-                Offense = new OffenseDto
-                {
-                    Classification = r.Offense.Classification.GetDisplayName(),
-                    Nature = r.Offense.Nature,
-                },
-                StatusOfSanction = r.StatusOfSanction
-            })
-            .ToListAsync();
-
-        var trafficViolations = await _context.TrafficReportsEncoded
-            .AsNoTracking()
-            .Where(tr => tr.StudentNumber == studentNumber)
-            .Select(tr => new TrafficReportEncodedDto
-            {
-                Offense = new OffenseDto
-                {
-                    Classification = tr.Offense.Classification.GetDisplayName(),
-                    Nature = tr.Offense.Nature,
-                },
-                DatePaid = tr.DatePaid,
-            })
-            .ToListAsync();
-
-        if (violations.Any())
+        try
         {
-            if (violations.Any(v => v.StatusOfSanction != "Completed"))
+            var violations = await _context.ReportsEncoded
+                .AsNoTracking()
+                .Where(r => r.StudentNumber == studentNumber)
+                .Select(r => new ReportEncodedDto
+                {
+                    Offense = new OffenseDto
+                    {
+                        Classification = r.Offense.Classification.GetDisplayName(),
+                        Nature = r.Offense.Nature,
+                    },
+                    StatusOfSanction = r.StatusOfSanction
+                })
+                .ToListAsync();
+
+            var trafficViolations = await _context.TrafficReportsEncoded
+                .AsNoTracking()
+                .Where(tr => tr.StudentNumber == studentNumber)
+                .Select(tr => new TrafficReportEncodedDto
+                {
+                    Offense = new OffenseDto
+                    {
+                        Classification = tr.Offense.Classification.GetDisplayName(),
+                        Nature = tr.Offense.Nature,
+                    },
+                    DatePaid = tr.DatePaid,
+                })
+                .ToListAsync();
+
+            if (violations.Any())
             {
-                result = false;
-                return await Task.FromResult(result);
+                if (violations.Any(v => v.StatusOfSanction != "Completed"))
+                {
+                    result = false;
+                    return await Task.FromResult(result);
+                }
+            }
+
+            if (trafficViolations.Any())
+            {
+                if (trafficViolations.Any(tv => tv.DatePaid == null))
+                {
+                    result = false;
+                    return await Task.FromResult(result);
+                }
             }
         }
-
-        if (trafficViolations.Any())
+        catch (Exception ex)
         {
-            if (trafficViolations.Any(tv => tv.DatePaid == null))
-            {
-                result = false;
-                return await Task.FromResult(result);
-            }
+            _logger.LogError(ex.Message);
         }
 
         return await Task.FromResult(result);
