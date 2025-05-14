@@ -12,6 +12,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<ReportEncoded> ReportsEncoded { get; set; }
     public DbSet<TrafficReportEncoded> TrafficReportsEncoded { get; set; }
     public DbSet<ReportsPending> ReportsPending { get; set; }
+    public DbSet<GoodMoralRequest> GoodMoralRequests { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

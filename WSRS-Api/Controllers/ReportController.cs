@@ -27,7 +27,7 @@ namespace WSRS_Api.Controllers
         }
 
         [HttpGet("{id:int}")]
-        public IActionResult GetAllStudentReports(int id)
+        public IActionResult GetStudentReports(int id)
         {
             var report = _repository.GetById(id);
             return Ok(report);

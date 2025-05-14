@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.EntityFrameworkCore;
 using WSRS_Api.Data;
 using WSRS_Api.Dtos;
 using WSRS_Api.Models;
@@ -21,7 +22,10 @@ namespace WSRS_Api.Repositories
         {
             try
             {
-                var reports = _context.ReportsPending.ToList();
+                var reports = _context.ReportsPending
+                    .AsNoTracking()
+                    .ToList();
+
                 return reports;
             }
             catch (Exception ex)
