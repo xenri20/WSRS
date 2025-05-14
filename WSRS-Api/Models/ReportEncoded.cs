@@ -14,6 +14,7 @@ public class ReportEncoded
     public DateOnly? HearingDate { get; set; } // Null if minor
     public string Sanction { get; set; }
     public string Description { get; set; }
+    public string StatusOfSanction { get; set; }
 
     // navigation properties
     public Offense Offense { get; set; }

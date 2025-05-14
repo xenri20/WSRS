@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Reflection.Metadata.Ecma335;
+using Microsoft.AspNetCore.Mvc;
 using WSRS_Api.Dtos;
 using WSRS_Api.Interfaces;
 
@@ -28,5 +29,11 @@ namespace WSRS_Api.Controllers
             return Ok(violations);
         }
 
+        [HttpGet("is-clear/{studentNumber}")]
+        public async Task<ActionResult<bool>> IsStudentClear(int studentNumber)
+        {
+            var result = _repository.IsStudentClear(studentNumber);
+            return Ok(result);
+        }
     }
 }

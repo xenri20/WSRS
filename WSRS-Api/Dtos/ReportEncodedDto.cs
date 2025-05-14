@@ -6,4 +6,5 @@ public class ReportEncodedDto
     public string Description { get; set; }
     public DateOnly CommissionDate { get; set; }
     public string Sanction { get; set; }
+    public string? StatusOfSanction { get; set; }
 }
