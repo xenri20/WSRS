@@ -8,7 +8,7 @@ namespace WSRS_SWAFO.Helpers
 
         public EmailDomainAttribute(string allowedDomain)
         {
-            _allowedDomain = allowedDomain; 
+            _allowedDomain = allowedDomain;
         }
 
         protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)

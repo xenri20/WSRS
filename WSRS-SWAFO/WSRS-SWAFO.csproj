@@ -32,9 +32,4 @@
 		<PackageReference Include="Microsoft.Identity.Web.UI" Version="3.3.1" />
 		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.7" />
 	</ItemGroup>
-
-	<ItemGroup>
-    <Folder Include="Migrations\" />
-    <Folder Include="wwwroot\lib\fonts\" />
-  </ItemGroup>
 </Project>

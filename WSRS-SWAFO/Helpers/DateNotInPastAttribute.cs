@@ -4,19 +4,12 @@ namespace WSRS_SWAFO.Helpers
 {
     public class DateNotInPastAttribute : ValidationAttribute
     {
-        public override bool IsValid(object? value)
+        public override bool IsValid(object? value) => value switch
         {
-            if (value is DateOnly date)
-            {
-                return date >= DateOnly.FromDateTime(DateTime.Now);
-            }
+            DateOnly date => date >= DateOnly.FromDateTime(DateTime.Now),
+            _ => true
+        };
 
-            return true;
-        }
-
-        public override string FormatErrorMessage(string name)
-        {
-            return $"{name} cannot be a past date.";
-        }
+        public override string FormatErrorMessage(string name) => $"{name} cannot be a past date.";
     }
 }

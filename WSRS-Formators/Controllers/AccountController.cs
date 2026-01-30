@@ -47,7 +47,7 @@ namespace WSRS_Formators.Controllers
             if (user != null)
             {
                 var passwordCheck = await _userManager.CheckPasswordAsync(user, model.Password);
-                if (passwordCheck) 
+                if (passwordCheck)
                 {
                     var claims = new List<Claim>
                     {

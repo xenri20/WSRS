@@ -48,7 +48,7 @@ namespace WSRS_SWAFO.Controllers
                                    .Where(r => r.Id == model.Id)
                                    .Select(r => r.StudentNumber)
                                    .FirstOrDefaultAsync();
-            
+
             var studentRecord = await _context.Students.Where(s => s.StudentNumber == idRecord).FirstOrDefaultAsync();
 
             var emailSubjectVM = new EmailSubjectViewModel
@@ -65,7 +65,6 @@ namespace WSRS_SWAFO.Controllers
             return Json(new { success = true });
         }
 
-
         [HttpDelete]
         public async Task<IActionResult> DeleteHearing(int id)
         {
@@ -79,13 +78,13 @@ namespace WSRS_SWAFO.Controllers
             return Json(new { success = true });
         }
 
-
         [HttpGet]
         public IActionResult GetHearings()
         {
             var events = _context.HearingSchedules
                 .Include(h => h.Student)
-                .Select(h => new {
+                .Select(h => new
+                {
                     id = h.Id,
                     title = h.Title,
                     start = h.ScheduledDate,
@@ -159,7 +158,5 @@ namespace WSRS_SWAFO.Controllers
                 }
             });
         }
-
-
     }
 }

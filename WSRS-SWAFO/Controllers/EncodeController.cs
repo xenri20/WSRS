@@ -49,7 +49,7 @@ namespace WSRS_SWAFO.Controllers
         // Page One - Student Violation Controller
         // Checks Student Record Database upon page load - Index
         [HttpPost]
-        [HttpGet] // Adding for optional 
+        [HttpGet] // Adding for optional
         public async Task<IActionResult> StudentRecordViolation(string violationType = null)
         {
             if (HttpContext.Request.Method == HttpMethods.Post)
@@ -300,7 +300,7 @@ namespace WSRS_SWAFO.Controllers
                     name = student!.FirstName + " " + student!.LastName,
                     sanction = offenseNature
                 };
-                
+
                 BackgroundJob.Enqueue(() => _emailSender.SendEmailAsync(emailSubjectVM));
                 SetToastMessage(title: "Success", message: "A report has been encoded successfully.");
 
@@ -507,10 +507,10 @@ namespace WSRS_SWAFO.Controllers
                 if (response.IsSuccessStatusCode)
                 {
                     SetToastMessage(
-                        message: "A pending report has been archived.", 
+                        message: "A pending report has been archived.",
                         button: new ToastButton
                         {
-                            Name = "Undo", 
+                            Name = "Undo",
                             Action = "UndoArchivePending",
                             Controller = "Encode",
                             RouteValues = new Dictionary<string, object>
@@ -842,7 +842,7 @@ namespace WSRS_SWAFO.Controllers
                         message: $"A GMC request has been {(action == "approve" ? "approved" : "denied")}.",
                         button: new ToastButton
                         {
-                            Name = "Undo", 
+                            Name = "Undo",
                             Action = nameof(UndoRequestStatus),
                             Controller = "Encode",
                             RouteValues = new Dictionary<string, object>
@@ -925,7 +925,6 @@ namespace WSRS_SWAFO.Controllers
 
             SetToastMessage("An action has been undone.");
             return RedirectToAction(nameof(GMCRequests));
-
         }
     }
 }

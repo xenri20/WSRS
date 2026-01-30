@@ -8,7 +8,7 @@ namespace WSRS_SWAFO.ViewModels
 {
     public class ReportEncodedViewModel
     {
-        public int Id {  get; set; }
+        public int Id { get; set; }
 
         [Display(Name = "Student Number")]
         [ForeignKey(nameof(Student))]

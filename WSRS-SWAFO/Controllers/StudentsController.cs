@@ -27,7 +27,7 @@ namespace WSRS_SWAFO.Controllers
                 .Include(s => s.TrafficReportsEncoded)
                     .ThenInclude(tr => tr.Offense)
                 .FirstOrDefaultAsync(s => s.StudentNumber == studentNumber);
-            
+
             if (student == null)
             {
                 return NotFound(new { message = "Student not found" });

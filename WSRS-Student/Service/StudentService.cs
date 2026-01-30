@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore.Query;
 using System.Security.Claims;
 using WSRS_Student.Interface;
 using WSRS_Student.Models;
@@ -12,7 +11,7 @@ namespace WSRS_Student.Service
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ILogger<StudentService> _logger;
 
-        public StudentService(IHttpClientFactory httpClientFactory , UserManager<ApplicationUser> userManager, ILogger<StudentService> logger)
+        public StudentService(IHttpClientFactory httpClientFactory, UserManager<ApplicationUser> userManager, ILogger<StudentService> logger)
         {
             _httpClientFactory = httpClientFactory;
             _userManager = userManager;

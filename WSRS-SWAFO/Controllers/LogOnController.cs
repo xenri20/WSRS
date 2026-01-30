@@ -32,10 +32,10 @@ namespace WSRS_SWAFO.Controllers
         }
 
         public async Task<IActionResult> SignInWithMicrosoft()
-        {    
+        {
             bool isOnline = await NetworkHelper.IsOnline();
             if (!isOnline)
-            { 
+            {
                 // Automatically refreshes page if there is no internet connection
                 return RedirectToAction("Index");
             }
@@ -57,7 +57,7 @@ namespace WSRS_SWAFO.Controllers
             if (!ModelState.IsValid) return View("Index", loginViewModel);
 
             var result = await _signInManager.PasswordSignInAsync(loginViewModel.EmailAddress, loginViewModel.Password, false, lockoutOnFailure: false);
- 
+
             if (result.Succeeded)
             {
                 return RedirectToAction("Index", "Dashboard");

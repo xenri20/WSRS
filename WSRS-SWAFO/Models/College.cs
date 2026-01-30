@@ -7,6 +7,5 @@ namespace WSRS_SWAFO.Models
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.None)]
         public string CollegeID { get; set; }
-        
     }
 }

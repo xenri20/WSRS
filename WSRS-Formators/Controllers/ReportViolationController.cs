@@ -70,8 +70,8 @@ namespace WSRS_Formators.Controllers
 
         [HttpGet]
         public IActionResult Create(
-            [FromQuery] int? studentNumber, 
-            [FromQuery] string? firstName, 
+            [FromQuery] int? studentNumber,
+            [FromQuery] string? firstName,
             [FromQuery] string? lastName)
         {
             if (studentNumber != null || !string.IsNullOrEmpty(firstName) || !string.IsNullOrEmpty(lastName))

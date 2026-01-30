@@ -42,17 +42,17 @@ namespace WSRS_SWAFO.Controllers
 
             var records = from r in _context.ReportsEncoded.AsNoTracking()
                     .Include(r => r.Student)
-                select new RecordsViewModel
-                {
-                    Id = r.Id,
-                    Name = string.Concat(r.Student.FirstName, " ", r.Student.LastName),
-                    StudentNumber = r.StudentNumber,
-                    College = r.CollegeID,
-                    CommissionDate = r.CommissionDate,
-                    OffenseClassification = r.Offense.Classification.ToString(),
-                    OffenseNature = r.Offense.Nature,
-                    Status = r.StatusOfSanction
-                };
+                          select new RecordsViewModel
+                          {
+                              Id = r.Id,
+                              Name = string.Concat(r.Student.FirstName, " ", r.Student.LastName),
+                              StudentNumber = r.StudentNumber,
+                              College = r.CollegeID,
+                              CommissionDate = r.CommissionDate,
+                              OffenseClassification = r.Offense.Classification.ToString(),
+                              OffenseNature = r.Offense.Nature,
+                              Status = r.StatusOfSanction
+                          };
 
             if (!string.IsNullOrEmpty(searchString))
             {

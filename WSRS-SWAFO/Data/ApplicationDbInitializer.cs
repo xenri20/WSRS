@@ -50,7 +50,7 @@ namespace WSRS_SWAFO.Data
 
                     await userManager.CreateAsync(user, adminPassword);
 
-                    await userManager.AddToRoleAsync(user,"Admin");
+                    await userManager.AddToRoleAsync(user, "Admin");
                 }
             }
         }

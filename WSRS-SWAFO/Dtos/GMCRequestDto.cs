@@ -6,7 +6,6 @@ namespace WSRS_SWAFO.Dtos
     public class GMCRequestDto
     {
         public int Id { get; set; }
-
         [Display(Name = "Application Date")]
         public DateOnly ApplicationDate { get; set; }
         public string Purpose { get; set; }

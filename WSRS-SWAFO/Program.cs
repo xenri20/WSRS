@@ -9,7 +9,6 @@ using WSRS_SWAFO.Interfaces;
 using Microsoft.IdentityModel.Tokens;
 using Hangfire;
 using Hangfire.Dashboard;
-using System.Security.Claims;
 using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);

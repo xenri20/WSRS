@@ -73,7 +73,7 @@ public class ViolationRepository : IViolationRepository
         // return an empty list just in case something goes wrong
         return new AllReportsDto
         {
-            Student = {},
+            Student = { },
             Violations = [],
             TrafficViolations = []
         };
@@ -95,7 +95,7 @@ public class ViolationRepository : IViolationRepository
             var unpaidTrafficViolations = await _context.TrafficReportsEncoded
                 .AsNoTracking()
                 .Where(tr => tr.StudentNumber == studentNumber)
-                .Select(tr => tr.DatePaid) 
+                .Select(tr => tr.DatePaid)
                 .Where(datePaid => datePaid == null)
                 .ToListAsync();
 

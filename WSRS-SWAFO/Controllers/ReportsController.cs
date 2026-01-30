@@ -80,22 +80,22 @@ namespace WSRS_SWAFO.Controllers
                 }
 
                 var reports = isTrafficViolation
-    ? _context.TrafficReportsEncoded
-        .Where(r => violationClassificationIds.Contains(r.OffenseId) &&
-                    (!start.HasValue || r.CommissionDate >= start) &&
-                    (!end.HasValue || r.CommissionDate <= end) &&
-                    r.College != null && r.College.CollegeID != null)
-        .GroupBy(r => r.College.CollegeID)
-        .Select(g => new { College = g.Key, ViolationCount = g.Count() })
-        .ToList()
-    : _context.ReportsEncoded
-        .Where(r => violationClassificationIds.Contains(r.OffenseId) &&
-                    (!start.HasValue || r.CommissionDate >= start) &&
-                    (!end.HasValue || r.CommissionDate <= end) &&
-                    r.College != null && r.College.CollegeID != null)
-        .GroupBy(r => r.College.CollegeID)
-        .Select(g => new { College = g.Key, ViolationCount = g.Count() })
-        .ToList();
+                    ? _context.TrafficReportsEncoded
+                        .Where(r => violationClassificationIds.Contains(r.OffenseId) &&
+                                    (!start.HasValue || r.CommissionDate >= start) &&
+                                    (!end.HasValue || r.CommissionDate <= end) &&
+                                    r.College != null && r.College.CollegeID != null)
+                        .GroupBy(r => r.College.CollegeID)
+                        .Select(g => new { College = g.Key, ViolationCount = g.Count() })
+                        .ToList()
+                    : _context.ReportsEncoded
+                        .Where(r => violationClassificationIds.Contains(r.OffenseId) &&
+                                    (!start.HasValue || r.CommissionDate >= start) &&
+                                    (!end.HasValue || r.CommissionDate <= end) &&
+                                    r.College != null && r.College.CollegeID != null)
+                        .GroupBy(r => r.College.CollegeID)
+                        .Select(g => new { College = g.Key, ViolationCount = g.Count() })
+                        .ToList();
 
                 _logger.LogInformation("Fetched {count} reports", reports.Count);
 
@@ -131,16 +131,16 @@ namespace WSRS_SWAFO.Controllers
             DateTime endDateTime = endDate.Date.AddDays(1).AddSeconds(-1);
 
             var collegeNames = new Dictionary<string, string>
-    {
-        { "CBAA", "College of Business Administration and Accountancy" },
-        { "COED", "College of Education" },
-        { "CEAT", "College of Engineering, Architecture and Technology" },
-        { "CTHM", "College of Tourism and Hospitality Management" },
-        { "CCJE", "College of Criminal Justice Education" },
-        { "CLAC", "College of Liberal Arts and Communication" },
-        { "CICS", "College of Information and Computer Studies" },
-        { "COS", "College of Science" }
-    };
+            {
+                { "CBAA", "College of Business Administration and Accountancy" },
+                { "COED", "College of Education" },
+                { "CEAT", "College of Engineering, Architecture and Technology" },
+                { "CTHM", "College of Tourism and Hospitality Management" },
+                { "CCJE", "College of Criminal Justice Education" },
+                { "CLAC", "College of Liberal Arts and Communication" },
+                { "CICS", "College of Information and Computer Studies" },
+                { "COS", "College of Science" }
+            };
 
             // Retrieve selected violations within the date range
             var selectedViolations = _context.ReportsEncoded
@@ -184,13 +184,13 @@ namespace WSRS_SWAFO.Controllers
             var violationSheet = workbook.Worksheets.Add("Violations Report");
 
             var categories = new Dictionary<string, string>
-    {
-        { "Total Violations", "All" },
-        { "Minor Offenses", "Minor" },
-        { "Major Offenses", "Major" },
-        { "Minor Traffic Violations", "MinorTraffic" },
-        { "Major Traffic Violations", "MajorTraffic" }
-    };
+            {
+                { "Total Violations", "All" },
+                { "Minor Offenses", "Minor" },
+                { "Major Offenses", "Major" },
+                { "Minor Traffic Violations", "MinorTraffic" },
+                { "Major Traffic Violations", "MajorTraffic" }
+            };
 
             int currentRow = 1;
             violationSheet.Cell(currentRow, 1).Value = "Violations Report";
@@ -364,7 +364,6 @@ namespace WSRS_SWAFO.Controllers
 
             var sanctionNatureList = workbook.Worksheets.Add("Nature of sanctions");
 
-
             // Title: "SANCTIONS IMPOSED FOR MAJOR OFFENSES COMMITTED"
             int sanctionRow = 1;
             sanctionNatureList.Cell(sanctionRow, 1).Value = "SANCTIONS IMPOSED FOR MINOR AND MAJOR OFFENSES COMMITTED";
@@ -424,8 +423,6 @@ namespace WSRS_SWAFO.Controllers
 
             // **Adjust Column Width for Readability**
             sanctionNatureList.Columns().AdjustToContents();
-
-
 
             var majorByNatureSheet = workbook.Worksheets.Add("Major Offense by Nature");
 
@@ -776,8 +773,6 @@ namespace WSRS_SWAFO.Controllers
 
             // **Adjust Column Width for Readability**
             majorTrafficByNatureSheet.Columns().AdjustToContents();
-
-
 
             using var stream = new MemoryStream();
             workbook.SaveAs(stream);

@@ -51,7 +51,8 @@ namespace WSRS_SWAFO.Services
                 if (role != null)
                 {
                     await _userManager.AddToRolesAsync(user, role);
-                } else
+                }
+                else
                 {
                     await _userManager.AddToRoleAsync(user, "AppRole.Member");
                 }
@@ -63,7 +64,7 @@ namespace WSRS_SWAFO.Services
 
                 // TODO Add role as well
             }
-            
+
             // For promptless sign out purposes (e.g. no more choosing which user to sign out as)
             var loginHint = claimsIdentity!.FindFirst("login_hint")?.Value;
 

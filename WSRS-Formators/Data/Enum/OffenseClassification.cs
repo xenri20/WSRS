@@ -6,7 +6,7 @@ namespace WSRS_Formators.Data.Enum
     {
         Minor,
         Major,
-        [Display(Name ="Minor Traffic")]
+        [Display(Name = "Minor Traffic")]
         MinorTraffic,
         [Display(Name = "Major Traffic")]
         MajorTraffic

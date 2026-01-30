@@ -34,7 +34,7 @@ namespace WSRS_Student.Controllers
                     var violations = await response.Content.ReadFromJsonAsync<AllReportsDto>();
                     return View(violations);
                 }
-                else 
+                else
                 {
                     _logger.LogInformation($"Error Status: {response.StatusCode}");
                 }

@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Mvc;
 using WSRS_Api.Dtos;
 
 namespace WSRS_Api.Interfaces;
