@@ -1,6 +1,4 @@
-@WSRS_Api_HostAddress = http://localhost:5150
+# @WSRS_Api_HostAddress = https://localhost:PORT
 
-GET {{WSRS_Api_HostAddress}}/weatherforecast/
+GET {{WSRS_Api_HostAddress}}/
 Accept: application/json
-
-###
