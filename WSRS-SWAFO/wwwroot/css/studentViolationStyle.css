@@ -57,23 +57,6 @@ h2 {
     flex: 1;
 }
 
-/* SEARCH INPUT WITH BUTTON */
-#searchForm {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    gap: 0.5rem;
-    height: 2.5rem;
-}
-
-#searchForm > input {
-    display: flex;
-    flex-grow: 1;
-    padding: 0.5rem 1rem;
-    border: 2px solid black;
-    border-radius: 2rem;
-}
-
 /*.content-panel{
     margin-top: 0.75em;
 }*/
