@@ -1,4 +1,5 @@
 ﻿@using NUglify.Helpers
+@using WSRS_SWAFO.Data.Enum;
 @using WSRS_SWAFO.Helpers;
 @using WSRS_SWAFO.ViewModels
 @model TrafficRecordsIndexViewModel
@@ -6,7 +7,12 @@
 @{
     ViewData["Title"] = "Manage Records";
 
-    static string GetClassficationStyle(string classification) => classification.Split(" ")[0].ToLower();
+    static string GetClassificationStyle(OffenseClassification classification) => 
+        classification.ToString().Substring(0, 5).ToLower();
+
+    // Filter options
+    var collegeOptions = ViewData["CollegeOptions"] as List<string> 
+        ?? new List<string>();
 }
 
 @section customHead {
@@ -24,31 +30,75 @@
     <hr />
     <div class="control-group">
         <form method="get" id="searchForm">
-            <input type="search" name="searchString" placeholder="Search" aria-required="true" value="@Model.CurrentFilter">
-
-            <div class="button-group">
-                <button type="submit" class="btn-function">
-                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <g clip-path="url(#clip0_173_68)">
-                            <path d="M6.41667 11.0833C8.994 11.0833 11.0833 8.994 11.0833 6.41667C11.0833 3.83934 8.994 1.75 6.41667 1.75C3.83934 1.75 1.75 3.83934 1.75 6.41667C1.75 8.994 3.83934 11.0833 6.41667 11.0833Z"
-                                  stroke="#1E1F20" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                            <path d="M12.25 12.25L9.71252 9.71249" stroke="#1E1F20" stroke-width="2" stroke-linecap="round"
-                                  stroke-linejoin="round" />
-                        </g>
-                        <defs>
-                            <clipPath id="clip0_173_68">
-                                <rect width="14" height="14" fill="white" />
-                            </clipPath>
-                        </defs>
+            <input type="search" 
+                name="searchString" 
+                class="w-20"
+                placeholder="Search" 
+                aria-required="true" 
+                value="@Model.CurrentFilter.Search"
+            />
+            <div class="dropdown">
+                <button type="button" 
+                    class="btn btn-text-icon dropdown-toggle" 
+                    data-bs-toggle="dropdown" 
+                    aria-expanded="false" 
+                    data-bs-auto-close="outside" 
+                    data-bs-offset="0,8"
+                >
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M18.3334 15.5042C18.3334 15.6699 18.2676 15.8289 18.1504 15.9461C18.0331 16.0633 17.8742 16.1292 17.7084 16.1292H13.4584C13.3192 16.6482 13.0127 17.1069 12.5863 17.434C12.1599 17.7611 11.6375 17.9384 11.1001 17.9384C10.5627 17.9384 10.0403 17.7611 9.6139 17.434C9.18751 17.1069 8.88095 16.6482 8.74175 16.1292H2.29175C2.12599 16.1292 1.96702 16.0633 1.84981 15.9461C1.7326 15.8289 1.66675 15.6699 1.66675 15.5042C1.66675 15.3384 1.7326 15.1794 1.84981 15.0622C1.96702 14.945 2.12599 14.8792 2.29175 14.8792H8.74175C8.88095 14.3601 9.18751 13.9015 9.6139 13.5744C10.0403 13.2473 10.5627 13.07 11.1001 13.07C11.6375 13.07 12.1599 13.2473 12.5863 13.5744C13.0127 13.9015 13.3192 14.3601 13.4584 14.8792H17.7084C17.8742 14.8792 18.0331 14.945 18.1504 15.0622C18.2676 15.1794 18.3334 15.3384 18.3334 15.5042ZM18.3334 4.49583C18.3334 4.66159 18.2676 4.82057 18.1504 4.93778C18.0331 5.05499 17.8742 5.12083 17.7084 5.12083H15.6667C15.5275 5.6399 15.221 6.09854 14.7946 6.42564C14.3682 6.75275 13.8458 6.93004 13.3084 6.93004C12.771 6.93004 12.2486 6.75275 11.8222 6.42564C11.3958 6.09854 11.0893 5.6399 10.9501 5.12083H2.29175C2.20967 5.12083 2.1284 5.10467 2.05257 5.07326C1.97674 5.04185 1.90784 4.99581 1.84981 4.93778C1.79177 4.87974 1.74573 4.81084 1.71432 4.73501C1.68291 4.65918 1.66675 4.57791 1.66675 4.49583C1.66675 4.41376 1.68291 4.33249 1.71432 4.25666C1.74573 4.18083 1.79177 4.11193 1.84981 4.05389C1.90784 3.99586 1.97674 3.94982 2.05257 3.91841C2.1284 3.887 2.20967 3.87083 2.29175 3.87083H10.9501C11.0893 3.35177 11.3958 2.89313 11.8222 2.56603C12.2486 2.23892 12.771 2.06162 13.3084 2.06162C13.8458 2.06162 14.3682 2.23892 14.7946 2.56603C15.221 2.89313 15.5275 3.35177 15.6667 3.87083H17.7084C17.7908 3.86971 17.8726 3.88511 17.9489 3.91613C18.0252 3.94714 18.0946 3.99313 18.1529 4.05139C18.2111 4.10966 18.2571 4.179 18.2881 4.25534C18.3191 4.33167 18.3345 4.41345 18.3334 4.49583ZM18.3334 9.99583C18.3345 10.0782 18.3191 10.16 18.2881 10.2363C18.2571 10.3127 18.2111 10.382 18.1529 10.4403C18.0946 10.4985 18.0252 10.5445 17.9489 10.5755C17.8726 10.6066 17.7908 10.622 17.7084 10.6208H7.95841C7.81921 11.1399 7.51265 11.5985 7.08627 11.9256C6.65988 12.2527 6.13749 12.43 5.60008 12.43C5.06268 12.43 4.54028 12.2527 4.1139 11.9256C3.68751 11.5985 3.38095 11.1399 3.24175 10.6208H2.29175C2.12599 10.6208 1.96702 10.555 1.84981 10.4378C1.7326 10.3206 1.66675 10.1616 1.66675 9.99583C1.66675 9.83007 1.7326 9.6711 1.84981 9.55389C1.96702 9.43668 2.12599 9.37083 2.29175 9.37083H3.24175C3.38095 8.85177 3.68751 8.39313 4.1139 8.06603C4.54028 7.73892 5.06268 7.56162 5.60008 7.56162C6.13749 7.56162 6.65988 7.73892 7.08627 8.06603C7.51265 8.39313 7.81921 8.85177 7.95841 9.37083H17.7084C17.8742 9.37083 18.0331 9.43668 18.1504 9.55389C18.2676 9.6711 18.3334 9.83007 18.3334 9.99583Z" fill="black"/>
                     </svg>
+                    Filter
                 </button>
-                @if (!string.IsNullOrEmpty(@Model.CurrentFilter))
-                {
-                    <a asp-action="Traffic" class="btn">
-                        Clear
-                    </a>
-                }
+                <div class="dropdown-menu dropdown-menu-end px-3 py-4 border border-2 border-dark rounded-2 shadow">
+                    <div class="input-wrapper mb-3">
+                        <select class="input col-4" name="classification" id="classificationOptions" aria-required="true">
+                            <option selected hidden disabled></option>
+                            <option value="@OffenseClassification.MinorTraffic">Minor</option>
+                            <option value="@OffenseClassification.MajorTraffic">Major</option>
+                        </select>
+                        <label class="label" for="classificationOptions">
+                            Classification
+                        </label>
+                    </div>
+
+                    <div class="input-wrapper mb-3">
+                        <select class="input" name="college" id="collegeOptions" aria-required="true">
+                            <option selected hidden disabled></option>
+                            @foreach (var item in collegeOptions)
+                            {
+                                <option value="@item">@item</option>
+                            }
+                        </select>
+                        <label class="label" for="college">
+                            College
+                        </label>
+                    </div>
+
+                    <div class="input-wrapper mb-3">
+                        <select class="input" name="settled" id="settledOptions" aria-required="true">
+                            <option selected hidden disabled></option>
+                            <option value="true">Settled</option>
+                            <option value="false">Unsettled</option>
+                        </select>
+                        <label class="label" for="settled">
+                            Status
+                        </label>
+                    </div>
+
+                    <button type="submit" class="btn dark-btn">Apply</button>
+                </div>
             </div>
+            @if (!string.IsNullOrEmpty(Model.CurrentFilter.Search) ||
+                !string.IsNullOrEmpty(Model.CurrentFilter.College) ||
+                Model.CurrentFilter.Settled != null ||
+                Model.CurrentFilter.Classification != null
+            )
+            {
+                <a asp-action="Traffic" class="btn dark-btn">
+                    Clear
+                </a>
+            }
         </form>
     </div>
     
@@ -57,10 +107,13 @@
             <thead>
                 <tr>
                     <th>
-                        <a asp-action="Index"
+                        <a asp-action="Traffic"
                            asp-controller="Records"
                            asp-route-sortOrder="@Model.CommissionDateSort"
-                           asp-route-currentFilter="@Model.CurrentFilter">
+                           asp-route-currentSearch="@Model.CurrentFilter.Search"
+                           asp-route-college="@Model.CurrentFilter.College"
+                           asp-route-classification="@Model.CurrentFilter.Classification"
+                           asp-route-settled="@Model.CurrentFilter.Settled">
                             @* TODO Place this action to a reversible icon *@
                             Commission Date
                         </a>
@@ -78,7 +131,7 @@
                 @if (!Model.Pagination.Items.Any())
                 {
                     <tr class="empty">
-                        <td colspan="7">
+                        <td colspan="8">
                             <div>No records found.</div>
                         </td>
                     </tr>
@@ -90,8 +143,11 @@
                         <tr>
                             <td>@record.FormattedCommissionDate</td>
                             <td>
-                                <span class="@GetClassficationStyle(record.OffenseClassification)">
-                                    @record.OffenseClassification
+                                <span class="@GetClassificationStyle(record.OffenseClassification)">
+                                    @(record.OffenseClassification == OffenseClassification.MinorTraffic 
+                                        ? "Minor" 
+                                        : "Major"
+                                    )
                                 </span>
                             </td>
                             <td class="long">@StringHelper.TruncateWithEllipsis(record.OffenseNature, 40)</td>
@@ -134,7 +190,10 @@
                             <a class="page-link text-black"
                                asp-route-pageIndex="1"
                                asp-route-sortOrder="@Model.CurrentSort"
-                               asp-route-currentFilter="@Model.CurrentFilter">
+                               asp-route-currentSearch="@Model.CurrentFilter.Search"
+                               asp-route-college="@Model.CurrentFilter.College"
+                               asp-route-classification="@Model.CurrentFilter.Classification"
+                               asp-route-settled="@Model.CurrentFilter.Settled">
                                 <span>First</span>
                             </a>
                         </li>
@@ -142,7 +201,10 @@
                             <a class="page-link text-black"
                                asp-route-pageIndex="@(Model.Pagination.PageIndex - 1)"
                                asp-route-sortOrder="@Model.CurrentSort"
-                               asp-route-currentFilter="@Model.CurrentFilter">
+                               asp-route-currentSearch="@Model.CurrentFilter.Search"
+                               asp-route-college="@Model.CurrentFilter.College"
+                               asp-route-classification="@Model.CurrentFilter.Classification"
+                               asp-route-settled="@Model.CurrentFilter.Settled">
                                 <span>&laquo;</span>
                             </a>
                         </li>
@@ -155,7 +217,10 @@
                             <a class="page-link text-black"
                                asp-route-pageIndex="@(Model.Pagination.PageIndex + 1)"
                                asp-route-sortOrder="@Model.CurrentSort"
-                               asp-route-currentFilter="@Model.CurrentFilter">
+                               asp-route-currentSearch="@Model.CurrentFilter.Search"
+                               asp-route-college="@Model.CurrentFilter.College"
+                               asp-route-classification="@Model.CurrentFilter.Classification"
+                               asp-route-settled="@Model.CurrentFilter.Settled">
                                 <span>&raquo;</span>
                             </a>
                         </li>
@@ -163,7 +228,10 @@
                             <a class="page-link text-black"
                                asp-route-pageIndex="@Model.Pagination.TotalPages"
                                asp-route-sortOrder="@Model.CurrentSort"
-                               asp-route-currentFilter="@Model.CurrentFilter">
+                               asp-route-currentSearch="@Model.CurrentFilter.Search"
+                               asp-route-college="@Model.CurrentFilter.College"
+                               asp-route-classification="@Model.CurrentFilter.Classification"
+                               asp-route-settled="@Model.CurrentFilter.Settled">
                                 <span>Last</span>
                             </a>
                         </li>
@@ -175,7 +243,7 @@
 </div>
 
 @section scripts {
-    <script src="~/js/records.js"></script>
+    <script src="~/js/records.js" asp-append-version="true"></script>
     <script src="~/js/components/studentModal.js" type="module" asp-append-version="true"></script>
 }
 

@@ -8,5 +8,6 @@ namespace WSRS_SWAFO.ViewModels.Records
         public string? College { get; set; }
         public OffenseClassification? Classification { get; set; }
         public string? StatusOfSanction { get; set; }
+        public bool? Settled { get; set; }
     }
 }

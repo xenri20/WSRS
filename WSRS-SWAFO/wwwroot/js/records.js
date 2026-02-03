@@ -10,12 +10,15 @@ function loadDropdowns() {
     const college = urlParams.get('college');
     const classification = urlParams.get('classification');
     const statusOfSanction = urlParams.get('statusOfSanction');
+    const settled = urlParams.get('settled');
 
     const collegeDropdown = document.getElementById('collegeOptions');
     const classificationDropdown = document.getElementById('classificationOptions');
     const statusOfSanctionDropdown = document.getElementById('statusOptions');
+    const settledDropdown = document.getElementById('settledOptions');
 
     if (college) collegeDropdown.value = college;
     if (classification) classificationDropdown.value = classification;
     if (statusOfSanction) statusOfSanctionDropdown.value = statusOfSanction;
+    if (settled) settledDropdown.value = settled;
 }
