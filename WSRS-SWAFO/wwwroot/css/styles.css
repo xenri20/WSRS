@@ -228,12 +228,12 @@ button {
     height: 2.5rem;
 
     & input[type="search"] {
-    display: flex;
-    flex-grow: 1;
-    padding: 0.5rem 1rem;
-    border: 2px solid black;
-    border-radius: 2rem;
-}
+        display: flex;
+        flex-grow: 1;
+        padding: 0.5rem 1rem;
+        border: 2px solid black;
+        border-radius: 2rem;
+    }
 }
 
 .hidden {
@@ -254,7 +254,7 @@ button.text-button {
     
     &:hover {
         border-bottom-color: black;
-}
+    }
 
     &:focus,
     &:focus-visible {
@@ -405,4 +405,11 @@ table tbody tr.empty {
     .input {
         min-width: 14ch;
     }
+}
+
+@media (min-width: 768px) {
+  .container {
+      padding-left: 0;
+      padding-right: 0;
+  }
 }
