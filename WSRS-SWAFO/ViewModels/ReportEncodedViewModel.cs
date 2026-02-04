@@ -30,11 +30,12 @@ namespace WSRS_SWAFO.ViewModels
 
         [Required(ErrorMessage = "Commission Date is required")]
         [Display(Name = "Commission Date")]
-        [DateNotInPast(ErrorMessage = "The date must be today or later.")]
+        [DateNotInPast(ErrorMessage = "The date must be today or later")]
         public DateOnly CommissionDate { get; set; }
 
         [Required(ErrorMessage = "CYS is required")]
         [Display(Name = "CYS")]
+        [RegularExpression(@"^[A-Z]{3}[1-5][1-9]$", ErrorMessage = "Must be in valid CYS format")]
         public string Course { get; set; }
 
         [Required(ErrorMessage = "Sanction is required")]

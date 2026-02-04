@@ -31,6 +31,7 @@ namespace WSRS_SWAFO.ViewModels
         // Values that can be edited
         [Required(ErrorMessage = "Please enter student's Course, Year and Section")]
         [Display(Name = "CYS")]
+        [RegularExpression(@"^[A-Z]{3}[1-5][1-9]$", ErrorMessage = "Must be in valid CYS format")]
         public string Course { get; set; }
 
         public string? Formator { get; set; }
