@@ -27,9 +27,8 @@
 /* TENTATIVE STYLING, SUBJECT TO FEEDBACK */
 .minor,
 .major {
-    padding: 6px 12px;
-    border: none;
-    border-radius: 1rem;
+    padding: 4px 12px;
+    border-radius: 0.25em;
     color: white;
     font-family: var(--medium);
 }
@@ -40,6 +39,34 @@
 
 .major {
     background-color: crimson;
+}
+
+/* TENTATIVE STYLING, SUBJECT TO FEEDBACK */
+[data-status="completed"],
+[data-status="ongoing"],
+[data-status="pending"] {
+    padding: 2px 12px;
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 12px;
+}
+
+[data-status="completed"] {
+    border-color: green;
+    background-color: lightgreen;
+    color: green;
+}
+
+[data-status="ongoing"] {
+    border-color: blue;
+    background-color: lightblue;
+    color: blue;
+}
+
+[data-status="pending"] {
+    border-color: darkgoldenrod;
+    background-color: lightgoldenrodyellow;
+    color: darkgoldenrod;
 }
 
 @media all and (max-width: 1100px) {

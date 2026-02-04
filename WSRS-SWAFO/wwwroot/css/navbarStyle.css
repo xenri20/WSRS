@@ -87,3 +87,15 @@
             color: black;
         }
 
+@media (max-width: 768px) {
+  #sidebar {
+      width: 76px;
+
+      /* Sidebar text */
+      & #logout button > div:last-child,
+      & [class*="-nav"] > div:last-child {
+          font-size: 0.85em;
+      }
+  }
+}
+
