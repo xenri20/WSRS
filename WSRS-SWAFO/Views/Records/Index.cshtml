@@ -118,7 +118,7 @@
         <table id="recordsTable">
             <thead>
                 <tr>
-                    <th>
+                    <th class="col-1">
                         <a asp-action="Index"
                            asp-controller="Records"
                            asp-route-sortOrder="@Model.CommissionDateSort"
@@ -130,13 +130,13 @@
                             Commission Date
                         </a>
                     </th>
-                    <th>Classification</th>
-                    <th>Nature</th>
+                    <th class="col-1">Classification</th>
+                    <th class="col-3">Nature</th>
                     <th>Student Number</th>
-                    <th>Name</th>
+                    <th class="col-2">Name</th>
                     <th>College</th>
                     <th>Status</th>
-                    <th></th>
+                    <th class="col-1"></th>
                 </tr>
             </thead>
             <tbody>
@@ -159,13 +159,13 @@
                                     @record.OffenseClassification
                                 </span>
                             </td>
-                            <td class="long">@StringHelper.TruncateWithEllipsis(record.OffenseNature, 40)</td>
+                            <td class="long left-align">@record.OffenseNature</td>
                             <td>
                                 <button type="button" class="text-button" data-student="@record.StudentNumber" data-bs-toggle="modal" data-bs-target="#studentModal">
                                     @record.StudentNumber
                                 </button>
                             </td>
-                            <td class="long">@record.Name</td>
+                            <td class="long left">@record.Name</td>
                             <td>@record.College</td>
                             <td>
                                 <span data-status="@record.Status.ToLower()">

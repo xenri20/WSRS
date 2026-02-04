@@ -106,7 +106,7 @@
         <table id="recordsTable">
             <thead>
                 <tr>
-                    <th>
+                    <th class="col-1">
                         <a asp-action="Traffic"
                            asp-controller="Records"
                            asp-route-sortOrder="@Model.CommissionDateSort"
@@ -119,12 +119,12 @@
                         </a>
                     </th>
                     <th>Classification</th>
-                    <th>Nature</th>
+                    <th class="col-3">Nature</th>
                     <th>Student Number</th>
-                    <th>Name</th>
+                    <th class="col-2">Name</th>
                     <th>College</th>
                     <th>Official Receipt</th>
-                    <th></th>
+                    <th class="col-1"></th>
                 </tr>
             </thead>
             <tbody>
@@ -150,13 +150,13 @@
                                     )
                                 </span>
                             </td>
-                            <td class="long">@StringHelper.TruncateWithEllipsis(record.OffenseNature, 40)</td>
+                            <td class="long left-align">@record.OffenseNature</td>
                             <td>
                                 <button type="button" class="text-button" data-student="@record.StudentNumber" data-bs-toggle="modal" data-bs-target="#studentModal">
                                     @record.StudentNumber
                                 </button>
                             </td>
-                            <td class="long">@record.Name</td>
+                            <td class="long left">@record.Name</td>
                             <td>@record.College</td>
                             <td>@(record.ORNumber.IsNullOrWhiteSpace() ? "-" : record.ORNumber)</td>
                             <td>

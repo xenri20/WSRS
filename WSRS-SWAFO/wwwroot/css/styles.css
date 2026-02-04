@@ -296,8 +296,17 @@ table td {
     min-width: 14ch;
 }
 
-table td.long {
-    width: 35ch;
+table td {
+    &.long {
+        min-width: 20ch;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    &.left-align {
+        text-align: left;
+    }
 }
 
 table thead {
