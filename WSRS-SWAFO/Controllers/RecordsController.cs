@@ -273,7 +273,7 @@ namespace WSRS_SWAFO.Controllers
             [FromQuery] bool? settled,
             [FromQuery] int? pageIndex)
         {
-            if (string.IsNullOrWhiteSpace(searchString))
+            if (!string.IsNullOrWhiteSpace(searchString))
                 pageIndex = 1;
             else
                 searchString = currentSearch;
