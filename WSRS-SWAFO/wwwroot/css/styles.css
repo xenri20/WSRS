@@ -248,6 +248,18 @@ button.text-button {
     cursor: pointer;
     font-size: 0.96em;
     font-weight: 700;
+    padding: 1px 0;
+    border: 2px solid transparent;
+    transition: border 0.15s ease-in-out;
+    
+    &:hover {
+        border-bottom-color: black;
+}
+
+    &:focus,
+    &:focus-visible {
+        outline-offset: 0.5rem;
+    }
 }
 
 /*.content-panel {
