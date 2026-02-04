@@ -167,7 +167,11 @@
                             </td>
                             <td class="long">@record.Name</td>
                             <td>@record.College</td>
-                            <td>@record.Status</td>
+                            <td>
+                                <span data-status="@record.Status.ToLower()">
+                                    @record.Status
+                                </span>
+                            </td>
                             <td>
                                 <a asp-action="Details" asp-route-id="@record.Id" class="btn-function">
                                     <svg width="32" height="32" viewBox="0 0 43 43" fill="none" xmlns="http://www.w3.org/2000/svg">
