@@ -3,8 +3,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
 using WSRS_SWAFO.Data;
+using WSRS_SWAFO.Data.Enum;
 using WSRS_SWAFO.Models;
 using WSRS_SWAFO.ViewModels;
+using WSRS_SWAFO.ViewModels.Records;
 
 namespace WSRS_SWAFO.Controllers
 {
@@ -22,8 +24,11 @@ namespace WSRS_SWAFO.Controllers
 
         public async Task<IActionResult> Index(
             [FromQuery] string sortOrder,
-            [FromQuery] string searchString,
-            [FromQuery] string currentFilter,
+            [FromQuery] string? searchString,
+            [FromQuery] string? currentSearch,
+            [FromQuery] string? college,
+            [FromQuery] OffenseClassification? classification,
+            [FromQuery] string? statusOfSanction,
             [FromQuery] int? pageIndex)
         {
             var referer = Request.Headers["Referer"].ToString();
@@ -31,64 +36,95 @@ namespace WSRS_SWAFO.Controllers
             {
                 return Content("<script>alert('External links are disabled. Use the in-app interface to proceed.'); window.history.back();</script>", "text/html");
             }
-            if (searchString != null)
-            {
-                pageIndex = 1;
-            }
-            else
-            {
-                searchString = currentFilter;
-            }
 
-            var records = from r in _context.ReportsEncoded.AsNoTracking()
-                    .Include(r => r.Student)
-                          select new RecordsViewModel
-                          {
-                              Id = r.Id,
-                              Name = string.Concat(r.Student.FirstName, " ", r.Student.LastName),
-                              StudentNumber = r.StudentNumber,
-                              College = r.CollegeID,
-                              CommissionDate = r.CommissionDate,
-                              OffenseClassification = r.Offense.Classification.ToString(),
-                              OffenseNature = r.Offense.Nature,
-                              Status = r.StatusOfSanction
-                          };
+            if (!string.IsNullOrWhiteSpace(searchString))
+                pageIndex = 1;
+            else
+                searchString = currentSearch;
+
+            var query = _context.ReportsEncoded
+                        .AsNoTracking()
+                        .Include(r => r.Student)
+                        .Include(r => r.Offense)
+                        .Include(r => r.College)
+                        .AsQueryable();
 
             if (!string.IsNullOrEmpty(searchString))
             {
                 searchString = searchString.Trim();
-                records = records.Where(r => r.Name.Contains(searchString)
-                                             || r.StudentNumber.ToString().Contains(searchString));
+                query = query.Where(r => (
+                    r.Student.FirstName + " " + r.Student.LastName).Contains(searchString) ||
+                    r.StudentNumber.ToString().Contains(searchString)
+                );
+            }
+
+            // Filters
+            if (!string.IsNullOrEmpty(statusOfSanction))
+            {
+                statusOfSanction = statusOfSanction.Trim();
+                query = query.Where(r => r.StatusOfSanction.Equals(statusOfSanction));
+            }
+
+            if (!string.IsNullOrEmpty(college))
+            {
+                query = query.Where(r => r.College.CollegeID.Equals(college));
+            }
+
+            if (classification.HasValue)
+            {
+                query = query.Where(r => r.Offense.Classification == classification.Value);
             }
 
             switch (sortOrder)
             {
                 case "date_asc":
-                    records = records.OrderBy(r => r.CommissionDate).ThenBy(r => r.Id);
+                    query = query.OrderBy(r => r.CommissionDate).ThenBy(r => r.Id);
                     break;
                 default:
-                    records = records.OrderByDescending(r => r.CommissionDate).ThenBy(r => r.Id);
+                    query = query.OrderByDescending(r => r.CommissionDate).ThenBy(r => r.Id);
                     break;
             }
 
-            // Ensures page number is at least 1
-            if (pageIndex < 1)
-            {
-                pageIndex = 1;
-            }
+            if (pageIndex < 1) pageIndex = 1;
 
-            // Set default page size
             int pageSize = 10;
+
+            var recordsAfterFilter = query.Select(r => new RecordsViewModel
+            {
+                Id = r.Id,
+                Name = string.Concat(r.Student.FirstName, " ", r.Student.LastName),
+                StudentNumber = r.StudentNumber,
+                College = r.CollegeID,
+                CommissionDate = r.CommissionDate,
+                OffenseClassification = r.Offense.Classification,
+                OffenseNature = r.Offense.Nature,
+                Status = r.StatusOfSanction,
+            });
 
             var recordsIndexVM = new RecordsIndexViewModel
             {
-                Pagination = await PaginatedList<RecordsViewModel>.CreateAsync(records, pageIndex ?? 1, pageSize),
+                Pagination = await PaginatedList<RecordsViewModel>
+                    .CreateAsync(recordsAfterFilter, pageIndex ?? 1, pageSize),
                 CurrentSort = sortOrder,
                 CommissionDateSort = (sortOrder == "date_asc") ? "date_desc" : "date_asc",
-                CurrentFilter = searchString,
+                CurrentFilter = new CurrentFilter
+                {
+                    Search = searchString,
+                    College = college,
+                    Classification = classification,
+                    StatusOfSanction = statusOfSanction,
+                },
             };
 
-            //return Ok(records); // Return data as JSON response
+            // Filter data for dropdowns
+            ViewData["CollegeOptions"] = _context.College.Select(c => c.CollegeID).ToList();
+            ViewData["ClassificationOptions"] = new List<string>
+            {
+                OffenseClassification.Minor.ToString(),
+                OffenseClassification.Major.ToString()
+            };
+            ViewData["SanctionStatusOptions"] = new List<string> { "Pending", "Ongoing", "Completed" }; // Might be better if these were enums
+
             return View(recordsIndexVM);
         }
 
@@ -230,69 +266,98 @@ namespace WSRS_SWAFO.Controllers
 
         public async Task<IActionResult> Traffic(
             [FromQuery] string sortOrder,
-            [FromQuery] string searchString,
-            [FromQuery] string currentFilter,
+            [FromQuery] string? searchString,
+            [FromQuery] string? currentSearch,
+            [FromQuery] string? college,
+            [FromQuery] OffenseClassification? classification,
+            [FromQuery] bool? settled,
             [FromQuery] int? pageIndex)
         {
-            if (searchString != null)
-            {
+            if (string.IsNullOrWhiteSpace(searchString))
                 pageIndex = 1;
-            }
             else
-            {
-                searchString = currentFilter;
-            }
+                searchString = currentSearch;
 
-            var records = from tr in _context.TrafficReportsEncoded.AsNoTracking()
-                    .Include(tr => tr.Student)
-                          select new TrafficRecordsViewModel
-                          {
-                              Id = tr.Id,
-                              Name = string.Concat(tr.Student.FirstName, " ", tr.Student.LastName),
-                              StudentNumber = tr.StudentNumber,
-                              College = tr.CollegeID,
-                              CommissionDate = tr.CommissionDate,
-                              OffenseClassification = tr.Offense.Classification.ToString().Substring(0, 5) + " Traffic",
-                              OffenseNature = tr.Offense.Nature,
-                              ORNumber = tr.ORNumber,
-                          };
+            var query = _context.TrafficReportsEncoded
+                          .AsNoTracking()
+                          .Include(tr => tr.Student)
+                          .Include(tr => tr.College)
+                          .Include(tr => tr.Offense)
+                          .AsQueryable();
 
             if (!string.IsNullOrEmpty(searchString))
             {
                 searchString = searchString.Trim();
-                records = records.Where(r => r.Name.Contains(searchString)
-                                             || r.StudentNumber.ToString().Contains(searchString));
+                query = query.Where(tr => (
+                    (tr.Student.FirstName + " " + tr.Student.LastName).Contains(searchString) ||
+                    tr.StudentNumber.ToString().Contains(searchString)
+                ));
+            }
+
+            // Filters
+            if (settled != null)
+            {
+                query = (bool)settled
+                    ? query.Where(tr => tr.DatePaid != null)
+                    : query.Where(tr => tr.DatePaid == null);
+            }
+
+            if (!string.IsNullOrEmpty(college))
+            {
+                query = query.Where(r => r.College.CollegeID.Equals(college));
+            }
+
+            if (classification.HasValue)
+            {
+                query = query.Where(r => r.Offense.Classification == classification.Value);
             }
 
             switch (sortOrder)
             {
                 case "date_asc":
-                    records = records.OrderBy(r => r.CommissionDate).ThenBy(r => r.Id);
+                    query = query.OrderBy(r => r.CommissionDate).ThenBy(r => r.Id);
                     break;
                 default:
-                    records = records.OrderByDescending(r => r.CommissionDate).ThenBy(r => r.Id);
+                    query = query.OrderByDescending(r => r.CommissionDate).ThenBy(r => r.Id);
                     break;
             }
 
             // Ensures page number is at least 1
-            if (pageIndex < 1)
-            {
-                pageIndex = 1;
-            }
+            if (pageIndex < 1) pageIndex = 1;
 
             // Set default page size
             int pageSize = 10;
 
+            var recordsAfterFilter = query.Select(tr => new TrafficRecordsViewModel
+            {
+                Id = tr.Id,
+                Name = string.Concat(tr.Student.FirstName, " ", tr.Student.LastName),
+                StudentNumber = tr.StudentNumber,
+                College = tr.CollegeID,
+                CommissionDate = tr.CommissionDate,
+                OffenseClassification = tr.Offense.Classification,
+                OffenseNature = tr.Offense.Nature,
+                ORNumber = tr.ORNumber,
+            });
+
             var trafficRecordsIndexVM = new TrafficRecordsIndexViewModel
             {
-                Pagination =
-                    await PaginatedList<TrafficRecordsViewModel>.CreateAsync(records, pageIndex ?? 1, pageSize),
+                Pagination = await PaginatedList<TrafficRecordsViewModel>
+                    .CreateAsync(recordsAfterFilter, pageIndex ?? 1, pageSize),
                 CurrentSort = sortOrder,
                 CommissionDateSort = (sortOrder == "date_asc") ? "date_desc" : "date_asc",
-                CurrentFilter = searchString,
+                CurrentFilter = new CurrentFilter
+                {
+                    Search = searchString,
+                    College = college,
+                    Classification = classification,
+                    Settled = settled,
+                },
             };
 
-            //return Ok(records); // Return data as JSON response
+            // Filter data for dropdowns
+            ViewData["CollegeOptions"] = _context.College.Select(c => c.CollegeID).ToList();
+
             return View(trafficRecordsIndexVM);
         }
 

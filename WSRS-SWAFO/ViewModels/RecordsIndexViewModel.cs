@@ -1,4 +1,5 @@
 using WSRS_SWAFO.Models;
+using WSRS_SWAFO.ViewModels.Records;
 
 namespace WSRS_SWAFO.ViewModels;
 
@@ -10,5 +11,5 @@ public class RecordsIndexViewModel
     public PaginatedList<RecordsViewModel> Pagination { get; set; }
     public string CurrentSort { get; set; }
     public string CommissionDateSort { get; set; }
-    public string CurrentFilter { get; set; }
+    public CurrentFilter CurrentFilter { get; set; }
 }

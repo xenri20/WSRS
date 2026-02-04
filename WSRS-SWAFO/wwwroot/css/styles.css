@@ -25,7 +25,7 @@ body {
 
 #sidebar + .container {
     height: 100vh;
-    max-width: 85vw;
+    max-width: 88vw;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -184,6 +184,17 @@ button {
             stroke: white;
         }
 
+.btn-text-icon {
+    &:focus,
+    &:focus-visible,
+    &:hover,
+    &:active {
+        & > svg path {
+            stroke: white;
+        }
+    }
+}
+
 .dark-btn {
     background-color: #292929;
     border: 2px solid #292929;
@@ -212,16 +223,17 @@ button {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    align-items: center;
     gap: 0.5rem;
     height: 2.5rem;
-}
 
-#searchForm > input {
+    & input[type="search"] {
     display: flex;
     flex-grow: 1;
     padding: 0.5rem 1rem;
     border: 2px solid black;
     border-radius: 2rem;
+}
 }
 
 .hidden {
@@ -367,3 +379,9 @@ table tbody tr.empty {
             background-color: black;
             color: white;
         }
+
+.dropdown-menu {
+    .input {
+        min-width: 14ch;
+    }
+}

@@ -1,10 +1,12 @@
-﻿namespace WSRS_SWAFO.ViewModels
+﻿using WSRS_SWAFO.Data.Enum;
+
+namespace WSRS_SWAFO.ViewModels
 {
     public class RecordsViewModel
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public string OffenseClassification { get; set; }
+        public OffenseClassification OffenseClassification { get; set; }
         public string OffenseNature { get; set; }
         public int StudentNumber { get; set; }
         public string College { get; set; }
